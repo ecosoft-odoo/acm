@@ -9,7 +9,7 @@ class AccountAnalyticContract(models.Model):
 
     agreement_id = fields.Many2one(
         comodel_name="agreement",
-        string="Agreement Document",
+        string="Agreement",
         ondelete="restrict",
         readonly=True,
     )

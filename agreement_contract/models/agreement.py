@@ -9,58 +9,57 @@ class Agreement(models.Model):
     _inherit = 'agreement'
 
     contract_type = fields.Selection(
+        string="Contract Type",
         selection=[
             ('sale', 'Customer'),
             ('purchase', 'Supplier'),
         ],
         default="sale",
+        required=True,
     )
     contract_count = fields.Integer(
-        string="Contract_count",
+        string="Contract Count",
         compute="_compute_contract_count",
     )
 
     @api.multi
     def _compute_contract_count(self):
-        for contract in self:
-            search_contract = contract.env['account.analytic.account'].\
-                search([('agreement_id', '=', self.id)])
-            if search_contract:
-                contract.contract_count = len(search_contract)
+        Contract = self.env['account.analytic.account']
+        for agreement in self:
+            search_contract = Contract.search(
+                [('agreement_id', '=', agreement.id)])
+            agreement.contract_count = len(search_contract)
 
     @api.multi
     def action_view_contract(self):
-        contract = self.env['account.analytic.account']
-        search_contract = contract.search([('agreement_id', '=', self.id)])
+        self.ensure_one()
+        Contract = self.env['account.analytic.account']
+        search_contract = Contract.search([('agreement_id', '=', self.id)])
+        # Is contract created?
         if not search_contract:
-            raise UserError(
-                _('Please create contract.'))
+            raise UserError(_('Please create contract.'))
+        # Update action
         if self.contract_type == 'sale':
-            action = self.env.ref(
-                'contract.action_account_analytic_sale_overdue_all').read()[0]
-            action['views'] = [(self.env.ref(
-                'contract.account_analytic_account_sale_form').id, 'form')]
+            xml_id = 'contract.action_account_analytic_sale_overdue_all'
+            view_id = 'contract.account_analytic_account_sale_form'
         else:
-            action = self.env.ref(
-                'contract.action_account_analytic_purchase_overdue_all').\
-                read()[0]
-            action['views'] = [(self.env.ref(
-                'contract.account_analytic_account_purchase_form').id, 'form')]
-        action['res_id'] = search_contract.id
+            xml_id = 'contract.action_account_analytic_purchase_overdue_all'
+            view_id = 'contract.account_analytic_account_purchase_form'
+        action = self.env.ref(xml_id).read()[0]
+        action.update({
+            'views': [(self.env.ref(view_id).id, 'form')],
+            'res_id': search_contract.id
+        })
         return action
 
     @api.multi
-    def create_new_contract(self, journal=None):
+    def prepare_contract(self):
         self.ensure_one()
-        if self.contract_count != 0:
-            raise UserError(
-                _('You created contract already.'))
         journal = self.env['account.journal'].search(
             [('type', '=', self.contract_type),
              ('company_id', '=', self.company_id.id),
              ], limit=1
         )
-        # Prepare contract
         vals = self.env['account.analytic.account'].create({
             'name': self.name,
             'contract_type': self.contract_type,
@@ -73,29 +72,29 @@ class Agreement(models.Model):
             'recurring_invoices': True,
         })
         vals._onchange_date_start()
-        # Prepare contract's product lines
-        for line in self.line_ids:
-            line = self.env['account.analytic.invoice.line'].create({
-                'analytic_account_id': vals.id,
-                'product_id': line.product_id.id,
-                'name': line.name,
-                'quantity': line.qty,
-                'uom_id': line.uom_id.id,
-                'price_unit': line.product_id.lst_price,
-            })
-        # Action view
-        if self.contract_type == 'sale':
-            view_id = self.env.ref(
-                'contract.account_analytic_account_sale_form').id
-        else:
-            view_id = self.env.ref(
-                'contract.account_analytic_account_purchase_form').id
-        view_contract = {
-            'res_id': vals.id,
-            'view_id': view_id,
-            'res_model': 'account.analytic.account',
-            'type': 'ir.actions.act_window',
-            'view_mode': 'form',
-            'view_type': 'form',
-        }
-        return view_contract
+        return vals
+
+    @api.multi
+    def prepare_contract_line(self, line, analytic_id):
+        vals = ({
+            'analytic_account_id': analytic_id,
+            'product_id': line.product_id.id,
+            'name': line.name,
+            'quantity': line.qty,
+            'uom_id': line.uom_id.id,
+            'price_unit': line.product_id.lst_price,
+        })
+        return vals
+
+    @api.multi
+    def create_new_contract(self):
+        if self.contract_count != 0:
+            raise UserError(_('You created contract already.'))
+        for agreement in self:
+            contract = agreement.prepare_contract()
+            # Prepare contract's product lines
+            for line in self.line_ids:
+                new_line = self.prepare_contract_line(line, contract.id)
+                if new_line:
+                    self.env['account.analytic.invoice.line'].create(new_line)
+        return self.action_view_contract()

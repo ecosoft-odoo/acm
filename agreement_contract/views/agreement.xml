@@ -11,13 +11,14 @@
                         string="Create Contract"
                         type="object"
                         class="oe_highlight"
-                        attrs="{'invisible': ['|','|', ('contract_count', '!=', 0), ('state', '=', 'active'), ('is_template', '=', True)]}"
+                        attrs="{'invisible': ['|', ('contract_count', '!=', 0), ('is_template', '=', True)]}"
                 />
             </button>
 
             <div name='button_box'>
                 <div class="oe_button_box" name="button_box">
                     <button name="action_view_contract"
+                            class="oe_stat_button"
                             type="object"
                             string="Contract"
                             icon="fa-pencil-square-o"

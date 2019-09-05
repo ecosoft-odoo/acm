@@ -16,5 +16,6 @@
     "data": [
         "views/agreement.xml",
         "views/account_analytic_account_view.xml",
+        "wizard/agreement_contract_create_view.xml",
     ],
 }
