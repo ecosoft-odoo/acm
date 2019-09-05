@@ -1,0 +1,37 @@
+<odoo>
+
+    <record id="agreement_contract_create_view" model="ir.ui.view">
+        <field name="name">agreement.contract.create.form</field>
+        <field name="model">agreement.contract.create</field>
+        <field name="arch" type="xml">
+            <form string="Create Contracts">
+                <p class="oe_grey">
+                    Are you sure you want to create this record?
+                </p>
+                <footer>
+                    <button string="Create"
+                            name="create_contract"
+                            type="object"
+                            class="btn-primary"
+                    />
+                    <button string="Cancel"
+                            class="btn-secondary"
+                            special="cancel"
+                    />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <act_window id="action_agreement_contract_create"
+                multi="True"
+                key2="client_action_multi"
+                name="Create Contracts"
+                res_model="agreement.contract.create"
+                src_model="agreement"
+                view_mode="form"
+                view_type="form"
+                target="new"
+    />
+
+</odoo>
