@@ -46,10 +46,16 @@ class Agreement(models.Model):
             xml_id = 'contract.action_account_analytic_purchase_overdue_all'
             view_id = 'contract.account_analytic_account_purchase_form'
         action = self.env.ref(xml_id).read()[0]
-        action.update({
-            'views': [(self.env.ref(view_id).id, 'form')],
-            'res_id': search_contract.id
-        })
+        if len(search_contract) == 1:
+            form = self.env.ref(view_id)
+            action.update({
+                'views': [(form.id, 'form')],
+                'res_id': search_contract.id,
+            })
+        else:
+            action.update({
+                'domain': [('id', 'in', search_contract.ids)],
+            })
         return action
 
     @api.multi
@@ -60,7 +66,7 @@ class Agreement(models.Model):
              ('company_id', '=', self.company_id.id),
              ], limit=1
         )
-        vals = self.env['account.analytic.account'].create({
+        vals = self.env['account.analytic.account'].new({
             'name': self.name,
             'contract_type': self.contract_type,
             'agreement_id': self.id,
@@ -72,11 +78,11 @@ class Agreement(models.Model):
             'recurring_invoices': True,
         })
         vals._onchange_date_start()
-        return vals
+        return vals._convert_to_write(vals._cache)
 
     @api.multi
     def prepare_contract_line(self, line, analytic_id):
-        vals = ({
+        val = ({
             'analytic_account_id': analytic_id,
             'product_id': line.product_id.id,
             'name': line.name,
@@ -84,17 +90,17 @@ class Agreement(models.Model):
             'uom_id': line.uom_id.id,
             'price_unit': line.product_id.lst_price,
         })
-        return vals
+        return val
 
     @api.multi
     def create_new_contract(self):
         if self.contract_count != 0:
             raise UserError(_('You created contract already.'))
         for agreement in self:
-            contract = agreement.prepare_contract()
+            val = agreement.prepare_contract()
+            contract = self.env['account.analytic.account'].create(val)
             # Prepare contract's product lines
             for line in self.line_ids:
-                new_line = self.prepare_contract_line(line, contract.id)
-                if new_line:
-                    self.env['account.analytic.invoice.line'].create(new_line)
-        return self.action_view_contract()
+                new_line = line.prepare_contract_line(line, contract.id)
+                self.env['account.analytic.invoice.line'].create(new_line)
+        return contract

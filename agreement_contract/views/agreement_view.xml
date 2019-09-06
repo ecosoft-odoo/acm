@@ -43,6 +43,14 @@
                     </div>
                 </group>
             </group>
+
+            <xpath expr="//group[@name='term_information']//field[@name='start_date']" position="replace">
+                <field name="start_date"/>
+            </xpath>
+            <xpath expr="//group[@name='term_information']//field[@name='end_date']" position="replace">
+                <field name="end_date"/>
+            </xpath>
+
         </field>
     </record>
 
