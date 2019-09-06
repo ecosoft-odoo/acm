@@ -6,7 +6,7 @@
         <field name="arch" type="xml">
             <form string="Create Contracts">
                 <p class="oe_grey">
-                    Are you sure you want to create this record?
+                    Are you sure you want to create contract from this record?
                 </p>
                 <footer>
                     <button string="Create"

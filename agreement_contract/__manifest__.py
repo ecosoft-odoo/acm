@@ -3,7 +3,7 @@
 
 {
     "name": "Agreements Contract",
-    "summary": "",
+    "summary": "Create contract from agreements",
     "version": "12.0.1.0.0",
     "author": "Ecosoft,Odoo Community Association (OCA)",
     "license": "AGPL-3",
