@@ -1,0 +1,14 @@
+<odoo>
+
+    <record id="partner_agreement_section_form_view" model="ir.ui.view">
+        <field name="name">Agreement Section Form</field>
+        <field name="model">agreement.section</field>
+        <field name="inherit_id" ref="agreement_legal.partner_agreement_section_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="/form/sheet//group[1]//group[1]//field[@name='agreement_id']" position="after">
+                <field name="contract_create_type" string="Contract Type"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

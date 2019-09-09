@@ -1,0 +1,25 @@
+<odoo>
+
+    <record id="view_account_analytic_account_form" model="ir.ui.view">
+        <field name="name">Contract form</field>
+        <field name="model">account.analytic.account</field>
+        <field name="inherit_id" ref="contract.account_analytic_account_recurring_form_form"/>
+        <field name="arch" type="xml">
+            <field name="group_id" position="after">
+                <field name="contract_create_type"/>
+                <field name="cancel_date"
+                       attrs="{'invisible': ['|', '|', ('contract_create_type', '==', 'new'), ('contract_create_type', '==', 'renew'), ('contract_create_type', '==', 'transfer')]}"
+                />
+            </field>
+            <field name="recurring_invoice_line_ids" position="after">
+                <label for="description" attrs="{'invisible': [('contract_create_type', '!=', 'violate')]}"/>
+                <div>
+                    <field name="description"
+                           attrs="{'invisible': [('contract_create_type', '!=', 'violate')]}"
+                    />
+                </div>
+            </field>
+        </field>
+    </record>
+
+</odoo>

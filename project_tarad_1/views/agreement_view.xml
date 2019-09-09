@@ -1,0 +1,30 @@
+<odoo>
+
+    <record id="partner_agreement_form_view" model="ir.ui.view">
+        <field name="name">Agreement Form</field>
+        <field name="model">agreement</field>
+        <field name="inherit_id" ref="agreement_legal.partner_agreement_form_view"/>
+        <field name="arch" type="xml">
+            <button name="create_new_agreement" position="after">
+                <field name="contract_count" invisible='1'/>
+                <button name="%(project_tarad_1.action_contract_create)d"
+                        string="Create Contract - Wizard"
+                        type="action"
+                        class="oe_highlight"
+                        attrs="{'invisible': [('is_template', '=', True)]}"
+                />
+            </button>
+            <xpath expr="//page[@name='structure']/div" position='after'>
+                <group>
+                    <group>
+                        <field name="contract_create_type"
+                               string="Contract Type"
+                               domain="[('contract_create_type', '=', contract_create_type)]"
+                        />
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
