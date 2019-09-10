@@ -1,0 +1,20 @@
+<odoo>
+
+    <record id="partner_agreement_form_view" model="ir.ui.view">
+        <field name="name">Agreement Form</field>
+        <field name="model">agreement</field>
+        <field name="inherit_id" ref="agreement_legal.partner_agreement_form_view"/>
+        <field name="arch" type="xml">
+            <field name="contract_type" position="after">
+                <field name="contract_genre" string="Contract Genre"/>
+            </field>
+
+            <field name="agreement_type_id" position="after">
+                <field name="transfer_agreement_id"
+                       string="Agreement Transfer"
+                       />
+            </field>
+        </field>
+    </record>
+
+</odoo>

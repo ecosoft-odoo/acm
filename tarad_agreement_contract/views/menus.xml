@@ -1,0 +1,14 @@
+<odoo>
+
+    <!-- Remove top menu from agreement module -->
+    <!-- <delete model="ir.ui.menu" id="tarad_agreement_contract.contract_genres" /> -->
+
+    <!-- Configuration -->
+    <menuitem name="Contract Genres"
+              id="contract_genres"
+              parent="agreement_legal.agreement_configuration"
+              sequence="70"
+              action="partner_agreement_action_contract_genre"
+              />
+
+</odoo>
