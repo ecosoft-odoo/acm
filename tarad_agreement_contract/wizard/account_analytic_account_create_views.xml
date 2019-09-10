@@ -1,0 +1,124 @@
+<odoo>
+
+    <record id="view_account_analytic_account_create" model="ir.ui.view">
+        <field name="name">account.analytic.account.create.form</field>
+        <field name="model">account.analytic.account.create</field>
+        <field name="arch" type="xml">
+            <form string="Contract">
+                <group>
+                    <group>
+                        <field name="contract_genre" widget="radio"/>
+                    </group>
+                    <group>
+                        <field name="new_partner"
+                               string="New Partner"
+                               attrs="{'invisible':[('contract_genre', '!=', 'transfer')]}"
+                        />
+                        <field name="start_date"
+                               attrs="{'invisible':['|', '|', ('contract_genre', '==', 'reject'), ('contract_genre', '==', 'violate'), ('contract_genre', '==', 'transfer')]}"
+                        />
+                        <field name="end_date"
+                               attrs="{'invisible':['|', '|', ('contract_genre', '==', 'reject'), ('contract_genre', '==', 'violate'), ('contract_genre', '==', 'transfer')]}"
+                        />
+                        <label for="recurring_interval" attrs="{'invisible':['|', '|', ('contract_genre', '==', 'reject'), ('contract_genre', '==', 'violate'), ('contract_genre', '==', 'transfer')]}"/>
+                            <div>
+                                <field name="recurring_interval"
+                                       class="oe_inline"
+                                       attrs="{'invisible':['|', '|', ('contract_genre', '==', 'reject'), ('contract_genre', '==', 'violate'), ('contract_genre', '==', 'transfer')]}"
+                                       />
+                                <field name="recurring_rule_type"
+                                       class="oe_inline"
+                                       attrs="{'invisible':['|', '|', ('contract_genre', '==', 'reject'), ('contract_genre', '==', 'violate'), ('contract_genre', '==', 'transfer')]}"
+                                       />
+                            </div>
+                        <field name="reject_date"
+                               attrs="{'invisible': [('contract_genre', '!=', 'reject')]}"
+                        />
+                        <field name="violate_date"
+                               attrs="{'invisible':[('contract_genre', '!=', 'violate')]}"
+                        />
+                    </group>
+                </group>
+                <label for="description" attrs="{'invisible':[('contract_genre', '!=', 'violate')]}"/>
+                    <div>
+                        <field name="description"
+                               string="Description"
+                               attrs="{'invisible':[('contract_genre', '!=', 'violate')]}"/>
+                    </div>
+                <footer>
+                    <button string="Confirm"
+                            name="action_create_contract"
+                            type="object"
+                            class="btn-primary"
+                            />
+                    <button string="Cancel"
+                            class="btn-secondary"
+                            special="cancel"
+                            />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_account_analytic_account_create" model="ir.actions.act_window">
+        <field name="name">Contract</field>
+        <field name="res_model">account.analytic.account.create</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_account_analytic_account_create"/>
+        <field name="target">new</field>
+    </record>
+
+    <record id="view_agreement_contract_create" model="ir.ui.view">
+        <field name="name">account.analytic.account.create.form</field>
+        <field name="model">account.analytic.account.create</field>
+        <field name="arch" type="xml">
+            <form string="Contract">
+                <group>
+                    <group>
+                        <field name="contract_genre" readonly="True"/>
+                        <field name="start_date"
+                               attrs="{'invisible':['|', ('contract_genre', '==', 'reject'), ('contract_genre', '==', 'violate')]}"
+                        />
+                        <field name="end_date"
+                               attrs="{'invisible':['|', ('contract_genre', '==', 'reject'), ('contract_genre', '==', 'violate')]}"
+                        />
+                        <label for="recurring_interval" attrs="{'invisible':['|', ('contract_genre', '==', 'reject'), ('contract_genre', '==', 'violate')]}"/>
+                            <div>
+                                <field name="recurring_interval"
+                                       class="oe_inline"
+                                       attrs="{'invisible':['|', ('contract_genre', '==', 'reject'), ('contract_genre', '==', 'violate')]}"
+                                       />
+                                <field name="recurring_rule_type"
+                                       class="oe_inline"
+                                       attrs="{'invisible':['|', ('contract_genre', '==', 'reject'), ('contract_genre', '==', 'violate')]}"
+                                       />
+                            </div>
+                    </group>
+                </group>
+                <footer>
+                    <button string="Create Contract"
+                            name="action_create_contract"
+                            type="object"
+                            class="btn-primary"
+                            />
+                    <button string="Cancel"
+                            class="btn-secondary"
+                            special="cancel"
+                            />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_agreement_contract_create" model="ir.actions.act_window">
+        <field name="name">Contract</field>
+        <field name="res_model">account.analytic.account.create</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_agreement_contract_create"/>
+        <field name="target">new</field>
+    </record>
+
+
+</odoo>

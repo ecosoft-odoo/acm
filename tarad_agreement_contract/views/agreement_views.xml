@@ -1,0 +1,38 @@
+<odoo>
+
+    <record id="partner_agreement_form_view" model="ir.ui.view">
+        <field name="name">Agreement Form</field>
+        <field name="model">agreement</field>
+        <field name="inherit_id" ref="agreement_legal.partner_agreement_form_view"/>
+        <field name="arch" type="xml">
+            <button name="create_new_agreement" position="after">
+                <button name="%(tarad_agreement_contract.action_agreement_contract_create)d"
+                        string="Create Contract"
+                        type="action"
+                        class="oe_highlight"
+                        attrs="{'invisible': [('is_template', '=', True)]}"
+                />
+            </button>
+
+            <field name="agreement_type_id" position="after">
+                <field name="transfer_agreement_id"
+                       string="Agreement Transfer"
+                />
+            </field>
+
+            <field name="contract_type" position="after">
+                <field name="contract_genre" string="Contract Genre"/>
+            </field>
+
+            <field name="start_date" position="attributes">
+                <attribute name="attrs">{'invisible': [('is_template', '=', True)]}</attribute>
+            </field>
+
+            <field name="end_date" position="attributes">
+                <attribute name="attrs">{'invisible': [('is_template', '=', True)]}</attribute>
+            </field>
+
+        </field>
+    </record>
+
+</odoo>
