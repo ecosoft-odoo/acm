@@ -1,0 +1,43 @@
+<odoo>
+
+    <template id="report_contract_document" inherit_id="contract.report_contract_document">
+        <xpath expr="//t[@t-call='web.external_layout']" position="replace">
+            <t t-foreach="docs" t-as="doc">
+                <div class ="page">
+                    <div style="font-size: 20px; font-weight: bold; text-align: center;">
+                        <p t-field="doc.agreement_id.description"/>
+                    </div>
+                    <div class="text-right">
+                        ทำที่ <span t-field="doc.company_id.name"/>
+                    </div>
+                    <div class="text-right">
+                        <span t-field="doc.date_start"/>
+                    </div>
+                    <t t-foreach="doc.agreement_id.sections_ids" t-as="s">
+                        <div style="font-size: 18px; font-weight: bold;">
+                            <p t-field="s.title"/>
+                        </div>
+                        <span t-field="s.dynamic_content" style="text-align: justify"/>
+                        <ol>
+                            <ol>
+                                <li t-foreach="s.agreement_id.clauses_ids" t-as="c">
+                                    <div style="font-size: 16px; text-align: justify">
+                                        <p t-field="c.title"/>
+                                    </div>
+                                    <span t-field="c.dynamic_content" style="text-align: justify"/>
+                                </li>
+                            </ol>
+                        </ol>
+                    </t>
+                </div>
+                <div t-foreach="doc.agreement_id.appendix_ids" t-as="a">
+                    <div class="page">
+                        <h3 t-field="a.title"/>
+                        <span t-field="a.dynamic_content"/>
+                    </div>
+                </div>
+            </t>
+        </xpath>
+    </template>
+
+</odoo>
