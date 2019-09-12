@@ -9,7 +9,6 @@ class Agreement(models.Model):
     _inherit = 'agreement'
 
     contract_type = fields.Selection(
-        string="Contract Type",
         selection=[
             ('sale', 'Customer'),
             ('purchase', 'Supplier'),
@@ -73,7 +72,7 @@ class Agreement(models.Model):
              ('company_id', '=', self.company_id.id),
              ], limit=1
         )
-        vals = self.env['account.analytic.account'].new({
+        vals = ({
             'name': self.name,
             'contract_type': self.contract_type,
             'agreement_id': self.id,
@@ -81,11 +80,11 @@ class Agreement(models.Model):
             'journal_id': journal.id,
             'pricelist_id': self.partner_id.property_product_pricelist.id,
             'date_start': self.start_date,
+            'recurring_next_date': self.start_date,
             'date_end': self.end_date,
             'recurring_invoices': True,
         })
-        vals._onchange_date_start()
-        return vals._convert_to_write(vals._cache)
+        return vals
 
     @api.multi
     def prepare_contract_line(self, line, analytic_id):
@@ -108,6 +107,6 @@ class Agreement(models.Model):
             contract = self.env['account.analytic.account'].create(val)
             # Prepare contract's product lines
             for line in self.line_ids:
-                new_line = line.prepare_contract_line(line, contract.id)
+                new_line = self.prepare_contract_line(line, contract.id)
                 self.env['account.analytic.invoice.line'].create(new_line)
         return contract
