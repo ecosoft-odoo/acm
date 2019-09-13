@@ -29,8 +29,8 @@ class TestAgreementContract(TransactionCase):
             a.description = 'Test Description'
             a.agreement_type_id = self.test_agreement_type
             a.partner_id = self.test_partner
-            a.start_date = '2018-01-01'
-            a.end_date = '2022-01-01'
+            a.date_start = '2018-01-01'
+            a.date_end = '2022-01-01'
         agreement_contract = a.save()
         # User Error Action view but not create contract yet
         with self.assertRaises(UserError):

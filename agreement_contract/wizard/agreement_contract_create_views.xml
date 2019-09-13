@@ -1,0 +1,48 @@
+<odoo>
+
+    <!-- Form View -->
+    <record id="view_agreement_contract_create" model="ir.ui.view">
+        <field name="name">agreement.contract.create.form</field>
+        <field name="model">agreement.contract.create</field>
+        <field name="arch" type="xml">
+            <form string="Contract">
+                <group>
+                    <group>
+                        <field name="contract_genre" readonly="True"/>
+                        <field name="date_start"/>
+                        <field name="date_end"/>
+                        <label for="recurring_interval"/>
+                            <div>
+                                <field name="recurring_interval" class="oe_inline"/>
+                                <field name="recurring_rule_type" class="oe_inline"/>
+                            </div>
+                    </group>
+                </group>
+
+                <footer>
+                    <button string="Create Contract"
+                            name="action_create_contract"
+                            type="object"
+                            class="btn-primary"
+                            />
+                    <button string="Cancel"
+                            class="btn-secondary"
+                            special="cancel"
+                            />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action Create Contract -->
+    <record id="action_agreement_contract_create" model="ir.actions.act_window">
+        <field name="name">Contract</field>
+        <field name="res_model">agreement.contract.create</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_agreement_contract_create"/>
+        <field name="target">new</field>
+    </record>
+
+
+</odoo>
