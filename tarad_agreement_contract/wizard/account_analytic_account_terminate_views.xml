@@ -1,0 +1,42 @@
+<odoo>
+
+    <record id="view_account_analytic_account_terminate" model="ir.ui.view">
+        <field name="name">account.analytic.account.terminate.form</field>
+        <field name="model">account.analytic.account.terminate</field>
+        <field name="arch" type="xml">
+            <form string="Contract">
+                <group>
+                    <group>
+                        <field name="contract_genre"/>
+                        <field name="date_termination" attrs="{'invisible': [('contract_genre', '!=', 'termination')]}"/>
+                        <field name="date_breach" attrs="{'invisible': [('contract_genre', '!=', 'breach')]}"/>
+                        <field name="breach_description" placeholder="Ex - Partner break the rule."
+                               attrs="{'invisible': [('contract_genre', '!=', 'breach')]}"
+                               />
+                    </group>
+                </group>
+                <footer>
+                    <button string="Confirm"
+                            name="action_terminate_contract"
+                            type="object"
+                            class="btn-primary"
+                            />
+                    <button string="Cancel"
+                            class="btn-secondary"
+                            special="cancel"
+                            />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_account_analytic_account_terminate" model="ir.actions.act_window">
+        <field name="name">Contract</field>
+        <field name="res_model">account.analytic.account.terminate</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_account_analytic_account_terminate"/>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

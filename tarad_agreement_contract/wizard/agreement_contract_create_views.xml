@@ -1,0 +1,31 @@
+<odoo>
+
+    <!-- Form View -->
+    <record id="view_agreement_contract_create" model="ir.ui.view">
+        <field name="name">agreement.contract.create.form</field>
+        <field name="model">agreement.contract.create</field>
+        <field name="inherit_id" ref="agreement_contract.view_agreement_contract_create"/>
+        <field name="arch" type="xml">
+            <button name="action_create_contract" position="replace">
+                <button name="action_create_contract"
+                        string="Test Contract"
+                        type="object"
+                        class="btn-primary"
+                        />
+            </button>
+
+            <field name="contract_genre" position="after">
+                <field name="new_partner" attrs="{'invisible':[('contract_genre', '!=', 'transfer')]}"/>
+                <field name="date_start" attrs="{'invisible':[('contract_genre', '==', 'lease')]}"/>
+                <field name="date_end" attrs="{'invisible':[('contract_genre', '==', 'lease')]}"/>
+                <label for="recurring_interval" attrs="{'invisible':[('contract_genre', '==', 'lease')]}"/>
+                    <div>
+                        <field name="recurring_interval" attrs="{'invisible':[('contract_genre', '==', 'lease')]}" class="oe_inline"/>
+                        <field name="recurring_rule_type" attrs="{'invisible':[('contract_genre', '==', 'lease')]}" class="oe_inline"/>
+                    </div>
+            </field>
+        </field>
+    </record>
+
+
+</odoo>

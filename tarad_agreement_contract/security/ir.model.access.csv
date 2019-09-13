@@ -1,2 +1,2 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_agreement_genre,access_agreement_genre,model_agreement_genre,,1,1,1,1
+access_agreement_breach,access_agreement_breach,model_agreement_breach,,1,1,1,1

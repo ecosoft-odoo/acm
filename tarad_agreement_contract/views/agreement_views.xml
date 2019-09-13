@@ -5,14 +5,25 @@
         <field name="model">agreement</field>
         <field name="inherit_id" ref="agreement_legal.partner_agreement_form_view"/>
         <field name="arch" type="xml">
-            <field name="contract_type" position="after">
-                <field name="contract_genre" string="Contract Genre"/>
-            </field>
+            <button name="%(agreement_contract.action_agreement_contract_create)d" position="after">
+                <button name="%(tarad_agreement_contract.action_account_analytic_account_terminate)d"
+                        string="Terminate Contract"
+                        type="action"
+                        class="oe_highlight"
+                        />
+            </button>
 
             <field name="agreement_type_id" position="after">
-                <field name="transfer_agreement_id"
-                       string="Agreement Transfer"
-                       />
+                <field name="contract_genre" invisible="1"/>
+                <field name="extension_agreement_id" string="Source Agreement"/>
+                <field name="transfer_agreement_id" string="Agreement Transfer"/>
+            </field>
+
+            <field name="is_template" position="after">
+                <field name="breach_agreement" class="oe_inline"/>
+                <field name="date_breach" attrs="{'invisible': [('breach_agreement' , '!=', True)]}"/>
+                <field name="breach_description" placeholder="Ex - Partner break the rule." attrs="{'invisible': [('breach_agreement' , '!=', True)]}"/>
+                <field name="breach_ids"/>
             </field>
         </field>
     </record>

@@ -1,0 +1,36 @@
+<odoo>
+
+    <record id="partner_agreement_agreement_breach_list_view" model="ir.ui.view">
+        <field name="name">Agreement Breach List</field>
+        <field name="model">agreement.breach</field>
+        <field name="arch" type="xml">
+            <tree default_order='breach_description'>
+                <field name="partner_id" string="Partner"/>
+                <field name="agreement_id"/>
+                <field name="date_breach"/>
+                <field name="breach_description"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="partner_agreement_agreement_breach_form_view" model="ir.ui.view">
+        <field name="name">Agreement Breach Form</field>
+        <field name="model">agreement.breach</field>
+        <field name="arch" type="xml">
+            <form string="Agreement Breachs">
+                <sheet>
+                    <group>
+                        <field name="breach_description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="partner_agreement_action_agreement_breach" model="ir.actions.act_window">
+        <field name="name">Agreement Breach</field>
+        <field name="res_model">agreement.breach</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

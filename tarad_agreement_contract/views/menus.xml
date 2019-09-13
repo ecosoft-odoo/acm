@@ -4,11 +4,10 @@
     <!-- <delete model="ir.ui.menu" id="tarad_agreement_contract.contract_genres" /> -->
 
     <!-- Configuration -->
-    <menuitem name="Contract Genres"
-              id="contract_genres"
+    <menuitem name="Breach"
+              id="agreement_breach"
               parent="agreement_legal.agreement_configuration"
               sequence="70"
-              action="partner_agreement_action_contract_genre"
+              action="partner_agreement_action_agreement_breach"
               />
-
 </odoo>
