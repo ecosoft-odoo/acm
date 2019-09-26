@@ -1,0 +1,25 @@
+.contract_form {
+    font-size: 18px;
+    text-align: justify;
+    .title {
+        font-size: 22px;
+        font-weight: bold;
+    }
+    .section {
+        text-indent: 56px;
+    }
+    .clauses ol {
+        list-style-position: inside;
+        counter-reset: item;
+    }
+    .clauses ol li {
+        display: block;
+        text-indent: 112px;
+    }
+    .clauses ol li:before {
+        content: "ข้อ " counter(item) ". ";
+        counter-increment: item;
+        position: absolute;
+        margin-left: -56px;
+    }
+}

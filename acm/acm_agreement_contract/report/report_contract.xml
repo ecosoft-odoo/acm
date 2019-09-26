@@ -1,0 +1,52 @@
+<odoo>
+
+    <template id="report_agreement_document" inherit_id="agreement_legal.report_agreement_document">
+        <xpath expr="//t[@t-call='web.external_layout']" position="replace">
+            <div class="page">
+                <div class="article contract_form">
+                    <div class="row">
+                        <div class="col-12 text-center title">
+                            <span t-field="doc.dynamic_description"/>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="col-12 text-right">
+                            ทำที่ <span t-field="doc.company_id.name"/>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="col-12 text-right">
+                            <span>วันที่ 13 เดือน ธันวาคม พ.ศ. 2561</span>
+                        </div>
+                    </div>
+                    <!-- Section -->
+                    <t t-foreach="doc.sections_ids" t-as="s">
+                        <br/>
+                        <div class="row">
+                            <div class="col-12">
+                                <strong t-field="s.title"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 section">
+                                <span t-field="s.dynamic_content"/>
+                            </div>
+                        </div>
+                        <!-- Clauses -->
+                        <div class="row">
+                            <div class="col-12 clauses">
+                                <ol>
+                                    <li t-foreach="s.clauses_ids" t-as="c">
+                                        <span t-field="c.dynamic_content"/>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>

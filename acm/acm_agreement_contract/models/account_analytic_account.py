@@ -8,13 +8,13 @@ class AccountAnalyticAccount(models.Model):
     _inherit = 'account.analytic.account'
 
     agreement_id = fields.Many2one(
-        'agreement',
+        comodel_name='agreement',
         string='Agreement',
         ondelete='restrict',
         readonly=True,
     )
     parent_contract_id = fields.Many2one(
-        'account.analytic.account',
+        comodel_name='account.analytic.account',
         string='Parent Contract',
         ondelete='restrict',
         readonly=True,

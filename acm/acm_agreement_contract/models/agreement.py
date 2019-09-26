@@ -9,8 +9,9 @@ class Agreement(models.Model):
     _inherit = 'agreement'
 
     contract_type = fields.Selection(
-        [('sale', 'Customer Contract'),
-         ('purchase', 'Supplier Contract'), ],
+        selection=[
+            ('sale', 'Customer Contract'),
+            ('purchase', 'Supplier Contract'), ],
         default='sale',
         required=True,
     )
@@ -24,11 +25,12 @@ class Agreement(models.Model):
         help='Repeat every (Days/Week/Month/Year)',
     )
     recurring_rule_type = fields.Selection(
-        [('daily', 'Day(s)'),
-         ('weekly', 'Week(s)'),
-         ('monthly', 'Month(s)'),
-         ('monthlylastday', 'Month(s) last day'),
-         ('yearly', 'Year(s)'), ],
+        selection=[
+            ('daily', 'Day(s)'),
+            ('weekly', 'Week(s)'),
+            ('monthly', 'Month(s)'),
+            ('monthlylastday', 'Month(s) last day'),
+            ('yearly', 'Year(s)'), ],
         string='Recurrence',
         default='monthly',
         required=True,
@@ -50,6 +52,49 @@ class Agreement(models.Model):
         for agreement in self:
             if agreement.search_contract():
                 agreement.is_contract_create = True
+
+    @api.multi
+    def get_agreement_vals(self):
+        self.ensure_one()
+        return {
+            'name': 'NEW',
+            'active': True,
+            'version': 1,
+            'revision': 0,
+            'state': 'draft',
+            'stage_id': self.env.ref('agreement_legal.agreement_stage_new').id,
+            'partner_id': self._context.get('partner_id'),
+            'date_contract': self._context.get('date_contract'),
+            'start_date': self._context.get('start_date'),
+            'end_date': self._context.get('end_date'),
+            'recurring_interval': self._context.get('recurring_interval'),
+            'recurring_rule_type': self._context.get('recurring_rule_type'),
+            'parent_agreement_id': False,
+        }
+
+    @api.multi
+    def _create_agreement(self):
+        self.ensure_one()
+        vals = self.get_agreement_vals()
+        # Create agreement
+        vals['name'] = self.name + ' - %s' % self._context.get('name')
+        new_agreement = self.copy(default=vals)
+        new_agreement.sections_ids.mapped('clauses_ids').write({
+            'agreement_id': new_agreement.id})
+        # Create child agreement
+        vals['parent_agreement_id'] = new_agreement.id
+        for child in self.child_agreements_ids:
+            vals['name'] = child.name + ' - %s' % self._context.get('name')
+            child_agreement = child.copy(default=vals)
+            child_agreement.sections_ids.mapped('clauses_ids').write({
+                'agreement_id': child_agreement.id})
+        return {
+            'res_model': 'agreement',
+            'type': 'ir.actions.act_window',
+            'view_mode': 'form',
+            'view_type': 'form',
+            'res_id': new_agreement.id,
+        }
 
     @api.multi
     def action_view_contract(self):

@@ -16,5 +16,10 @@
         'acm_agreement_contract/wizards/agreement_create_wizards.xml',
         'acm_agreement_contract/views/agreement_views.xml',
         'acm_agreement_contract/views/account_analytic_account_views.xml',
+        'acm_agreement_contract/views/res_partner_views.xml',
+        'acm_agreement_contract/data/report_paperformat_data.xml',
+        'acm_agreement_contract/data/report_data.xml',
+        'acm_agreement_contract/report/report_contract.xml',
+        'acm_agreement_contract/report/report_templates.xml',
     ],
 }

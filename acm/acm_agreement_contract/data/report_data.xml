@@ -1,0 +1,6 @@
+<odoo>
+    <!-- Setting Paperformat Agreement -->
+    <record id="agreement_legal.partner_agreement_contract_document" model="ir.actions.report">
+        <field name="paperformat_id" ref="acm.report_paperformat_agreement"/>
+    </record>
+</odoo>

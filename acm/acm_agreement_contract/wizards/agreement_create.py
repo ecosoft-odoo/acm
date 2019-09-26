@@ -8,11 +8,9 @@ class AgreementCreate(models.TransientModel):
     _name = 'agreement.create'
     _description = 'Create Agreement at the same time'
 
-    title = fields.Char(
-        string='Title',
-    )
+    title = fields.Char()
     partner_id = fields.Many2one(
-        'res.partner',
+        comodel_name='res.partner',
         string='Partner',
         required=True,
     )
@@ -35,11 +33,12 @@ class AgreementCreate(models.TransientModel):
         help='Repeat every (Days/Week/Month/Year)',
     )
     recurring_rule_type = fields.Selection(
-        [('daily', 'Day(s)'),
-         ('weekly', 'Week(s)'),
-         ('monthly', 'Month(s)'),
-         ('monthlylastday', 'Month(s) last day'),
-         ('yearly', 'Year(s)'), ],
+        selection=[
+            ('daily', 'Day(s)'),
+            ('weekly', 'Week(s)'),
+            ('monthly', 'Month(s)'),
+            ('monthlylastday', 'Month(s) last day'),
+            ('yearly', 'Year(s)'), ],
         string='Recurrence',
         default='monthly',
         required=True,
@@ -47,46 +46,17 @@ class AgreementCreate(models.TransientModel):
     )
 
     @api.multi
-    def get_default_vals(self):
+    def action_create_agreement(self):
         self.ensure_one()
-        return {
-            'name': 'NEW',
-            'active': True,
-            'version': 1,
-            'revision': 0,
-            'state': 'draft',
-            'stage_id': self.env.ref('agreement_legal.agreement_stage_new').id,
+        agreement_id = self._context.get('active_id')
+        template_agreement = self.env['agreement'].browse(agreement_id)
+        agreement = template_agreement.with_context({
+            'name': self.title,
             'partner_id': self.partner_id.id,
             'date_contract': self.date_contract,
             'start_date': self.date_start,
             'end_date': self.date_end,
             'recurring_interval': self.recurring_interval,
             'recurring_rule_type': self.recurring_rule_type,
-            'parent_agreement_id': False,
-        }
-
-    @api.multi
-    def action_create_agreement(self):
-        self.ensure_one()
-        agreement_id = self._context.get('active_id')
-        template_agreement = self.env['agreement'].browse(agreement_id)
-        default_vals = self.get_default_vals()
-        default_vals['name'] = template_agreement.name + ' - %s' % self.title
-        # Create agreemnt
-        new_agreement = template_agreement.copy(default=default_vals)
-        new_agreement.sections_ids.mapped('clauses_ids').write({
-            'agreement_id': new_agreement.id})
-        # Create child agreement
-        default_vals['parent_agreement_id'] = new_agreement.id
-        for child in template_agreement.child_agreements_ids:
-            default_vals['name'] = child.name + ' - %s' % self.title
-            child_agreement = child.copy(default=default_vals)
-            child_agreement.sections_ids.mapped('clauses_ids').write({
-                'agreement_id': child_agreement.id})
-        return {
-            'res_model': 'agreement',
-            'type': 'ir.actions.act_window',
-            'view_mode': 'form',
-            'view_type': 'form',
-            'res_id': new_agreement.id,
-        }
+        })
+        return agreement._create_agreement()
