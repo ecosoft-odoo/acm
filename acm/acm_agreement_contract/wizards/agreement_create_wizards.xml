@@ -1,21 +1,22 @@
 <odoo>
 
-    <record id="agreement_create_form_view" model="ir.ui.view">
+    <record id="agreement_create_view_form" model="ir.ui.view">
         <field name="name">agreement.create.view.form</field>
         <field name="model">agreement.create</field>
         <field name="arch" type="xml">
             <form string="Create Agreement">
                 <group>
                     <group>
+                        <field name="title"/>
                         <field name="partner_id"/>
                         <field name="date_contract"/>
                         <field name="date_start"/>
                         <field name="date_end"/>
                         <label for="recurring_interval"/>
-                            <div>
-                                <field name="recurring_interval" class="oe_inline"/>
-                                <field name="recurring_rule_type" class="oe_inline"/>
-                            </div>
+                        <div>
+                            <field name="recurring_interval" class="oe_inline"/>
+                            <field name="recurring_rule_type" class="oe_inline"/>
+                        </div>
                     </group>
                     <group></group>
                 </group>
@@ -32,7 +33,7 @@
         <field name="res_model">agreement.create</field>
         <field name="view_type">form</field>
         <field name="view_mode">form</field>
-        <field name="view_id" ref="agreement_create_form_view"/>
+        <field name="view_id" ref="agreement_create_view_form"/>
         <field name="target">new</field>
     </record>
 

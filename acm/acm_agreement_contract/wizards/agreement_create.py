@@ -8,6 +8,9 @@ class AgreementCreate(models.TransientModel):
     _name = 'agreement.create'
     _description = 'Create Agreement at the same time'
 
+    title = fields.Char(
+        string='Title',
+    )
     partner_id = fields.Many2one(
         'res.partner',
         string='Partner',
@@ -59,6 +62,7 @@ class AgreementCreate(models.TransientModel):
             'end_date': self.date_end,
             'recurring_interval': self.recurring_interval,
             'recurring_rule_type': self.recurring_rule_type,
+            'parent_agreement_id': False,
         }
 
     @api.multi
@@ -67,16 +71,18 @@ class AgreementCreate(models.TransientModel):
         agreement_id = self._context.get('active_id')
         template_agreement = self.env['agreement'].browse(agreement_id)
         default_vals = self.get_default_vals()
+        default_vals['name'] = template_agreement.name + ' - %s' % self.title
         # Create agreemnt
         new_agreement = template_agreement.copy(default=default_vals)
         new_agreement.sections_ids.mapped('clauses_ids').write({
-            'agreement_id': template_agreement.id})
+            'agreement_id': new_agreement.id})
         # Create child agreement
+        default_vals['parent_agreement_id'] = new_agreement.id
         for child in template_agreement.child_agreements_ids:
+            default_vals['name'] = child.name + ' - %s' % self.title
             child_agreement = child.copy(default=default_vals)
             child_agreement.sections_ids.mapped('clauses_ids').write({
-                'agreement_id': new_agreement.id})
-            child_agreement.parent_agreement_id = new_agreement.id
+                'agreement_id': child_agreement.id})
         return {
             'res_model': 'agreement',
             'type': 'ir.actions.act_window',
