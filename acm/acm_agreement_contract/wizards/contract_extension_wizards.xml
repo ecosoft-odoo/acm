@@ -1,0 +1,39 @@
+<odoo>
+
+    <!-- Form View -->
+    <record id="contract_extension_view_form" model="ir.ui.view">
+        <field name="name">contract.extension.form</field>
+        <field name="model">contract.extension</field>
+        <field name="arch" type="xml">
+            <form string="Extension Contract">
+                <group>
+                    <group>
+                        <field name="date_contract"/>
+                        <field name="date_start"/>
+                        <field name="date_end"/>
+                        <label for="recurring_interval"/>
+                        <div>
+                            <field name="recurring_interval" class="oe_inline"/>
+                            <field name="recurring_rule_type" class="oe_inline"/>
+                        </div>
+                    </group>
+                </group>
+                <footer>
+                    <button string="Extension Contract" name="action_extension_contract" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action Extension Contract -->
+    <record id="contract_extension_action" model="ir.actions.act_window">
+        <field name="name">Extension Contract</field>
+        <field name="res_model">contract.extension</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="contract_extension_view_form"/>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

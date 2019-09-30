@@ -1,0 +1,27 @@
+<odoo>
+
+    <record id="product_template_form_view" model="ir.ui.view">
+        <field name="name">product.template.common.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <page name="invoicing" position="after">
+                <page name="lease_info" string="Lease Info">
+                    <group>
+                        <group>
+                            <field name="width"/>
+                            <field name="length"/>
+                            <field name="area"/>
+                            <label for="time_start" string="Working Hours"/>
+                            <div>
+                                <field name="time_start" class="oe_inline" widget="float_time"/> to
+                                <field name="time_end" class="oe_inline" widget="float_time"/>
+                            </div>
+                        </group>
+                    </group>
+                </page>
+            </page>
+        </field>
+    </record>
+
+</odoo>

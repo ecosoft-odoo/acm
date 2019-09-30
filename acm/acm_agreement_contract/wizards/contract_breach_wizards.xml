@@ -1,0 +1,35 @@
+<odoo>
+
+    <!-- Form View -->
+    <record id="contract_breach_view_form" model="ir.ui.view">
+        <field name="name">contract.breach.form</field>
+        <field name="model">contract.breach</field>
+        <field name="arch" type="xml">
+            <form string="breach Contract">
+                <group>
+                    <group>
+                        <field name="date_breach"/>
+                    </group>
+                </group>
+                <group string="Reason">
+                    <field name="reason" nolabel="1"/>
+                </group>
+                <footer>
+                    <button string="Breach Contract" name="action_breach_contract" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action Breach Contract -->
+    <record id="contract_breach_action" model="ir.actions.act_window">
+        <field name="name">Breach Contract</field>
+        <field name="res_model">contract.breach</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="contract_breach_view_form"/>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

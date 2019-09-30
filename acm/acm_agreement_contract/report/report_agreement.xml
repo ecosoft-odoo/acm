@@ -1,0 +1,89 @@
+<odoo>
+
+    <template id="report_agreement_document" inherit_id="agreement_legal.report_agreement_document">
+        <xpath expr="//t[@t-call='web.external_layout']" position="replace">
+            <div class="page">
+                <div class="article contract_form">
+                    <div class="row">
+                        <div class="col-12 text-center title">
+                            <span t-field="doc.dynamic_description"/>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="col-12 text-right">
+                            สถานที่ทำสัญญา <span t-field="doc.company_id.name"/>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <t t-set="month_dict"
+                            t-value="{
+                                '01': 'มกราคม',
+                                '02': 'กุมภาพันธ์',
+                                '03': 'มีนาคม',
+                                '04': 'เมษายน',
+                                '05': 'พฤษภาคม',
+                                '06': 'มิถุนายน',
+                                '07': 'กรกฎาคม',
+                                '08': 'สิงหาคม',
+                                '09': 'กันยายน',
+                                '10': 'ตุลาคม',
+                                '11': 'พฤศจิกายน',
+                                '12': 'ธันวาคม'}"/>
+                        <div class="col-12 text-right">
+                            วันที่ <span t-esc="doc.date_contract.strftime('%d')"/>
+                            เดือน <span t-esc="month_dict[doc.date_contract.strftime('%m')]"/>
+                            พ.ศ. <span t-esc="(doc.date_contract + relativedelta(years=543)).strftime('%Y')"/>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="col-12 text-right">
+                            <span t-esc="str(doc.date_contract.strftime('%m'))"/>
+                            <span t-esc="doc.date_contract.strftime('%m')"/>
+                        </div>
+                    </div>
+                    <!-- Section -->
+                    <t t-foreach="doc.sections_ids" t-as="s">
+                        <br/>
+                        <div class="row">
+                            <div class="col-12">
+                                <strong t-field="s.title"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 section">
+                                <span t-field="s.dynamic_content"/>
+                            </div>
+                        </div>
+                        <!-- Clauses -->
+                        <div class="row">
+                            <div class="col-12 clauses">
+                                <ol>
+                                    <li t-foreach="s.clauses_ids" t-as="c">
+                                        <span t-field="c.dynamic_content"/>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </t>
+                    <div t-foreach="doc.appendix_ids" t-as="a">
+                        <div class="page text-center sub_title" style="page-break-before: always; text-decoration: underline;">
+                            <span t-field="a.name"/>
+                        </div>
+                        <div class="page text-center sub_title">
+                            <p t-field="a.title"/>
+                        </div>
+                        <div class="row">
+                            <div class="col-12" style="text-align: left;">
+                                <span t-field="a.dynamic_content"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+</odoo>

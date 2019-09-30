@@ -5,7 +5,7 @@ from odoo import fields, models, api
 from dateutil.relativedelta import relativedelta
 
 
-class Partner(models.Model):
+class ResPartner(models.Model):
     _inherit = 'res.partner'
 
     date_birth = fields.Date(
@@ -19,8 +19,5 @@ class Partner(models.Model):
     @api.multi
     def _compute_age(self):
         for record in self:
-            if record.date_birth and record.date_birth <= fields.date.today():
-                record.age = relativedelta(
-                    fields.Date.today(), record.date_birth).years
-            else:
-                record.age = -1
+            record.age = relativedelta(
+                fields.Date.today(), record.date_birth).years

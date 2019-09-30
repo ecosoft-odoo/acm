@@ -5,34 +5,21 @@ from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 
 
-class AgreementCreate(models.TransientModel):
-    _name = 'agreement.create'
-    _description = 'Create Agreement at the same time'
+class ContractExtension(models.TransientModel):
+    _name = 'contract.extension'
+    _description = 'Extension contract from agreement'
 
-    name = fields.Char(
-        required=True,
-    )
-    partner_id = fields.Many2one(
-        comodel_name='res.partner',
-        string='Partner',
-        required=True,
-    )
-    partner_contact_id = fields.Many2one(
-        comodel_name='res.partner',
-        string='Primary Contact',
-        help='The primary partner contact (If Applicable).',
-    )
-    date_contract = fields.Date(
-        string='Contract Date',
-        default=fields.Date.today(),
-        required=True,
-    )
     date_start = fields.Date(
         string='Start Date',
         required=True,
     )
     date_end = fields.Date(
         string='End Date',
+        required=True,
+    )
+    date_contract = fields.Date(
+        string='Contract Date',
+        default=fields.Date.today(),
         required=True,
     )
     recurring_interval = fields.Integer(
@@ -55,20 +42,27 @@ class AgreementCreate(models.TransientModel):
     )
 
     @api.multi
-    def action_create_agreement(self):
+    def action_extension_contract(self):
         self.ensure_one()
         if self.date_start > self.date_end:
-            raise UserError(_('"Start Date" cannot be more than "End Date"'))
-        agreement_id = self._context.get('active_id')
-        template_agreement = self.env['agreement'].browse(agreement_id)
-        agreement = template_agreement.with_context({
-            'name': self.name,
-            'partner_id': self.partner_id.id,
-            'partner_contact_id': self.partner_contact_id.id,
+            raise UserError(_('"Start Date" cannot be less than "End Date"'))
+        context = dict(self._context or {})
+        active_id = context.get('active_id', [])
+        agreement = self.env['agreement'].browse(active_id)
+        if agreement.is_contract_create == 'False':
+            raise UserError(_('Please create contract.'))
+        if agreement.end_date >= self.date_start:
+            raise UserError(
+                _('The contract is still active on the date you selected.'))
+        new_agreement = agreement.with_context({
+            'name': ' Extension',
+            'partner_id': agreement.partner_id.id,
+            'partner_contact_id': agreement.partner_contact_id.id,
             'date_contract': self.date_contract,
             'start_date': self.date_start,
             'end_date': self.date_end,
             'recurring_interval': self.recurring_interval,
             'recurring_rule_type': self.recurring_rule_type,
+            'extension': True,
         })
-        return agreement._create_agreement()
+        return new_agreement._create_agreement()

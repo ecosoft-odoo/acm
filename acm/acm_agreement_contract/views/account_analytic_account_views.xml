@@ -9,6 +9,9 @@
                 <field name="agreement_id"/>
                 <field name="parent_contract_id" context="{'form_view_ref': 'contract.account_analytic_account_sale_form'}"/>
             </field>
+            <button name="recurring_create_invoice" position="attributes">
+                <attribute name="groups"></attribute>
+            </button>
         </field>
     </record>
 

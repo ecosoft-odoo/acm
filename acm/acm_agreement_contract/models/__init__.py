@@ -5,3 +5,4 @@ from . import agreement_line
 from . import account_analytic_account
 from . import agreement
 from . import res_partner
+from . import product_template

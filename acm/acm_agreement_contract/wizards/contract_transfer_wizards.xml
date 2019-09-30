@@ -1,13 +1,13 @@
 <odoo>
 
-    <record id="agreement_create_view_form" model="ir.ui.view">
-        <field name="name">agreement.create.view.form</field>
-        <field name="model">agreement.create</field>
+    <!-- Form View -->
+    <record id="contract_transfer_view_form" model="ir.ui.view">
+        <field name="name">contract.transfer.form</field>
+        <field name="model">contract.transfer</field>
         <field name="arch" type="xml">
-            <form string="Create Agreement">
+            <form string="Transfer Contract">
                 <group>
                     <group>
-                        <field name="name"/>
                         <field name="partner_id"/>
                         <field name="partner_contact_id" attrs="{'invisible':[('partner_id', '=', False)]}" domain="[('parent_id', '=', partner_id)]"/>
                         <field name="date_contract"/>
@@ -19,22 +19,22 @@
                             <field name="recurring_rule_type" class="oe_inline"/>
                         </div>
                     </group>
-                    <group></group>
                 </group>
                 <footer>
-                    <button name="action_create_agreement" string="Create Agreement" type="object" class="btn-primary"/>
+                    <button string="Transfer Contract" name="action_transfer_contract" type="object" class="btn-primary"/>
                     <button string="Cancel" class="btn-secondary" special="cancel"/>
                 </footer>
             </form>
         </field>
     </record>
 
-    <record id="agreement_create_action" model="ir.actions.act_window">
-        <field name="name">Create Agreement</field>
-        <field name="res_model">agreement.create</field>
+    <!-- Action Transfer Contract -->
+    <record id="contract_transfer_action" model="ir.actions.act_window">
+        <field name="name">Transfer Contract</field>
+        <field name="res_model">contract.transfer</field>
         <field name="view_type">form</field>
-        <field name="view_mode">form</field>
-        <field name="view_id" ref="agreement_create_view_form"/>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="contract_transfer_view_form"/>
         <field name="target">new</field>
     </record>
 
