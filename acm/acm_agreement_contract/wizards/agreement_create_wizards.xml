@@ -1,0 +1,54 @@
+<odoo>
+    <!-- Form View -->
+    <record id="agreement_create_view_form" model="ir.ui.view">
+        <field name="name">agreement.create.view.form</field>
+        <field name="model">agreement.create</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="template_ids" domain="[('is_template', '=', True), ('state', '=', 'active')]" widget="many2many_tags"/>
+                        <label for="name"/>
+                        <div>
+                            <field name="name" class="oe_inline"/> -
+                            <field name="post_name" class="oe_inline"/>
+                        </div>
+                        <field name="partner_id"/>
+                        <field name="partner_contact_id" attrs="{'invisible': [('partner_id', '=', False)]}" domain="[('parent_id', '=', partner_id)]"/>
+                        <field name="date_contract"/>
+                        <field name="date_start"/>
+                        <field name="date_end"/>
+                        <label for="recurring_interval"/>
+                        <div>
+                            <field name="recurring_interval" class="oe_inline"/>
+                            <field name="recurring_rule_type" class="oe_inline"/>
+                        </div>
+                    </group>
+                    <group></group>
+                </group>
+                <footer>
+                    <button name="action_create_agreement" string="Create Agreement" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="agreement_create_action" model="ir.actions.act_window">
+        <field name="name">Create Agreement</field>
+        <field name="res_model">agreement.create</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="agreement_create_view_form"/>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem
+        name="New Agreement"
+        id="new_agreement_menu"
+        sequence="20"
+        parent="agreement_legal.agreement_operations"
+        action="agreement_create_action"/>
+</odoo>
