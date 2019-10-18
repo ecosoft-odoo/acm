@@ -36,7 +36,6 @@ class Agreement(models.Model):
     )
     date_contract = fields.Date(
         string='Contract Date',
-        default=fields.date.today(),
     )
     recurring_interval = fields.Integer(
         string='Repeat Every',

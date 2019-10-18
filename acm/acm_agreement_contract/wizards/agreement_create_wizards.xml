@@ -13,7 +13,7 @@
                             <field name="name" class="oe_inline"/> -
                             <field name="post_name" class="oe_inline"/>
                         </div>
-                        <field name="partner_id"/>
+                        <field name="partner_id" domain="[('customer', '=', True)]"/>
                         <field name="partner_contact_id" attrs="{'invisible': [('partner_id', '=', False)]}" domain="[('parent_id', '=', partner_id)]"/>
                         <field name="date_contract"/>
                         <field name="date_start"/>
