@@ -14,6 +14,9 @@
                             <field name="area"/>
                             <field name="working_hours"/>
                         </group>
+                        <group>
+                            <field name="lease_type"/>
+                        </group>
                     </group>
                 </page>
             </page>

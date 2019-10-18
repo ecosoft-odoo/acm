@@ -11,3 +11,11 @@ class ProductTemplate(models.Model):
     length = fields.Float()
     area = fields.Float()
     working_hours = fields.Char()
+    lease_type = fields.Selection(
+        selection=[
+            ('rent', 'Rent'),
+            ('compensation', 'Compensation'),
+            ('deposit', 'Deposit'),
+            ('transfer', 'Transfer'), ],
+        string='Lease Type',
+    )
