@@ -1,0 +1,32 @@
+<odoo>
+    <!-- Form View -->
+    <record id="contract_terminate_view_form" model="ir.ui.view">
+        <field name="name">contract.terminate.form</field>
+        <field name="model">contract.terminate</field>
+        <field name="arch" type="xml">
+            <form string="Terminate Contract">
+                <group>
+                    <group>
+                        <field name="date_termination"/>
+                    </group>
+                </group>
+                <group string="Reason">
+                    <field name="reason_termination" nolabel="1"/>
+                </group>
+                <footer>
+                    <button string="Terminate Contract" name="action_terminate_contract" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action Terminate Contract -->
+    <record id="contract_terminate_action" model="ir.actions.act_window">
+        <field name="name">Terminate Contract</field>
+        <field name="res_model">contract.terminate</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>
