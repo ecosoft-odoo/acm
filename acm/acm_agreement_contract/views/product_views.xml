@@ -9,9 +9,9 @@
                 <page name="lease_info" string="Lease Info">
                     <group>
                         <group>
-                            <field name="width"/>
-                            <field name="length"/>
-                            <field name="area"/>
+                            <field name="p_width"/>
+                            <field name="p_length"/>
+                            <field name="p_area"/>
                             <field name="working_hours"/>
                         </group>
                         <group>

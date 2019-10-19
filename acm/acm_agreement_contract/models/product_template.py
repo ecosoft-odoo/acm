@@ -7,9 +7,15 @@ from odoo import models, fields
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
-    width = fields.Float()
-    length = fields.Float()
-    area = fields.Float()
+    p_width = fields.Float(
+        string='Width',
+    )
+    p_length = fields.Float(
+        string='Length',
+    )
+    p_area = fields.Float(
+        string='Area',
+    )
     working_hours = fields.Char()
     lease_type = fields.Selection(
         selection=[
