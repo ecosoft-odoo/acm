@@ -1,0 +1,42 @@
+<odoo>
+    <template id="report_agreement_document" inherit_id="agreement_legal.report_agreement_document">
+        <xpath expr="//t[@t-call='web.external_layout']" position="replace">
+            <div class="page">
+                <div class="article contract_form">
+                    <!-- Section -->
+                    <t t-foreach="doc.sections_ids" t-as="s">
+                        <t t-if="s.title">
+                            <div class="row">
+                                <div class="col-12">
+                                    <strong t-field="s.title"/>
+                                </div>
+                            </div>
+                        </t>
+                        <t t-if="s.dynamic_content">
+                            <div class="row">
+                                <div class="col-12 section">
+                                    <span t-field="s.dynamic_content"/>
+                                </div>
+                            </div>
+                        </t>
+                        <!-- Clauses -->
+                        <div class="row">
+                            <div class="col-12 clauses">
+                                <ol>
+                                    <li t-foreach="s.clauses_ids" t-as="c">
+                                        <t t-if="c.title">
+                                            <div t-field="c.title"/>
+                                        </t>
+                                        <t t-if="c.dynamic_content">
+                                            <div t-field="c.dynamic_content"/>
+                                        </t>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>
