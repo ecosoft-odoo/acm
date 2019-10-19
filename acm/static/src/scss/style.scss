@@ -1,0 +1,32 @@
+@font-face {
+    font-family: 'THSarabunNew';
+    src: url('../fonts/THSarabunNew.ttf') format('truetype');
+}
+.contract_form {
+    font-family: 'THSarabunNew';
+    font-size: 24px;
+    text-align: justify;
+    line-height: 30px;
+    p {
+        margin-bottom: 10px;
+    }
+    .section {
+        text-indent: 56px;
+    }
+    .clauses {
+        ol {
+            list-style-position: inside;
+            counter-reset: item;
+            li {
+                display: block;
+                text-indent: 112px;
+            }
+            li:before {
+                content: "ข้อ " counter(item) ". ";
+                counter-increment: item;
+                position: absolute;
+                margin-left: -56px;
+            }
+        }
+    }
+}

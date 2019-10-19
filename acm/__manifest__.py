@@ -13,6 +13,8 @@
         'contract',
     ],
     'data': [
+        'acm_agreement_contract/data/report_paperformat_data.xml',
+        'acm_agreement_contract/data/report_data.xml',
         'acm_agreement_contract/security/ir.model.access.csv',
         'acm_agreement_contract/wizards/agreement_create_wizards.xml',
         'acm_agreement_contract/wizards/contract_extension_wizards.xml',
@@ -24,5 +26,7 @@
         'acm_agreement_contract/views/product_views.xml',
         'acm_agreement_contract/views/account_analytic_account_views.xml',
         'acm_agreement_contract/views/agreement_views.xml',
+        'acm_agreement_contract/report/report_templates.xml',
+        'acm_agreement_contract/report/report_agreement.xml',
     ],
 }
