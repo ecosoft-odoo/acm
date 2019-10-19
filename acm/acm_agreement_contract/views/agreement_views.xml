@@ -1,0 +1,138 @@
+<odoo>
+    <!-- Form View -->
+    <record id="partner_agreement_form_view" model="ir.ui.view">
+        <field name="name">Agreement Form</field>
+        <field name="model">agreement</field>
+        <field name="inherit_id" ref="agreement_legal.partner_agreement_form_view"/>
+        <field name="arch" type="xml">
+            <!-- Not use state_id -->
+            <field name="state" position="replace"/>
+            <field name="stage_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <!-- -->
+            <form position="attributes">
+                <attribute name="delete">0</attribute>
+                <attribute name="duplicate">0</attribute>
+            </form>
+            <button name="create_new_agreement" position="after">
+                <button name="active_statusbar" string="Active" type="object" class="oe_highlight" confirm="Are you sure to active this agreement ?" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                <button name="create_new_contract" string="New Contract" type="object" class="oe_highlight" attrs="{'invisible': ['|', ('is_template', '=', True), '|', ('is_contract_create', '=', True), ('state', '!=', 'active')]}"/>
+                <button name="%(contract_extension_action)d" string="Extension Contract" type="action" class="oe_highlight" attrs="{'invisible': ['|', ('is_contract_create', '=', False), ('state', '!=', 'active')]}"/>
+                <button name="%(contract_transfer_action)d" string="Transfer Contract" type="action" class="oe_highlight" attrs="{'invisible': ['|', ('is_contract_create', '=', False), ('state', '!=', 'active')]}"/>
+                <button name="%(contract_breach_action)d" string="Breach Contract" type="action" class="oe_highlight" attrs="{'invisible': ['|', ('is_contract_create', '=', False), ('state', '!=', 'active')]}"/>
+                <button name="%(contract_terminate_action)d" string="Termination Contract" type="action" class="oe_highlight" attrs="{'invisible': ['|', ('is_contract_create', '=', False), ('state', '!=', 'active')]}"/>
+                <button name="inactive_statusbar" string="Inactive" type="object" class="oe_highlight" confirm="Are you sure to inactive this agreement ?" attrs="{'invisible': [('state', 'not in', ['draft', 'active'])]}"/>
+                <field name="state" widget="statusbar"/>
+            </button>
+            <div name="button_box" position="inside">
+                <button name="action_view_contract" string="Contract" type="object" class="oe_stat_button" icon="fa-pencil-square-o" attrs="{'invisible': [('is_contract_create', '=', False)]}"/>
+            </div>
+            <field name="is_template" position="attributes">
+                <attribute name="readonly">1</attribute>
+            </field>
+            <field name="end_date" position="after">
+                <field name="date_contract" attrs="{'invisible': [('is_template', '=', True)]}"/>
+                <label for="recurring_interval" attrs="{'invisible': [('is_template', '=', True)]}"/>
+                <div attrs="{'invisible': [('is_template', '=', True)]}">
+                    <field name="recurring_interval" class="oe_inline"/>
+                    <field name="recurring_rule_type" class="oe_inline"/>
+                </div>
+            </field>
+            <field name="termination_date" position="attributes">
+                <attribute name="attrs">{'invisible': [('is_termination', '=', False)]}</attribute>
+            </field>
+            <field name="termination_requested" position="attributes">
+                <attribute name="attrs">{'invisible': [('is_termination', '=', False)]}</attribute>
+            </field>
+            <field name="termination_date" position="after">
+                <field name="reason_termination" readonly="True" attrs="{'invisible': [('is_termination', '=', False)]}"/>
+                <field name="date_breach" readonly="True" attrs="{'invisible': [('is_breach', '=', False)]}"/>
+                <field name="reason_breach" readonly="True" attrs="{'invisible': [('is_breach', '=', False)]}"/>
+            </field>
+            <field name="partner_id" position="attributes">
+                <attribute name="attrs">{'required': [('is_template', '=', False)]}</attribute>
+            </field>
+            <field name="uom_id" position="after">
+                <field name="lst_price"/>
+            </field>
+            <xpath expr="//sheet/group[1]/group[2]" position="inside">
+                <field name="is_contract_create" invisible="1"/>
+                <field name="contract_type"/>
+                <field name="template_id" readonly="True" attrs="{'invisible': [('is_template', '=', True)]}"/>
+                <field name="is_extension" readonly="True" attrs="{'invisible': [('is_extension', '=', False)]}"/>
+                <field name="extension_agreement_id" readonly="True" attrs="{'invisible': [('is_extension', '=', False)]}"/>
+                <field name="is_transfer" readonly="True" attrs="{'invisible': [('is_transfer', '=', False)]}"/>
+                <field name="transfer_agreement_id" readonly="True" attrs="{'invisible': [('is_transfer', '=', False)]}"/>
+                <field name="is_breach" readonly="True" attrs="{'invisible': [('is_breach', '=', False)]}"/>
+                <field name="is_termination" readonly="True" attrs="{'invisible': [('is_termination', '=', False)]}"/>
+            </xpath>
+            <xpath expr="//page[@name='products']/field/tree" position="attributes">
+                <attribute name="editable">buttom</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Tree View -->
+    <record id="partner_agreement_list_view" model="ir.ui.view">
+        <field name="name">Agreement List</field>
+        <field name="model">agreement</field>
+        <field name="inherit_id" ref="agreement_legal.partner_agreement_list_view"/>
+        <field name="arch" type="xml">
+            <tree position="attributes">
+                <attribute name="delete">0</attribute>
+            </tree>
+            <field name="agreement_subtype_id" position="after">
+                <field name="state" string="Status"/>
+            </field>
+            <field name="name" position="before">
+                <field name="code"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- Graph View -->
+    <record id="agreement_graph_view" model="ir.ui.view">
+        <field name="name">agreement.graph</field>
+        <field name="model">agreement</field>
+        <field name="inherit_id" ref="agreement_legal.agreement_graph_view"/>
+        <field name="arch" type="xml">
+            <field name="stage_id" position="replace"/>
+            <graph position="inside">
+                <field name="state" type="row"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Pivot View -->
+    <record id="agreement_pivot_view" model="ir.ui.view">
+        <field name="name">agreement.pivot</field>
+        <field name="model">agreement</field>
+        <field name="inherit_id" ref="agreement_legal.agreement_pivot_view"/>
+        <field name="arch" type="xml">
+            <field name="stage_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="stage_id" position="after">
+                <field name="state" type="row"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="agreement_legal.partner_agreement_agreement_templates" model="ir.actions.act_window">
+        <field name="context">{'default_is_template': True}</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record id="agreement_legal.agreement_operations_agreement" model="ir.actions.act_window">
+        <field name="context">{'default_is_template': False}</field>
+    </record>
+
+    <!-- Menu -->
+    <record id="agreement_legal.agreement_dashboard" model="ir.ui.menu">
+        <field name="active">False</field>
+    </record>
+    <record id="agreement.agreement_menu" model="ir.ui.menu">
+        <field name="action" ref="agreement_legal.agreement_operations_agreement"/>
+    </record>
+</odoo>
