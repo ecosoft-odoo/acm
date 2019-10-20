@@ -73,6 +73,22 @@ class Agreement(models.Model):
     is_contract_create = fields.Boolean(
         compute='_compute_is_contract_create',
     )
+    rent_line_id = fields.Many2one(
+        comodel_name='agreement.line',
+        compute='_compute_line_id',
+    )
+    compensation_line_id = fields.Many2one(
+        comodel_name='agreement.line',
+        compute='_compute_line_id',
+    )
+    deposit_line_id = fields.Many2one(
+        comodel_name='agreement.line',
+        compute='_compute_line_id',
+    )
+    transfer_line_id = fields.Many2one(
+        comodel_name='agreement.line',
+        compute='_compute_line_id',
+    )
 
     @api.constrains('start_date', 'end_date')
     @api.multi
@@ -93,6 +109,30 @@ class Agreement(models.Model):
         for rec in self:
             if rec.search_contract():
                 rec.is_contract_create = True
+
+    @api.multi
+    @api.depends('line_ids')
+    def _compute_line_id(self):
+        for rec in self:
+            lines = rec.line_ids
+            if not lines:
+                continue
+            rent_line_ids = lines.filtered(
+                lambda l: l.product_id.lease_type == 'rent')
+            compensation_line_ids = lines.filtered(
+                lambda l: l.product_id.lease_type == 'compensation')
+            deposit_line_ids = lines.filtered(
+                lambda l: l.product_id.lease_type == 'deposit')
+            transfer_line_ids = lines.filtered(
+                lambda l: l.product_id.lease_type == 'transfer')
+            if rent_line_ids:
+                rec.rent_line_id = rent_line_ids[0]
+            if compensation_line_ids:
+                rec.compensation_line_id = compensation_line_ids[0]
+            if deposit_line_ids:
+                rec.deposit_line_id = deposit_line_ids[0]
+            if transfer_line_ids:
+                rec.transfer_line_id = transfer_line_ids[0]
 
     @api.multi
     def active_statusbar(self):
