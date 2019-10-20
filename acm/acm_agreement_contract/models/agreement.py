@@ -4,6 +4,7 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 from lxml import etree
+from num2words import num2words
 
 
 class Agreement(models.Model):
@@ -284,3 +285,36 @@ class Agreement(models.Model):
         if self._context.get('default_is_template', False):
             vals['code'] = 'Template'
         return super(Agreement, self).create(vals)
+
+    @api.model
+    def trans_recurring(self, type):
+        types = {
+            'daily': 'รายวัน',
+            'weekly': 'รายสัปดาห์',
+            'monthly': 'รายเดือน',
+            'monthlylastday': 'วันสุดท้ายของเดือน',
+            'yearly': 'รายปี',
+        }
+        return types[type]
+
+    @api.model
+    def trans_months(self, month):
+        months = {
+            '01': 'มกราคม',
+            '02': 'กุมภาพันธ์',
+            '03': 'มีนาคม',
+            '04': 'เมษายน',
+            '05': 'พฤษภาคม',
+            '06': 'มิถุนายน',
+            '07': 'กรกฎาคม',
+            '08': 'สิงหาคม',
+            '09': 'กันยายน',
+            '10': 'ตุลาคม',
+            '11': 'พฤศจิกายน',
+            '12': 'ธันวาคม',
+        }
+        return months[month]
+
+    @api.model
+    def amount_text(self, amount):
+        return num2words(amount, to='currency', lang='th')
