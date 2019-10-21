@@ -25,3 +25,5 @@ class ProductTemplate(models.Model):
             ('transfer', 'Transfer'), ],
         string='Lease Type',
     )
+    product_type = fields.Char()
+    product_category = fields.Char()

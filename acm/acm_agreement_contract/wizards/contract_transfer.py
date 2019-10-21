@@ -58,9 +58,6 @@ class ContractTransfer(models.TransientModel):
         agreement = self.env['agreement'].browse(agreement_id)
         if agreement.is_contract_create is False:
             raise UserError(_('Please create contract.'))
-        if agreement.end_date >= self.date_start:
-            raise UserError(
-                _('The contract is still active on the date you selected.'))
         new_agreement = agreement.with_context({
             'partner_id': self.partner_id.id,
             'partner_contact_id': self.partner_contact_id.id,

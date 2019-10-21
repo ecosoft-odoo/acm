@@ -88,6 +88,10 @@
             <field name="name" position="before">
                 <field name="code"/>
             </field>
+            <field name="parent_agreement_id" position="after">
+                <field name="start_date" invisible="context.get('default_is_template', False)"/>
+                <field name="end_date"  invisible="context.get('default_is_template', False)"/>
+            </field>
         </field>
     </record>
 
