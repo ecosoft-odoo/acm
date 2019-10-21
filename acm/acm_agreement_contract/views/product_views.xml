@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="product.product_template_form_view"/>
         <field name="arch" type="xml">
             <page name="invoicing" position="after">
-                <page name="lease_info" string="Lease Info">
+                <page name="agreement_info" string="Agreement Info">
                     <group>
                         <group>
                             <field name="p_width"/>
@@ -16,6 +16,8 @@
                         </group>
                         <group>
                             <field name="lease_type"/>
+                            <field name="product_category"/>
+                            <field name="product_type"/>
                         </group>
                     </group>
                 </page>
