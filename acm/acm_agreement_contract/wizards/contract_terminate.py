@@ -8,9 +8,11 @@ from odoo.exceptions import UserError
 class ContractTerminate(models.TransientModel):
     _name = 'contract.terminate'
 
+    date_termination_requested = fields.Date(
+        string='Termination Requested Date',
+    )
     date_termination = fields.Date(
         string='Termination Date',
-        default=fields.Date.today(),
     )
     reason_termination = fields.Text(
         string='Termination Reason',
@@ -26,13 +28,14 @@ class ContractTerminate(models.TransientModel):
             raise UserError(_('Agreement is not active.'))
         if agreement.is_contract_create is False:
             raise UserError(_('Contract is not active.'))
-        if self.date_termination > fields.Date.today():
-            raise UserError(
-                _('Termination Date cannot more than Current Date'))
+        # if self.date_termination > fields.Date.today():
+        #     raise UserError(
+        #         _('Termination Date cannot more than Current Date'))
         agreement.write({
             'is_termination': True,
+            'termination_requested': self.date_termination_requested,
             'termination_date': self.date_termination,
             'reason_termination': self.reason_termination,
         })
-        agreement.inactive_statusbar()
+        # agreement.inactive_statusbar()
         return agreement

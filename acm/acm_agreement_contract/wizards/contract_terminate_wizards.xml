@@ -7,6 +7,7 @@
             <form string="Terminate Contract">
                 <group>
                     <group>
+                        <field name="date_termination_requested"/>
                         <field name="date_termination"/>
                     </group>
                 </group>
