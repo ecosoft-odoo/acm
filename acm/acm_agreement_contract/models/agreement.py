@@ -78,11 +78,11 @@ class Agreement(models.Model):
         comodel_name='agreement.line',
         compute='_compute_line_id',
     )
-    compensation_line_id = fields.Many2one(
+    tea_money_line_id = fields.Many2one(
         comodel_name='agreement.line',
         compute='_compute_line_id',
     )
-    deposit_line_id = fields.Many2one(
+    security_deposit_line_id = fields.Many2one(
         comodel_name='agreement.line',
         compute='_compute_line_id',
     )
@@ -119,19 +119,19 @@ class Agreement(models.Model):
             if not lines:
                 continue
             rent_line_ids = lines.filtered(
-                lambda l: l.product_id.lease_type == 'rent')
-            compensation_line_ids = lines.filtered(
-                lambda l: l.product_id.lease_type == 'compensation')
-            deposit_line_ids = lines.filtered(
-                lambda l: l.product_id.lease_type == 'deposit')
+                lambda l: l.product_id.value_type == 'rent')
+            tea_money_line_ids = lines.filtered(
+                lambda l: l.product_id.value_type == 'tea_money')
+            security_deposit_line_ids = lines.filtered(
+                lambda l: l.product_id.value_type == 'security_deposit')
             transfer_line_ids = lines.filtered(
-                lambda l: l.product_id.lease_type == 'transfer')
+                lambda l: l.product_id.value_type == 'transfer')
             if rent_line_ids:
                 rec.rent_line_id = rent_line_ids[0]
-            if compensation_line_ids:
-                rec.compensation_line_id = compensation_line_ids[0]
-            if deposit_line_ids:
-                rec.deposit_line_id = deposit_line_ids[0]
+            if tea_money_line_ids:
+                rec.tea_money_line_id = tea_money_line_ids[0]
+            if security_deposit_line_ids:
+                rec.security_deposit_line_id = security_deposit_line_ids[0]
             if transfer_line_ids:
                 rec.transfer_line_id = transfer_line_ids[0]
 
