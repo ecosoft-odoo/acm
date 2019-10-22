@@ -9,13 +9,13 @@
                 <page name="agreement_info" string="Agreement Info">
                     <group>
                         <group>
-                            <field name="p_width"/>
-                            <field name="p_length"/>
-                            <field name="p_area"/>
+                            <field name="width"/>
+                            <field name="length"/>
+                            <field name="area"/>
                             <field name="working_hours"/>
                         </group>
                         <group>
-                            <field name="lease_type"/>
+                            <field name="value_type"/>
                             <field name="product_category"/>
                             <field name="product_type"/>
                         </group>

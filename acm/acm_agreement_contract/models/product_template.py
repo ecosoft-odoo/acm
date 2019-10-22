@@ -7,23 +7,21 @@ from odoo import models, fields
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
-    p_width = fields.Float(
-        string='Width',
-    )
-    p_length = fields.Float(
-        string='Length',
-    )
-    p_area = fields.Float(
-        string='Area',
-    )
+    width = fields.Float()
+    length = fields.Float()
+    area = fields.Float()
     working_hours = fields.Char()
-    lease_type = fields.Selection(
+    value_type = fields.Selection(
         selection=[
             ('rent', 'Rent'),
-            ('compensation', 'Compensation'),
-            ('deposit', 'Deposit'),
+            ('tea_money', 'Tea Money'),
+            ('security_deposit', 'Security Deposit'),
             ('transfer', 'Transfer'), ],
-        string='Lease Type',
+        string='Value Type',
     )
-    product_type = fields.Char()
-    product_category = fields.Char()
+    product_type = fields.Char(
+        string='Product Types',
+    )
+    product_category = fields.Char(
+        string='Product Categories',
+    )
