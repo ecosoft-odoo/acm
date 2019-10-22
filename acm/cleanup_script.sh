@@ -5,6 +5,7 @@ db="ACM"
 psql="docker exec -it $pg_container psql -U $pg_user $db"
 
 # Contracts & Agreements
+$psql -c "delete from account_analytic_line"
 $psql -c "delete from account_analytic_account"
 $psql -c "delete from agreement where is_template is False"
 
