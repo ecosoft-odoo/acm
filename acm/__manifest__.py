@@ -15,6 +15,8 @@
     'data': [
         'acm_agreement_contract/data/report_paperformat_data.xml',
         'acm_agreement_contract/data/report_data.xml',
+        'acm_agreement_contract/data/agreement_subtype_data.xml',
+        'acm_agreement_contract/data/agreement_data.xml',
         'acm_agreement_contract/security/ir.model.access.csv',
         'acm_agreement_contract/wizards/agreement_create_wizards.xml',
         'acm_agreement_contract/wizards/contract_extension_wizards.xml',
