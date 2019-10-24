@@ -1,0 +1,38 @@
+<odoo>
+    <!-- Tree View -->
+    <record id="agreement_line_view_tree" model="ir.ui.view">
+        <field name="name">areement.line.view.tree</field>
+        <field name="model">agreement.line</field>
+        <field name="priority" eval="9999"/>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="product_id"/>
+                <field name="name"/>
+                <field name="qty"/>
+                <field name="uom_id"/>
+                <field name="lst_price"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="agreement_line_action" model="ir.actions.act_window">
+        <field name="name">Agreement Lines</field>
+        <field name="res_model">agreement.line</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record id="agreement_line_action_tree_view" model="ir.actions.act_window.view">
+        <field eval="10" name="sequence"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="agreement_line_view_tree" />
+        <field name="act_window_id" ref="agreement_line_action" />
+    </record>
+
+    <!-- Menu -->
+    <menuitem
+            name="Agreement Lines"
+            id="agreement_line_menu"
+            parent="agreement_legal.agreement_operations"
+            sequence="15"
+            action="agreement_line_action"/>
+</odoo>
