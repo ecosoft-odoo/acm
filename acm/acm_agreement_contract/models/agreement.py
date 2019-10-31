@@ -59,12 +59,6 @@ class Agreement(models.Model):
     is_breach = fields.Boolean(
         string='Breach',
     )
-    date_breach = fields.Date(
-        string='Breach Date',
-    )
-    reason_breach = fields.Text(
-        string='Breach Reason',
-    )
     is_termination = fields.Boolean(
         string='Termination',
     )
@@ -89,6 +83,11 @@ class Agreement(models.Model):
     transfer_line_id = fields.Many2one(
         comodel_name='agreement.line',
         compute='_compute_line_id',
+    )
+    breach_ids = fields.One2many(
+        comodel_name='agreement.breach',
+        inverse_name='agreement_id',
+        string='Breach',
     )
 
     @api.constrains('start_date', 'end_date')

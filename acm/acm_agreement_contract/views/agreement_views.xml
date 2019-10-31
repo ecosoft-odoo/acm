@@ -20,7 +20,8 @@
                 <button name="create_new_contract" string="New Contract" type="object" class="oe_highlight" attrs="{'invisible': ['|', ('is_template', '=', True), '|', ('is_contract_create', '=', True), ('state', '!=', 'active')]}"/>
                 <button name="%(contract_extension_action)d" string="Renew" type="action" class="oe_highlight" attrs="{'invisible': ['|', ('is_contract_create', '=', False), ('state', '!=', 'active')]}"/>
                 <button name="%(contract_transfer_action)d" string="Transfer" type="action" class="oe_highlight" attrs="{'invisible': ['|', ('is_contract_create', '=', False), ('state', '!=', 'active')]}"/>
-                <button name="%(contract_breach_action)d" string="Breach" type="action" class="oe_highlight" attrs="{'invisible': ['|', ('is_contract_create', '=', False), ('state', '!=', 'active')]}"/>
+                <button name="%(contract_breach_action)d" string="Breach" type="action" class="oe_highlight" context="{'type': 'breach'}" attrs="{'invisible': ['|', ('is_contract_create', '=', False), '|', ('state', '!=', 'active'), ('is_breach', '=', True)]}"/>
+                <button name="%(contract_breach_action)d" string="Cancel Breach" type="action" class="oe_highlight" context="{'type': 'cancel_breach'}" attrs="{'invisible': ['|', ('is_contract_create', '=', False), '|', ('state', '!=', 'active'), ('is_breach', '=', False)]}"/>
                 <button name="%(contract_terminate_action)d" string="Termination" type="action" class="oe_highlight" attrs="{'invisible': ['|', ('is_contract_create', '=', False), ('state', '!=', 'active')]}"/>
                 <button name="inactive_statusbar" string="Inactive" type="object" class="oe_highlight" confirm="Are you sure to inactive this agreement ?" attrs="{'invisible': [('state', 'not in', ['draft', 'active'])]}"/>
                 <field name="state" widget="statusbar"/>
@@ -47,8 +48,6 @@
             </field>
             <field name="termination_date" position="after">
                 <field name="reason_termination" readonly="True" attrs="{'invisible': [('is_termination', '=', False)]}"/>
-                <field name="date_breach" readonly="True" attrs="{'invisible': [('is_breach', '=', False)]}"/>
-                <field name="reason_breach" readonly="True" attrs="{'invisible': [('is_breach', '=', False)]}"/>
             </field>
             <field name="partner_id" position="attributes">
                 <attribute name="attrs">{'required': [('is_template', '=', False)]}</attribute>
@@ -56,6 +55,19 @@
             <field name="uom_id" position="after">
                 <field name="lst_price"/>
             </field>
+            <notebook position="inside">
+                <page name="breach" string="Breach" attrs="{'invisible': [('breach_ids', '=', [])]}">
+                    <field name="breach_ids">
+                        <tree create="0" edit="0" delete="0">
+                            <field name="date_breach"/>
+                            <field name="type_breach"/>
+                            <field name="reason_breach"/>
+                            <field name="date_cancel_breach"/>
+                            <field name="reason_cancel_breach"/>
+                        </tree>
+                    </field>
+                </page>
+            </notebook>
             <xpath expr="//sheet/group[1]/group[2]" position="inside">
                 <field name="is_contract_create" invisible="1"/>
                 <field name="contract_type"/>

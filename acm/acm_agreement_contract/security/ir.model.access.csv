@@ -1,2 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_agreement_line_allusers,agreement line all users,model_agreement_line,agreement_legal.group_agreement_user,1,1,1,1
+access_agreement_breach_allusers,agreement breach all users,model_agreement_breach,agreement_legal.group_agreement_user,1,1,1,1
