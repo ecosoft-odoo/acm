@@ -89,6 +89,12 @@ class Agreement(models.Model):
         inverse_name='agreement_id',
         string='Breach',
     )
+    termination_by = fields.Selection(
+        selection=[
+            ('lessee', 'Lessee'),
+            ('lessor', 'Lessor'), ],
+        string='Termination By',
+    )
 
     @api.constrains('start_date', 'end_date')
     @api.multi
