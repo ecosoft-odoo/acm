@@ -11,24 +11,19 @@ class ContractBreach(models.TransientModel):
     date_breach = fields.Date(
         string='Breach Date',
         default=fields.Date.today(),
-        required=True,
     )
     type_breach = fields.Char(
         string='Breach Type',
-        required=True,
     )
     reason_breach = fields.Text(
         string='Breach Reason',
-        required=True,
     )
     date_cancel_breach = fields.Date(
         string='Cancel Breach Date',
         default=fields.Date.today(),
-        required=True,
     )
     reason_cancel_breach = fields.Text(
-        string='Breach Cancel Reason',
-        required=True,
+        string='Cancel Breach Reason',
     )
 
     @api.multi
