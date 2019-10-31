@@ -7,12 +7,37 @@
             <form string="Terminate Contract">
                 <group>
                     <group>
+                        <field name="termination_by"/>
                         <field name="date_termination_requested"/>
                         <field name="date_termination"/>
                     </group>
+                    <group>
+                        <field name="reason_termination"/>
+                    </group>
                 </group>
-                <group string="Reason">
-                    <field name="reason_termination" nolabel="1"/>
+                <group string="Lessee Pay">
+                    <field name="lessee_terminate_line_ids" nolabel="1" context="{'default_invoice_type': 'out_invoice'}">
+                        <tree editable="buttom">
+                            <field name="product_id"/>
+                            <field name="name"/>
+                            <field name="qty"/>
+                            <field name="uom_id" groups="uom.group_uom"/>
+                            <field name="lst_price"/>
+                            <field name="invoice_type" invisible="1"/>
+                        </tree>
+                    </field>
+                </group>
+                <group string="Lessor Pay">
+                    <field name="lessor_terminate_line_ids" nolabel="1" context="{'default_invoice_type': 'in_invoice'}">
+                        <tree editable="buttom">
+                            <field name="product_id"/>
+                            <field name="name"/>
+                            <field name="qty"/>
+                            <field name="uom_id" groups="uom.group_uom"/>
+                            <field name="lst_price"/>
+                            <field name="invoice_type" invisible="1"/>
+                        </tree>
+                    </field>
                 </group>
                 <footer>
                     <button string="Terminate Contract" name="action_terminate_contract" type="object" class="btn-primary"/>
