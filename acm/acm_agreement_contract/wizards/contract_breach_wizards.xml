@@ -4,17 +4,22 @@
         <field name="name">contract.breach.form</field>
         <field name="model">contract.breach</field>
         <field name="arch" type="xml">
-            <form string="breach Contract">
+            <form string="Breach Contract">
                 <group>
                     <group>
-                        <field name="date_breach"/>
+                        <field name="date_breach" invisible="context.get('type') != 'breach'"/>
+                        <field name="type_breach" invisible="context.get('type') != 'breach'"/>
+                        <field name="date_cancel_breach" invisible="context.get('type') != 'cancel_breach'"/>
                     </group>
                 </group>
-                <group string="Reason">
+                <group string="Reason" invisible="context.get('type') != 'breach'">
                     <field name="reason_breach" nolabel="1"/>
                 </group>
+                <group string="Reason" invisible="context.get('type') != 'cancel_breach'">
+                    <field name="reason_cancel_breach" nolabel="1"/>
+                </group>
                 <footer>
-                    <button string="Breach Contract" name="action_breach_contract" type="object" class="btn-primary"/>
+                    <button string="Confirm" name="action_breach_contract" type="object" class="btn-primary"/>
                     <button string="Cancel" class="btn-secondary" special="cancel"/>
                 </footer>
             </form>

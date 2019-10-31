@@ -11,9 +11,24 @@ class ContractBreach(models.TransientModel):
     date_breach = fields.Date(
         string='Breach Date',
         default=fields.Date.today(),
+        required=True,
+    )
+    type_breach = fields.Char(
+        string='Breach Type',
+        required=True,
     )
     reason_breach = fields.Text(
         string='Breach Reason',
+        required=True,
+    )
+    date_cancel_breach = fields.Date(
+        string='Cancel Breach Date',
+        default=fields.Date.today(),
+        required=True,
+    )
+    reason_cancel_breach = fields.Text(
+        string='Breach Cancel Reason',
+        required=True,
     )
 
     @api.multi
@@ -27,9 +42,19 @@ class ContractBreach(models.TransientModel):
             raise UserError(_('Contract is not active.'))
         if self.date_breach > fields.Date.today():
             raise UserError(_('Breach Date cannot more than Current Date'))
-        agreement.write({
-            'is_breach': True,
-            'date_breach': self.date_breach,
-            'reason_breach': self.reason_breach,
-        })
+        # Create agreement breach
+        if context.get('type') == 'breach':
+            self.env['agreement.breach'].create({
+                'date_breach': self.date_breach,
+                'type_breach': self.type_breach,
+                'reason_breach': self.reason_breach,
+                'agreement_id': agreement.id, })
+            agreement.is_breach = True
+        else:
+            agreement.breach_ids.filtered(
+                lambda l: l.date_cancel_breach is False).write({
+                    'date_cancel_breach': self.date_cancel_breach,
+                    'reason_cancel_breach': self.reason_cancel_breach,
+                })
+            agreement.is_breach = False
         return agreement
