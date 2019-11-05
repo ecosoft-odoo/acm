@@ -41,13 +41,15 @@
                 </div>
             </field>
             <field name="termination_date" position="attributes">
+                <attribute name="readonly">True</attribute>
                 <attribute name="attrs">{'invisible': [('is_termination', '=', False)]}</attribute>
             </field>
             <field name="termination_requested" position="attributes">
+                <attribute name="readonly">True</attribute>
                 <attribute name="attrs">{'invisible': [('is_termination', '=', False)]}</attribute>
             </field>
             <field name="termination_date" position="after">
-                <field name="termination_by"/>
+                <field name="termination_by" readonly="True" attrs="{'invisible': [('is_termination', '=', False)]}"/>
                 <field name="reason_termination" readonly="True" attrs="{'invisible': [('is_termination', '=', False)]}"/>
             </field>
             <field name="partner_id" position="attributes">

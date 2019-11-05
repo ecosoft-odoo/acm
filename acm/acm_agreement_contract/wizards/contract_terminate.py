@@ -121,7 +121,7 @@ class ContractTerminate(models.TransientModel):
                 'view_type': 'form',
                 'domain': [('id', 'in', invoice_ids)],
             }
-        # agreement.inactive_statusbar()
+        agreement.inactive_statusbar()
         return agreement
 
     @api.multi
