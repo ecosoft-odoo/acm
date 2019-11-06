@@ -12,15 +12,10 @@
                         <field name="date_contract"/>
                         <field name="date_start"/>
                         <field name="date_end"/>
-                        <label for="recurring_interval"/>
-                        <div>
-                            <field name="recurring_interval" class="oe_inline"/>
-                            <field name="recurring_rule_type" class="oe_inline"/>
-                        </div>
                     </group>
                 </group>
                 <footer>
-                    <button string="Transfer Contract" name="action_transfer_contract" type="object" class="btn-primary"/>
+                    <button string="Confirm" name="action_transfer_contract" type="object" class="btn-primary"/>
                     <button string="Cancel" class="btn-secondary" special="cancel"/>
                 </footer>
             </form>

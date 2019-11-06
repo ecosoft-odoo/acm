@@ -40,7 +40,7 @@
                     </field>
                 </group>
                 <footer>
-                    <button string="Terminate Contract" name="action_terminate_contract" type="object" class="btn-primary"/>
+                    <button string="Confirm" name="action_terminate_contract" type="object" class="btn-primary"/>
                     <button string="Cancel" class="btn-secondary" special="cancel"/>
                 </footer>
             </form>

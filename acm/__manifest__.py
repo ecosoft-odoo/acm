@@ -23,6 +23,7 @@
         'acm_agreement_contract/wizards/contract_transfer_wizards.xml',
         'acm_agreement_contract/wizards/contract_breach_wizards.xml',
         'acm_agreement_contract/wizards/contract_terminate_wizards.xml',
+        'acm_agreement_contract/wizards/contract_create_invoice_wizards.xml',
         'acm_agreement_contract/views/res_partner_views.xml',
         'acm_agreement_contract/views/res_company_views.xml',
         'acm_agreement_contract/views/product_views.xml',
