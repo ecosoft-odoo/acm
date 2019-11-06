@@ -52,7 +52,6 @@ class Agreement(models.Model):
             ('monthlylastday', 'Month(s) last day'),
             ('yearly', 'Year(s)'), ],
         string='Recurrence',
-        default='monthly',
         required=True,
         help='Specify Interval for automatic invoice generation.',
     )
@@ -170,14 +169,16 @@ class Agreement(models.Model):
             'state': 'draft',
             'parent_agreement_id': False,
             'stage_id': self.env.ref('agreement_legal.agreement_stage_new').id,
-            'template_id': self.template_id and self.template_id.id or self.id,
+            'template_id': self.is_template and self.id or self.template_id.id,
             'partner_id': context.get('partner_id'),
             'partner_contact_id': context.get('partner_contact_id'),
             'date_contract': context.get('date_contract'),
             'start_date': context.get('date_start'),
             'end_date': context.get('date_end'),
-            'recurring_interval': context.get('recurring_interval'),
-            'recurring_rule_type': context.get('recurring_rule_type'),
+            'recurring_interval':
+                context.get('recurring_interval') or self.recurring_interval,
+            'recurring_rule_type':
+                context.get('recurring_rule_type') or self.recurring_rule_type,
             'is_extension': context.get('is_extension'),
             'extension_agreement_id': context.get('extension_agreement_id'),
             'is_transfer': context.get('is_transfer'),
@@ -217,8 +218,8 @@ class Agreement(models.Model):
                     update agreement set revision = 0 where id = %s
                 """, (agreement.id, ))
             agreement_ids.append(agreement.id)
-        new_agreement = self.browse(agreement_ids)
-        return new_agreement.view_agreement()
+        new_agreements = self.browse(agreement_ids)
+        return new_agreements
 
     @api.multi
     def prepare_contract(self):

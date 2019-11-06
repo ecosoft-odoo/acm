@@ -55,7 +55,6 @@ class AgreementCreate(models.TransientModel):
             ('monthlylastday', 'Month(s) last day'),
             ('yearly', 'Year(s)'), ],
         string='Recurrence',
-        default='monthly',
         required=True,
         help='Specify Interval for automatic invoice generation.',
     )
@@ -67,7 +66,7 @@ class AgreementCreate(models.TransientModel):
     @api.multi
     def action_create_agreement(self):
         self.ensure_one()
-        agreement = self.template_ids.with_context({
+        agreements = self.template_ids.with_context({
             'post_name': self.post_name,
             'partner_id': self.partner_id.id,
             'partner_contact_id': self.partner_contact_id.id,
@@ -77,10 +76,8 @@ class AgreementCreate(models.TransientModel):
             'recurring_interval': self.recurring_interval,
             'recurring_rule_type': self.recurring_rule_type,
         })
-        result = agreement.create_agreement()
+        new_agreements = agreements.create_agreement()
         # Write Child Agreements
-        new_agreement_ids = result['context'].get('res_ids', [])
-        new_agreements = self.env['agreement'].browse(new_agreement_ids)
         for new_agreement in new_agreements:
             child_templates = new_agreement.template_id.child_agreements_ids
             if not child_templates:
@@ -93,4 +90,4 @@ class AgreementCreate(models.TransientModel):
                     where id in %s""", (
                         new_agreement.id,
                         tuple(child_agreements.ids)))
-        return result
+        return new_agreements.view_agreement()

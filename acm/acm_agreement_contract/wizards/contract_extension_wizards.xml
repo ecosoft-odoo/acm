@@ -4,21 +4,16 @@
         <field name="name">contract.extension.form</field>
         <field name="model">contract.extension</field>
         <field name="arch" type="xml">
-            <form string="Extension Contract">
+            <form string="Renew Contract">
                 <group>
                     <group>
                         <field name="date_contract"/>
                         <field name="date_start"/>
                         <field name="date_end"/>
-                        <label for="recurring_interval"/>
-                        <div>
-                            <field name="recurring_interval" class="oe_inline"/>
-                            <field name="recurring_rule_type" class="oe_inline"/>
-                        </div>
                     </group>
                 </group>
                 <footer>
-                    <button string="Extension Contract" name="action_extension_contract" type="object" class="btn-primary"/>
+                    <button string="Confirm" name="action_extension_contract" type="object" class="btn-primary"/>
                     <button string="Cancel" class="btn-secondary" special="cancel"/>
                 </footer>
             </form>
@@ -27,10 +22,19 @@
 
     <!-- Action Extension Contract -->
     <record id="contract_extension_action" model="ir.actions.act_window">
-        <field name="name">Extension Contract</field>
+        <field name="name">Renew Contract</field>
         <field name="res_model">contract.extension</field>
         <field name="view_type">form</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>
     </record>
+    <act_window
+        id="contract_extension_action_2"
+        name="Renew Contract"
+        src_model="agreement"
+        res_model="contract.extension"
+        view_type="form"
+        view_mode="form"
+        key2="client_action_multi"
+        target="new"/>
 </odoo>

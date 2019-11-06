@@ -21,46 +21,29 @@ class ContractExtension(models.TransientModel):
         default=fields.Date.today(),
         required=True,
     )
-    recurring_interval = fields.Integer(
-        string='Repeat Every',
-        default=1,
-        required=True,
-        help='Repeat every (Days/Week/Month/Year)',
-    )
-    recurring_rule_type = fields.Selection(
-        selection=[
-            ('daily', 'Day(s)'),
-            ('weekly', 'Week(s)'),
-            ('monthly', 'Month(s)'),
-            ('monthlylastday', 'Month(s) last day'),
-            ('yearly', 'Year(s)'), ],
-        string='Recurrence',
-        default='monthly',
-        required=True,
-        help='Specify Interval for automatic invoice generation.',
-    )
 
     @api.multi
     def action_extension_contract(self):
-        self.ensure_one()
         context = self._context.copy()
-        agreement_id = context.get('active_id', [])
-        agreement = self.env['agreement'].browse(agreement_id)
-        if agreement.is_contract_create is False:
-            raise UserError(_('Please create contract.'))
-        if agreement.end_date >= self.date_start:
-            raise UserError(
-                _('The contract is still active on the date you selected.'))
-        new_agreement = agreement.with_context({
-            'partner_id': agreement.partner_id.id,
-            'partner_contact_id': agreement.partner_contact_id.id,
-            'date_contract': self.date_contract,
-            'date_start': self.date_start,
-            'date_end': self.date_end,
-            'recurring_interval': self.recurring_interval,
-            'recurring_rule_type': self.recurring_rule_type,
-            'is_extension': True,
-            'extension_agreement_id': agreement.id,
-        })
-        result = new_agreement.create_agreement()
-        return result
+        Agreement = self.env['agreement']
+        agreements = Agreement.browse(context.get('active_ids', []))
+        new_agreements = Agreement
+        for agreement in agreements:
+            if agreement.is_contract_create is False:
+                raise UserError(
+                    _('Please create contract of %s.' % (agreement.name, )))
+            if agreement.end_date >= self.date_start:
+                raise UserError(
+                    _('%s is still active on the date you selected.')
+                    % (agreement.name, ))
+            agreement = agreement.with_context({
+                'partner_id': agreement.partner_id.id,
+                'partner_contact_id': agreement.partner_contact_id.id,
+                'date_contract': self.date_contract,
+                'date_start': self.date_start,
+                'date_end': self.date_end,
+                'is_extension': True,
+                'extension_agreement_id': agreement.id,
+            })
+            new_agreements += agreement.create_agreement()
+        return new_agreements.view_agreement()
