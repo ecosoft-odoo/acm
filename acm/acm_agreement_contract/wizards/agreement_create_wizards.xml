@@ -27,7 +27,7 @@
                     <group></group>
                 </group>
                 <footer>
-                    <button name="action_create_agreement" string="Create Agreement" type="object" class="btn-primary"/>
+                    <button name="action_create_agreement" string="Confirm" type="object" class="btn-primary"/>
                     <button string="Cancel" class="btn-secondary" special="cancel"/>
                 </footer>
             </form>
