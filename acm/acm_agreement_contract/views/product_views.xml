@@ -18,6 +18,8 @@
                             <field name="value_type"/>
                             <field name="goods_category_id"/>
                             <field name="goods_type"/>
+                            <field name="zone"/>
+                            <field name="lock_number"/>
                         </group>
                     </group>
                 </page>
