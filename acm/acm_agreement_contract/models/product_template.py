@@ -1,7 +1,7 @@
 # Copyright 2019 Ecosoft Co., Ltd (https://ecosoft.co.th/)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html)
 
-from odoo import models, fields
+from odoo import models, fields, api
 
 
 class ProductTemplate(models.Model):
@@ -26,3 +26,18 @@ class ProductTemplate(models.Model):
         comodel_name='goods.category',
         string='Goods Category',
     )
+    zone = fields.Char(
+        string='Zone',
+    )
+    lock_number = fields.Char(
+        string='Number',
+    )
+
+    @api.onchange('zone', 'lock_number')
+    def _onchange_zone_number(self):
+        names = []
+        if self.zone:
+            names.append(self.zone)
+        if self.lock_number:
+            names.append(self.lock_number)
+        self.name = '/'.join(names)
