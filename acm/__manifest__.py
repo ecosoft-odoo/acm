@@ -27,6 +27,7 @@
         'acm_agreement_contract/views/res_partner_views.xml',
         'acm_agreement_contract/views/res_company_views.xml',
         'acm_agreement_contract/views/product_views.xml',
+        'acm_agreement_contract/views/goods_category_views.xml',
         'acm_agreement_contract/views/account_analytic_account_views.xml',
         'acm_agreement_contract/views/agreement_views.xml',
         'acm_agreement_contract/report/report_templates.xml',

@@ -4,6 +4,7 @@
 from . import res_partner
 from . import res_company
 from . import product_template
+from . import goods_category
 from . import account_analytic_account
 from . import account_analytic_invoice_line
 from . import agreement

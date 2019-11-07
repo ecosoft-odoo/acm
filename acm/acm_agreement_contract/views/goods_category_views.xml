@@ -1,0 +1,41 @@
+<odoo>
+    <!-- Tree View -->
+    <record id="goods_category_tree_view" model="ir.ui.view">
+        <field name="name">goods.category.tree.view</field>
+        <field name="model">goods.category</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="goods_category_form_view" model="ir.ui.view">
+        <field name="name">goods.category.form.view</field>
+        <field name="model">goods.category</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="name"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="goods_category_action" model="ir.actions.act_window">
+        <field name="name">Goods Category</field>
+        <field name="res_model">goods.category</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem
+        name="Goods Category"
+        id="goods_category_menu"
+        sequence="110"
+        parent="agreement_legal.agreement_masterdata"
+        action="goods_category_action"/>
+</odoo>
