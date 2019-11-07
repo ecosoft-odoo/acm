@@ -39,7 +39,7 @@
                     <field name="recurring_interval" class="oe_inline"/>
                     <field name="recurring_rule_type" class="oe_inline"/>
                 </div>
-                <field name="payment_due_date" attrs="{'invisible': [('recurring_rule_type', '!=', 'monthly')]}"/>
+                <field name="payment_due_date" attrs="{'invisible': ['|', ('is_template', '=', True), ('recurring_rule_type', '!=', 'monthly')]}"/>
             </field>
             <field name="termination_date" position="attributes">
                 <attribute name="readonly">True</attribute>
