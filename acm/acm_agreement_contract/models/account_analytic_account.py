@@ -16,7 +16,8 @@ class AccountAnalyticAccount(models.Model):
 
     @api.model
     def _prepare_invoice_line(self, line, invoice_id):
-        if not line.is_select:
+        next_date = line.analytic_account_id.recurring_next_date
+        if not(line.date_start <= next_date <= line.date_end):
             return {}
         return super(AccountAnalyticAccount, self) \
             ._prepare_invoice_line(line, invoice_id)
