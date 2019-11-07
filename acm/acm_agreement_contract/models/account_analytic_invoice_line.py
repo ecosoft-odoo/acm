@@ -7,7 +7,9 @@ from odoo import models, fields
 class AccountAnalyticInvoiceLine(models.Model):
     _inherit = 'account.analytic.invoice.line'
 
-    is_select = fields.Boolean(
-        string='Select ?',
-        default=True,
+    date_start = fields.Date(
+        string='Start Date',
+    )
+    date_end = fields.Date(
+        string='End Date',
     )

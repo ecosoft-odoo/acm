@@ -11,8 +11,9 @@
             <button name="recurring_create_invoice" position="attributes">
                 <attribute name="groups"></attribute>
             </button>
-            <xpath expr="//field[@name='recurring_invoice_line_ids']/tree/field[@name='product_id']" position="before">
-                <field name="is_select"/>
+            <xpath expr="//field[@name='recurring_invoice_line_ids']/tree/field[@name='name']" position="after">
+                <field name="date_start"/>
+                <field name="date_end"/>
             </xpath>
         </field>
     </record>

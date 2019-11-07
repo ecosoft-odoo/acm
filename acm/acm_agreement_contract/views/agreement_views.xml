@@ -59,6 +59,10 @@
             <field name="uom_id" position="after">
                 <field name="lst_price"/>
             </field>
+            <xpath expr="//field[@name='line_ids']/tree/field[@name='name']" position="after">
+                <field name="date_start"/>
+                <field name="date_end"/>
+            </xpath>
             <notebook position="inside">
                 <page name="breach" string="Breach" attrs="{'invisible': [('breach_ids', '=', [])]}">
                     <field name="breach_ids">

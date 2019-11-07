@@ -13,6 +13,12 @@ class AgreementLine(models.Model):
     lst_price = fields.Float(
         string='Unit Price',
     )
+    date_start = fields.Date(
+        string='Start Date',
+    )
+    date_end = fields.Date(
+        string='End Date',
+    )
 
     @api.multi
     def prepare_contract_line(self):
@@ -22,6 +28,8 @@ class AgreementLine(models.Model):
             'quantity': self.qty,
             'uom_id': self.uom_id.id,
             'specific_price': self.lst_price,
+            'date_start': self.date_start,
+            'date_end': self.date_end,
         }
 
     @api.onchange("product_id")
