@@ -16,8 +16,8 @@
                         </group>
                         <group>
                             <field name="value_type"/>
-                            <field name="product_category"/>
-                            <field name="product_type"/>
+                            <field name="goods_category_id"/>
+                            <field name="goods_type"/>
                         </group>
                     </group>
                 </page>
