@@ -331,3 +331,20 @@ class Agreement(models.Model):
     @api.model
     def amount_text(self, amount):
         return num2words(amount, to='currency', lang='th')
+
+    @api.multi
+    def get_rent_text(self):
+        self.ensure_one()
+        rent_lines = self.line_ids.filtered(
+            lambda l: l.product_id.value_type == 'rent').sorted('date_start')
+        if len(rent_lines) <= 1:
+            return ' %s บาท (%s)' % (
+                '{0:,.0f}'.format(rent_lines.lst_price),
+                self.amount_text(rent_lines.lst_price))
+        else:
+            rent_text = ''
+            for index, rent_line in enumerate(rent_lines):
+                rent_text += ' ปีที่ %s %s บาท (%s)' % (
+                    str(index+1), '{0:,.0f}'.format(rent_line.lst_price),
+                    self.amount_text(rent_line.lst_price))
+            return rent_text
