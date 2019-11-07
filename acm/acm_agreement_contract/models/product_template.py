@@ -19,9 +19,10 @@ class ProductTemplate(models.Model):
             ('transfer', 'Transfer'), ],
         string='Value Type',
     )
-    product_type = fields.Char(
-        string='Product Types',
+    goods_type = fields.Char(
+        string='Goods Type',
     )
-    product_category = fields.Char(
-        string='Product Categories',
+    goods_category_id = fields.Many2one(
+        comodel_name='goods.category',
+        string='Goods Category',
     )
