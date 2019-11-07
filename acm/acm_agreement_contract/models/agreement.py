@@ -94,6 +94,10 @@ class Agreement(models.Model):
             ('lessor', 'Lessor'), ],
         string='Termination By',
     )
+    payment_due_date = fields.Integer(
+        string='Payment Due Date',
+        default=1,
+    )
 
     @api.constrains('start_date', 'end_date')
     @api.multi
@@ -240,7 +244,10 @@ class Agreement(models.Model):
             'recurring_rule_type': self.recurring_rule_type,
             'date_start': self.start_date,
             'date_end': self.end_date,
-            'recurring_next_date': self.start_date,
+            'recurring_next_date':
+                self.recurring_rule_type == 'monthly' and
+                '%s-%s-%s' % (self.start_date.year, self.start_date.month,
+                              self.payment_due_date) or self.start_date,
             'active': True,
         }
 
