@@ -4,7 +4,7 @@
         <field name="name">contract.terminate.form</field>
         <field name="model">contract.terminate</field>
         <field name="arch" type="xml">
-            <form string="Terminate Contract">
+            <form string="Terminate Agreement">
                 <group>
                     <group>
                         <field name="termination_by"/>
@@ -49,7 +49,7 @@
 
     <!-- Action Terminate Contract -->
     <record id="contract_terminate_action" model="ir.actions.act_window">
-        <field name="name">Terminate Contract</field>
+        <field name="name">Terminate Agreement</field>
         <field name="res_model">contract.terminate</field>
         <field name="view_type">form</field>
         <field name="view_mode">form</field>

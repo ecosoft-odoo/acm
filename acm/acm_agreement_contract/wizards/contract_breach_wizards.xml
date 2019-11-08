@@ -4,7 +4,7 @@
         <field name="name">contract.breach.form</field>
         <field name="model">contract.breach</field>
         <field name="arch" type="xml">
-            <form string="Breach Contract">
+            <form string="Breach Agreement">
                 <group>
                     <group>
                         <field name="date_breach" invisible="context.get('type') != 'breach'" required="context.get('type') == 'breach'"/>
@@ -28,7 +28,7 @@
 
     <!-- Action Breach Contract -->
     <record id="contract_breach_action" model="ir.actions.act_window">
-        <field name="name">Breach Contract</field>
+        <field name="name">Breach Agreement</field>
         <field name="res_model">contract.breach</field>
         <field name="view_type">form</field>
         <field name="view_mode">form</field>

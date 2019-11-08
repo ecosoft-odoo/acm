@@ -4,7 +4,7 @@
         <field name="name">contract.extension.form</field>
         <field name="model">contract.extension</field>
         <field name="arch" type="xml">
-            <form string="Renew Contract">
+            <form string="Renew Agreement">
                 <group>
                     <group>
                         <field name="date_contract"/>
@@ -22,7 +22,7 @@
 
     <!-- Action Extension Contract -->
     <record id="contract_extension_action" model="ir.actions.act_window">
-        <field name="name">Renew Contract</field>
+        <field name="name">Renew Agreement</field>
         <field name="res_model">contract.extension</field>
         <field name="view_type">form</field>
         <field name="view_mode">form</field>
@@ -30,7 +30,7 @@
     </record>
     <act_window
         id="contract_extension_action_2"
-        name="Renew Contract"
+        name="Renew Agreement"
         src_model="agreement"
         res_model="contract.extension"
         view_type="form"

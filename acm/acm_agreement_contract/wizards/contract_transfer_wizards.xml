@@ -4,7 +4,7 @@
         <field name="name">contract.transfer.form</field>
         <field name="model">contract.transfer</field>
         <field name="arch" type="xml">
-            <form string="Transfer Contract">
+            <form string="Transfer Agreement">
                 <group>
                     <group>
                         <field name="partner_id" domain="[('customer', '=', True)]"/>
@@ -24,7 +24,7 @@
 
     <!-- Action Transfer Contract -->
     <record id="contract_transfer_action" model="ir.actions.act_window">
-        <field name="name">Transfer Contract</field>
+        <field name="name">Transfer Agreement</field>
         <field name="res_model">contract.transfer</field>
         <field name="view_type">form</field>
         <field name="view_mode">form</field>
