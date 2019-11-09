@@ -5,6 +5,7 @@ from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 from lxml import etree
 from num2words import num2words
+from dateutil.relativedelta import relativedelta
 
 
 class Agreement(models.Model):
@@ -348,3 +349,19 @@ class Agreement(models.Model):
                     str(index+1), '{0:,.0f}'.format(rent_line.lst_price),
                     self.amount_text(rent_line.lst_price))
             return rent_text
+
+    @api.multi
+    def _compute_line_start_end_date(self, rental_number):
+        for line in self.mapped('line_ids'):
+            date_valid = False
+            start_date = line.agreement_id.start_date
+            end_date = line.agreement_id.end_date
+            if line.date_start:
+                line.date_start += relativedelta(years=rental_number)
+                date_valid = start_date <= line.date_start <= end_date
+            if line.date_end:
+                line.date_end += relativedelta(years=rental_number)
+                date_valid = start_date <= line.date_end <= end_date
+            if not date_valid:
+                raise UserError(
+                    _('Date in Products/Services is not valid.'))
