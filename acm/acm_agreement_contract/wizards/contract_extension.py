@@ -3,6 +3,7 @@
 
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
+from dateutil.relativedelta import relativedelta
 
 
 class ContractExtension(models.TransientModel):
@@ -21,6 +22,16 @@ class ContractExtension(models.TransientModel):
         default=fields.Date.today(),
         required=True,
     )
+    rental_number = fields.Integer(
+        string='Number of Rentals (Years)',
+    )
+
+    @api.onchange('date_start', 'date_end')
+    def _onchange_start_end_date(self):
+        date_start, date_end = self.date_start, self.date_end
+        if date_end:
+            date_end += relativedelta(days=1)
+        self.rental_number = relativedelta(date_end, date_start).years
 
     @api.multi
     def action_extension_contract(self):
@@ -45,5 +56,8 @@ class ContractExtension(models.TransientModel):
                 'is_extension': True,
                 'extension_agreement_id': agreement.id,
             })
-            new_agreements += agreement.create_agreement()
+            new_agreement = agreement.create_agreement()
+            # Compute Start Date and End Date in Products/Services
+            new_agreement._compute_line_start_end_date(self.rental_number)
+            new_agreements += new_agreement
         return new_agreements.view_agreement()
