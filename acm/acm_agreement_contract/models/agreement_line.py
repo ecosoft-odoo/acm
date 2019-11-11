@@ -19,6 +19,7 @@ class AgreementLine(models.Model):
     date_end = fields.Date(
         string='End Date',
     )
+    invoiced = fields.Boolean()
 
     @api.multi
     def prepare_contract_line(self):

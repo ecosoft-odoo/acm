@@ -2,9 +2,12 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html)
 
 from . import agreement_create
-from . import contract_extension
-from . import contract_transfer
-from . import contract_breach
-from . import contract_terminate
-from . import contract_create_invoice
+from . import agreement_extension
+from . import agreement_transfer
+from . import agreement_breach
+from . import agreement_terminate
 from . import agreement_active
+from . import agreement_inactive
+from . import agreement_create_invoice
+from . import agreement_create_contract
+from . import contract_create_invoice

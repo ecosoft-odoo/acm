@@ -8,7 +8,7 @@ class ContractCreateInvoice(models.TransientModel):
     _name = 'contract.create.invoice'
 
     @api.multi
-    def create_invoices(self):
+    def action_create_invoices(self):
         self.ensure_one()
         active_ids = self._context.get('active_ids', [])
         contracts = self.env['account.analytic.account'].browse(active_ids)

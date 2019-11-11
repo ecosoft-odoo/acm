@@ -6,8 +6,8 @@ from odoo.exceptions import UserError
 from dateutil.relativedelta import relativedelta
 
 
-class ContractExtension(models.TransientModel):
-    _name = 'contract.extension'
+class AgreementExtension(models.TransientModel):
+    _name = 'agreement.extension'
 
     date_start = fields.Date(
         string='Start Date',
@@ -34,15 +34,15 @@ class ContractExtension(models.TransientModel):
         self.rental_number = relativedelta(date_end, date_start).years
 
     @api.multi
-    def action_extension_contract(self):
+    def action_extension_agreement(self):
         context = self._context.copy()
         Agreement = self.env['agreement']
         agreements = Agreement.browse(context.get('active_ids', []))
         new_agreements = Agreement
         for agreement in agreements:
-            if agreement.is_contract_create is False:
+            if not agreement.is_contract_create:
                 raise UserError(
-                    _('Please create contract of %s.' % (agreement.name, )))
+                    _('Please create contract %s.' % (agreement.name, )))
             if agreement.end_date >= self.date_start:
                 raise UserError(
                     _('%s is still active on the date you selected.')
@@ -57,7 +57,12 @@ class ContractExtension(models.TransientModel):
                 'extension_agreement_id': agreement.id,
             })
             new_agreement = agreement.create_agreement()
+            # Remove Start Date and End Date for line invoiced
+            new_agreement.line_ids.filtered(lambda l: l.invoiced).write({
+                'date_start': False,
+                'date_end': False,
+            })
             # Compute Start Date and End Date in Products/Services
             new_agreement._compute_line_start_end_date(self.rental_number)
-            new_agreements += new_agreement
+            new_agreements |= new_agreement
         return new_agreements.view_agreement()
