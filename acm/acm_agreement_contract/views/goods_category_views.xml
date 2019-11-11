@@ -4,7 +4,7 @@
         <field name="name">goods.category.tree.view</field>
         <field name="model">goods.category</field>
         <field name="arch" type="xml">
-            <tree>
+            <tree string="Goods Category">
                 <field name="name"/>
             </tree>
         </field>
@@ -15,7 +15,7 @@
         <field name="name">goods.category.form.view</field>
         <field name="model">goods.category</field>
         <field name="arch" type="xml">
-            <form>
+            <form string="Goods Category">
                 <group>
                     <field name="name"/>
                 </group>

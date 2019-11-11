@@ -1,8 +1,8 @@
 <odoo>
     <!-- Form View -->
-    <record id="contract_extension_view_form" model="ir.ui.view">
-        <field name="name">contract.extension.form</field>
-        <field name="model">contract.extension</field>
+    <record id="agreement_extension_view_form" model="ir.ui.view">
+        <field name="name">agreement.extension.view.form</field>
+        <field name="model">agreement.extension</field>
         <field name="arch" type="xml">
             <form string="Renew Agreement">
                 <group>
@@ -10,31 +10,33 @@
                         <field name="date_contract"/>
                         <field name="date_start"/>
                         <field name="date_end"/>
+                        <field name="rental_number"/>
                     </group>
                 </group>
                 <footer>
-                    <button string="Confirm" name="action_extension_contract" type="object" class="btn-primary"/>
+                    <button name="action_extension_agreement" string="Confirm" type="object" default_focus="1" class="btn-primary"/>
                     <button string="Cancel" class="btn-secondary" special="cancel"/>
                 </footer>
             </form>
         </field>
     </record>
 
-    <!-- Action Extension Contract -->
-    <record id="contract_extension_action" model="ir.actions.act_window">
+    <!-- Action -->
+    <record id="agreement_extension_action" model="ir.actions.act_window">
         <field name="name">Renew Agreement</field>
-        <field name="res_model">contract.extension</field>
+        <field name="res_model">agreement.extension</field>
         <field name="view_type">form</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>
     </record>
     <act_window
-        id="contract_extension_action_2"
+        id="agreement_extension_action_2"
         name="Renew Agreement"
         src_model="agreement"
-        res_model="contract.extension"
+        res_model="agreement.extension"
         view_type="form"
         view_mode="form"
+        multi="True"
         key2="client_action_multi"
         target="new"/>
 </odoo>

@@ -4,7 +4,7 @@
         <field name="name">agreement.create.view.form</field>
         <field name="model">agreement.create</field>
         <field name="arch" type="xml">
-            <form>
+            <form string="Create Agreement">
                 <group>
                     <group>
                         <field name="template_ids" domain="[('is_template', '=', True), ('state', '=', 'active')]" widget="many2many_tags"/>
@@ -27,7 +27,7 @@
                     <group></group>
                 </group>
                 <footer>
-                    <button name="action_create_agreement" string="Confirm" type="object" class="btn-primary"/>
+                    <button name="action_create_agreement" string="Confirm" type="object" default_focus="1" class="btn-primary"/>
                     <button string="Cancel" class="btn-secondary" special="cancel"/>
                 </footer>
             </form>
