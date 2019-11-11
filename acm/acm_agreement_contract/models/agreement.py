@@ -41,8 +41,6 @@ class Agreement(models.Model):
     )
     recurring_interval = fields.Integer(
         string='Repeat Every',
-        default=1,
-        required=True,
         help='Repeat every (Days/Week/Month/Year)',
     )
     recurring_rule_type = fields.Selection(
@@ -53,7 +51,6 @@ class Agreement(models.Model):
             ('monthlylastday', 'Month(s) last day'),
             ('yearly', 'Year(s)'), ],
         string='Recurrence',
-        required=True,
         help='Specify Interval for automatic invoice generation.',
     )
     is_breach = fields.Boolean(
@@ -68,24 +65,24 @@ class Agreement(models.Model):
     is_contract_create = fields.Boolean(
         compute='_compute_is_contract_create',
     )
-    rent_line_id = fields.Many2one(
-        comodel_name='agreement.line',
-        compute='_compute_line_id',
+    rent_product_id = fields.Many2one(
+        comodel_name='product.product',
+        compute='_compute_product_id',
     )
-    tea_money_line_id = fields.Many2one(
-        comodel_name='agreement.line',
-        compute='_compute_line_id',
+    tea_money_product_id = fields.Many2one(
+        comodel_name='product.product',
+        compute='_compute_product_id',
     )
-    security_deposit_line_id = fields.Many2one(
-        comodel_name='agreement.line',
-        compute='_compute_line_id',
+    security_deposit_product_id = fields.Many2one(
+        comodel_name='product.product',
+        compute='_compute_product_id',
     )
-    transfer_line_id = fields.Many2one(
-        comodel_name='agreement.line',
-        compute='_compute_line_id',
+    transfer_product_id = fields.Many2one(
+        comodel_name='product.product',
+        compute='_compute_product_id',
     )
     breach_ids = fields.One2many(
-        comodel_name='agreement.breach',
+        comodel_name='agreement.breach.line',
         inverse_name='agreement_id',
         string='Breach',
     )
@@ -109,9 +106,8 @@ class Agreement(models.Model):
 
     @api.multi
     def search_contract(self):
-        self.ensure_one()
         Contract = self.env['account.analytic.account']
-        contracts = Contract.search([('agreement_id', '=', self.id)])
+        contracts = Contract.search([('agreement_id', 'in', self.ids)])
         return contracts
 
     @api.multi
@@ -121,28 +117,21 @@ class Agreement(models.Model):
                 rec.is_contract_create = True
 
     @api.multi
-    @api.depends('line_ids')
-    def _compute_line_id(self):
+    def _compute_product_id(self):
         for rec in self:
             lines = rec.line_ids
-            if not lines:
-                continue
-            rent_line_ids = lines.filtered(
-                lambda l: l.product_id.value_type == 'rent')
-            tea_money_line_ids = lines.filtered(
-                lambda l: l.product_id.value_type == 'tea_money')
-            security_deposit_line_ids = lines.filtered(
-                lambda l: l.product_id.value_type == 'security_deposit')
-            transfer_line_ids = lines.filtered(
-                lambda l: l.product_id.value_type == 'transfer')
-            if rent_line_ids:
-                rec.rent_line_id = rent_line_ids[0]
-            if tea_money_line_ids:
-                rec.tea_money_line_id = tea_money_line_ids[0]
-            if security_deposit_line_ids:
-                rec.security_deposit_line_id = security_deposit_line_ids[0]
-            if transfer_line_ids:
-                rec.transfer_line_id = transfer_line_ids[0]
+            self.rent_product_id = lines.filtered(
+                lambda l: l.product_id.value_type == 'rent') \
+                .mapped('product_id')
+            self.tea_money_product_id = lines.filtered(
+                lambda l: l.product_id.value_type == 'tea_money') \
+                .mapped('product_id')
+            self.security_deposit_product_id = lines.filtered(
+                lambda l: l.product_id.value_type == 'security_deposit') \
+                .mapped('product_id')
+            self.transfer_product_id = lines.filtered(
+                lambda l: l.product_id.value_type == 'transfer') \
+                .mapped('product_id')
 
     @api.multi
     def active_statusbar(self):
@@ -254,29 +243,36 @@ class Agreement(models.Model):
 
     @api.multi
     def create_new_contract(self):
-        self.ensure_one()
-        if self.is_contract_create:
-            raise UserError(_('Contract is still active.'))
-        contract_dict = self.prepare_contract()
-        contract = self.env['account.analytic.account'].create(contract_dict)
-        lines = []
-        for line in self.line_ids:
-            lines.append((0, 0, line.prepare_contract_line()))
-        contract.write({'recurring_invoice_line_ids': lines})
-        return True
+        Contract = self.env['account.analytic.account']
+        contracts = Contract
+        for rec in self:
+            if rec.state != 'active':
+                raise UserError(_('State %s is not active.') % (rec.name, ))
+            if rec.is_contract_create:
+                raise UserError(_('Contract %s is still active.')
+                                % (rec.name, ))
+            contract_dict = rec.prepare_contract()
+            contract = Contract.create(contract_dict)
+            lines = []
+            for line in rec.line_ids:
+                lines.append((0, 0, line.prepare_contract_line()))
+            contract.write({'recurring_invoice_line_ids': lines})
+            contracts |= contract
+        return contracts
 
     @api.multi
     def action_view_contract(self):
-        self.ensure_one()
-        if not self.is_contract_create:
-            raise UserError(_('Please create contract.'))
+        if not self:
+            raise UserError(_('Please select agreement.'))
+        if len(list(set(self.mapped('contract_type')))) > 1:
+            raise UserError(_('Not multiple contract type.'))
         action_id = 'contract.action_account_analytic_%s_overdue_all' \
-            % (self.contract_type, )
+            % (self[0].contract_type, )
         action = self.env.ref(action_id).read()[0]
         contracts = self.search_contract()
-        if contracts:
+        if len(contracts) == 1:
             view_id = 'contract.account_analytic_account_%s_form' \
-                % (self.contract_type, )
+                % (self[0].contract_type, )
             action.update({
                 'views': [(self.env.ref(view_id).id, 'form')],
                 'res_id': contracts[0].id,
@@ -362,6 +358,6 @@ class Agreement(models.Model):
             if line.date_end:
                 line.date_end += relativedelta(years=rental_number)
                 date_valid = start_date <= line.date_end <= end_date
-            if not date_valid:
+            if (line.date_start or line.date_end) and not date_valid:
                 raise UserError(
                     _('Date in Products/Services is not valid.'))

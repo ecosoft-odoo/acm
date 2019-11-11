@@ -5,8 +5,8 @@ from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 
 
-class ContractTransfer(models.TransientModel):
-    _name = 'contract.transfer'
+class AgreementTransfer(models.TransientModel):
+    _name = 'agreement.transfer'
 
     partner_id = fields.Many2one(
         comodel_name='res.partner',
@@ -33,15 +33,15 @@ class ContractTransfer(models.TransientModel):
     )
 
     @api.multi
-    def action_transfer_contract(self):
+    def action_transfer_agreement(self):
         context = self._context.copy()
         Agreement = self.env['agreement']
         agreements = Agreement.browse(context.get('active_ids', []))
         new_agreements = Agreement
         for agreement in agreements:
-            if agreement.is_contract_create is False:
+            if not agreement.is_contract_create:
                 raise UserError(
-                    _('Please create contract of %s.' % (agreement.name, )))
+                    _('Please create contract %s.' % (agreement.name, )))
             agreement = agreement.with_context({
                 'partner_id': self.partner_id.id,
                 'partner_contact_id': self.partner_contact_id.id,
@@ -51,5 +51,11 @@ class ContractTransfer(models.TransientModel):
                 'is_transfer': True,
                 'transfer_agreement_id': agreement.id,
             })
-            new_agreements += agreement.create_agreement()
+            new_agreement = agreement.create_agreement()
+            # Remove Start Date and End Date for line invoiced
+            new_agreement.line_ids.filtered(lambda l: l.invoiced).write({
+                'date_start': False,
+                'date_end': False,
+            })
+            new_agreements |= new_agreement
         return new_agreements.view_agreement()

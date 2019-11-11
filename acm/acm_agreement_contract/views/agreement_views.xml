@@ -18,11 +18,11 @@
             <button name="create_new_agreement" position="after">
                 <button name="active_statusbar" string="Active" type="object" class="oe_highlight" confirm="Are you sure to active this agreement ?" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
                 <button name="create_new_contract" string="New Contract" type="object" class="oe_highlight" attrs="{'invisible': ['|', ('is_template', '=', True), '|', ('is_contract_create', '=', True), ('state', '!=', 'active')]}"/>
-                <button name="%(contract_extension_action)d" string="Renew" type="action" class="oe_highlight" attrs="{'invisible': ['|', ('is_contract_create', '=', False), ('state', '!=', 'active')]}"/>
-                <button name="%(contract_transfer_action)d" string="Transfer" type="action" class="oe_highlight" attrs="{'invisible': ['|', ('is_contract_create', '=', False), ('state', '!=', 'active')]}"/>
-                <button name="%(contract_breach_action)d" string="Breach" type="action" class="oe_highlight" context="{'type': 'breach'}" attrs="{'invisible': ['|', ('is_contract_create', '=', False), '|', ('state', '!=', 'active'), ('is_breach', '=', True)]}"/>
-                <button name="%(contract_breach_action)d" string="Cancel Breach" type="action" class="oe_highlight" context="{'type': 'cancel_breach'}" attrs="{'invisible': ['|', ('is_contract_create', '=', False), '|', ('state', '!=', 'active'), ('is_breach', '=', False)]}"/>
-                <button name="%(contract_terminate_action)d" string="Termination" type="action" class="oe_highlight" attrs="{'invisible': ['|', ('is_contract_create', '=', False), ('state', '!=', 'active')]}"/>
+                <button name="%(agreement_extension_action)d" string="Renew" type="action" class="oe_highlight" attrs="{'invisible': ['|', ('is_contract_create', '=', False), ('state', '!=', 'active')]}"/>
+                <button name="%(agreement_transfer_action)d" string="Transfer" type="action" class="oe_highlight" attrs="{'invisible': ['|', ('is_contract_create', '=', False), ('state', '!=', 'active')]}"/>
+                <button name="%(agreement_breach_action)d" string="Breach" type="action" class="oe_highlight" context="{'breach': True}" attrs="{'invisible': ['|', ('is_contract_create', '=', False), '|', ('state', '!=', 'active'), ('is_breach', '=', True)]}"/>
+                <button name="%(agreement_breach_action)d" string="Cancel Breach" type="action" class="oe_highlight" context="{'breach': False}" attrs="{'invisible': ['|', ('is_contract_create', '=', False), '|', ('state', '!=', 'active'), ('is_breach', '=', False)]}"/>
+                <button name="%(agreement_terminate_action)d" string="Termination" type="action" class="oe_highlight" attrs="{'invisible': ['|', ('is_contract_create', '=', False), ('state', '!=', 'active')]}"/>
                 <button name="inactive_statusbar" string="Inactive" type="object" class="oe_highlight" confirm="Are you sure to inactive this agreement ?" attrs="{'invisible': [('state', 'not in', ['draft', 'active'])]}"/>
                 <field name="state" widget="statusbar"/>
             </button>
@@ -34,8 +34,8 @@
             </field>
             <field name="end_date" position="after">
                 <field name="date_contract" attrs="{'invisible': [('is_template', '=', True)]}"/>
-                <label for="recurring_interval" attrs="{'invisible': [('is_template', '=', True)]}"/>
-                <div attrs="{'invisible': [('is_template', '=', True)]}">
+                <label for="recurring_interval" attrs="{'invisible': [('is_template', '=', True)], 'required': [('is_template', '=', False)]}"/>
+                <div attrs="{'invisible': [('is_template', '=', True)], 'required': [('is_template', '=', False)]}">
                     <field name="recurring_interval" class="oe_inline"/>
                     <field name="recurring_rule_type" class="oe_inline"/>
                 </div>

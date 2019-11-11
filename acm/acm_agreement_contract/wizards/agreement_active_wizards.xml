@@ -9,7 +9,7 @@
                     This is for active agreements.
                 </p>
                 <footer>
-                    <button string="Confirm" name="active_agreement" type="object" default_focus="1" class="btn-primary"/>
+                    <button name="action_active_agreement" string="Confirm" type="object" default_focus="1" class="btn-primary"/>
                     <button string="Cancel" class="btn-secondary" special="cancel"/>
                 </footer>
             </form>

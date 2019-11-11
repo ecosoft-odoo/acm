@@ -17,7 +17,7 @@
         <field name="agreement_type_id" ref="agreement_legal.agreement_type_contract"/>
         <field name="agreement_subtype_id" ref="acm.agreement_subtype_service"/>
         <field name="contract_type">sale</field>
-        <field name="description">สัญญาเช่า</field>
+        <field name="description">สัญญาบริการ</field>
         <field name="company_id" ref="base.main_company"/>
     </record>
 </odoo>

@@ -4,13 +4,13 @@
 from odoo import models, api
 
 
-class AgreementActive(models.TransientModel):
-    _name = 'agreement.active'
+class AgreementCreateContract(models.TransientModel):
+    _name = 'agreement.create.contract'
 
     @api.multi
-    def action_active_agreement(self):
+    def action_create_contract(self):
         self.ensure_one()
         active_ids = self._context.get('active_ids', [])
         agreements = self.env['agreement'].browse(active_ids)
-        agreements.active_statusbar()
-        return agreements.view_agreement()
+        agreements.create_new_contract()
+        return agreements.action_view_contract()
