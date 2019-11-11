@@ -1,0 +1,60 @@
+<odoo>
+
+    <template id="report_batch_invoice">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <t t-set="address">
+                            <address t-field="o.partner_id" t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>
+                        </t>
+                        <div id="informations" class="row">
+                            <div class="col-auto" name="date_invoice">
+                                <strong>Invoice Date:</strong>
+                                <p t-field="o.date_invoice"/>
+                            </div>
+                            <div class="col-auto" name="tax_id">
+                                <strong>Tax ID:</strong>
+                                <p t-field="o.partner_id.vat"/>
+                            </div>
+                            <div class="col-auto" name="currency_id">
+                                <strong>Currency:</strong>
+                                <p t-field="o.currency_id"/>
+                            </div>
+                            <div class="col-auto" name="currency_id">
+                                <strong>Period:</strong>
+                                <p t-field="o.batch_invoice_id.date_range_id.name"/>
+                            </div>
+                        </div>
+                        <table class="table table-sm o_main_table" name="invoice_line_table">
+                            <tr>
+                                <t t-set="colspan" t-value="6"/>
+                                <th class="text-left"><span>Product</span></th>
+                                <th class="text-left"><span>Meter From</span></th>
+                                <th class="text-left"><span>Meter To</span></th>
+                                <th class="text-left"><span>Quantity</span></th>
+                                <th class="text-left"><span>Price/Unit</span></th>
+                                <th class="text-right"><span>Total</span></th>
+                            </tr>
+                            <t t-foreach="o.invoice_line_ids" t-as="line">
+                                <tr name="account_invoice_line">
+                                    <td name="account_invoice_line_number"><span t-field="line.product_id.name"/></td>
+                                    <td class="text-left"><span t-field="line.meter_from"/></td>
+                                    <td class="text-left"><span t-field="line.meter_to"/></td>
+                                    <td class="text-left"><span t-field="line.quantity"/></td>
+                                    <td class="text-left"><span t-field="line.price_unit"/></td>
+                                    <td class="text-right"><span t-field="line.price_subtotal"/></td>
+                                </tr>
+                            </t>
+                        </table>
+                        <p  t-esc="'%.2f'% o.amount_untaxed"/>
+                        <p t-esc="'%.2f'% o.amount_tax"/>
+                        <span class="text_amount"><t t-esc="o.amount_text(o.amount_total)"/></span>
+                        <span t-esc="o.amount_total"/>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

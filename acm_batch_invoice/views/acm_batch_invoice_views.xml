@@ -1,0 +1,92 @@
+<odoo>
+
+    <record id="acm_batch_invoice_view_form" model="ir.ui.view">
+        <field name="name">acm.batch.invoice.form</field>
+        <field name="model">acm.batch.invoice</field>
+        <field name="arch" type="xml">
+            <form string="Batch Invoices">
+                <header>
+                    <field name="state" widget="statusbar" nolabel="1" statusbar_visible="draft,confirm,done"/>
+                    <button name="button_confirm" string="Confirm" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                    <button name="button_create_invoice" string="Create Invoice" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'confirm')]}"/>
+                    <button name="button_set_to_draft" string="Set to draft" type="object" attrs="{'invisible': [('state', '=', 'done')]}"/>
+                </header>
+                <sheet string="Invoice">
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_invoice"
+                                string="Invoices"
+                                class="oe_stat_button"
+                                type="object"
+                                icon="fa-pencil-square-o"
+                                attrs="{'invisible': [('state', '!=', 'done')]}">
+                        </button>
+                    </div>
+                    <h1>
+                        <label for="name" string="Draft Batch Invoice" attrs="{'invisible': [('state','!=', 'draft')]}"/>
+                        <field name="name" readonly="1" class="oe_inline" attrs="{'invisible': [('state', '=', 'draft')]}"/>
+                    </h1>
+                    <group>
+                        <group>
+                            <field name="invoice_type"/>
+                            <field name="date_invoice"/>
+                            <field name="date_range_id"/>
+                            <field name="journal_id"/>
+                            <field name="water_product_id"/>
+                            <field name="electric_product_id"/>
+                        </group>
+                    </group>
+                    <button name="retriveve_product_line"
+                            string="Retrieve Meter Lines"
+                            type="object"
+                            class="oe_highlight"
+                            states="draft"/>
+
+                    <notebook>
+                        <page string="Meter Lines">
+                            <field name="batch_invoice_line_ids">
+                                <tree name="batch_invoice" create="0" editable="bottom">
+                                    <field name="agreement_id"/>
+                                    <field name="partner_id"/>
+                                    <field name="lock"/>
+                                    <field name="water_from"/>
+                                    <field name="water_to"/>
+                                    <field name="water_amount"/>
+                                    <field name="electric_from"/>
+                                    <field name="electric_to"/>
+                                    <field name="electric_amount"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="acm_batch_invoice_view_tree" model="ir.ui.view">
+        <field name="name">acm.batch.invoice.tree</field>
+        <field name="model">acm.batch.invoice</field>
+        <field name="arch" type="xml">
+            <tree string="Batch Invoices">
+                <field name="name"/>
+                <field name="invoice_type"/>
+                <field name="date_invoice"/>
+                <field name="state"/>
+            </tree>
+      </field>
+    </record>
+
+    <record id="acm_batch_invoice_action_form" model="ir.actions.act_window">
+        <field name="name">Batch Invoices</field>
+        <field name="res_model">acm.batch.invoice</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem
+        name="Batch Invoice"
+        id="batch_invoice_menu"
+        sequence="30"
+        parent="agreement_legal.agreement_operations"
+        action="acm_batch_invoice_action_form"/>
+
+</odoo>
