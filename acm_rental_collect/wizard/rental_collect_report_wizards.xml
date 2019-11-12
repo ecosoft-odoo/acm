@@ -1,0 +1,31 @@
+<odoo>
+
+    <record id="rental_collect_wizard_view" model="ir.ui.view">
+        <field name="name">rental.collect.wizard.view</field>
+        <field name="model">rental.collect.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Rental Collection Form">
+                <group>
+                    <group>
+                        <field name="date_print"/>
+                        <field name="agreement_ids"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="print_report" type="object" string="Print" class="oe_highlight"/>
+                    <button special="cancel" class="oe_link" string="Cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <act_window
+        name="Rental Collection Form"
+        id="report_rental_collect_wizard"
+        src_model="agreement"
+        res_model="rental.collect.report.wizard"
+        view_mode="form"
+        key2="client_print_multi"
+        target="new"/>
+
+</odoo>
