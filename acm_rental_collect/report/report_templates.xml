@@ -1,0 +1,10 @@
+<odoo>
+
+    <template id="acm_rental_collect.internal_layout">
+        <div class="article">
+            <link href="/acm_rental_collect/static/src/css/style.css" rel="stylesheet"/>
+          <t t-raw="0"/>
+        </div>
+    </template>
+
+</odoo>
