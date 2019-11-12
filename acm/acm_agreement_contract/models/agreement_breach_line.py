@@ -6,6 +6,7 @@ from odoo import models, fields
 
 class AgreementBreachLine(models.Model):
     _name = 'agreement.breach.line'
+    _description = 'Agreement Breach Lines'
 
     agreement_id = fields.Many2one(
         comodel_name='agreement',

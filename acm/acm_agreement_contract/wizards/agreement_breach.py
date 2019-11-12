@@ -7,6 +7,7 @@ from odoo.exceptions import UserError
 
 class AgreementBreach(models.TransientModel):
     _name = 'agreement.breach'
+    _description = 'Agreement Breach'
 
     date_breach = fields.Date(
         string='Breach Date',

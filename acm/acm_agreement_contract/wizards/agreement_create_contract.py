@@ -6,6 +6,7 @@ from odoo import models, api
 
 class AgreementCreateContract(models.TransientModel):
     _name = 'agreement.create.contract'
+    _description = 'Create Contract From Agreement'
 
     @api.multi
     def action_create_contract(self):
