@@ -90,6 +90,18 @@
             <xpath expr="//page[@name='products']/field/tree" position="attributes">
                 <attribute name="editable">buttom</attribute>
             </xpath>
+            <group name="partner" position="attributes">
+                <attribute name="string">Lessee</attribute>
+            </group>
+            <group name="company" position="attributes">
+                <attribute name="string">Lessor</attribute>
+            </group>
+            <xpath expr="//page[@name='signature']/group[1]/group[1]" position="attributes">
+                <attribute name="string">Lessee</attribute>
+            </xpath>
+            <xpath expr="//page[@name='signature']/group[1]/group[2]" position="attributes">
+                <attribute name="string">Lessor</attribute>
+            </xpath>
         </field>
     </record>
 
@@ -111,6 +123,11 @@
             <field name="parent_agreement_id" position="after">
                 <field name="start_date" invisible="context.get('default_is_template', False)"/>
                 <field name="end_date"  invisible="context.get('default_is_template', False)"/>
+            </field>
+            <field name="partner_id" position="after">
+                <field name="product_zone" invisible="context.get('default_is_template', False)"/>
+                <field name="product_category_id" invisible="context.get('default_is_template', False)"/>
+                <field name="product_number" invisible="context.get('default_is_template', False)"/>
             </field>
         </field>
     </record>

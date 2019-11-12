@@ -20,14 +20,14 @@ class Agreement(models.Model):
     )
     extension_agreement_id = fields.Many2one(
         comodel_name='agreement',
-        string='Source Agreement',
+        string='Source Agreement (Extension)',
     )
     is_transfer = fields.Boolean(
         string='Transfer',
     )
     transfer_agreement_id = fields.Many2one(
         comodel_name='agreement',
-        string='Source Agreement',
+        string='Source Agreement (Transfer)',
     )
     contract_type = fields.Selection(
         selection=[
@@ -84,7 +84,7 @@ class Agreement(models.Model):
     breach_ids = fields.One2many(
         comodel_name='agreement.breach.line',
         inverse_name='agreement_id',
-        string='Breach',
+        string='Breach Lines',
     )
     termination_by = fields.Selection(
         selection=[
@@ -95,6 +95,48 @@ class Agreement(models.Model):
     payment_due_date = fields.Integer(
         string='Payment Due Date',
         default=1,
+    )
+    partner_id = fields.Many2one(
+        string='Lessee',
+    )
+    partner_contact_id = fields.Many2one(
+        string='Lessee Contact',
+    )
+    partner_contact_phone = fields.Char(
+        string='Lessee Phone',
+    )
+    partner_contact_email = fields.Char(
+        string='Lessee Email',
+    )
+    partner_signed_date = fields.Date(
+        string='Signed on (Lessee)',
+    )
+    partner_signed_user_id = fields.Many2one(
+        string='Signed By (Lessee)',
+    )
+    company_id = fields.Many2one(
+        string='Lessor',
+    )
+    company_contact_id = fields.Many2one(
+        string='Lessor Contact',
+    )
+    company_contact_phone = fields.Char(
+        string='Lessor Phone',
+    )
+    company_contact_email = fields.Char(
+        string='Lessor Email',
+    )
+    product_zone = fields.Char(
+        related='rent_product_id.zone',
+        string='Zone',
+    )
+    product_category_id = fields.Many2one(
+        related='rent_product_id.goods_category_id',
+        string='Product Category',
+    )
+    product_number = fields.Char(
+        related='rent_product_id.lock_number',
+        string='Lock',
     )
 
     @api.constrains('start_date', 'end_date')
