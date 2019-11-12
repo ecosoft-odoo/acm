@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_acm_batch_invoice_user,acm.batch.invoice,model_acm_batch_invoice,agreement_legal.group_agreement_user,1,1,1,1
+access_acm_batch_invoice_line_user,acm.batch.invoice.line,model_acm_batch_invoice_line,agreement_legal.group_agreement_user,1,1,1,1
