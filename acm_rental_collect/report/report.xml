@@ -1,0 +1,14 @@
+<odoo>
+
+    <report
+        id="report_rental_collection"
+        model="agreement"
+        string="Rental Collection Form"
+        report_type="qweb-pdf"
+        name="acm_rental_collect.report_rental_collection"
+        file="acm_rental_collect.report_rental_collection"
+        print_report_name="'Rental Collection'"
+        paperformat="acm_rental_collect.report_paperformat_rental_collect"
+        menu="False"/>
+
+</odoo>
