@@ -6,6 +6,7 @@ from odoo import models, api
 
 class AgreementActive(models.TransientModel):
     _name = 'agreement.active'
+    _description = 'Active Agreement'
 
     @api.multi
     def action_active_agreement(self):

@@ -8,6 +8,7 @@ from dateutil.relativedelta import relativedelta
 
 class AgreementExtension(models.TransientModel):
     _name = 'agreement.extension'
+    _description = 'Extension Agreement'
 
     date_start = fields.Date(
         string='Start Date',

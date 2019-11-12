@@ -6,5 +6,6 @@ from odoo import models, fields
 
 class GoodsCategory(models.Model):
     _name = 'goods.category'
+    _description = 'Goods Category'
 
     name = fields.Char()
