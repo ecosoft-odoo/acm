@@ -120,16 +120,16 @@ class Agreement(models.Model):
     def _compute_product_id(self):
         for rec in self:
             lines = rec.line_ids
-            self.rent_product_id = lines.filtered(
+            rec.rent_product_id = lines.filtered(
                 lambda l: l.product_id.value_type == 'rent') \
                 .mapped('product_id')
-            self.tea_money_product_id = lines.filtered(
+            rec.tea_money_product_id = lines.filtered(
                 lambda l: l.product_id.value_type == 'tea_money') \
                 .mapped('product_id')
-            self.security_deposit_product_id = lines.filtered(
+            rec.security_deposit_product_id = lines.filtered(
                 lambda l: l.product_id.value_type == 'security_deposit') \
                 .mapped('product_id')
-            self.transfer_product_id = lines.filtered(
+            rec.transfer_product_id = lines.filtered(
                 lambda l: l.product_id.value_type == 'transfer') \
                 .mapped('product_id')
 
