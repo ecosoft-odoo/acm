@@ -6,6 +6,7 @@ from odoo import models, api
 
 class AgreementInActive(models.TransientModel):
     _name = 'agreement.inactive'
+    _description = 'Inactive Agreement'
 
     @api.multi
     def action_inactive_agreement(self):

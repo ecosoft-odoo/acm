@@ -6,6 +6,7 @@ from odoo import models, fields, api
 
 class AgreementCreate(models.TransientModel):
     _name = 'agreement.create'
+    _description = 'Create Agreement'
 
     template_ids = fields.Many2many(
         comodel_name='agreement',

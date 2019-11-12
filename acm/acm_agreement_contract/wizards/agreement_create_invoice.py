@@ -7,6 +7,7 @@ from odoo.exceptions import UserError
 
 class AgreementCreateInvoice(models.TransientModel):
     _name = 'agreement.create.invoice'
+    _description = 'Create Invoice From Agreement'
 
     product_id = fields.Many2one(
         comodel_name='product.product',

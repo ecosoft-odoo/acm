@@ -7,6 +7,7 @@ from odoo.exceptions import UserError
 
 class AgreementTerminate(models.TransientModel):
     _name = 'agreement.terminate'
+    _description = 'Terminate Agreement'
 
     termination_by = fields.Selection(
         selection=[

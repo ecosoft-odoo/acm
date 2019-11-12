@@ -6,6 +6,7 @@ from odoo import models, api
 
 class ContractCreateInvoice(models.TransientModel):
     _name = 'contract.create.invoice'
+    _description = 'Create Invoice From Contract'
 
     @api.multi
     def action_create_invoices(self):

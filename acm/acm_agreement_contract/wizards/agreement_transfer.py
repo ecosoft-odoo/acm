@@ -7,6 +7,7 @@ from odoo.exceptions import UserError
 
 class AgreementTransfer(models.TransientModel):
     _name = 'agreement.transfer'
+    _description = 'Transfer Agreement'
 
     partner_id = fields.Many2one(
         comodel_name='res.partner',

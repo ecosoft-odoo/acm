@@ -336,13 +336,13 @@ class Agreement(models.Model):
             lambda l: l.product_id.value_type == 'rent').sorted('date_start')
         if len(rent_lines) <= 1:
             return ' %s บาท (%s)' % (
-                '{0:,.0f}'.format(rent_lines.lst_price),
+                '{0:,.2f}'.format(rent_lines.lst_price),
                 self.amount_text(rent_lines.lst_price))
         else:
             rent_text = ''
             for index, rent_line in enumerate(rent_lines):
                 rent_text += ' ปีที่ %s %s บาท (%s)' % (
-                    str(index+1), '{0:,.0f}'.format(rent_line.lst_price),
+                    str(index+1), '{0:,.2f}'.format(rent_line.lst_price),
                     self.amount_text(rent_line.lst_price))
             return rent_text
 
@@ -361,3 +361,8 @@ class Agreement(models.Model):
             if (line.date_start or line.date_end) and not date_valid:
                 raise UserError(
                     _('Date in Products/Services is not valid.'))
+
+    @api.multi
+    def filter_lines(self, value_type=''):
+        return self.line_ids.filtered(
+            lambda l: l.product_id.value_type == value_type)
