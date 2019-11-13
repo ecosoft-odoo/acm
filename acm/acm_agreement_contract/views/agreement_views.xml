@@ -175,5 +175,6 @@
     </record>
     <record id="agreement.agreement_menu" model="ir.ui.menu">
         <field name="action" ref="agreement_legal.agreement_operations_agreement"/>
+        <field name="sequence">2</field>
     </record>
 </odoo>

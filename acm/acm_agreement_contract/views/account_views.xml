@@ -1,0 +1,6 @@
+<odoo>
+    <!-- Menu -->
+    <record id="account.menu_finance" model="ir.ui.menu">
+        <field name="sequence">3</field>
+    </record>
+</odoo>

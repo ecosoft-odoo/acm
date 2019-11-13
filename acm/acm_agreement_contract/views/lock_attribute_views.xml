@@ -1,0 +1,41 @@
+<odoo>
+    <!-- Tree View -->
+    <record id="lock_attribute_tree_view" model="ir.ui.view">
+        <field name="name">lock.attribute.tree.view</field>
+        <field name="model">lock.attribute</field>
+        <field name="arch" type="xml">
+            <tree string="Lock Attribute">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="lock_attribute_form_view" model="ir.ui.view">
+        <field name="name">lock.attribute.form.view</field>
+        <field name="model">lock.attribute</field>
+        <field name="arch" type="xml">
+            <form string="Lock Attribute">
+                <group>
+                    <field name="name"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="lock_attribute_action" model="ir.actions.act_window">
+        <field name="name">Lock Attribute</field>
+        <field name="res_model">lock.attribute</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem
+        name="Lock Attribute"
+        id="lock_attribute_menu"
+        sequence="120"
+        parent="agreement_legal.agreement_masterdata"
+        action="lock_attribute_action"/>
+</odoo>
