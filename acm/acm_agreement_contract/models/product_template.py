@@ -9,7 +9,9 @@ class ProductTemplate(models.Model):
 
     width = fields.Float()
     length = fields.Float()
-    area = fields.Float()
+    area = fields.Float(
+        compute='_compute_area',
+    )
     working_hours = fields.Char()
     value_type = fields.Selection(
         selection=[
@@ -29,9 +31,20 @@ class ProductTemplate(models.Model):
     zone = fields.Char(
         string='Zone',
     )
+    subzone = fields.Char(
+        string='Subzone',
+    )
     lock_number = fields.Char(
         string='Number',
     )
+    lock_attribute = fields.Many2one(
+        comodel_name='lock.attribute',
+    )
+
+    @api.depends('width', 'length')
+    def _compute_area(self):
+        for rec in self:
+            rec.area = rec.width * rec.length
 
     @api.onchange('zone', 'lock_number')
     def _onchange_zone_number(self):
