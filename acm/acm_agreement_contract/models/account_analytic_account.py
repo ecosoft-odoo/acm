@@ -28,3 +28,12 @@ class AccountAnalyticAccount(models.Model):
             return {}
         return super(AccountAnalyticAccount, self) \
             ._prepare_invoice_line(line, invoice_id)
+
+    @api.multi
+    def recurring_create_invoice(self):
+        """Create invoice only if Invoice contain some lines."""
+        invoices = super().recurring_create_invoice()
+        no_line_invs = invoices.filtered(lambda inv: not inv.invoice_line_ids)
+        invoices -= no_line_invs
+        no_line_invs.unlink()
+        return invoices
