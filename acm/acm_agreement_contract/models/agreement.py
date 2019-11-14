@@ -68,18 +68,23 @@ class Agreement(models.Model):
     rent_product_id = fields.Many2one(
         comodel_name='product.product',
         compute='_compute_product_id',
+        string='Product',
+        store=True,
     )
     tea_money_product_id = fields.Many2one(
         comodel_name='product.product',
         compute='_compute_product_id',
+        store=True,
     )
     security_deposit_product_id = fields.Many2one(
         comodel_name='product.product',
         compute='_compute_product_id',
+        store=True,
     )
     transfer_product_id = fields.Many2one(
         comodel_name='product.product',
         compute='_compute_product_id',
+        store=True,
     )
     breach_ids = fields.One2many(
         comodel_name='agreement.breach.line',
@@ -126,9 +131,11 @@ class Agreement(models.Model):
     company_contact_email = fields.Char(
         string='Lessor Email',
     )
-    product_zone = fields.Char(
-        related='rent_product_id.zone',
+    product_group_id = fields.Many2one(
+        comodel_name='account.analytic.group',
+        related='rent_product_id.group_id',
         string='Zone',
+        store=True,
     )
     product_category_id = fields.Many2one(
         related='rent_product_id.goods_category_id',
@@ -137,6 +144,9 @@ class Agreement(models.Model):
     product_number = fields.Char(
         related='rent_product_id.lock_number',
         string='Lock',
+    )
+    state = fields.Selection(
+        string='Status',
     )
 
     @api.constrains('start_date', 'end_date')
@@ -158,22 +168,31 @@ class Agreement(models.Model):
             if rec.search_contract():
                 rec.is_contract_create = True
 
+    @api.depends('line_ids', 'line_ids.product_id')
     @api.multi
     def _compute_product_id(self):
         for rec in self:
             lines = rec.line_ids
-            rec.rent_product_id = lines.filtered(
+            rent_product = lines.filtered(
                 lambda l: l.product_id.value_type == 'rent') \
                 .mapped('product_id')
-            rec.tea_money_product_id = lines.filtered(
+            tea_money_product = lines.filtered(
                 lambda l: l.product_id.value_type == 'tea_money') \
                 .mapped('product_id')
-            rec.security_deposit_product_id = lines.filtered(
+            security_deposit_product = lines.filtered(
                 lambda l: l.product_id.value_type == 'security_deposit') \
                 .mapped('product_id')
-            rec.transfer_product_id = lines.filtered(
+            transfer_product = lines.filtered(
                 lambda l: l.product_id.value_type == 'transfer') \
                 .mapped('product_id')
+            if rent_product:
+                rec.rent_product_id = rent_product[0]
+            if tea_money_product:
+                rec.tea_money_product_id = tea_money_product[0]
+            if security_deposit_product:
+                rec.security_deposit_product_id = security_deposit_product[0]
+            if transfer_product:
+                rec.transfer_product_id = transfer_product[0]
 
     @api.multi
     def active_statusbar(self):
@@ -281,6 +300,8 @@ class Agreement(models.Model):
                 '%s-%s-%s' % (self.start_date.year, self.start_date.month,
                               self.payment_due_date) or self.start_date,
             'active': True,
+            'group_id': self.product_group_id.id,
+            'rent_product_id': self.rent_product_id.id,
         }
 
     @api.multi

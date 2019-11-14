@@ -13,6 +13,13 @@ class AccountAnalyticAccount(models.Model):
         ondelete='restrict',
         readonly=True,
     )
+    rent_product_id = fields.Many2one(
+        comodel_name='product.product',
+        string='Product',
+    )
+    group_id = fields.Many2one(
+        string='Zone',
+    )
 
     @api.model
     def _prepare_invoice_line(self, line, invoice_id):

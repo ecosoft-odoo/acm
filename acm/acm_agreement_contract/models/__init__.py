@@ -11,3 +11,4 @@ from . import account_analytic_invoice_line
 from . import agreement
 from . import agreement_line
 from . import agreement_breach_line
+from . import account
