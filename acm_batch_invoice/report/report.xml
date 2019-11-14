@@ -1,7 +1,7 @@
 <odoo>
 
     <report
-        id="report_batch_invoice"
+        id="action_report_batch_invoice"
         model="account.invoice"
         string="Batch Invoice"
         report_type="qweb-pdf"

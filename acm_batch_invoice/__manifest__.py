@@ -14,6 +14,7 @@
     ],
     'data': [
         'data/batch_invoice_sequence.xml',
+        'data/date_range.xml',
         'security/ir.model.access.csv',
         'views/acm_batch_invoice_views.xml',
         'views/account_invoice_view.xml',
