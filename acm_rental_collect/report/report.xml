@@ -1,7 +1,7 @@
 <odoo>
 
     <report
-        id="report_rental_collection"
+        id="action_report_rental_collection"
         model="agreement"
         string="Rental Collection Form"
         report_type="qweb-pdf"
