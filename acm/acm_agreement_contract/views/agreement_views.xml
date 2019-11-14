@@ -114,20 +114,31 @@
             <tree position="attributes">
                 <attribute name="delete">0</attribute>
             </tree>
-            <field name="agreement_subtype_id" position="after">
-                <field name="state" string="Status"/>
+            <field name="name" position="attributes">
+                <attribute name="invisible">not context.get('default_is_template', False)</attribute>
             </field>
-            <field name="name" position="before">
-                <field name="code"/>
+            <field name="partner_id" position="before">
+                <field name="product_group_id" invisible="context.get('default_is_template', False)"/>
+                <field name="rent_product_id" invisible="context.get('default_is_template', False)"/>
+            </field>
+            <field name="company_id" position="attributes">
+                <attribute name="invisible">not context.get('default_is_template', False)</attribute>
+            </field>
+            <field name="parent_agreement_id" position="attributes">
+                <attribute name="invisible">not context.get('default_is_template', False)</attribute>
             </field>
             <field name="parent_agreement_id" position="after">
                 <field name="start_date" invisible="context.get('default_is_template', False)"/>
                 <field name="end_date"  invisible="context.get('default_is_template', False)"/>
             </field>
-            <field name="partner_id" position="after">
-                <field name="product_zone" invisible="context.get('default_is_template', False)"/>
-                <field name="product_category_id" invisible="context.get('default_is_template', False)"/>
-                <field name="product_number" invisible="context.get('default_is_template', False)"/>
+            <field name="agreement_type_id" position="attributes">
+                <attribute name="invisible">not context.get('default_is_template', False)</attribute>
+            </field>
+            <field name="agreement_subtype_id" position="attributes">
+                <attribute name="invisible">not context.get('default_is_template', False)</attribute>
+            </field>
+            <field name="agreement_subtype_id" position="after">
+                <field name="state"/>
             </field>
         </field>
     </record>
@@ -157,6 +168,22 @@
             <field name="stage_id" position="after">
                 <field name="state" type="row"/>
             </field>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record model="ir.ui.view" id="partner_agreement_search_view">
+        <field name="name">Agreement Search</field>
+        <field name="model">agreement</field>
+        <field name="inherit_id" ref="agreement_legal.partner_agreement_search_view"/>
+        <field name="arch" type="xml">
+            <field name="name" position="before">
+                <field name="product_group_id"/>
+                <field name="rent_product_id"/>
+            </field>
+            <filter name="group_partner_id" position="before">
+                <filter name="group_product_group_id" string="Zone" icon="terp-partner" context="{'group_by':'product_group_id'}"/>
+            </filter>
         </field>
     </record>
 

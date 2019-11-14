@@ -28,7 +28,8 @@ class ProductTemplate(models.Model):
         comodel_name='goods.category',
         string='Goods Category',
     )
-    zone = fields.Char(
+    group_id = fields.Many2one(
+        comodel_name='account.analytic.group',
         string='Zone',
     )
     subzone = fields.Char(
@@ -46,11 +47,11 @@ class ProductTemplate(models.Model):
         for rec in self:
             rec.area = rec.width * rec.length
 
-    @api.onchange('zone', 'lock_number')
-    def _onchange_zone_number(self):
+    @api.onchange('group_id', 'lock_number')
+    def _onchange_group_number(self):
         names = []
-        if self.zone:
-            names.append(self.zone)
+        if self.group_id:
+            names.append(self.group_id.name)
         if self.lock_number:
             names.append(self.lock_number)
         self.name = '/'.join(names)

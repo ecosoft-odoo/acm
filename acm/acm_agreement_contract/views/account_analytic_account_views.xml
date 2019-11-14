@@ -17,4 +17,39 @@
             </xpath>
         </field>
     </record>
+
+    <!-- Tree View -->
+    <record id="view_account_analytic_account_journal_tree" model="ir.ui.view">
+        <field name="name">Contract list</field>
+        <field name="model">account.analytic.account</field>
+        <field name="inherit_id" ref="contract.view_account_analytic_account_journal_tree"/>
+        <field name="arch" type="xml">
+            <field name="name" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="code" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="journal_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="partner_id" position="before">
+                <field name="group_id"/>
+                <field name="rent_product_id"/>
+            </field>
+            <field name="recurring_next_date" position="after">
+                <field name="date_start"/>
+                <field name="date_end"/>
+            </field>
+            <field name="debit" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="credit" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="balance" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+        </field>
+    </record>
 </odoo>

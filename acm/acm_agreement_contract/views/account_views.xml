@@ -1,4 +1,19 @@
 <odoo>
+    <!-- Form View -->
+    <record id="invoice_form" model="ir.ui.view">
+        <field name="name">account.invoice.form</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/group[1]/group[2]" position="inside">
+                <field name="group_id"/>
+            </xpath>
+            <!-- <field name="cash_rounding_id" position="after">
+                <field name="group_id"/>
+            </field> -->
+        </field>
+    </record>
+
     <!-- Menu -->
     <record id="account.menu_finance" model="ir.ui.menu">
         <field name="sequence">3</field>
