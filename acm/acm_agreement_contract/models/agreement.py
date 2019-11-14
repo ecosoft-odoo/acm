@@ -131,7 +131,7 @@ class Agreement(models.Model):
     company_contact_email = fields.Char(
         string='Lessor Email',
     )
-    product_group_id = fields.Many2one(
+    group_id = fields.Many2one(
         comodel_name='account.analytic.group',
         related='rent_product_id.group_id',
         string='Zone',
@@ -155,6 +155,20 @@ class Agreement(models.Model):
         self.ensure_one()
         if self.start_date > self.end_date:
             raise UserError(_('"Start Date" cannot be more than "End Date"'))
+
+    @api.constrains('rent_product_id', 'state')
+    def _check_rent_product_id(self):
+        if self.state == 'active':
+            # No rent product
+            if not self.rent_product_id:
+                raise UserError(_('Please add product for rent.'))
+            # No multiple rent product
+            agreements = self.env['agreement'].search(
+                [('state', '=', 'active'),
+                 ('rent_product_id', '=', self.rent_product_id.id), ])
+            if len(agreements) > 1:
+                raise UserError(_(
+                    'The rental product is not permitted in this agreement.'))
 
     @api.multi
     def search_contract(self):
@@ -300,7 +314,7 @@ class Agreement(models.Model):
                 '%s-%s-%s' % (self.start_date.year, self.start_date.month,
                               self.payment_due_date) or self.start_date,
             'active': True,
-            'group_id': self.product_group_id.id,
+            'group_id': self.group_id.id,
             'rent_product_id': self.rent_product_id.id,
         }
 

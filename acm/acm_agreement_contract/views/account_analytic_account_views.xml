@@ -52,4 +52,20 @@
             </field>
         </field>
     </record>
+
+    <!-- Search View -->
+    <record id="view_account_analytic_account_search" model="ir.ui.view">
+        <field name="name">account.analytic.account.search</field>
+        <field name="model">account.analytic.account</field>
+        <field name="inherit_id" ref="analytic.view_account_analytic_account_search"/>
+        <field name="arch" type="xml">
+            <field name="name" position="before">
+                <field name="group_id"/>
+                <field name="rent_product_id"/>
+            </field>
+            <filter name="associatedpartner" position="before">
+                <filter name="group_group_id" string="Zone" icon="terp-partner" context="{'group_by':'group_id'}"/>
+            </filter>
+        </field>
+    </record>
 </odoo>

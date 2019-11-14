@@ -8,9 +8,6 @@
             <xpath expr="//sheet/group[1]/group[2]" position="inside">
                 <field name="group_id"/>
             </xpath>
-            <!-- <field name="cash_rounding_id" position="after">
-                <field name="group_id"/>
-            </field> -->
         </field>
     </record>
 
