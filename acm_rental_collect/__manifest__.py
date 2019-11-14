@@ -6,7 +6,7 @@
     'version': '12.0.1.0.0',
     'author': 'Ecosoft, Odoo Community Association (OCA)',
     'license': 'AGPL-3',
-    'website': 'https://github.com/OCA/contract',
+    'website': 'https://github.com/ecosoft-odoo/acm',
     'category': 'Agreement',
     'depends': [
         'acm',

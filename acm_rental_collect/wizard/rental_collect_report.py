@@ -21,5 +21,6 @@ class RentalCollectReport(models.TransientModel):
     def print_report(self):
         self.ensure_one()
         datas = {'ids': self.ids, 'model': self._name}
-        action = self.env.ref('acm_rental_collect.report_rental_collection')
+        action = self.env.ref(
+            'acm_rental_collect.action_report_rental_collection')
         return action.report_action(self, data=datas)
