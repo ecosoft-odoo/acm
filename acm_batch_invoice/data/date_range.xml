@@ -1,0 +1,93 @@
+<odoo noupdate="1">
+
+    <record id="date_range_type_monthly" model="date.range.type">
+        <field name="name">Monthly</field>
+    </record>
+
+    <!-- Current Year -->
+    <record id="date_range_m1" model="date.range">
+        <field name="name" eval="'มกราคม '+ str((datetime.now()+relativedelta(years=543)).year)"/>
+        <field name="date_start" eval="str(datetime.now().year) +'-01-01'"/>
+        <field name="date_end" eval="str(datetime.now().year) +'-01-31'"/>
+        <field name="type_id" ref="date_range_type_monthly"/>
+    </record>
+
+    <record id="date_range_m2" model="date.range">
+        <field name="name" eval="'กุมภาพันธ์ '+ str((datetime.now()+relativedelta(years=543)).year)"/>
+        <field name="date_start" eval="str(datetime.now().year) +'-02-01'"/>
+        <field name="date_end" eval="str(datetime.now().year) +'-02-28'"/>
+        <field name="type_id" ref="date_range_type_monthly"/>
+    </record>
+
+    <record id="date_range_m3" model="date.range">
+        <field name="name" eval="'มีนาคม '+ str((datetime.now()+relativedelta(years=543)).year)"/>
+        <field name="date_start" eval="str(datetime.now().year) +'-03-01'"/>
+        <field name="date_end" eval="str(datetime.now().year) +'-03-31'"/>
+        <field name="type_id" ref="date_range_type_monthly"/>
+    </record>
+
+    <record id="date_range_m4" model="date.range">
+        <field name="name" eval="'เมษายน '+ str((datetime.now()+relativedelta(years=543)).year)"/>
+        <field name="date_start" eval="str(datetime.now().year) +'-04-01'"/>
+        <field name="date_end" eval="str(datetime.now().year) +'-04-30'"/>
+        <field name="type_id" ref="date_range_type_monthly"/>
+    </record>
+
+    <record id="date_range_m5" model="date.range">
+        <field name="name" eval="'พฤษภาคม '+ str((datetime.now()+relativedelta(years=543)).year)"/>
+        <field name="date_start" eval="str(datetime.now().year) +'-05-01'"/>
+        <field name="date_end" eval="str(datetime.now().year) +'-05-31'"/>
+        <field name="type_id" ref="date_range_type_monthly"/>
+    </record>
+
+    <record id="date_range_m6" model="date.range">
+        <field name="name" eval="'มิถุนายน '+ str((datetime.now()+relativedelta(years=543)).year)"/>
+        <field name="date_start" eval="str(datetime.now().year) +'-06-01'"/>
+        <field name="date_end" eval="str(datetime.now().year) +'-06-30'"/>
+        <field name="type_id" ref="date_range_type_monthly"/>
+    </record>
+
+    <record id="date_range_m7" model="date.range">
+        <field name="name" eval="'กรกฎาคม '+ str((datetime.now()+relativedelta(years=543)).year)"/>
+        <field name="date_start" eval="str(datetime.now().year) +'-07-01'"/>
+        <field name="date_end" eval="str(datetime.now().year) +'-07-31'"/>
+        <field name="type_id" ref="date_range_type_monthly"/>
+    </record>
+
+    <record id="date_range_m8" model="date.range">
+        <field name="name" eval="'สิงหาคม '+ str((datetime.now()+relativedelta(years=543)).year)"/>
+        <field name="date_start" eval="str(datetime.now().year) +'-08-01'"/>
+        <field name="date_end" eval="str(datetime.now().year) +'-08-31'"/>
+        <field name="type_id" ref="date_range_type_monthly"/>
+    </record>
+
+    <record id="date_range_m9" model="date.range">
+        <field name="name" eval="'กันยายน '+ str((datetime.now()+relativedelta(years=543)).year)"/>
+        <field name="date_start" eval="str(datetime.now().year) +'-09-01'"/>
+        <field name="date_end" eval="str(datetime.now().year) +'-09-30'"/>
+        <field name="type_id" ref="date_range_type_monthly"/>
+    </record>
+
+    <record id="date_range_m10" model="date.range">
+        <field name="name" eval="'ตุลาคม '+ str((datetime.now()+relativedelta(years=543)).year)"/>
+        <field name="date_start" eval="str(datetime.now().year) +'-10-01'"/>
+        <field name="date_end" eval="str(datetime.now().year) +'-10-31'"/>
+        <field name="type_id" ref="date_range_type_monthly"/>
+    </record>
+
+    <record id="date_range_m11" model="date.range">
+        <field name="name" eval="'พฤศจิกายน '+ str((datetime.now()+relativedelta(years=543)).year)"/>
+        <field name="date_start" eval="str(datetime.now().year) +'-11-01'"/>
+        <field name="date_end" eval="str(datetime.now().year) +'-11-30'"/>
+        <field name="type_id" ref="date_range_type_monthly"/>
+    </record>
+
+    <record id="date_range_m12" model="date.range">
+        <field name="name" eval="'ธันวาคม '+ str((datetime.now()+relativedelta(years=543)).year)"/>
+        <field name="date_start" eval="str(datetime.now().year) +'-12-01'"/>
+        <field name="date_end" eval="str(datetime.now().year) +'-12-31'"/>
+        <field name="type_id" ref="date_range_type_monthly"/>
+    </record>
+
+
+</odoo>

@@ -20,6 +20,8 @@ class ACMBatchInvoice(models.Model):
         ],
         default='sale',
         required=True,
+        readonly=True,
+        states={'draft': [('readonly', False)]},
     )
     state = fields.Selection(
         selection=[
@@ -37,24 +39,32 @@ class ACMBatchInvoice(models.Model):
         comodel_name='date.range',
         string='Date Range',
         required=True,
+        readonly=True,
+        states={'draft': [('readonly', False)]},
     )
     journal_id = fields.Many2one(
         comodel_name='account.journal',
         string='Journal',
         domain="[('type', '=', invoice_type)]",
         required=True,
+        readonly=True,
+        states={'draft': [('readonly', False)]},
     )
     water_product_id = fields.Many2one(
         comodel_name='product.product',
         string='Water Product',
         domain="[('type', '=', 'service')]",
-        required=True
+        required=True,
+        readonly=True,
+        states={'draft': [('readonly', False)]},
     )
     electric_product_id = fields.Many2one(
         comodel_name='product.product',
         string='Electric Product',
         domain="[('type', '=', 'service')]",
-        required=True
+        required=True,
+        readonly=True,
+        states={'draft': [('readonly', False)]},
     )
     batch_invoice_line_ids = fields.One2many(
         comodel_name='acm.batch.invoice.line',
