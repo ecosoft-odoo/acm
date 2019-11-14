@@ -217,15 +217,26 @@ class ACMBatchInvoiceLine(models.Model):
         comodel_name='res.partner',
         string='Partner',
     )
-    lock = fields.Text()
-    water_amount = fields.Float()
+    zone = fields.Char(
+        related='agreement_id.rent_product_id.zone',
+    )
+    lock_number = fields.Char(
+        related='agreement_id.rent_product_id.lock_number',
+    )
+    water_amount = fields.Float(
+        readonly=True,
+        compute='_compute_water_amount',
+    )
     water_from = fields.Float(
         string='Water From',
     )
     water_to = fields.Float(
         string='Water To',
     )
-    electric_amount = fields.Float()
+    electric_amount = fields.Float(
+        readonly=True,
+        compute='_compute_electric_amount',
+    )
     electric_from = fields.Float(
         string='Electric From',
     )
@@ -233,13 +244,16 @@ class ACMBatchInvoiceLine(models.Model):
         string='Electric To',
     )
 
-    @api.onchange('water_to', 'water_from', 'electric_to', 'electric_from')
-    def _onchange_amount(self):
-        water_diff = self.water_to - self.water_from
-        water_price = self.batch_invoice_id.water_product_id.lst_price
-        elec_diff = self.electric_to - self.electric_from
-        elec_price = self.batch_invoice_id.electric_product_id.lst_price
-        water_amount = water_diff * water_price
-        electric_amount = elec_diff * elec_price
-        self.water_amount = water_amount if water_amount > 0 else 0
-        self.electric_amount = electric_amount if electric_amount > 0 else 0
+    @api.multi
+    def _compute_water_amount(self):
+        for rec in self:
+            water_diff = rec.water_to - rec.water_from
+            water_price = rec.batch_invoice_id.water_product_id.lst_price
+            rec.water_amount = water_diff*water_price
+
+    @api.multi
+    def _compute_electric_amount(self):
+        for rec in self:
+            elec_diff = rec.electric_to - rec.electric_from
+            elec_price = rec.batch_invoice_id.electric_product_id.lst_price
+            rec.electric_amount = elec_diff * elec_price
