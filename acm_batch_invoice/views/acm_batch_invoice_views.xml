@@ -8,8 +8,8 @@
                 <header>
                     <field name="state" widget="statusbar" nolabel="1" statusbar_visible="draft,confirm,done"/>
                     <button name="button_confirm" string="Confirm" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
-                    <button name="button_create_invoice" string="Create Invoice" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'confirm')]}"/>
-                    <button name="button_set_to_draft" string="Set to draft" type="object" attrs="{'invisible': [('state', '!=', 'confirm'')]}"/>
+                    <button name="%(action_batch_invoice)d" string="Create Invoice" type="action" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'confirm')]}"/>
+                    <button name="button_set_to_draft" string="Set to draft" type="object" attrs="{'invisible': [('state', '!=', 'confirm')]}"/>
                 </header>
                 <sheet string="Invoice">
                     <div class="oe_button_box" name="button_box">
@@ -71,7 +71,8 @@
         <field name="name">acm.batch.invoice.tree</field>
         <field name="model">acm.batch.invoice</field>
         <field name="arch" type="xml">
-            <tree string="Batch Invoices">
+            <tree string="Batch Invoices" default_order="group_id">
+                <field name="group_id"/>
                 <field name="name"/>
                 <field name="invoice_type"/>
                 <field name="date_invoice"/>
