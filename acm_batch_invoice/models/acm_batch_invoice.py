@@ -197,7 +197,7 @@ class ACMBatchInvoice(models.Model):
                     {
                         'agreement_id': line.id,
                         'partner_id': line.partner_id.id,
-                        'lock': line.line_ids.product_id.name,
+                        'lock': line.rent_product_id.name,
                     }
                 )
 
