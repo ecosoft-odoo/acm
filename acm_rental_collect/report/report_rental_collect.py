@@ -21,7 +21,7 @@ class ReportRentalCollect(models.AbstractModel):
                 'lock': agreement.rent_product_id.name,
                 'partner': agreement.partner_id.name,
                 'type': agreement.rent_product_id.goods_type or '-',
-                'price': agreement.line_ids.lst_price,
+                'price': agreement.rent_product_id.lst_price,
             })
         return {
             'doc_ids': data['ids'],
