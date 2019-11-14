@@ -9,7 +9,7 @@
                     <field name="state" widget="statusbar" nolabel="1" statusbar_visible="draft,confirm,done"/>
                     <button name="button_confirm" string="Confirm" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
                     <button name="button_create_invoice" string="Create Invoice" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'confirm')]}"/>
-                    <button name="button_set_to_draft" string="Set to draft" type="object" attrs="{'invisible': [('state', '=', 'done')]}"/>
+                    <button name="button_set_to_draft" string="Set to draft" type="object" attrs="{'invisible': [('state', '!=', 'confirm')]}"/>
                 </header>
                 <sheet string="Invoice">
                     <div class="oe_button_box" name="button_box">
@@ -44,16 +44,16 @@
                     <notebook>
                         <page string="Meter Lines">
                             <field name="batch_invoice_line_ids">
-                                <tree name="batch_invoice" create="0" editable="bottom">
-                                    <field name="agreement_id"/>
+                                <tree name="batch_invoice" create="0" editable="bottom" default_order="zone">
+                                    <field name="zone"/>
+                                    <field name="lock_number"/>
                                     <field name="partner_id"/>
-                                    <field name="lock"/>
                                     <field name="water_from"/>
                                     <field name="water_to"/>
-                                    <field name="water_amount"/>
+                                    <field name="water_amount" sum="Total Amount"/>
                                     <field name="electric_from"/>
                                     <field name="electric_to"/>
-                                    <field name="electric_amount"/>
+                                    <field name="electric_amount" sum="Total Amount"/>
                                 </tree>
                             </field>
                         </page>
