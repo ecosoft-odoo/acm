@@ -118,7 +118,7 @@
                 <attribute name="invisible">not context.get('default_is_template', False)</attribute>
             </field>
             <field name="partner_id" position="before">
-                <field name="product_group_id" invisible="context.get('default_is_template', False)"/>
+                <field name="group_id" invisible="context.get('default_is_template', False)"/>
                 <field name="rent_product_id" invisible="context.get('default_is_template', False)"/>
             </field>
             <field name="company_id" position="attributes">
@@ -178,11 +178,11 @@
         <field name="inherit_id" ref="agreement_legal.partner_agreement_search_view"/>
         <field name="arch" type="xml">
             <field name="name" position="before">
-                <field name="product_group_id"/>
+                <field name="group_id"/>
                 <field name="rent_product_id"/>
             </field>
             <filter name="group_partner_id" position="before">
-                <filter name="group_product_group_id" string="Zone" icon="terp-partner" context="{'group_by':'product_group_id'}"/>
+                <filter name="group_group_id" string="Zone" icon="terp-partner" context="{'group_by':'group_id'}"/>
             </filter>
         </field>
     </record>
