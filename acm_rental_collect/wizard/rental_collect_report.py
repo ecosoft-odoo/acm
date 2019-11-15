@@ -8,19 +8,40 @@ class RentalCollectReport(models.TransientModel):
     _name = 'rental.collect.report.wizard'
     _description = 'Rental Collection Report'
 
+    group_id = fields.Many2one(
+        comodel_name='account.analytic.group',
+        string='Zone',
+        required=True,
+    )
     date_print = fields.Date(
         default=fields.Date.today,
-    )
-    agreement_ids = fields.Many2many(
-        comodel_name='agreement',
-        string='Agreement List',
-        default=lambda self: self._context.get('active_ids', []),
+        required=True,
     )
 
     @api.multi
     def print_report(self):
         self.ensure_one()
-        datas = {'ids': self.ids, 'model': self._name}
+        Result = self.env['rental.collect.report']
+        result = Result.search([('group_id', '=', self.group_id.id)])
+        datas = {'ids': result.ids, 'model': result._name}
         action = self.env.ref(
             'acm_rental_collect.action_report_rental_collection')
         return action.report_action(self, data=datas)
+
+    @api.model
+    def trans_months(self, month):
+        months = {
+            '01': 'มกราคม',
+            '02': 'กุมภาพันธ์',
+            '03': 'มีนาคม',
+            '04': 'เมษายน',
+            '05': 'พฤษภาคม',
+            '06': 'มิถุนายน',
+            '07': 'กรกฎาคม',
+            '08': 'สิงหาคม',
+            '09': 'กันยายน',
+            '10': 'ตุลาคม',
+            '11': 'พฤศจิกายน',
+            '12': 'ธันวาคม',
+        }
+        return months[month]

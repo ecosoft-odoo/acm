@@ -4,9 +4,10 @@
         <t t-call="web.html_container">
             <t t-call="acm_rental_collect.internal_layout">
                 <div class="page">
-                    <p t-esc="company_name"/>
+                    <span t-esc="company_name"/>
                     รายชื่อผู้เช่าแผงลอยตลาดวโรรส
-                    ปี <span t-esc="(print_date + relativedelta(years=543)).year"/> เดือน <span t-esc="print_date.strftime('%B')"/>
+                    เดือน <span t-esc="month"/>
+                    ปี <span t-esc="(date_print + relativedelta(years=543)).year"/>
                     <div class="page_break"/>
                     <div class="act_as_table data_table" style="width: 100%;">
                         <div class="act_as_thead">
@@ -17,8 +18,9 @@
                                 <div class="act_as_cell" style="width: 8%;">ประเภทสินค้า</div>
                                 <div class="act_as_cell" style="width: 5%;">ค่าเช่า</div>
                                 <div class="act_as_cell" style="width: 5%;">ยกมา</div>
+                                <t t-set="k" t-value="context_timestamp(datetime.datetime.now() + relativedelta(day=31)).day"/>
                                 <t t-set="i" t-value="1"/>
-                                <t t-foreach="last_day" t-as="d">
+                                <t t-foreach="k" t-as="d">
                                     <div class="act_as_cell" style="width: 2.1%;">
                                         <span t-esc="i"/>
                                         <t t-set="i" t-value="i+1"/>
@@ -34,27 +36,48 @@
                                     <t t-set="j" t-value="j+1"/>
                                 </div>
                                 <div class="act_as_cell">
-                                    <span t-esc="o['lock']"/>
+                                    <span t-esc="o['product_name']"/>
                                 </div>
                                 <div class="act_as_cell left">
-                                    <span t-esc="o['partner']"/>
+                                    <span t-esc="o['partner_name']"/>
                                 </div>
                                 <div class="act_as_cell">
                                     <span t-esc="o['type']"/>
                                 </div>
                                 <div class="act_as_cell right">
-                                    <span t-esc="o['price']"/>
+                                    <span t-esc="'%.2f'%o['price']"/>
                                 </div>
                                 <div class="act_as_cell">
                                 </div>
                                 <t t-set="i" t-value="1"/>
-                                <t t-foreach="last_day" t-as="d">
+                                <t t-foreach="k" t-as="d">
                                     <div class="act_as_cell">
                                         <t t-set="i" t-value="i+1"/>
                                     </div>
                                 </t>
                             </div>
                         </t>
+                        <div class="act_as_row lines">
+                            <div class="act_as_cell" style="background: grey;">
+                            </div>
+                            <div class="act_as_cell" style="background: grey;">
+                            </div>
+                            <div class="act_as_cell" style="background: grey;">
+                            </div>
+                            <div class="act_as_cell" style="background: grey;">
+                            </div>
+                            <div class="act_as_cell right" style="font-weight: bold;">
+                                <span t-esc="'%.2f'%amount"/>
+                            </div>
+                            <div class="act_as_cell" style="background: grey;">
+                            </div>
+                            <t t-set="i" t-value="1"/>
+                            <t t-foreach="k" t-as="d">
+                                <div class="act_as_cell" style="background: grey;">
+                                    <t t-set="i" t-value="i+1"/>
+                                </div>
+                            </t>
+                        </div>
                     </div>
                 </div>
             </t>
