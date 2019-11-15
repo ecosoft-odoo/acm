@@ -24,5 +24,5 @@ class AccountInvoice(models.Model):
 class AccountInvoiceLine(models.Model):
     _inherit = "account.invoice.line"
 
-    meter_from = fields.Float()
-    meter_to = fields.Float()
+    meter_from = fields.Char()
+    meter_to = fields.Char()

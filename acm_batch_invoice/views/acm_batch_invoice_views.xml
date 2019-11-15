@@ -8,8 +8,8 @@
                 <header>
                     <field name="state" widget="statusbar" nolabel="1" statusbar_visible="draft,confirm,done"/>
                     <button name="button_confirm" string="Confirm" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
-                    <button name="button_create_invoice" string="Create Invoice" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'confirm')]}"/>
-                    <button name="button_set_to_draft" string="Set to draft" type="object" attrs="{'invisible': [('state', '=', 'done')]}"/>
+                    <button name="%(action_batch_invoice)d" string="Create Invoice" type="action" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'confirm')]}"/>
+                    <button name="button_set_to_draft" string="Set to draft" type="object" attrs="{'invisible': [('state', '!=', 'confirm')]}"/>
                 </header>
                 <sheet string="Invoice">
                     <div class="oe_button_box" name="button_box">
@@ -33,6 +33,7 @@
                             <field name="journal_id"/>
                             <field name="water_product_id"/>
                             <field name="electric_product_id"/>
+                            <field name="group_id"/>
                         </group>
                     </group>
                     <button name="retriveve_product_line"
@@ -44,16 +45,19 @@
                     <notebook>
                         <page string="Meter Lines">
                             <field name="batch_invoice_line_ids">
-                                <tree name="batch_invoice" create="0" editable="bottom">
-                                    <field name="agreement_id"/>
+                                <tree name="batch_invoice" create="0" editable="bottom" default_order="lock_number">
+                                    <field name="lock_number"/>
                                     <field name="partner_id"/>
-                                    <field name="lock"/>
-                                    <field name="water_from"/>
-                                    <field name="water_to"/>
-                                    <field name="water_amount"/>
+                                    <field name="flat_rate" sum="Total Amount"/>
                                     <field name="electric_from"/>
                                     <field name="electric_to"/>
-                                    <field name="electric_amount"/>
+                                    <field name="electric_amount" sum="Total Amount"/>
+                                    <field name="electric_from_2"/>
+                                    <field name="electric_to_2"/>
+                                    <field name="electric_amount_2" sum="Total Amount"/>
+                                    <field name="water_from"/>
+                                    <field name="water_to"/>
+                                    <field name="water_amount" sum="Total Amount"/>
                                 </tree>
                             </field>
                         </page>
@@ -67,7 +71,8 @@
         <field name="name">acm.batch.invoice.tree</field>
         <field name="model">acm.batch.invoice</field>
         <field name="arch" type="xml">
-            <tree string="Batch Invoices">
+            <tree string="Batch Invoices" default_order="group_id">
+                <field name="group_id"/>
                 <field name="name"/>
                 <field name="invoice_type"/>
                 <field name="date_invoice"/>
@@ -80,6 +85,17 @@
         <field name="name">Batch Invoices</field>
         <field name="res_model">acm.batch.invoice</field>
         <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="batch_invoice_search_view" model="ir.ui.view">
+        <field name="name">Batch Invoice Search</field>
+        <field name="model">acm.batch.invoice</field>
+        <field name="arch" type="xml">
+            <search string="Batch Invoice Search">
+                <filter name="group_partner_id" string="Zone" context="{'group_by':'group_id'}"/>
+                <filter name="group_date" string="Invoice Date" context="{'group_by':'date_invoice'}"/>
+            </search>
+        </field>
     </record>
 
     <menuitem

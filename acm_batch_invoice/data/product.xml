@@ -1,0 +1,23 @@
+<odoo noupdate="1">
+
+    <record id="water_product" model="product.product">
+        <field name="name">ค่าน้ำประปา</field>
+        <field name="type">service</field>
+        <field name="sale_ok">True</field>
+        <field name="purchase_ok">False</field>
+        <field name="taxes_id">False</field>
+        <field name="list_price">6</field>
+        <field name="categ_id" ref="product.product_category_all"/>
+    </record>
+
+    <record id="electric_product" model="product.product">
+        <field name="name">ค่าไฟฟ้า</field>
+        <field name="type">service</field>
+        <field name="sale_ok">True</field>
+        <field name="purchase_ok">False</field>
+        <field name="taxes_id">False</field>
+        <field name="list_price">6</field>
+        <field name="categ_id" ref="product.product_category_all"/>
+    </record>
+
+</odoo>

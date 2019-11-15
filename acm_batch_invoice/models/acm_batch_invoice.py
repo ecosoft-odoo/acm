@@ -2,7 +2,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html)
 
 from odoo import models, fields, api, _
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError, UserError
 
 
 class ACMBatchInvoice(models.Model):
@@ -34,6 +34,7 @@ class ACMBatchInvoice(models.Model):
     )
     date_invoice = fields.Date(
         string='Invoice Date',
+        states={'done': [('readonly', True)]},
     )
     date_range_id = fields.Many2one(
         comodel_name='date.range',
@@ -53,16 +54,12 @@ class ACMBatchInvoice(models.Model):
     water_product_id = fields.Many2one(
         comodel_name='product.product',
         string='Water Product',
-        domain="[('type', '=', 'service')]",
-        required=True,
         readonly=True,
         states={'draft': [('readonly', False)]},
     )
     electric_product_id = fields.Many2one(
         comodel_name='product.product',
         string='Electric Product',
-        domain="[('type', '=', 'service')]",
-        required=True,
         readonly=True,
         states={'draft': [('readonly', False)]},
     )
@@ -77,6 +74,13 @@ class ACMBatchInvoice(models.Model):
         comodel_name='account.invoice',
         copy=False,
         store=True,
+    )
+    group_id = fields.Many2one(
+        string='Zone',
+        comodel_name='account.analytic.group',
+        required=True,
+        readonly=True,
+        states={'draft': [('readonly', False)]},
     )
 
     @api.multi
@@ -116,18 +120,39 @@ class ACMBatchInvoice(models.Model):
         return result
 
     @api.multi
-    def _prepare_invoice_line(self, invoice_id, line, product):
+    def _prepare_product(
+            self, invoice, product, name, meter_from, meter_to, amount, analy):
+        val = {
+            'product_id': product,
+            'name': name,
+            'meter_from': meter_from if meter_to - meter_from != 0 else '-',
+            'meter_to': meter_to if meter_to - meter_from != 0 else '-',
+            'qty': meter_to - meter_from if meter_to - meter_from != 0 else 1,
+            'amount': amount,
+            'analytic': analy,
+        }
+        return self._prepare_invoice_line(invoice, val)
+
+    @api.multi
+    def _prepare_invoice_line(self, invoice_id, product):
         invoice_line = self.env['account.invoice.line'].new({
             'invoice_id': invoice_id,
             'product_id': product['product_id'],
-            'name': product['name'],
             'meter_from': product['meter_from'],
             'meter_to': product['meter_to'],
             'quantity': product['qty'],
             'price_unit': product['amount'],
+            'account_analytic_id': product['analytic'],
         })
         invoice_line._onchange_product_id()
-        return invoice_line._convert_to_write(invoice_line._cache)
+        invoice_line._convert_to_write(invoice_line._cache)
+        line = self.env['account.invoice.line'].create(
+            invoice_line._convert_to_write(invoice_line._cache)
+        )
+        if product['name'] == 'ค่าไฟฟ้าเหมาจ่าย':
+            line.write({'price_unit': product['amount']})
+        line.write({'name': product['name']})
+        return invoice_id.compute_taxes()
 
     @api.multi
     def _prepare_invoice(self):
@@ -150,32 +175,38 @@ class ACMBatchInvoice(models.Model):
     def _create_invoice(self):
         self.ensure_one()
         for line in self.batch_invoice_line_ids:
+            if line.check_condition() is False:
+                continue
             invoices = self.env['account.invoice'].create(
                 self._prepare_invoice())
-            water = {
-                'product_id': self.water_product_id.id,
-                'name': line.lock,
-                'meter_from': line.water_from,
-                'meter_to': line.water_to,
-                'qty': line.water_to - line.water_from,
-                'amount': line.water_amount,
-            }
-            water_product = self._prepare_invoice_line(invoices, line, water)
-            electric = {
-                'product_id': self.electric_product_id.id,
-                'name': line.lock,
-                'meter_from': line.electric_from,
-                'meter_to': line.electric_to,
-                'qty': line.electric_to - line.electric_from,
-                'amount': line.electric_amount,
-            }
-            electric_product = self._prepare_invoice_line(
-                invoices, line, electric
-            )
-            self.env['account.invoice.line'].create(
-                (water_product, electric_product)
-            )
-            invoices.compute_taxes()
+            if line.water_amount != 0:
+                self._prepare_product(
+                    invoices, self.water_product_id,
+                    self.water_product_id.name, line.water_from,
+                    line.water_to, line.water_amount,
+                    line.contract_id,
+                )
+            if line.electric_amount != 0:
+                self._prepare_product(
+                    invoices, self.electric_product_id,
+                    self.electric_product_id.name, line.electric_from,
+                    line.electric_to, line.electric_amount,
+                    line.contract_id,
+                )
+            if line.electric_amount_2 != 0:
+                self._prepare_product(
+                    invoices, self.electric_product_id,
+                    self.electric_product_id.name, line.electric_from_2,
+                    line.electric_to_2, line.electric_amount_2,
+                    line.contract_id,
+                )
+            if line.flat_rate != 0:
+                self._prepare_product(
+                    invoices, self.electric_product_id,
+                    'ค่าไฟฟ้าเหมาจ่าย', 0,
+                    0, line.flat_rate,
+                    line.contract_id,
+                )
 
     @api.multi
     def button_create_invoice(self):
@@ -187,17 +218,17 @@ class ACMBatchInvoice(models.Model):
     @api.multi
     def retriveve_product_line(self):
         if not self.batch_invoice_line_ids:
-            agreement = self.env['agreement'].search([
-                ('state', '=', 'active'),
-                ('is_template', '=', False),
+            contract = self.env['account.analytic.account'].search([
+                ('group_id', '=', self.group_id.id)
             ])
             Batch_line = self.env['acm.batch.invoice.line']
-            for line in agreement:
+            for line in contract:
+                lock_number = line.agreement_id.rent_product_id.lock_number
                 self.batch_invoice_line_ids += Batch_line.new(
                     {
-                        'agreement_id': line.id,
+                        'contract_id': line.id,
+                        'lock_number': lock_number,
                         'partner_id': line.partner_id.id,
-                        'lock': line.rent_product_id.name,
                     }
                 )
 
@@ -209,37 +240,98 @@ class ACMBatchInvoiceLine(models.Model):
     batch_invoice_id = fields.Many2one(
         comodel_name='acm.batch.invoice',
     )
-    agreement_id = fields.Many2one(
-        comodel_name='agreement',
-        string='Agreements'
+    invoice_id = fields.Many2one(
+        comodel_name='account.invoice',
+    )
+    contract_id = fields.Many2one(
+        comodel_name='account.analytic.account',
     )
     partner_id = fields.Many2one(
         comodel_name='res.partner',
         string='Partner',
     )
-    lock = fields.Text()
-    water_amount = fields.Float()
+    flat_rate = fields.Float(
+        digits=(12, 0),
+    )
+    lock_number = fields.Char()
+    water_amount = fields.Float(
+        readonly=True,
+        compute='_compute_water_amount',
+        digits=(12, 0),
+    )
     water_from = fields.Float(
-        string='Water From',
+        digits=(12, 0),
     )
     water_to = fields.Float(
-        string='Water To',
+        digits=(12, 0),
     )
-    electric_amount = fields.Float()
+    electric_amount = fields.Float(
+        readonly=True,
+        compute='_compute_electric_amount',
+        digits=(12, 0),
+    )
     electric_from = fields.Float(
-        string='Electric From',
+        digits=(12, 0),
     )
     electric_to = fields.Float(
-        string='Electric To',
+        digits=(12, 0),
+    )
+    electric_amount_2 = fields.Float(
+        readonly=True,
+        compute='_compute_electric_amount_2',
+        digits=(12, 0),
+    )
+    electric_from_2 = fields.Float(
+        digits=(12, 0),
+    )
+    electric_to_2 = fields.Float(
+        digits=(12, 0),
     )
 
-    @api.onchange('water_to', 'water_from', 'electric_to', 'electric_from')
-    def _onchange_amount(self):
-        water_diff = self.water_to - self.water_from
-        water_price = self.batch_invoice_id.water_product_id.lst_price
-        elec_diff = self.electric_to - self.electric_from
-        elec_price = self.batch_invoice_id.electric_product_id.lst_price
-        water_amount = water_diff * water_price
-        electric_amount = elec_diff * elec_price
-        self.water_amount = water_amount if water_amount > 0 else 0
-        self.electric_amount = electric_amount if electric_amount > 0 else 0
+    @api.constrains(
+        'electric_amount_2', 'electric_amount', 'water_amount', 'flat_rate')
+    def _check_all_amount(self):
+        for amount in self:
+            if amount.flat_rate < 0:
+                raise UserError(
+                    _("Lock number '%s' 'Flat Rate' can't less than 0")
+                    % amount.lock_number)
+            if amount.electric_amount_2 < 0:
+                raise UserError(
+                    _("Lock number '%s' 'Electric Amount 2' can't less than 0")
+                    % amount.lock_number)
+            if amount.electric_amount < 0:
+                raise UserError(
+                    _("Lock number '%s' 'Electric Amount' can't less than 0")
+                    % amount.lock_number)
+            if amount.water_amount < 0:
+                raise UserError(
+                    _("Lock number '%s' 'Water Amount' can't less than 0")
+                    % amount.lock_number)
+
+    @api.multi
+    def _compute_water_amount(self):
+        for rec in self:
+            water_diff = rec.water_to - rec.water_from
+            water_price = rec.batch_invoice_id.water_product_id.lst_price
+            rec.water_amount = water_diff*water_price
+
+    @api.multi
+    def _compute_electric_amount(self):
+        for rec in self:
+            elec_diff = rec.electric_to - rec.electric_from
+            elec_price = rec.batch_invoice_id.electric_product_id.lst_price
+            rec.electric_amount = elec_diff * elec_price
+
+    @api.multi
+    def _compute_electric_amount_2(self):
+        for rec in self:
+            elec_diff = rec.electric_to_2 - rec.electric_from_2
+            elec_price = rec.batch_invoice_id.electric_product_id.lst_price
+            rec.electric_amount_2 = elec_diff * elec_price
+
+    @api.multi
+    def check_condition(self):
+        if not (self.water_amount or self.electric_amount
+                or self.electric_amount_2 or self.flat_rate):
+            return False

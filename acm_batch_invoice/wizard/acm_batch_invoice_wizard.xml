@@ -1,0 +1,29 @@
+<odoo>
+
+    <record id="acm_batch_invoice_wizard_view" model="ir.ui.view">
+        <field name="name">acm.batch.invoice.wizard.view</field>
+        <field name="model">acm.batch.invoice.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Batch Invoice">
+                <group>
+                    <group>
+                        <field name="date_invoice"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="button_confirm" type="object" string="Confirm" class="oe_highlight"/>
+                    <button special="cancel" class="oe_link" string="Cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_batch_invoice" model="ir.actions.act_window">
+        <field name="name">Batch Invoice</field>
+        <field name="res_model">acm.batch.invoice.wizard</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="acm_batch_invoice_wizard_view"/>
+        <field name="target">new</field>
+    </record>
+
+</odoo>
