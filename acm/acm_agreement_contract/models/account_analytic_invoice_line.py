@@ -13,3 +13,8 @@ class AccountAnalyticInvoiceLine(models.Model):
     date_end = fields.Date(
         string='End Date',
     )
+    manual = fields.Boolean(
+        string='Manual',
+        default=False,
+        help="Allow using this line to create manual invoice",
+    )

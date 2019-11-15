@@ -11,3 +11,4 @@ from . import agreement_inactive
 from . import agreement_create_invoice
 from . import agreement_create_contract
 from . import contract_create_invoice
+from . import contract_create_manual_invoice

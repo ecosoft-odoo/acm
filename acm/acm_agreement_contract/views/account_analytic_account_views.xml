@@ -12,6 +12,7 @@
                 <attribute name="groups"></attribute>
             </button>
             <xpath expr="//field[@name='recurring_invoice_line_ids']/tree/field[@name='name']" position="after">
+                <field name="manual"/>
                 <field name="date_start"/>
                 <field name="date_end"/>
             </xpath>
