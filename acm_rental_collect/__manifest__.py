@@ -13,6 +13,7 @@
     ],
     'data': [
         'data/paper_format.xml',
+        'security/ir.model.access.csv',
         'report/report_templates.xml',
         'report/rental_collect_report.xml',
         'report/report.xml',
