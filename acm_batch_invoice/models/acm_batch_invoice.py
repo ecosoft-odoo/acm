@@ -155,17 +155,18 @@ class ACMBatchInvoice(models.Model):
         return invoice_id.compute_taxes()
 
     @api.multi
-    def _prepare_invoice(self):
-        for inv in self.batch_invoice_line_ids:
+    def _prepare_invoice(self, partner):
+        for inv in self:
             invoice = self.env['account.invoice'].new({
                 'type': 'out_invoice',
-                'partner_id': inv.partner_id.id,
+                'partner_id': partner,
                 'batch_invoice_id': self.id,
                 'currency_id': self.env.user.company_id.currency_id.id,
                 'journal_id': self.journal_id.id,
                 'date_invoice': self.date_invoice,
                 'company_id': self.env.user.company_id.id,
                 'user_id': self.env.user.id,
+                'type2': 'utility',
             })
             # Get other invoice values from partner onchange
             invoice._onchange_partner_id()
@@ -178,7 +179,7 @@ class ACMBatchInvoice(models.Model):
             if line.check_condition() is False:
                 continue
             invoices = self.env['account.invoice'].create(
-                self._prepare_invoice())
+                self._prepare_invoice(line.partner_id.id))
             if line.water_amount != 0:
                 self._prepare_product(
                     invoices, self.water_product_id,
@@ -289,22 +290,10 @@ class ACMBatchInvoiceLine(models.Model):
         'electric_amount_2', 'electric_amount', 'water_amount', 'flat_rate')
     def _check_all_amount(self):
         for amount in self:
-            if amount.flat_rate < 0:
+            if (amount.flat_rate or amount.electric_amount_2 or
+                    amount.electric_amount or amount.water_amount) < 0:
                 raise UserError(
-                    _("Lock number '%s' 'Flat Rate' can't less than 0")
-                    % amount.lock_number)
-            if amount.electric_amount_2 < 0:
-                raise UserError(
-                    _("Lock number '%s' 'Electric Amount 2' can't less than 0")
-                    % amount.lock_number)
-            if amount.electric_amount < 0:
-                raise UserError(
-                    _("Lock number '%s' 'Electric Amount' can't less than 0")
-                    % amount.lock_number)
-            if amount.water_amount < 0:
-                raise UserError(
-                    _("Lock number '%s' 'Water Amount' can't less than 0")
-                    % amount.lock_number)
+                    _("Negative amount is not allowed, please check"))
 
     @api.depends('water_to', 'water_from')
     def _compute_water_amount(self):
