@@ -15,7 +15,6 @@ class AccountInvoice(models.Model):
             ('others', 'Others'),
         ],
         string='Invoice Type',
-        required=True,
     )
     group_id = fields.Many2one(
         comodel_name='account.analytic.group',

@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="account.invoice_form"/>
         <field name="arch" type="xml">
             <xpath expr="//sheet/group[1]/group[2]" position="inside">
-                <field name="type2"/>
+                <field name="type2" required="True"/>
             </xpath>
         </field>
     </record>
