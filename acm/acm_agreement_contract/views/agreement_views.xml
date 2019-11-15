@@ -194,6 +194,7 @@
     </record>
     <record id="agreement_legal.agreement_operations_agreement" model="ir.actions.act_window">
         <field name="context">{'default_is_template': False}</field>
+        <field name="search_view_id" ref="agreement_legal.partner_agreement_search_view"/>
     </record>
 
     <!-- Menu -->
