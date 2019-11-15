@@ -11,16 +11,23 @@ class RentalCollectReport(models.TransientModel):
     date_print = fields.Date(
         default=fields.Date.today,
     )
-    agreement_ids = fields.Many2many(
-        comodel_name='agreement',
-        string='Agreement List',
-        default=lambda self: self._context.get('active_ids', []),
+    group_id = fields.Many2one(
+        comodel_name='account.analytic.group',
+        string='Zone',
     )
 
     @api.multi
     def print_report(self):
         self.ensure_one()
-        datas = {'ids': self.ids, 'model': self._name}
-        action = self.env.ref(
-            'acm_rental_collect.action_report_rental_collection')
-        return action.report_action(self, data=datas)
+        # Get Result Report
+        Result = self.env['rental.collect.report']
+        result = Result.search([('product_tmpl_id.group_id', '=', self.group_id.id)])
+        # Get PDF Report
+        report_name = 'acm_rental_collect.report_rental_collection'
+        for x in result:
+            x=5/0
+        return {
+            'type': 'ir.actions.report',
+            'report_name': report_name,
+            'datas': {'ids': result.ids, 'model': result._name, },
+        }

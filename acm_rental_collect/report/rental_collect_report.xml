@@ -6,9 +6,9 @@
                 <div class="page">
                     <p t-esc="company_name"/>
                     รายชื่อผู้เช่าแผงลอยตลาดวโรรส
-                    ปี <span t-esc="(print_date + relativedelta(years=543)).year"/> เดือน <span t-esc="print_date.strftime('%B')"/>
+                    <!-- ปี <span t-esc="(print_date + relativedelta(years=543)).year"/> เดือน <span t-esc="print_date.strftime('%B')"/> -->
                     <div class="page_break"/>
-                    <div class="act_as_table data_table" style="width: 100%;">
+                    <!-- <div class="act_as_table data_table" style="width: 100%;">
                         <div class="act_as_thead">
                             <div class="act_as_row labels">
                                 <div class="act_as_cell" style="width: 3%;">ลำดับ</div>
@@ -55,7 +55,7 @@
                                 </t>
                             </div>
                         </t>
-                    </div>
+                    </div> -->
                 </div>
             </t>
         </t>
