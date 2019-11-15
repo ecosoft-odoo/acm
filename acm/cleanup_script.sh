@@ -9,6 +9,10 @@ $psql -c "delete from account_analytic_line"
 $psql -c "delete from account_analytic_account"
 $psql -c "delete from agreement where is_template is False"
 
+# Batch Invoices
+$psql -c "delete from acm_batch_invoice_line"
+$psql -c "delete from acm_batch_invoice"
+
 # Accounts
 $psql -c "delete from account_invoice"
 $psql -c "delete from account_payment"
