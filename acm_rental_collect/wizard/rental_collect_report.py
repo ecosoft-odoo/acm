@@ -8,19 +8,34 @@ class RentalCollectReport(models.TransientModel):
     _name = 'rental.collect.report.wizard'
     _description = 'Rental Collection Report'
 
-    date_print = fields.Date(
-        default=fields.Date.today,
+    group_id = fields.Many2one(
+        comodel_name='account.analytic.group',
+        string='Zone',
+        required=True,
     )
-    agreement_ids = fields.Many2many(
-        comodel_name='agreement',
-        string='Agreement List',
-        default=lambda self: self._context.get('active_ids', []),
-    )
+    date_print = fields.Date()
 
     @api.multi
     def print_report(self):
         self.ensure_one()
-        datas = {'ids': self.ids, 'model': self._name}
-        action = self.env.ref(
-            'acm_rental_collect.action_report_rental_collection')
-        return action.report_action(self, data=datas)
+        # Get Result Report
+        Result = self.env['rental.collect.report']
+        result = Result.search([('group_id', '=', self.group_id.id)])
+        # docs = []
+        # for val in result:
+        #     docs.append({
+        #         'product_name': val.product_name,
+        #         'partner': val.partner_id.name or '',
+        #         'type': val.goods_type or '',
+        #         'price': val.lst_price,
+        #     })
+        # Get PDF Report
+        report_name = 'acm_rental_collect.report_rental_collection'
+        return {
+            'doc_ids': result.ids,
+            'doc_model': result._name,
+            'type': 'ir.actions.report',
+            'report_name': report_name,
+            'report_type': 'qweb-pdf',
+            'docs': result,
+        }

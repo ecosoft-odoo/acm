@@ -7,8 +7,8 @@
             <form string="Rental Collection Form">
                 <group>
                     <group>
+                        <field name="group_id"/>
                         <field name="date_print"/>
-                        <field name="agreement_ids"/>
                     </group>
                 </group>
                 <footer>
@@ -19,13 +19,19 @@
         </field>
     </record>
 
-    <act_window
-        name="Rental Collection Form"
-        id="report_rental_collect_wizard"
-        src_model="agreement"
-        res_model="rental.collect.report.wizard"
-        view_mode="form"
-        key2="client_print_multi"
-        target="new"/>
+    <record id="rental_collect_action" model="ir.actions.act_window">
+        <field name="name">Report Rental Collection Form</field>
+        <field name="res_model">rental.collect.report.wizard</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="rental_collect_wizard_view"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem
+            name="Rental Collection Form"
+            id="menu_rental_collect_form_report"
+            sequence="20"
+            parent="agreement_legal.agreement_reporting"
+            action="rental_collect_action"/>
 
 </odoo>
