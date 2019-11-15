@@ -8,10 +8,19 @@ class RentalCollectReport(models.TransientModel):
     _name = 'rental.collect.report.wizard'
     _description = 'Rental Collection Report'
 
+<<<<<<< HEAD
     group_id = fields.Many2one(
         comodel_name='account.analytic.group',
         string='Zone',
         required=True,
+=======
+    date_print = fields.Date(
+        default=fields.Date.today,
+    )
+    group_id = fields.Many2one(
+        comodel_name='account.analytic.group',
+        string='Zone',
+>>>>>>> 52bfeeaa6666b18b28b378a4398267587a32f1d5
     )
     date_print = fields.Date()
 
@@ -20,6 +29,7 @@ class RentalCollectReport(models.TransientModel):
         self.ensure_one()
         # Get Result Report
         Result = self.env['rental.collect.report']
+<<<<<<< HEAD
         result = Result.search([('group_id', '=', self.group_id.id)])
         # docs = []
         # for val in result:
@@ -38,4 +48,15 @@ class RentalCollectReport(models.TransientModel):
             'report_name': report_name,
             'report_type': 'qweb-pdf',
             'docs': result,
+=======
+        result = Result.search([('product_tmpl_id.group_id', '=', self.group_id.id)])
+        # Get PDF Report
+        report_name = 'acm_rental_collect.report_rental_collection'
+        for x in result:
+            x=5/0
+        return {
+            'type': 'ir.actions.report',
+            'report_name': report_name,
+            'datas': {'ids': result.ids, 'model': result._name, },
+>>>>>>> 52bfeeaa6666b18b28b378a4398267587a32f1d5
         }

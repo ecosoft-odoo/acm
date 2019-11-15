@@ -3,6 +3,7 @@
     <template id="report_rental_collection">
         <t t-call="web.html_container">
             <t t-call="acm_rental_collect.internal_layout">
+<<<<<<< HEAD
                 <t t-foreach="docs" t-as="o">
                     <div class="page">
                         <p t-esc="company_name"/>
@@ -28,6 +29,29 @@
                                         </div>
                                     </t>
                                 </div>
+=======
+                <div class="page">
+                    <p t-esc="company_name"/>
+                    รายชื่อผู้เช่าแผงลอยตลาดวโรรส
+                    <!-- ปี <span t-esc="(print_date + relativedelta(years=543)).year"/> เดือน <span t-esc="print_date.strftime('%B')"/> -->
+                    <div class="page_break"/>
+                    <!-- <div class="act_as_table data_table" style="width: 100%;">
+                        <div class="act_as_thead">
+                            <div class="act_as_row labels">
+                                <div class="act_as_cell" style="width: 3%;">ลำดับ</div>
+                                <div class="act_as_cell" style="width: 3%;">ล็อค</div>
+                                <div class="act_as_cell">ชื่อ - สกุล</div>
+                                <div class="act_as_cell" style="width: 8%;">ประเภทสินค้า</div>
+                                <div class="act_as_cell" style="width: 5%;">ค่าเช่า</div>
+                                <div class="act_as_cell" style="width: 5%;">ยกมา</div>
+                                <t t-set="i" t-value="1"/>
+                                <t t-foreach="last_day" t-as="d">
+                                    <div class="act_as_cell" style="width: 2.1%;">
+                                        <span t-esc="i"/>
+                                        <t t-set="i" t-value="i+1"/>
+                                    </div>
+                                </t>
+>>>>>>> 52bfeeaa6666b18b28b378a4398267587a32f1d5
                             </div>
                             <t t-set="j" t-value="1"/>
                             <div class="act_as_row lines">
@@ -52,9 +76,15 @@
                                     </div>
                                 </t>
                             </div>
+<<<<<<< HEAD
                         </div>
                     </div>
                 </t>
+=======
+                        </t>
+                    </div> -->
+                </div>
+>>>>>>> 52bfeeaa6666b18b28b378a4398267587a32f1d5
             </t>
         </t>
     </template>
