@@ -4,6 +4,7 @@
         <field name="name">Contract form</field>
         <field name="model">account.analytic.account</field>
         <field name="inherit_id" ref="contract.account_analytic_account_recurring_form_form"/>
+        <field name="priority" eval="10000"/>
         <field name="arch" type="xml">
             <field name="partner_id" position="after">
                 <field name="agreement_id" domain="[('is_template', '=', False)]"/>
@@ -16,6 +17,17 @@
                 <field name="date_start"/>
                 <field name="date_end"/>
             </xpath>
+            <field name="recurring_invoicing_type" position="replace"/>
+            <field name="date_end" position="replace"/>
+            <field name="recurring_next_date" position="replace"/>
+            <field name="date_start" position="after">
+                <field name="recurring_next_date"
+                    attrs="{'required': [('recurring_invoices', '=', True)]}"/>
+                <field name="date_end"
+                    attrs="{'required': [('recurring_invoices', '=', True)]}"/>
+                <field name="recurring_invoicing_type"
+                    attrs="{'required': [('recurring_invoices', '=', True)]}" invisible="1"/>
+            </field>
         </field>
     </record>
 

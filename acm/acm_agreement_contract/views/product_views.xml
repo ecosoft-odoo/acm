@@ -19,7 +19,7 @@
                             <field name="goods_category_id"/>
                             <field name="goods_type"/>
                             <field name="lock_attribute"/>
-                            <field name="group_id"/>
+                            <field name="group_id" attrs="{'required': [('value_type', '=', 'rent')]}"/>
                             <field name="subzone"/>
                             <field name="lock_number"/>
                         </group>

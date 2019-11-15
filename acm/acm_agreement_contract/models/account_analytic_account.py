@@ -1,7 +1,8 @@
 # Copyright 2019 Ecosoft Co., Ltd (https://ecosoft.co.th/)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html)
 
-from odoo import models, fields, api
+from odoo import models, fields, api, _
+from odoo.exceptions import UserError
 
 
 class AccountAnalyticAccount(models.Model):
@@ -15,11 +16,32 @@ class AccountAnalyticAccount(models.Model):
     )
     rent_product_id = fields.Many2one(
         comodel_name='product.product',
+        compute='_compute_product_id',
         string='Product',
     )
     group_id = fields.Many2one(
         string='Zone',
     )
+
+    @api.constrains('recurring_invoice_line_ids')
+    def _check_recurring_invoice_line_ids(self):
+        for rec in self:
+            lines = rec.recurring_invoice_line_ids
+            rent_products = \
+                lines.filtered(lambda l: l.product_id.value_type == 'rent') \
+                .mapped('product_id')
+            if len(rent_products) > 1:
+                raise UserError(_('Only one rental product is allowed.'))
+
+    @api.depends('recurring_invoice_line_ids')
+    @api.multi
+    def _compute_product_id(self):
+        for rec in self:
+            rent_product = rec.recurring_invoice_line_ids.filtered(
+                lambda l: l.product_id.value_type == 'rent') \
+                .mapped('product_id')
+            if rent_product:
+                rec.rent_product_id = rent_product[0]
 
     @api.model
     def _prepare_invoice_line(self, line, invoice_id):
@@ -44,3 +66,12 @@ class AccountAnalyticAccount(models.Model):
         invoices -= no_line_invs
         no_line_invs.unlink()
         return invoices
+
+    @api.multi
+    def _create_invoice(self, invoice=False):
+        invoice = super()._create_invoice(invoice=invoice)
+        # Update invoice type
+        invoice.write({
+            'type2': 'rent',
+        })
+        return invoice
