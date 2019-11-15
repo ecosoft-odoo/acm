@@ -217,6 +217,7 @@ class ACMBatchInvoice(models.Model):
 
     @api.multi
     def retriveve_product_line(self):
+        self.batch_invoice_line_ids = False
         if not self.batch_invoice_line_ids:
             contract = self.env['account.analytic.account'].search([
                 ('group_id', '=', self.group_id.id)
@@ -251,13 +252,11 @@ class ACMBatchInvoiceLine(models.Model):
         string='Partner',
     )
     flat_rate = fields.Float(
-        digits=(12, 0),
     )
     lock_number = fields.Char()
     water_amount = fields.Float(
         readonly=True,
         compute='_compute_water_amount',
-        digits=(12, 0),
     )
     water_from = fields.Float(
         digits=(12, 0),
@@ -268,7 +267,6 @@ class ACMBatchInvoiceLine(models.Model):
     electric_amount = fields.Float(
         readonly=True,
         compute='_compute_electric_amount',
-        digits=(12, 0),
     )
     electric_from = fields.Float(
         digits=(12, 0),
@@ -279,7 +277,6 @@ class ACMBatchInvoiceLine(models.Model):
     electric_amount_2 = fields.Float(
         readonly=True,
         compute='_compute_electric_amount_2',
-        digits=(12, 0),
     )
     electric_from_2 = fields.Float(
         digits=(12, 0),
@@ -309,21 +306,21 @@ class ACMBatchInvoiceLine(models.Model):
                     _("Lock number '%s' 'Water Amount' can't less than 0")
                     % amount.lock_number)
 
-    @api.multi
+    @api.depends('water_to', 'water_from')
     def _compute_water_amount(self):
         for rec in self:
             water_diff = rec.water_to - rec.water_from
             water_price = rec.batch_invoice_id.water_product_id.lst_price
             rec.water_amount = water_diff*water_price
 
-    @api.multi
+    @api.depends('electric_to', 'electric_from')
     def _compute_electric_amount(self):
         for rec in self:
             elec_diff = rec.electric_to - rec.electric_from
             elec_price = rec.batch_invoice_id.electric_product_id.lst_price
             rec.electric_amount = elec_diff * elec_price
 
-    @api.multi
+    @api.depends('electric_to_2', 'electric_from_2')
     def _compute_electric_amount_2(self):
         for rec in self:
             elec_diff = rec.electric_to_2 - rec.electric_from_2
