@@ -16,7 +16,7 @@ class ProductTemplate(models.Model):
     value_type = fields.Selection(
         selection=[
             ('rent', 'Rent'),
-            ('tea_money', 'Tea Money'),
+            ('lump_sum_rent', 'Lump Sum Rent'),
             ('security_deposit', 'Security Deposit'),
             ('transfer', 'Transfer'), ],
         string='Value Type',

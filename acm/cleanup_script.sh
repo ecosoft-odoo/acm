@@ -1,10 +1,11 @@
 #!/bin/bash
 pg_container="postgres"
 pg_user="odoo"
-db="ACM"
+db="ACM_TEST"
 psql="docker exec -it $pg_container psql -U $pg_user $db"
 
 # Contracts & Agreements
+$psql -c "delete from account_analytic_distribution"
 $psql -c "delete from account_analytic_line"
 $psql -c "delete from account_analytic_account"
 $psql -c "delete from agreement where is_template is False"
