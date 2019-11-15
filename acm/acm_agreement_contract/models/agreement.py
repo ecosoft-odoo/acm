@@ -152,23 +152,37 @@ class Agreement(models.Model):
     @api.constrains('start_date', 'end_date')
     @api.multi
     def _check_start_end_date(self):
-        self.ensure_one()
-        if self.start_date > self.end_date:
-            raise UserError(_('"Start Date" cannot be more than "End Date"'))
+        for rec in self:
+            if rec.start_date > rec.end_date:
+                raise UserError(
+                    _('"Start Date" cannot be more than "End Date"'))
 
     @api.constrains('rent_product_id', 'state')
     def _check_rent_product_id(self):
-        if self.state == 'active':
-            # No rent product
-            if not self.rent_product_id:
-                raise UserError(_('Please add product for rent.'))
-            # No multiple rent product
-            agreements = self.env['agreement'].search(
-                [('state', '=', 'active'),
-                 ('rent_product_id', '=', self.rent_product_id.id), ])
-            if len(agreements) > 1:
-                raise UserError(_(
-                    'The rental product is not permitted in this agreement.'))
+        for rec in self:
+            if rec.state == 'active':
+                # No rent product
+                if not rec.rent_product_id:
+                    raise UserError(_('Please add rental product.'))
+                # No multiple rent product
+                agreements = self.env['agreement'].search(
+                    [('state', '=', 'active'),
+                     ('rent_product_id', '=', rec.rent_product_id.id), ],
+                    order='id')
+                if len(agreements) > 1:
+                    raise UserError(_(
+                        'The rental product is duplicated with %s.'
+                        % (agreements[0].name, )))
+
+    @api.constrains('line_ids')
+    def _check_line_ids(self):
+        for rec in self:
+            lines = rec.line_ids
+            rent_products = \
+                lines.filtered(lambda l: l.product_id.value_type == 'rent') \
+                .mapped('product_id')
+            if len(rent_products) > 1:
+                raise UserError(_('Only one rental product is allowed.'))
 
     @api.multi
     def search_contract(self):
@@ -315,7 +329,6 @@ class Agreement(models.Model):
                               self.payment_due_date) or self.start_date,
             'active': True,
             'group_id': self.group_id.id,
-            'rent_product_id': self.rent_product_id.id,
         }
 
     @api.multi
