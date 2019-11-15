@@ -7,7 +7,7 @@
             <form string="Create Invoices">
                 <group>
                     <group>
-                        <field name="product_id" domain="[('value_type', 'in', ['tea_money', 'security_deposit', 'transfer'])]"/>
+                        <field name="product_id" domain="[('value_type', 'in', ['lump_sum_rent', 'security_deposit', 'transfer'])]"/>
                         <field name="count_agreement"/>
                     </group>
                     <group>

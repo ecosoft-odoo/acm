@@ -71,7 +71,7 @@ class Agreement(models.Model):
         string='Product',
         store=True,
     )
-    tea_money_product_id = fields.Many2one(
+    lump_sum_rent_product_id = fields.Many2one(
         comodel_name='product.product',
         compute='_compute_product_id',
         store=True,
@@ -204,8 +204,8 @@ class Agreement(models.Model):
             rent_product = lines.filtered(
                 lambda l: l.product_id.value_type == 'rent') \
                 .mapped('product_id')
-            tea_money_product = lines.filtered(
-                lambda l: l.product_id.value_type == 'tea_money') \
+            lump_sum_rent_product = lines.filtered(
+                lambda l: l.product_id.value_type == 'lump_sum_rent') \
                 .mapped('product_id')
             security_deposit_product = lines.filtered(
                 lambda l: l.product_id.value_type == 'security_deposit') \
@@ -215,8 +215,8 @@ class Agreement(models.Model):
                 .mapped('product_id')
             if rent_product:
                 rec.rent_product_id = rent_product[0]
-            if tea_money_product:
-                rec.tea_money_product_id = tea_money_product[0]
+            if lump_sum_rent_product:
+                rec.lump_sum_rent_product_id = lump_sum_rent_product[0]
             if security_deposit_product:
                 rec.security_deposit_product_id = security_deposit_product[0]
             if transfer_product:
