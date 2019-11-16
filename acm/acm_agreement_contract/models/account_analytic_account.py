@@ -18,6 +18,7 @@ class AccountAnalyticAccount(models.Model):
         comodel_name='product.product',
         compute='_compute_product_id',
         string='Product',
+        store=True,
     )
     group_id = fields.Many2one(
         string='Zone',

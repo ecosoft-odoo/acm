@@ -29,6 +29,10 @@
         <field name="model">account.invoice</field>
         <field name="inherit_id" ref="account.view_account_invoice_filter"/>
         <field name="arch" type="xml">
+            <field name="number" position="before">
+                <field name="group_id"/>
+                <field name="rent_product_id"/>
+            </field>
             <filter name="group_by_partner_id" position="before">
                 <filter name="group_by_type2" string="Invoice Type" context="{'group_by':'type2'}"/>
                 <filter name="group_by_group_id" string="Zone" context="{'group_by':'group_id'}"/>
