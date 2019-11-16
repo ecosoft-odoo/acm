@@ -38,3 +38,23 @@ class AccountInvoice(models.Model):
                 .mapped('product_id')
             if rent_products:
                 rec.rent_product_id = rent_products[0]
+
+
+class AccountInvoiceLine(models.Model):
+    _inherit = 'account.invoice.line'
+
+    group_id = fields.Many2one(
+        comodel_name='account.analytic.group',
+        related='account_analytic_id.group_id',
+        string='Zone',
+    )
+
+
+class AccountMoveLine(models.Model):
+    _inherit = 'account.move.line'
+
+    group_id = fields.Many2one(
+        comodel_name='account.analytic.group',
+        related='analytic_account_id.group_id',
+        string='Zone',
+    )
