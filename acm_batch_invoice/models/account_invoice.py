@@ -8,15 +8,8 @@ from num2words import num2words
 class AccountInvoice(models.Model):
     _inherit = "account.invoice"
 
-    batch_invoice_id = fields.Many2one(
-        comodel_name="acm.batch.invoice",
-        string="Batch Invoice",
-        readonly=True,
-    )
-
     @api.multi
     def remove_menu_print(self, res, reports):
-        # Remove reports menu
         for report in reports:
             reports = self.env.ref(report, raise_if_not_found=False)
             for rec in res.get('toolbar', {}).get('print', []):
@@ -36,7 +29,6 @@ class AccountInvoice(models.Model):
             view_id=view_id, view_type=view_type,
             toolbar=toolbar, submenu=submenu)
         if res and view_type in ['tree', 'form']:
-            # del menu report customer invoice
             if type and type != 'out_invoice':
                 self.remove_menu_print(res, hide_reports_base)
         return res
