@@ -9,11 +9,12 @@ class RentalCollectReport(models.Model):
     _name = 'rental.collect.report'
     _description = 'Rental Collect Report'
     _auto = False
+    _order = 'product_name'
 
-    product_name = fields.Char()
     group_id = fields.Many2one(
         comodel_name='account.analytic.group',
     )
+    product_name = fields.Char()
     partner_id = fields.Many2one(
         comodel_name='res.partner',
     )
@@ -21,28 +22,37 @@ class RentalCollectReport(models.Model):
     lst_price = fields.Float()
     date_start = fields.Date()
     date_end = fields.Date()
+    state = fields.Selection(
+        selection=[
+            ('drafe', 'Draft'),
+            ('active', 'Active'),
+            ('inactive', 'Inactive'),
+        ],
+    )
 
     def init(self):
         tools.drop_view_if_exists(self.env.cr, self._table)
         self.env.cr.execute("""
             CREATE or REPLACE VIEW rental_collect_report as (
                 select
-                    row_number() over(
-                        order by pt.group_id, cast(lock_number as int)) as id,
+                    pt.id,
                     pt.group_id,
                     pt.name as product_name,
                     ag.partner_id,
                     pt.goods_type,
                     agl.lst_price,
                     agl.date_start,
-                    agl.date_end
+                    agl.date_end,
+                    ag.state
                 from
                     product_template pt
                     left join product_product pp on pt.id = pp.product_tmpl_id
                     left join agreement_line agl on pp.id = agl.product_id
+                    and agl.id = (select max(id) from agreement_line agl2
+                    where agl2.agreement_id = agl.agreement_id)
                     left join agreement ag on agl.agreement_id = ag.id
                     where pt.value_type = 'rent'
-                    order by pt.group_id, cast(lock_number as int)
+                    order by pt.lock_number, pt.group_id
             )
         """)
 
