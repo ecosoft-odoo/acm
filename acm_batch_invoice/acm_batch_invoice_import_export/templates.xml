@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright 2019 Ecosoft Co., Ltd.
+  License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl.html).-->
+<odoo>
+
+    <record id="acm_batch_invoice_xlsx_template" model="xlsx.template">
+        <field name="res_model">acm.batch.invoice</field>
+        <field name="fname">acm_batch_invoice.xlsx</field>
+        <field name="name">ACM Batch Invoice</field>
+        <field name="description">ACM Import/Excel ACM Batch Invoice</field>
+        <field name="input_instruction">
+            {
+                '__EXPORT__': {
+                    'batch_invoice': {
+                        '_HEAD_': {
+                            'D2': 'name${value or ""}#{align=left;style=text}',
+                            'D3': 'date_invoice${value or ""}#{align=left;style=date}',
+                            'D4': 'date_range_id.display_name${value or ""}#{align=left;style=text}',
+                            'D5': 'group_id.display_name${value or ""}#{align=left;style=text}',
+                            'A1': 'batch_invoice_line_ids${(value and value._export_rows([["id"]])) and ""}',
+                        },
+                        'batch_invoice_line_ids': {
+                            'A8': 'id${list(model.browse(value)._get_external_ids().values())[0][0]}',  # External ID
+                            'B8': 'lock_number${value or ""}#{align=center;style=text}',
+                            'C8': 'partner_id.display_name${value or ""}#{align=left;style=text}',
+                            'D8': 'flat_rate${value or 0.0}#{style=number}',
+                            'E8': 'electric_to${value or 0}',
+                            'F8': 'electric_from${value or 0}',
+                            'G8': 'electric_to_2${value or 0}',
+                            'H8': 'electric_from_2${value or 0}',
+                            'I8': 'water_to${value or 0}',
+                            'J8': 'water_from${value or 0}',
+                            'K8': 'invoice_id.display_name${value or ""}#{align=left;style=text}',
+                        },
+                    }
+                },
+                '__IMPORT__': {
+                    'batch_invoice': {
+                        '_NODEL_batch_invoice_line_ids': {
+                            'A8': 'id',  # External ID matching
+                            'D8': 'flat_rate',
+                            'E8': 'electric_to',
+                            'F8': 'electric_from',
+                            'G8': 'electric_to_2',
+                            'H8': 'electric_from_2',
+                            'I8': 'water_to${value or 0}',
+                            'J8': 'water_from${value or 0}',
+                        }
+                    }
+                },
+            }
+        </field>
+    </record>
+
+    <function model="xlsx.template" name="load_xlsx_template">
+        <value eval="[ref('acm_batch_invoice_xlsx_template')]"/>
+    </function>
+
+</odoo>

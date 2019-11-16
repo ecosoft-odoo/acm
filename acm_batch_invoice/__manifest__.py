@@ -11,6 +11,7 @@
     'depends': [
         'acm',
         'date_range',
+        'excel_import_export',
     ],
     'data': [
         'data/batch_invoice_sequence.xml',
@@ -22,5 +23,8 @@
         'views/account_invoice_view.xml',
         'report/report_batch_invoice.xml',
         'report/report.xml',
+        # Excel Import/Export
+        'acm_batch_invoice_import_export/actions.xml',
+        'acm_batch_invoice_import_export/templates.xml',
     ],
 }
