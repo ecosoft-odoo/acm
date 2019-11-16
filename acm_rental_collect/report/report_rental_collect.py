@@ -15,19 +15,25 @@ class ReportRentalCollect(models.AbstractModel):
         docs = []
         Result = self.env['rental.collect.report']
         sum = 0.00
-        result = Result.search([('group_id', '=', wizard_id.group_id.id)])
+        result = Result.search(
+            [
+                ('group_id', '=', wizard_id.group_id.id),
+            ]
+        )
         for val in result:
             sum += val.lst_price
             docs.append({
                 'product_name': val.product_name,
-                'partner_name': val.partner_id.name,
-                'type': val.goods_type or '-',
-                'price': val.lst_price,
+                'partner_name': val.partner_id.name if val.state == 'active' else '',
+                'type': val.goods_type if val.state == 'active' else '',
+                'price': '%.2f' % val.lst_price if val.state == 'active' else '',
                 'amount': '',
             })
         return {
             'doc_ids': data['ids'],
             'doc_model': data['model'],
+            'year': wizard_id.date_range_id.date_end.year + 543,
+            'end_date': wizard_id.date_range_id.date_end.day,
             'date_print': wizard_id.date_print,
             'company_name': self.env.user.company_id.name,
             'amount': sum,
