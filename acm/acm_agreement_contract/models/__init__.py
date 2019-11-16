@@ -3,7 +3,7 @@
 
 from . import res_partner
 from . import res_company
-from . import product_template
+from . import product
 from . import goods_category
 from . import lock_attribute
 from . import account_analytic_account
