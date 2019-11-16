@@ -7,7 +7,6 @@
             <form string="Rental Collection Form">
                 <group>
                     <group>
-                        <field name="date_range_id"/>
                         <field name="group_id"/>
                         <field name="date_print"/>
                     </group>

@@ -20,7 +20,7 @@ ACM :: Rental Collection
     :target: https://translation.odoo-community.org/projects/acm-12-0-add-acm_rental_collect/acm-12-0-add-acm_rental_collect-acm_rental_collect
     :alt: Translate me on Weblate
 
-|badge1| |badge2| |badge3| |badge4|
+|badge1| |badge2| |badge3| |badge4| 
 
 This module add new feature to print "Rental Collect Form" from Agreements
 
