@@ -15,20 +15,32 @@ class RentalCollectReport(models.TransientModel):
     )
     date_print = fields.Date(
         default=fields.Date.today,
-        readonly=True,
-    )
-    date_range_id = fields.Many2one(
-        comodel_name='date.range',
-        string='Date Range',
+        string='Date',
         required=True,
     )
 
     @api.multi
     def print_report(self):
         self.ensure_one()
-        Result = self.env['rental.collect.report']
-        result = Result.search([('group_id', '=', self.group_id.id)])
-        datas = {'ids': result.ids, 'model': result._name}
+        datas = {'ids': self.ids, 'model': self._name}
         action = self.env.ref(
             'acm_rental_collect.action_report_rental_collection')
         return action.report_action(self, data=datas)
+
+    @api.model
+    def trans_months(self, month):
+        months = {
+            '01': 'มกราคม',
+            '02': 'กุมภาพันธ์',
+            '03': 'มีนาคม',
+            '04': 'เมษายน',
+            '05': 'พฤษภาคม',
+            '06': 'มิถุนายน',
+            '07': 'กรกฎาคม',
+            '08': 'สิงหาคม',
+            '09': 'กันยายน',
+            '10': 'ตุลาคม',
+            '11': 'พฤศจิกายน',
+            '12': 'ธันวาคม',
+        }
+        return months[month]

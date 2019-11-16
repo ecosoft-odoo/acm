@@ -2,6 +2,8 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html)
 
 from odoo import models, api
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 
 
 class ReportRentalCollect(models.AbstractModel):
@@ -11,32 +13,35 @@ class ReportRentalCollect(models.AbstractModel):
     @api.model
     def _get_report_values(self, docids, data=None):
         Wizard = self.env['rental.collect.report.wizard']
-        wizard_id = Wizard.browse(self.env.context.get('active_ids'))
-        docs = []
-        Result = self.env['rental.collect.report']
+        wizard = Wizard.browse(self.env.context.get('active_ids'))
+        products = self.env['product.product'].search(
+            [('value_type', '=', 'rent'),
+             ('group_id', '=', wizard.group_id.id), ])
+        agreement_lines = self.env['agreement.line'].search(
+            [('product_id', 'in', products.ids),
+             ('agreement_id.state', '=', 'active'),
+             ('date_start', '<=', wizard.date_print),
+             ('date_end', '>=', wizard.date_print), ])
+        line_dict = {}
         sum = 0.00
-        result = Result.search(
-            [
-                ('group_id', '=', wizard_id.group_id.id),
-            ]
-        )
-        for val in result:
-            sum += val.lst_price
-            docs.append({
-                'product_name': val.product_name,
-                'partner_name': val.partner_id.name if val.state == 'active' else '',
-                'type': val.goods_type if val.state == 'active' else '',
-                'price': '%.2f' % val.lst_price if val.state == 'active' else '',
-                'amount': '',
-            })
+        for rec in agreement_lines:
+            sum += rec.lst_price
+            line_dict[rec.product_id.id] = {
+                'partner_name': rec.agreement_id.partner_id.display_name,
+                'goods_type': rec.product_id.goods_type,
+                'lst_price': '%.2f' % rec.lst_price,
+            }
+        current_date = datetime.today()
         return {
-            'doc_ids': data['ids'],
-            'doc_model': data['model'],
-            'year': wizard_id.date_range_id.date_end.year + 543,
-            'end_date': wizard_id.date_range_id.date_end.day,
-            'date_print': wizard_id.date_print,
+            'year': wizard.date_print.year + 543,
+            'month': wizard.trans_months(wizard.date_print.strftime('%m')),
+            'end_date': (wizard.date_print + relativedelta(day=31)).day,
+            'date_print': wizard.date_print,
             'company_name': self.env.user.company_id.name,
+            'current_date': current_date.day,
+            'current_month': wizard.trans_months(current_date.strftime('%m')),
+            'current_year': current_date.year + 543,
             'amount': sum,
-            'month': Result.trans_months(wizard_id.date_print.strftime('%m')),
-            'docs': docs,
+            'line_dict': line_dict,
+            'products': products,
         }
