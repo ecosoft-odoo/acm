@@ -55,3 +55,25 @@ class ProductTemplate(models.Model):
         if self.lock_number:
             names.append(self.lock_number)
         self.name = '/'.join(names)
+
+
+class ProductProduct(models.Model):
+    _inherit = 'product.product'
+
+    area = fields.Float(
+        compute='_compute_area',
+    )
+
+    @api.depends('width', 'length')
+    def _compute_area(self):
+        for rec in self:
+            rec.area = rec.width * rec.length
+
+    @api.onchange('group_id', 'lock_number')
+    def _onchange_group_number(self):
+        names = []
+        if self.group_id:
+            names.append(self.group_id.name)
+        if self.lock_number:
+            names.append(self.lock_number)
+        self.name = '/'.join(names)
