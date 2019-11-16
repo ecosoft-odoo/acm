@@ -27,7 +27,7 @@ class ACMBatchInvoice(models.Model):
         selection=[
             ('draft', 'Draft'),
             ('confirm', 'Confirmed'),
-            ('done', 'Invoice'),
+            ('done', 'Invoiced'),
         ],
         default='draft',
         required=True,
@@ -70,11 +70,6 @@ class ACMBatchInvoice(models.Model):
         readonly=True,
         states={'draft': [('readonly', False)]},
     )
-    invoice_ids = fields.Many2many(
-        comodel_name='account.invoice',
-        copy=False,
-        store=True,
-    )
     group_id = fields.Many2one(
         string='Zone',
         comodel_name='account.analytic.group',
@@ -82,6 +77,39 @@ class ACMBatchInvoice(models.Model):
         readonly=True,
         states={'draft': [('readonly', False)]},
     )
+    is_invoice_create = fields.Boolean(
+        compute='_compute_is_invoice_create',
+    )
+
+    @api.multi
+    def search_contract(self):
+        Invoice = self.env['account.invoice']
+        invoices = Invoice.search([('origin', '=', self.name)])
+        return invoices
+
+    @api.multi
+    def _compute_is_invoice_create(self):
+        for rec in self:
+            if rec.state == 'done' and rec.search_contract():
+                rec.is_invoice_create = True
+
+    @api.onchange('date_range_id', 'group_id')
+    def _check_batch_invoice_is_create(self):
+        batchs = self.env['acm.batch.invoice'].search(
+            [
+                ('date_range_id', '=', self.date_range_id.id),
+                ('group_id', '=', self.group_id.id),
+            ]
+        )
+        if batchs:
+            text = "Batch Invoice for  %s / Zone '%s' already exists" % (
+                self.date_range_id.name, self.group_id.name,
+            )
+            warning = {
+                'title': _("Warning"),
+                'message': text,
+            }
+            return {'warning': warning}
 
     @api.multi
     def button_confirm(self):
@@ -105,7 +133,7 @@ class ACMBatchInvoice(models.Model):
         tree_view = self.env.ref("account.invoice_tree")
         form_view = self.env.ref("account.invoice_form")
         val = self.env['account.invoice'].search(
-            [('batch_invoice_id', '=', self.id)]
+            [('origin', '=', self.name)]
         )
         result = {
             'name': _('Invoices'),
@@ -155,12 +183,13 @@ class ACMBatchInvoice(models.Model):
         return invoice_id.compute_taxes()
 
     @api.multi
-    def _prepare_invoice(self, partner):
+    def _prepare_invoice(self, partner, lock_number):
         for inv in self:
             invoice = self.env['account.invoice'].new({
                 'type': 'out_invoice',
                 'partner_id': partner,
-                'batch_invoice_id': self.id,
+                'origin': self.name,
+                'name': '%s/%s' % (self.group_id.name, lock_number),
                 'currency_id': self.env.user.company_id.currency_id.id,
                 'journal_id': self.journal_id.id,
                 'date_invoice': self.date_invoice,
@@ -168,7 +197,6 @@ class ACMBatchInvoice(models.Model):
                 'user_id': self.env.user.id,
                 'type2': 'utility',
             })
-            # Get other invoice values from partner onchange
             invoice._onchange_partner_id()
         return invoice._convert_to_write(invoice._cache)
 
@@ -179,7 +207,8 @@ class ACMBatchInvoice(models.Model):
             if line.check_condition() is False:
                 continue
             invoices = self.env['account.invoice'].create(
-                self._prepare_invoice(line.partner_id.id))
+                self._prepare_invoice(line.partner_id.id, line.lock_number))
+            line.invoice_id = invoices.id
             if line.water_amount != 0:
                 self._prepare_product(
                     invoices, self.water_product_id,
@@ -221,7 +250,7 @@ class ACMBatchInvoice(models.Model):
         self.batch_invoice_line_ids = False
         if not self.batch_invoice_line_ids:
             contract = self.env['account.analytic.account'].search([
-                ('group_id', '=', self.group_id.id)
+                ('group_id', '=', self.group_id.id),
             ])
             Batch_line = self.env['acm.batch.invoice.line']
             for line in contract:
@@ -238,23 +267,33 @@ class ACMBatchInvoice(models.Model):
 class ACMBatchInvoiceLine(models.Model):
     _name = 'acm.batch.invoice.line'
     _description = 'ACM Batch Invoice Lines'
+    _order = 'lock_number'
 
     batch_invoice_id = fields.Many2one(
         comodel_name='acm.batch.invoice',
+        index=True,
     )
     invoice_id = fields.Many2one(
         comodel_name='account.invoice',
+        ondelete='set null',
+        readonly=True,
     )
     contract_id = fields.Many2one(
         comodel_name='account.analytic.account',
+        required=True,
     )
     partner_id = fields.Many2one(
         comodel_name='res.partner',
         string='Partner',
+        readonly=True,
+        required=True,
     )
     flat_rate = fields.Float(
     )
-    lock_number = fields.Char()
+    lock_number = fields.Char(
+        readonly=True,
+        required=True,
+    )
     water_amount = fields.Float(
         readonly=True,
         compute='_compute_water_amount',
@@ -295,26 +334,59 @@ class ACMBatchInvoiceLine(models.Model):
                 raise UserError(
                     _("Negative amount is not allowed, please check"))
 
+    @api.onchange('flat_rate')
+    def _check_flat_rate_amount(self):
+        if self.flat_rate < 0:
+            raise UserError(
+                _("'Flat Rate' is negative, please check"))
+
     @api.depends('water_to', 'water_from')
     def _compute_water_amount(self):
         for rec in self:
+            if rec.water_to < 0:
+                raise UserError(
+                    _("'Water To' is negative, please check"))
+            if rec.water_from < 0:
+                raise UserError(
+                    _("'Water From' is negative, please check"))
             water_diff = rec.water_to - rec.water_from
             water_price = rec.batch_invoice_id.water_product_id.lst_price
             rec.water_amount = water_diff*water_price
+            if rec.water_amount < 0:
+                raise UserError(
+                    _("'Water Amount' is negative, please check"))
 
     @api.depends('electric_to', 'electric_from')
     def _compute_electric_amount(self):
         for rec in self:
+            if rec.electric_to < 0:
+                raise UserError(
+                    _("'Electric To' is negative, please check"))
+            if rec.electric_from < 0:
+                raise UserError(
+                    _("'Electric From' is negative, please check"))
             elec_diff = rec.electric_to - rec.electric_from
             elec_price = rec.batch_invoice_id.electric_product_id.lst_price
             rec.electric_amount = elec_diff * elec_price
+            if rec.electric_amount < 0:
+                raise UserError(
+                    _("'Electric Amount' is negative, please check"))
 
     @api.depends('electric_to_2', 'electric_from_2')
     def _compute_electric_amount_2(self):
         for rec in self:
+            if rec.electric_to_2 < 0:
+                raise UserError(
+                    _("'Electric to 2' is negative, please check"))
+            if rec.electric_from_2 < 0:
+                raise UserError(
+                    _("'Electric From 2' is negative, please check"))
             elec_diff = rec.electric_to_2 - rec.electric_from_2
             elec_price = rec.batch_invoice_id.electric_product_id.lst_price
             rec.electric_amount_2 = elec_diff * elec_price
+            if rec.electric_amount_2 < 0:
+                raise UserError(
+                    _("'Electric Amount 2' is negative, please check"))
 
     @api.multi
     def check_condition(self):
