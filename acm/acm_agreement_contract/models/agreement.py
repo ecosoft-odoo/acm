@@ -124,6 +124,7 @@ class Agreement(models.Model):
     )
     company_contact_id = fields.Many2one(
         string='Lessor Contact',
+        default=lambda self: self._default_company_contract_id(),
     )
     company_contact_phone = fields.Char(
         string='Lessor Phone',
@@ -456,3 +457,12 @@ class Agreement(models.Model):
     def filter_lines(self, value_type=''):
         return self.line_ids.filtered(
             lambda l: l.product_id.value_type == value_type)
+
+    @api.model
+    def _default_company_contract_id(self):
+        company = self.env['res.company']._company_default_get()
+        company_contact = self.env['res.partner'].search(
+            [('parent_id', '=', company.partner_id.id)])
+        if len(company_contact) > 1:
+            company_contact = company_contact[0]
+        return company_contact

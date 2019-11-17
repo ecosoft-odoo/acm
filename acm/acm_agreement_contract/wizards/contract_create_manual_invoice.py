@@ -33,7 +33,6 @@ class ContractCreateManualInvoice(models.TransientModel):
             new_product_ids = set(contract.recurring_invoice_line_ids.
                                   filtered('manual').mapped('product_id').ids)
             product_ids = product_ids.intersection(new_product_ids)
-        print(product_ids)
         return [('id', 'in', list(product_ids))]
 
     @api.model
