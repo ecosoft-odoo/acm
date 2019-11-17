@@ -21,6 +21,7 @@
         'wizard/acm_batch_invoice_wizard.xml',
         'views/acm_batch_invoice_views.xml',
 <<<<<<< HEAD
+<<<<<<< HEAD
         'report/report_batch_invoice.xml',
         'report/report.xml',
         # Excel Import/Export
@@ -28,5 +29,7 @@
         'acm_batch_invoice_import_export/templates.xml',
 =======
 >>>>>>> [12.0][FIX] remove report
+=======
+>>>>>>> 92fc2b22457a1daa21954878a0089360fe7d4aed
     ],
 }
