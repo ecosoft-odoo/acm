@@ -19,7 +19,5 @@
         'security/ir.model.access.csv',
         'wizard/acm_batch_invoice_wizard.xml',
         'views/acm_batch_invoice_views.xml',
-        'report/report_batch_invoice.xml',
-        'report/report.xml',
     ],
 }

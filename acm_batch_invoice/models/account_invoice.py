@@ -9,31 +9,6 @@ class AccountInvoice(models.Model):
     _inherit = "account.invoice"
 
     @api.multi
-    def remove_menu_print(self, res, reports):
-        for report in reports:
-            reports = self.env.ref(report, raise_if_not_found=False)
-            for rec in res.get('toolbar', {}).get('print', []):
-                if rec.get('id', False) in reports.ids:
-                    del res['toolbar']['print'][
-                        res.get('toolbar', {}).get('print').index(rec)]
-        return res
-
-    @api.model
-    def fields_view_get(self, view_id=None, view_type='form',
-                        toolbar=False, submenu=False):
-        hide_reports_base = [
-            'acm_batch_invoice.action_report_batch_invoice',
-        ]
-        type = self._context.get('type')
-        res = super(AccountInvoice, self).fields_view_get(
-            view_id=view_id, view_type=view_type,
-            toolbar=toolbar, submenu=submenu)
-        if res and view_type in ['tree', 'form']:
-            if type and type != 'out_invoice':
-                self.remove_menu_print(res, hide_reports_base)
-        return res
-
-    @api.multi
     def amount_text(self, amount):
         try:
             return num2words(amount, to='currency', lang='th')
