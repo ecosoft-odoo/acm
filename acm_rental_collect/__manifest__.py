@@ -15,8 +15,8 @@
         'data/paper_format.xml',
         'report/report_templates.xml',
         'report/rental_collect_report.xml',
+        'report/report_payment_voucher.xml',
         'report/report.xml',
-        'report/report_invoice.xml',
         'wizard/rental_collect_report_wizards.xml',
     ],
 }
