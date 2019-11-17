@@ -20,3 +20,50 @@ class Agreement(models.Model):
         root.set('delete', 'true')
         res['arch'] = etree.tostring(root)
         return res
+
+    @api.multi
+    def mock_unlink_recital_structure(self):
+        self.mapped('recital_ids').unlink()
+        return True
+
+    @api.multi
+    def mock_unlink_section_structure(self):
+        self.mapped('sections_ids').unlink()
+        return True
+
+    @api.multi
+    def mock_unlink_clause_structure(self):
+        self.mapped('clauses_ids').unlink()
+        return True
+
+    @api.multi
+    def mock_unlink_appendix_structure(self):
+        self.mapped('appendix_ids').unlink()
+        return True
+
+    @api.multi
+    def mock_copy_recital_structure(self):
+        self.ensure_one()
+        for rec in self.template_id.recital_ids:
+            recital = rec.copy()
+            recital.agreement_id = self.id
+        return True
+
+    @api.multi
+    def mock_copy_section_structure(self):
+        self.ensure_one()
+        for rec in self.template_id.sections_ids:
+            section = rec.copy()
+            section.agreement_id = self.id
+            section.mapped('clauses_ids').write({
+                'agreement_id': self.id,
+            })
+        return True
+
+    @api.multi
+    def mock_copy_appendix_structure(self):
+        self.ensure_one()
+        for rec in self.template_id.appendix_ids:
+            appendix = rec.copy()
+            appendix.agreement_id = self.id
+        return True
