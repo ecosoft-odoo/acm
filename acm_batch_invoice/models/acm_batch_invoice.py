@@ -34,7 +34,10 @@ class ACMBatchInvoice(models.Model):
     )
     date_invoice = fields.Date(
         string='Invoice Date',
-        states={'done': [('readonly', True)]},
+        default=fields.Date.today,
+        required=True,
+        readonly=True,
+        states={'draft': [('readonly', False)]},
     )
     date_range_id = fields.Many2one(
         comodel_name='date.range',
@@ -54,12 +57,14 @@ class ACMBatchInvoice(models.Model):
     water_product_id = fields.Many2one(
         comodel_name='product.product',
         string='Water Product',
+        required=True,
         readonly=True,
         states={'draft': [('readonly', False)]},
     )
     electric_product_id = fields.Many2one(
         comodel_name='product.product',
         string='Electric Product',
+        required=True,
         readonly=True,
         states={'draft': [('readonly', False)]},
     )
@@ -77,9 +82,24 @@ class ACMBatchInvoice(models.Model):
         readonly=True,
         states={'draft': [('readonly', False)]},
     )
-    is_invoice_create = fields.Boolean(
-        compute='_compute_is_invoice_create',
+    invoice_count = fields.Integer(
+        compute='_compute_invoice_count',
     )
+
+    @api.multi
+    def _compute_invoice_count(self):
+        for rec in self:
+            rec.invoice_count = \
+                len(rec.batch_invoice_line_ids.mapped('invoice_id'))
+
+    @api.multi
+    def unlink(self):
+        for rec in self:
+            if rec.invoice_count > 0:
+                raise ValidationError(
+                    _('As this batch already create invoice(s), '
+                      'deletion is not allowed'))
+        return super().unlink()
 
     @api.multi
     def search_contract(self):
@@ -87,47 +107,36 @@ class ACMBatchInvoice(models.Model):
         invoices = Invoice.search([('origin', '=', self.name)])
         return invoices
 
-    @api.multi
-    def _compute_is_invoice_create(self):
-        for rec in self:
-            if rec.state == 'done' and rec.search_contract():
-                rec.is_invoice_create = True
-
     @api.onchange('date_range_id', 'group_id')
-    def _check_batch_invoice_is_create(self):
-        batchs = self.env['acm.batch.invoice'].search(
-            [
-                ('date_range_id', '=', self.date_range_id.id),
-                ('group_id', '=', self.group_id.id),
-            ]
-        )
-        if batchs:
-            text = "Batch Invoice for  %s / Zone '%s' already exists" % (
-                self.date_range_id.name, self.group_id.name,
-            )
+    def _onchange_batch_invoice_is_create(self):
+        exists = self.env['acm.batch.invoice'].search([
+            ('date_range_id', '=', self.date_range_id.id),
+            ('group_id', '=', self.group_id.id)])
+        if exists:
+            message = (_('Batch Invoice for %s, Zone %s already exists.\n'
+                         'Are you sure to continue?') %
+                       (self.date_range_id.name, self.group_id.name))
             warning = {
-                'title': _("Warning"),
-                'message': text,
+                'title': _('Warning'),
+                'message': message,
             }
             return {'warning': warning}
 
     @api.multi
     def button_confirm(self):
+        Sequene = self.env['ir.sequence']
+        seq_code = 'acm.batch.invoice'
         for rec in self:
             if not rec.batch_invoice_line_ids:
-                raise ValidationError(_('Meter Lines are empty.'))
+                raise ValidationError(_('Meter Lines cannot be empty!'))
             if not rec.name:
-                rec.name = (
-                    self.env["ir.sequence"]
-                    .with_context(ir_sequence_date=rec.date_invoice)
-                    .next_by_code("acm.batch.invoice")
-                )
-            rec.write({'state': 'confirm'})
+                ctx = {'ir_sequence_date': rec.date_invoice}
+                rec.name = Sequene.with_context(ctx).next_by_code(seq_code)
+        self.write({'state': 'confirm'})
 
     @api.multi
     def button_set_to_draft(self):
-        for rec in self:
-            rec.write({'state': 'draft'})
+        self.write({'state': 'draft'})
 
     def action_view_invoice(self):
         tree_view = self.env.ref("account.invoice_tree")
@@ -147,101 +156,61 @@ class ACMBatchInvoice(models.Model):
         }
         return result
 
-    @api.multi
-    def _prepare_product(
-            self, invoice, product, name, meter_from, meter_to, amount, analy):
-        val = {
-            'product_id': product,
-            'name': name,
-            'meter_from': meter_from if meter_to - meter_from != 0 else '-',
-            'meter_to': meter_to if meter_to - meter_from != 0 else '-',
-            'qty': meter_to - meter_from if meter_to - meter_from != 0 else 1,
-            'amount': amount,
-            'analytic': analy,
-        }
-        return self._prepare_invoice_line(invoice, val)
-
-    @api.multi
-    def _prepare_invoice_line(self, invoice_id, product):
-        invoice_line = self.env['account.invoice.line'].new({
-            'invoice_id': invoice_id,
-            'product_id': product['product_id'],
-            'meter_from': product['meter_from'],
-            'meter_to': product['meter_to'],
-            'quantity': product['qty'],
-            'price_unit': product['amount'],
-            'account_analytic_id': product['analytic'],
+    @api.model
+    def _prepare_invoice_dict(self, line):
+        batch = line.batch_invoice_id
+        invoice = self.env['account.invoice'].new({
+            'type': 'out_invoice',
+            'type2': 'utility',
+            'partner_id': line.partner_id.id,
+            'origin': batch.name,
+            'name': '%s/%s' % (batch.group_id.name, line.lock_number),
+            'currency_id': self.env.user.company_id.currency_id.id,
+            'journal_id': batch.journal_id.id,
+            'date_invoice': batch.date_invoice,
+            'company_id': self.env.user.company_id.id,
+            'user_id': self.env.user.id,
         })
-        invoice_line._onchange_product_id()
-        invoice_line._convert_to_write(invoice_line._cache)
-        line = self.env['account.invoice.line'].create(
-            invoice_line._convert_to_write(invoice_line._cache)
-        )
-        if product['name'] == 'ค่าไฟฟ้าเหมาจ่าย':
-            line.write({'price_unit': product['amount']})
-        line.write({'name': product['name']})
-        return invoice_id.compute_taxes()
-
-    @api.multi
-    def _prepare_invoice(self, partner, lock_number):
-        for inv in self:
-            invoice = self.env['account.invoice'].new({
-                'type': 'out_invoice',
-                'partner_id': partner,
-                'origin': self.name,
-                'name': '%s/%s' % (self.group_id.name, lock_number),
-                'currency_id': self.env.user.company_id.currency_id.id,
-                'journal_id': self.journal_id.id,
-                'date_invoice': self.date_invoice,
-                'company_id': self.env.user.company_id.id,
-                'user_id': self.env.user.id,
-                'type2': 'utility',
-            })
-            invoice._onchange_partner_id()
+        invoice._onchange_partner_id()
         return invoice._convert_to_write(invoice._cache)
 
+    @api.model
+    def _prepare_invoice_line_dict(self, type, line, invoice):
+        line_vals = {'invoice_id': invoice.id,
+                     'account_analytic_id': line.contract_id.id}
+        utility_info = line._get_utility_info(type)
+        line_vals.update(utility_info)
+        invoice_line = self.env['account.invoice.line'].new(line_vals)
+        invoice_line._onchange_product_id()
+        res = invoice_line._convert_to_write(invoice_line._cache)
+        res.update(utility_info)  # Ensure untility_info
+        return res
+
     @api.multi
-    def _create_invoice(self):
+    def _create_invoices(self):
         self.ensure_one()
+        Invoice = self.env['account.invoice']
+        utility_types = ['water_amount', 'electric_amount',
+                         'electric_amount_2', 'flat_rate']
         for line in self.batch_invoice_line_ids:
-            if line.check_condition() is False:
+            if not line.amount_subtotal:
                 continue
-            invoices = self.env['account.invoice'].create(
-                self._prepare_invoice(line.partner_id.id, line.lock_number))
-            line.invoice_id = invoices.id
-            if line.water_amount != 0:
-                self._prepare_product(
-                    invoices, self.water_product_id,
-                    self.water_product_id.name, line.water_from,
-                    line.water_to, line.water_amount,
-                    line.contract_id,
-                )
-            if line.electric_amount != 0:
-                self._prepare_product(
-                    invoices, self.electric_product_id,
-                    self.electric_product_id.name, line.electric_from,
-                    line.electric_to, line.electric_amount,
-                    line.contract_id,
-                )
-            if line.electric_amount_2 != 0:
-                self._prepare_product(
-                    invoices, self.electric_product_id,
-                    self.electric_product_id.name, line.electric_from_2,
-                    line.electric_to_2, line.electric_amount_2,
-                    line.contract_id,
-                )
-            if line.flat_rate != 0:
-                self._prepare_product(
-                    invoices, self.electric_product_id,
-                    'ค่าไฟฟ้าเหมาจ่าย', 0,
-                    0, line.flat_rate,
-                    line.contract_id,
-                )
+            invoice_dict = self._prepare_invoice_dict(line)
+            invoice = Invoice.create(invoice_dict)
+            lines_dict = []
+            for type in utility_types:
+                if line[type]:  # If line has amount
+                    lines_dict.append(
+                        (0, 0, self._prepare_invoice_line_dict(type, line,
+                                                               invoice)))
+            invoice.write({'invoice_line_ids': lines_dict})
+            invoice.compute_taxes()
+            line.invoice_id = invoice
 
     @api.multi
     def button_create_invoice(self):
         self.ensure_one()
-        self._create_invoice()
+        self._create_invoices()
         self.write({'state': 'done'})
         return self.action_view_invoice()
 
@@ -272,6 +241,8 @@ class ACMBatchInvoiceLine(models.Model):
     batch_invoice_id = fields.Many2one(
         comodel_name='acm.batch.invoice',
         index=True,
+        required=True,
+        ondelete='cascade',
     )
     invoice_id = fields.Many2one(
         comodel_name='account.invoice',
@@ -289,6 +260,7 @@ class ACMBatchInvoiceLine(models.Model):
         required=True,
     )
     flat_rate = fields.Float(
+        string='Electric Flat Rate',
     )
     lock_number = fields.Char(
         readonly=True,
@@ -296,7 +268,8 @@ class ACMBatchInvoiceLine(models.Model):
     )
     water_amount = fields.Float(
         readonly=True,
-        compute='_compute_water_amount',
+        compute='_compute_all_amount',
+        store=True,
     )
     water_from = fields.Float(
         digits=(12, 0),
@@ -305,91 +278,94 @@ class ACMBatchInvoiceLine(models.Model):
         digits=(12, 0),
     )
     electric_amount = fields.Float(
+        string='#1 Electric Amount',
+        compute='_compute_all_amount',
         readonly=True,
-        compute='_compute_electric_amount',
+        store=True,
     )
     electric_from = fields.Float(
+        string='#1 Electric From',
         digits=(12, 0),
     )
     electric_to = fields.Float(
+        string='#1 Electric To',
         digits=(12, 0),
     )
     electric_amount_2 = fields.Float(
+        string='#2 Electric Amount',
+        compute='_compute_all_amount',
         readonly=True,
-        compute='_compute_electric_amount_2',
+        store=True,
     )
     electric_from_2 = fields.Float(
+        string='#2 Electric From',
         digits=(12, 0),
     )
     electric_to_2 = fields.Float(
+        string='#2 Electric To',
         digits=(12, 0),
     )
+    amount_subtotal = fields.Float(
+        string='Subtotal',
+        compute='_compute_all_amount',
+        readonly=True,
+        store=True,
+    )
 
-    @api.constrains(
-        'electric_amount_2', 'electric_amount', 'water_amount', 'flat_rate')
-    def _check_all_amount(self):
-        for amount in self:
-            if (amount.flat_rate or amount.electric_amount_2 or
-                    amount.electric_amount or amount.water_amount) < 0:
-                raise UserError(
-                    _("Negative amount is not allowed, please check"))
-
-    @api.onchange('flat_rate')
-    def _check_flat_rate_amount(self):
-        if self.flat_rate < 0:
-            raise UserError(
-                _("'Flat Rate' is negative, please check"))
-
-    @api.depends('water_to', 'water_from')
-    def _compute_water_amount(self):
+    @api.constrains('water_to', 'water_from', 'water_amount', 'electric_from',
+                    'electric_to', 'electric_amount', 'electric_from_2',
+                    'electric_to_2', 'electric_amount_2', 'flat_rate')
+    def _check_no_negative_amount(self):
+        field_lst = ['water_to', 'water_from', 'water_amount', 'electric_from',
+                     'electric_to', 'electric_amount', 'electric_from_2',
+                     'electric_to_2', 'electric_amount_2', 'flat_rate']
         for rec in self:
-            if rec.water_to < 0:
-                raise UserError(
-                    _("'Water To' is negative, please check"))
-            if rec.water_from < 0:
-                raise UserError(
-                    _("'Water From' is negative, please check"))
-            water_diff = rec.water_to - rec.water_from
-            water_price = rec.batch_invoice_id.water_product_id.lst_price
-            rec.water_amount = water_diff*water_price
-            if rec.water_amount < 0:
-                raise UserError(
-                    _("'Water Amount' is negative, please check"))
+            for f in field_lst:
+                if rec[f] < 0:
+                    raise UserError(_('Negative amount is not allowed'))
 
-    @api.depends('electric_to', 'electric_from')
-    def _compute_electric_amount(self):
+    @api.depends('flat_rate', 'water_to', 'water_from', 'electric_from',
+                 'electric_to', 'electric_from_2', 'electric_to_2')
+    def _compute_all_amount(self):
+        utility_types = ['water_amount', 'electric_amount',
+                         'electric_amount_2', 'flat_rate']
         for rec in self:
-            if rec.electric_to < 0:
-                raise UserError(
-                    _("'Electric To' is negative, please check"))
-            if rec.electric_from < 0:
-                raise UserError(
-                    _("'Electric From' is negative, please check"))
-            elec_diff = rec.electric_to - rec.electric_from
-            elec_price = rec.batch_invoice_id.electric_product_id.lst_price
-            rec.electric_amount = elec_diff * elec_price
-            if rec.electric_amount < 0:
-                raise UserError(
-                    _("'Electric Amount' is negative, please check"))
-
-    @api.depends('electric_to_2', 'electric_from_2')
-    def _compute_electric_amount_2(self):
-        for rec in self:
-            if rec.electric_to_2 < 0:
-                raise UserError(
-                    _("'Electric to 2' is negative, please check"))
-            if rec.electric_from_2 < 0:
-                raise UserError(
-                    _("'Electric From 2' is negative, please check"))
-            elec_diff = rec.electric_to_2 - rec.electric_from_2
-            elec_price = rec.batch_invoice_id.electric_product_id.lst_price
-            rec.electric_amount_2 = elec_diff * elec_price
-            if rec.electric_amount_2 < 0:
-                raise UserError(
-                    _("'Electric Amount 2' is negative, please check"))
+            amount_subtotal = 0.0
+            for type in utility_types:
+                info = rec._get_utility_info(type)
+                rec[type] = info['quantity'] * info['price_unit']
+                amount_subtotal += rec[type]
+            rec.amount_subtotal = amount_subtotal
 
     @api.multi
-    def check_condition(self):
-        if not (self.water_amount or self.electric_amount
-                or self.electric_amount_2 or self.flat_rate):
-            return False
+    def _get_utility_info(self, type):
+        self.ensure_one()
+        line = self
+        batch = line.batch_invoice_id
+        utilities = {
+            'water_amount': {
+                'product_id': batch.water_product_id.id,
+                'name': _('ค่าน้ำประปา'),
+                'quantity': line.water_to - line.water_from,
+                'price_unit': batch.water_product_id.lst_price,
+            },
+            'electric_amount': {
+                'product_id': batch.electric_product_id.id,
+                'name': _('ค่าไฟฟ้า'),
+                'quantity': line.electric_to - line.electric_from,
+                'price_unit': batch.electric_product_id.lst_price,
+            },
+            'electric_amount_2': {
+                'product_id': batch.electric_product_id.id,
+                'name': _('ค่าไฟฟ้า (มิเตอร์ 2)'),
+                'quantity': line.electric_to_2 - line.electric_from_2,
+                'price_unit': batch.electric_product_id.lst_price,
+            },
+            'flat_rate': {
+                'product_id': batch.electric_product_id.id,
+                'name': _('ค่าไฟฟ้า (เหมาจ่าย)'),
+                'quantity': 1,
+                'price_unit': line.flat_rate,
+            },
+        }
+        return utilities[type]

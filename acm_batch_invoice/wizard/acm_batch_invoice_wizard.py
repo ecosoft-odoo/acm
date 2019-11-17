@@ -9,13 +9,12 @@ class ACMBatchInvoiceWizard(models.TransientModel):
     _description = 'Batch Invoice Wizard'
 
     date_invoice = fields.Date(
-        default=fields.Date.today,
+        string='Invoice Date',
+        readonly=True,
     )
 
     @api.multi
     def button_confirm(self):
-        batch = self.env['acm.batch.invoice']
-        context = dict(self._context or {})
-        invoices = batch.browse(context.get('active_ids'))
-        invoices.date_invoice = self.date_invoice
-        return invoices.button_create_invoice()
+        active_ids = self._context.get('active_ids')
+        batches = self.env['acm.batch.invoice'].browse(active_ids)
+        return batches.button_create_invoice()
