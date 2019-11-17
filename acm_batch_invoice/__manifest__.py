@@ -20,10 +20,13 @@
         'security/ir.model.access.csv',
         'wizard/acm_batch_invoice_wizard.xml',
         'views/acm_batch_invoice_views.xml',
+<<<<<<< HEAD
         'report/report_batch_invoice.xml',
         'report/report.xml',
         # Excel Import/Export
         'acm_batch_invoice_import_export/actions.xml',
         'acm_batch_invoice_import_export/templates.xml',
+=======
+>>>>>>> [12.0][FIX] remove report
     ],
 }
