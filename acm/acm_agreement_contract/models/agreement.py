@@ -223,12 +223,33 @@ class Agreement(models.Model):
             if transfer_product:
                 rec.transfer_product_id = transfer_product[0]
 
+    @api.model
+    def _validate_rent_product_dates(self, product_lines):
+        sorted_lines = product_lines.filtered(
+            lambda l: l.product_id and
+            l.product_id.value_type == 'rent').sorted('date_start')
+        count = len(sorted_lines)
+        err = False
+        for i in range(count):
+            if i == 0:  # Check first date
+                err = self.start_date != sorted_lines[i].date_start
+            if not err and i == count-1:  # Check last date
+                err = self.end_date != sorted_lines[i].date_end
+            if not err and i < count-1:
+                next_date = sorted_lines[i].date_end + relativedelta(days=1)
+                err = next_date != sorted_lines[i+1].date_start
+            if err:
+                raise UserError(_("Rental product's start/end dates "
+                                  "not in continuing sequence"))
+
     @api.multi
     def active_statusbar(self):
         for rec in self:
             # Agreement must have product / services
             if not (rec.is_template or rec.line_ids):
                 raise UserError(_('Please add Products/Services.'))
+            # Validate rent product dates sequence
+            self._validate_rent_product_dates(rec.line_ids)
             rec.write({
                 'state': 'active',
             })
