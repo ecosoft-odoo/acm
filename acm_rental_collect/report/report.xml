@@ -18,6 +18,14 @@
         report_type="qweb-pdf"
         name="acm_rental_collect.report_payment_voucher"
         file="acm_rental_collect.report_payment_voucher"
-        print_report_name="'Payment Voucher'"/>
+        print_report_name="'Voucher_ACM'"/>
 
+    <report
+        id="action_report_receipt_acm"
+        model="account.invoice"
+        string="Receipt ACM"
+        report_type="qweb-pdf"
+        name="acm_rental_collect.report_receipt_acm"
+        file="acm_rental_collect.report_receipt_acm"
+        print_report_name="'Receipt_ACM'"/>
 </odoo>
