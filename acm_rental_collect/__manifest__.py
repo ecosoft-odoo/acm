@@ -16,6 +16,7 @@
         'report/report_templates.xml',
         'report/rental_collect_report.xml',
         'report/report.xml',
+        'report/report_invoice.xml',
         'wizard/rental_collect_report_wizards.xml',
     ],
 }
