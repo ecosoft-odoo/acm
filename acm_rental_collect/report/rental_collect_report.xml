@@ -21,10 +21,10 @@
                         <thead>
                             <tr>
                                 <th class="head_table center" style="width: 3%;">ลำดับ</th>
-                                <th class="head_table center" style="width: 3%;">ล็อค</th>
-                                <th class="head_table center">ชื่อ - สกุล</th>
+                                <th class="head_table center">ล็อค</th>
+                                <th class="head_table center" style="width: 12%;">ชื่อ - สกุล</th>
                                 <th class="head_table center" style="width: 8%;">ประเภทสินค้า</th>
-                                <th class="head_table center" style="width: 5%;">ค่าเช่า</th>
+                                <th class="head_table center" style="width: 7%;">ค่าเช่า</th>
                                 <th class="head_table center" style="width: 5%;">ยกมา</th>
                                 <t t-foreach="range(end_date)" t-as="i">
                                     <th class="head_table center" style="width: 2.1%;" t-esc="i+1"/>
