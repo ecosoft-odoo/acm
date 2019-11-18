@@ -23,14 +23,13 @@ class ReportRentalCollect(models.AbstractModel):
              ('date_start', '<=', wizard.date_print),
              ('date_end', '>=', wizard.date_print), ])
         line_dict = {}
-        sum = 0.00
         for rec in agreement_lines:
-            sum += rec.lst_price
             line_dict[rec.product_id.id] = {
                 'partner_name': rec.agreement_id.partner_id.display_name,
                 'goods_type': rec.product_id.goods_type,
                 'lst_price': '%.2f' % rec.lst_price,
             }
+        amount = sum([float(x['lst_price']) for x in list(line_dict.values())])
         current_date = datetime.today()
         return {
             'year': wizard.date_print.year + 543,
@@ -41,7 +40,7 @@ class ReportRentalCollect(models.AbstractModel):
             'current_date': current_date.day,
             'current_month': wizard.trans_months(current_date.strftime('%m')),
             'current_year': current_date.year + 543,
-            'amount': sum,
+            'amount': amount,
             'line_dict': line_dict,
             'products': products,
         }
