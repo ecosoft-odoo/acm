@@ -23,6 +23,8 @@ class ContractCreateManualInvoice(models.TransientModel):
 
     @api.model
     def _get_product_domain(self):
+        if self._context.get('active_model') != 'account.analytic.account':
+            return []
         active_ids = self._context.get('active_ids', [])
         Contract = self.env['account.analytic.account']
         contracts = Contract.browse(active_ids)
