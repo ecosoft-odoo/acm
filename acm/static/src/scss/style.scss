@@ -3,29 +3,29 @@
     src: url('../fonts/THSarabunNew.ttf') format('truetype');
 }
 .contract_form {
-    font-family: 'THSarabunNew';
-    font-size: 23px;
-    text-align: justify;
-    line-height: 30px;
+    font-family: 'THSarabunNew' !important;
+    font-size: 23px !important;
+    text-align: justify !important;
+    line-height: 30px !important;
     p {
-        margin-bottom: 10px;
+        margin-bottom: 10px !important;
     }
     .section {
-        text-indent: 56px;
+        text-indent: 56px !important;
     }
     .clauses {
         ol {
-            list-style-position: inside;
-            counter-reset: item;
+            list-style-position: inside !important;
+            counter-reset: item !important;
             li {
-                display: block;
-                text-indent: 112px;
+                display: block !important;
+                text-indent: 112px !important;
             }
             li:before {
-                content: "ข้อ " counter(item) ". ";
-                counter-increment: item;
-                position: absolute;
-                margin-left: -56px;
+                content: "ข้อ " counter(item) ". " !important;
+                counter-increment: item !important;
+                position: absolute !important;
+                margin-left: -56px !important;
             }
         }
     }
