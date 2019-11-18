@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="base.view_company_form"/>
         <field name="arch" type="xml">
             <notebook position="inside">
-                <page name="agreement_info" string="Agreement Info">
+                <page name="agreement_info" string="Agreement Info" groups="agreement_legal.group_agreement_readonly">
                     <group>
                         <group>
                             <field name="market_name"/>

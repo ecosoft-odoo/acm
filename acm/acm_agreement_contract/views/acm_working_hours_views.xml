@@ -1,0 +1,47 @@
+<odoo>
+    <!-- Tree View -->
+    <record id="acm_working_hours_tree_view" model="ir.ui.view">
+        <field name="name">acm.working.hours.tree.view</field>
+        <field name="model">acm.working.hours</field>
+        <field name="arch" type="xml">
+            <tree string="Working Hours">
+                <field name="name"/>
+                <field name="working_hours"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="acm_working_hours_form_view" model="ir.ui.view">
+        <field name="name">acm.working.hours.form.view</field>
+        <field name="model">acm.working.hours</field>
+        <field name="arch" type="xml">
+            <form string="Working Hours">
+                <group>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                    <group>
+                        <field name="working_hours"/>
+                    </group>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="acm_working_hours_action" model="ir.actions.act_window">
+        <field name="name">Working Hours</field>
+        <field name="res_model">acm.working.hours</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem
+        name="Working Hours"
+        id="acm_working_hours_menu"
+        sequence="130"
+        parent="agreement_legal.agreement_masterdata"
+        action="acm_working_hours_action"/>
+</odoo>

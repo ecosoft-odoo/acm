@@ -12,7 +12,10 @@ class ProductTemplate(models.Model):
     area = fields.Float(
         compute='_compute_area',
     )
-    working_hours = fields.Char()
+    working_hours_id = fields.Many2one(
+        comodel_name='acm.working.hours',
+        string='Working Hours',
+    )
     value_type = fields.Selection(
         selection=[
             ('rent', 'Rent'),

@@ -6,13 +6,13 @@
         <field name="inherit_id" ref="product.product_template_form_view"/>
         <field name="arch" type="xml">
             <page name="general_information" position="before">
-                <page name="agreement_info" string="Agreement Info">
+                <page name="agreement_info" string="Agreement Info" groups="agreement_legal.group_agreement_readonly">
                     <group>
                         <group>
                             <field name="width"/>
                             <field name="length"/>
                             <field name="area"/>
-                            <field name="working_hours"/>
+                            <field name="working_hours_id"/>
                         </group>
                         <group>
                             <field name="value_type"/>
