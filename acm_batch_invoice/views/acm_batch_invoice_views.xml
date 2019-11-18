@@ -8,17 +8,20 @@
                 <header>
                     <field name="state" widget="statusbar" nolabel="1" statusbar_visible="draft,confirm,done"/>
                     <button name="button_confirm" string="Confirm" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
-                    <button name="%(action_batch_invoice)d" string="Create Invoice" type="action" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'confirm')]}"/>
+                    <button name="%(action_batch_invoice)d" string="Create Invoice" type="action" class="oe_highlight"
+                      attrs="{'invisible': [('state', '!=', 'confirm')]}" context="{'default_date_invoice': date_invoice}"/>
                     <button name="button_set_to_draft" string="Set to draft" type="object" attrs="{'invisible': [('state', '!=', 'confirm')]}"/>
                 </header>
                 <sheet string="Invoice">
                     <div class="oe_button_box" name="button_box">
-                        <button name="action_view_invoice"
-                                string="Invoices"
-                                class="oe_stat_button"
-                                type="object"
-                                icon="fa-pencil-square-o"
-                                attrs="{'invisible': [('is_invoice_create', '=', False)]}">
+                        <button class="oe_stat_button" name="action_view_invoice" type="object" icon="fa-pencil-square-o"
+                            attrs="{'invisible': [('invoice_count', '=', False)]}">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="invoice_count" widget="statinfo" nolabel="1" class="mr4"/>
+                                </span>
+                                <span class="o_stat_text">Invoices</span>
+                            </div>
                         </button>
                     </div>
                     <h1>
@@ -27,24 +30,15 @@
                     </h1>
                     <group>
                         <group>
-                            <field name="is_invoice_create" invisible="1"/>
-                            <field name="date_invoice"/>
                             <field name="date_range_id"/>
                             <field name="group_id"/>
                         </group>
                         <group>
-                            <field name="invoice_type"/>
-                            <field name="journal_id"/>
-                            <field name="water_product_id"/>
-                            <field name="electric_product_id"/>
+                            <field name="date_invoice"/>
                         </group>
                     </group>
-                    <button name="retriveve_product_line"
-                            string="Retrieve Meter Lines"
-                            type="object"
-                            class="oe_highlight"
-                            states="draft"/>
-
+                    <button name="retriveve_product_line" string="Retrieve Meter Lines"
+                            type="object" class="oe_highlight" states="draft"/>
                     <notebook>
                         <page string="Meter Lines">
                             <field name="batch_invoice_line_ids">
@@ -66,6 +60,18 @@
                                 </tree>
                             </field>
                         </page>
+                        <page string="Others" groups="base.group_no_one">
+                            <group>
+                                <group>
+                                    <field name="water_product_id"/>
+                                    <field name="electric_product_id"/>
+                                </group>
+                                <group>
+                                    <field name="invoice_type"/>
+                                    <field name="journal_id"/>
+                                </group>
+                            </group>
+                        </page>
                     </notebook>
                 </sheet>
             </form>
@@ -79,7 +85,7 @@
             <tree string="Batch Invoices" default_order="group_id">
                 <field name="group_id"/>
                 <field name="name"/>
-                <field name="invoice_type"/>
+                <field name="date_range_id"/>
                 <field name="date_invoice"/>
                 <field name="state"/>
             </tree>
@@ -97,8 +103,18 @@
         <field name="model">acm.batch.invoice</field>
         <field name="arch" type="xml">
             <search string="Batch Invoice Search">
-                <filter name="group_partner_id" string="Zone" context="{'group_by':'group_id'}"/>
-                <filter name="group_date" string="Invoice Date" context="{'group_by':'date_invoice'}"/>
+                <field name="name" string="Batch Number"/>
+                <field name="group_id" string="Zone"/>
+                <field name="date_range_id" string="Date Range"/>
+                <filter string="Draft" domain="[('state','=','draft')]" name="state_draft_filter"/>
+                <filter string="Confirmed" domain="[('state','=','confirm')]" name="state_confirm_filter"/>
+                <filter string="Invoiced" domain="[('state','=','done')]" name="state_done_filter"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_partner_id" string="Zone" context="{'group_by':'group_id'}"/>
+                    <filter name="group_partner_id" string="Date Range" context="{'group_by':'date_range_id'}"/>
+                    <filter name="group_date" string="Invoice Date" context="{'group_by':'date_invoice'}"/>
+                    <filter name="group_state" string="State" context="{'group_by':'state'}"/>
+                </group>
             </search>
         </field>
     </record>
@@ -106,8 +122,8 @@
     <menuitem
         name="Batch Invoice"
         id="batch_invoice_menu"
-        sequence="30"
-        parent="agreement_legal.agreement_operations"
+        sequence="16"
+        parent="account.menu_finance_receivables"
         action="acm_batch_invoice_action_form"/>
 
 </odoo>
