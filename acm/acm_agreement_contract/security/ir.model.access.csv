@@ -1,5 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_agreement_line_allusers,agreement line all users,model_agreement_line,agreement_legal.group_agreement_user,1,1,1,1
+agreement_legal.access_agreement_line_allusers,agreement line all users,model_agreement_line,agreement_legal.group_agreement_user,1,1,1,1
 access_agreement_breach_line_readonly,agreement breach line readonly,model_agreement_breach_line,agreement_legal.group_agreement_readonly,1,0,0,0
 access_agreement_breach_line_allusers,agreement breach line all users,model_agreement_breach_line,agreement_legal.group_agreement_user,1,1,1,1
 access_goods_category_readonly,goods category readonly,model_goods_category,agreement_legal.group_agreement_readonly,1,0,0,0
