@@ -37,6 +37,7 @@
         'acm_agreement_contract/views/lock_attribute_views.xml',
         'acm_agreement_contract/views/account_analytic_account_views.xml',
         'acm_agreement_contract/views/agreement_views.xml',
+        'acm_agreement_contract/views/acm_working_hours_views.xml',
         'acm_agreement_contract/report/report_templates.xml',
         'acm_agreement_contract/report/report_agreement.xml',
     ],
