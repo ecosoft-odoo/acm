@@ -96,6 +96,7 @@ class ContractCreateManualInvoice(models.TransientModel):
             'contract_id': contract.id,
             'user_id': contract.partner_id.user_id.id,
             'type2': 'rent',
+            'name': contract.rent_product_id.name,
         })
         # Get other invoice values from partner onchange
         invoice._onchange_partner_id()

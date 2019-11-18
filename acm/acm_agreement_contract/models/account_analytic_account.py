@@ -70,9 +70,11 @@ class AccountAnalyticAccount(models.Model):
 
     @api.multi
     def _create_invoice(self, invoice=False):
-        invoice = super()._create_invoice(invoice=invoice)
+        self.ensure_one()
+        inv = super()._create_invoice(invoice=invoice)
         # Update invoice type
-        invoice.write({
+        inv.write({
             'type2': 'rent',
+            'name': self.rent_product_id.name,
         })
-        return invoice
+        return inv
