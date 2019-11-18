@@ -49,7 +49,7 @@
                             <t t-set="paid" t-value="list(set(map(lambda d: d['date'], o._get_payments_vals())))"/>
                             <t t-foreach="paid" t-as="p">
                                 <span class="oe_form_field text-right oe_payment_label">
-                                <t t-esc="p.day"/>/<t t-esc="p.month"/>/<t t-esc="p.year + 543"/>
+                                <t t-esc="p + relativedelta(years=543)" t-options='{"widget": "date"}'/>
                                 <span t-if="i != len(paid)">,</span>
                                 <t t-set="i" t-value="i+1"/>
                             </span>
@@ -242,27 +242,23 @@
                         </table>
 
                         <div id="signature" class="row" style="margin-top: 75px;">
-                            <div class="col-4" name="aa">
+                            <div class="col-4">
                                 <p style="text-align:center" t-field="o.create_uid"/>
                                 <p style="text-align:center">ผู้จัดทำ</p>
                                 <div style="text-align: center;">
                                     <span>วันที</span>
-                                    <span t-esc="o.create_date.day"/> /
-                                    <span t-esc="o.create_date.month"/> /
-                                    <span t-esc="o.create_date.year + 543"/>
+                                    <t t-esc="o.create_date + relativedelta(years=543)" t-options='{"widget": "date"}'/>
                                 </div>
                             </div>
-                            <div class="col-4" name="bb">
-                                <p style="text-align:center" t-field="o.create_uid"/>
+                            <div class="col-4">
+                                <p style="text-align:center" t-esc="o.move_id.line_ids[0].write_uid.display_name"/>
                                 <p style="text-align:center">ผู้ตรวจทาน</p>
                                 <div style="text-align: center;">
                                     <span>วันที</span>
-                                    <span t-esc="o.create_date.day"/> /
-                                    <span t-esc="o.create_date.month"/> /
-                                    <span t-esc="o.create_date.year + 543"/>
+                                    <t t-esc="paid[0] + relativedelta(years=543)" t-options='{"widget": "date"}'/>
                                 </div>
                             </div>
-                            <div class="col-4" name="cc">
+                            <div class="col-4">
                                 <p style="text-align:center">........................</p>
                                 <p style="text-align:center">ผู้อนุมัติ</p>
                                 <div>
