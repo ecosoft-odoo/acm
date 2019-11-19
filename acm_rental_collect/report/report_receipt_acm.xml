@@ -20,11 +20,8 @@
                         <t t-set="i" t-value="1"/>
                         <t t-set="paid" t-value="list(set(map(lambda d: d['date'], o._get_payments_vals())))"/>
                         <span style="margin-left: 65px; width: 70px;" t-if="o.state in ('in_payment', 'paid')">Date </span>
-                        <t t-foreach="paid" t-as="p">
-                            <span style="text-align: right;" t-esc="p" t-options='{"widget": "date"}'/>
-                            <span style="text-align: right;" t-if="i != len(paid)">,</span>
-                            <t t-set="i" t-value="i+1"/>
-                        </t>
+                        <t t-set="paid" t-value="list(set(map(lambda d: d['date'], o._get_payments_vals())))"/>
+                        <span t-esc="', '.join(str(date) for date in paid)"/>
                     </h2>
 
                     <div id="informations" class="row mt32 mb32">
@@ -191,11 +188,13 @@
                             <strong class="text-center">The SEPA QR Code informations are not set correctly.</strong><br />
                         </p>
                     </div>
-                    <div style="position: absolute">
-                        <span>ชื่อผู้รับเงิน</span>
-                        <div style="border: 1px solid black; width: 400px; margin-left: 5px; margin-top: 55px; display: inline-block;"/>
-                        <span>วันที่รับเงิน</span>
-                        <div style="border: 1px solid black; width: 200px; margin-left: 5px; margin-top: -5px; display: inline-block;"/>
+                    <div class="footer invoice_preprint_form">
+                        <div class="last-page">
+                            <span>ชื่อผู้รับเงิน</span>
+                            <div style="border: 1px solid black; width: 400px; margin-left: 5px; margin-top: 55px; display: inline-block;"/>
+                            <span>วันที่รับเงิน</span>
+                            <div style="border: 1px solid black; width: 200px; margin-left: 5px; margin-top: -5px; display: inline-block;"/>
+                        </div>
                     </div>
                 </div>
             </t>

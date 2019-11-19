@@ -45,15 +45,10 @@
                         <div class="col-auto mw-100 mb-2" t-if="o.state in ('in_payment', 'paid')" name="payment">
                             <strong>Paid on:</strong>
                             <p class="m-0"/>
-                            <t t-set="i" t-value="1"/>
                             <t t-set="paid" t-value="list(set(map(lambda d: d['date'], o._get_payments_vals())))"/>
-                            <t t-foreach="paid" t-as="p">
-                                <span class="oe_form_field text-right oe_payment_label">
-                                <t t-esc="p + relativedelta(years=543)" t-options='{"widget": "date"}'/>
-                                <span t-if="i != len(paid)">,</span>
-                                <t t-set="i" t-value="i+1"/>
-                            </span>
-                            </t>
+                            <div class="text-right">
+                                <span t-esc="', '.join(str(date) for date in paid)"/>
+                            </div>
                         </div>
                     </div>
 
@@ -240,29 +235,31 @@
                                 </tbody>
                             </t>
                         </table>
-
-                        <div id="signature" class="row" style="margin-top: 75px;">
-                            <div class="col-4">
-                                <p style="text-align:center" t-field="o.create_uid"/>
-                                <p style="text-align:center">ผู้จัดทำ</p>
-                                <div style="text-align: center;">
-                                    <span>วันที</span>
-                                    <t t-esc="o.create_date + relativedelta(years=543)" t-options='{"widget": "date"}'/>
+                        <div class="footer invoice_preprint_form">
+                            <div id="signature" class="row last-page">
+                                <div class="col-4">
+                                    <p style="text-align:center" t-field="o.create_uid"/>
+                                    <p style="text-align:center">ผู้จัดทำ</p>
+                                    <div style="text-align: center;">
+                                        <span>วันที</span>
+                                        <t t-esc="o.create_date + relativedelta(years=543)" t-options='{"widget": "date"}'/>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-4">
-                                <p style="text-align:center" t-esc="o.move_id.line_ids[0].write_uid.display_name"/>
-                                <p style="text-align:center">ผู้ตรวจทาน</p>
-                                <div style="text-align: center;">
-                                    <span>วันที</span>
-                                    <t t-esc="paid[0] + relativedelta(years=543)" t-options='{"widget": "date"}'/>
+                                <div class="col-4">
+                                    <p style="text-align:center" t-esc="o.move_id.line_ids[0].write_uid.display_name"/>
+                                    <p style="text-align:center">ผู้ตรวจทาน</p>
+                                    <div style="text-align: center;">
+                                        <span>วันที</span>
+                                        <t t-set="paid" t-value="list(set(map(lambda d: d['date'], o._get_payments_vals())))"/>
+                                        <span t-esc="', '.join(str(date) for date in paid)"/>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-4">
-                                <p style="text-align:center">........................</p>
-                                <p style="text-align:center">ผู้อนุมัติ</p>
-                                <div>
-                                    <span style="padding-left: 70px;">วันที</span>
+                                <div class="col-4">
+                                    <p style="text-align:center">........................</p>
+                                    <p style="text-align:center">ผู้อนุมัติ</p>
+                                    <div>
+                                        <span style="padding-left: 60px;">วันที</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
