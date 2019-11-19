@@ -191,7 +191,7 @@
                     <div class="footer invoice_preprint_form">
                         <div class="last-page">
                             <span>ชื่อผู้รับเงิน</span>
-                            <div style="border: 1px solid black; width: 400px; margin-left: 5px; margin-top: 55px; display: inline-block;"/>
+                            <div style="border: 1px solid black; width: 400px; margin-left: 5px; margin-top: -5px; display: inline-block;"/>
                             <span>วันที่รับเงิน</span>
                             <div style="border: 1px solid black; width: 200px; margin-left: 5px; margin-top: -5px; display: inline-block;"/>
                         </div>
