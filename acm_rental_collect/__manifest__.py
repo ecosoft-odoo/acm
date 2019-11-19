@@ -10,6 +10,7 @@
     'category': 'Agreement',
     'depends': [
         'acm',
+        'report_qweb_element_page_visibility',
     ],
     'data': [
         'data/paper_format.xml',
