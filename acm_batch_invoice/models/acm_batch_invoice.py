@@ -101,12 +101,6 @@ class ACMBatchInvoice(models.Model):
                       'deletion is not allowed'))
         return super().unlink()
 
-    @api.multi
-    def search_contract(self):
-        Invoice = self.env['account.invoice']
-        invoices = Invoice.search([('origin', '=', self.name)])
-        return invoices
-
     @api.onchange('date_range_id', 'group_id')
     def _onchange_batch_invoice_is_create(self):
         exists = self.env['acm.batch.invoice'].search([
