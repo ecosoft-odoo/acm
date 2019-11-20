@@ -487,3 +487,19 @@ class Agreement(models.Model):
         if len(company_contact) > 1:
             company_contact = company_contact[0]
         return company_contact
+
+    @api.multi
+    def get_rental_period(self, date_start, date_end):
+        rent_period = ''
+        if date_start and date_end:
+            period = relativedelta(
+                date_end, date_start - relativedelta(days=1))
+            if period.years:
+                rent_period += str(period.years) + ' ปี'
+            if period.months:
+                rent_period += \
+                    (rent_period and ' ' or '') + str(period.months) + ' เดือน'
+            if period.days:
+                rent_period += \
+                    (rent_period and ' ' or '') + str(period.days) + ' วัน'
+        return rent_period
