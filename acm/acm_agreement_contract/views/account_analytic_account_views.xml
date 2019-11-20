@@ -30,6 +30,17 @@
             </field>
         </field>
     </record>
+    <record id="account_analytic_group_form_view" model="ir.ui.view">
+        <field name="name">account.analytic.group.form</field>
+        <field name="model">account.analytic.group</field>
+        <field name="inherit_id" ref="analytic.account_analytic_group_form_view"/>
+        <field name="arch" type="xml">
+            <field name="parent_id" position="after">
+                <field name="weight1"/>
+                <field name="weight2"/>
+            </field>
+        </field>
+    </record>
 
     <!-- Tree View -->
     <record id="view_account_analytic_account_journal_tree" model="ir.ui.view">

@@ -78,3 +78,14 @@ class AccountAnalyticAccount(models.Model):
             'name': self.rent_product_id.name,
         })
         return inv
+
+
+class AccountAnalyticGroup(models.Model):
+    _inherit = 'account.analytic.group'
+
+    weight1 = fields.Char(
+        string='Load weight',
+    )
+    weight2 = fields.Char(
+        string='Other weight',
+    )
