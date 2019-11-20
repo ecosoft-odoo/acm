@@ -14,6 +14,7 @@
     ],
     'data': [
         'data/paper_format.xml',
+        'report/template/report_templates.xml',
         'report/report_templates.xml',
         'report/rental_collect_report.xml',
         'report/report_voucher_acm.xml',
