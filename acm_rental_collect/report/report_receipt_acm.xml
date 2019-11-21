@@ -235,7 +235,7 @@
         <template id="report_receipt_acm">
             <t t-call="web.html_container">
                 <t t-foreach="docs" t-as="o">
-                    <t t-set="lang" t-value="o.user_id.lang"/>
+                    <t t-set="lang" t-value="o.env.user.lang"/>
                     <t t-call="acm_rental_collect.report_receipt_acm_document_with_payments" t-lang="lang"/>
                 </t>
             </t>
