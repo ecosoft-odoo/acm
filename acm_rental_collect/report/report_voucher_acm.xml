@@ -47,7 +47,7 @@
                             <p class="m-0"/>
                             <t t-set="paid" t-value="list(set(map(lambda d: d['date'], o._get_payments_vals())))"/>
                             <div class="text-right">
-                                <span t-esc="', '.join(str(date) for date in paid)" t-options='{"widget": "date"}'/>
+                                <span t-esc="', '.join(date.strftime('%d/%m/%Y') for date in paid)"/>
                             </div>
                         </div>
                     </div>
@@ -253,7 +253,7 @@
                         <div style="text-align: center;">
                             <span>วันที</span>
                             <t t-set="paid" t-value="list(set(map(lambda d: d['date'], o._get_payments_vals())))"/>
-                            <span t-esc="', '.join(str(date) for date in paid)" t-options='{"widget": "date"}'/>
+                            <span t-esc="', '.join(date.strftime('%d/%m/%Y') for date in paid)"/>
                         </div>
                     </div>
                     <div class="col-4">
