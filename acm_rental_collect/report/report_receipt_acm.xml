@@ -24,7 +24,8 @@
                             <t t-set="paid" t-value="list(set(map(lambda d: d['date'], o._get_payments_vals())))"/>
                             <span style="width: 70px;" t-if="o.state in ('in_payment', 'paid')">วันที่ </span>
                             <t t-set="paid" t-value="list(set(map(lambda d: d['date'], o._get_payments_vals())))"/>
-                            <span t-esc="', '.join(date.strftime('%d/%m/%Y') for date in paid)"/>
+                            <t t-set="date_paid" t-value="o._get_date(paid, lang)"/>
+                            <t t-esc="date_paid"/>
                         </div>
                     </h2>
 
@@ -35,11 +36,11 @@
                         </div>
                         <div class="col-auto mw-100 mb-2" t-if="o.date_invoice" name="invoice_date">
                             <strong>วันที่ใบแจ้งหนี้</strong>
-                            <p class="m-0" t-field="o.date_invoice"/>
+                            <p class="m-0" t-field="o.date_invoice" t-options='{"widget": "date"}'/>
                         </div>
                         <div class="col-auto mw-100 mb-2" t-if="o.date_due and o.type == 'out_invoice' and o.state in ('open', 'in_payment', 'paid')" name="due_date">
                             <strong>วันที่ครบกำหนดชำระ</strong>
-                            <p class="m-0" t-field="o.date_due"/>
+                            <p class="m-0" t-field="o.date_due" t-options='{"widget": "date"}'/>
                         </div>
                         <div class="col-auto mw-100 mb-2" t-if="o.origin" name="origin">
                             <strong>เอกสารต้นทาง</strong>
@@ -234,7 +235,7 @@
         <template id="report_receipt_acm">
             <t t-call="web.html_container">
                 <t t-foreach="docs" t-as="o">
-                    <t t-set="lang" t-value="o.user_id.lang if o.type in ('in_invoice', 'in_refund') else o.partner_id.lang"/>
+                    <t t-set="lang" t-value="o.user_id.lang"/>
                     <t t-call="acm_rental_collect.report_receipt_acm_document_with_payments" t-lang="lang"/>
                 </t>
             </t>

@@ -21,3 +21,8 @@ class AccountInvoice(models.Model):
             move_ids = list(map(lambda d: d['move_id'], payment_infos))
             move = rec.env['account.move'].browse(move_ids)
             rec.move_line_ids = move.mapped('line_ids').sorted('debit', True)
+
+    def _get_date(self, dict, user_lang):
+        lang = self.env['res.lang'].search([('code', '=', user_lang)])
+        date_paid = ', '.join(date.strftime(lang.date_format) for date in dict)
+        return date_paid
