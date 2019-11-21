@@ -6,15 +6,15 @@
                 <div class="page">
                     <div class="row">
                         <div class="col-6">
-                            <span t-field="res_company.partner_id.name"/>
+                            <span t-field="res_company.partner_id.display_name"/>
                             รายชื่อผู้เช่าแผงลอยตลาดวโรรส
-                            เดือน <span t-esc="month"/>
-                            ปี <span t-esc="year"/>
+                            เดือน <span t-esc="wizard.trans_months(wizard.date_print.strftime('%m'))"/>
+                            ปี <span t-esc="wizard.date_print.year+543"/>
                         </div>
                         <div class="col-6 text-right">
-                            ออกวันที่ : <span t-esc="current_date"/>
-                            <span t-esc="current_month"/>
-                            <span t-esc="current_year"/>
+                            ออกวันที่ <span t-esc="current_date.day"/>
+                            <span t-esc="wizard.trans_months(current_date.strftime('%m'))"/>
+                            <span t-esc="current_date.year + 543"/>
                         </div>
                     </div>
                     <table>
@@ -26,7 +26,7 @@
                                 <th class="head_table center" style="width: 8%;">ประเภทสินค้า</th>
                                 <th class="head_table center" style="width: 7%;">ค่าเช่า</th>
                                 <th class="head_table center" style="width: 5%;">ยกมา</th>
-                                <t t-foreach="range(end_date)" t-as="i">
+                                <t t-foreach="range(wizard._get_last_date(wizard.date_print.year, wizard.date_print.month)[1])" t-as="i">
                                     <th class="head_table center" style="width: 2.1%;" t-esc="i+1"/>
                                 </t>
                             </tr>
@@ -49,7 +49,7 @@
                                     <span t-esc="line_dict.get(o.id, {}).get('lst_price')"/>
                                 </td>
                                 <td class="head_table center"/>
-                                <t t-foreach="range(end_date)" t-as="i">
+                                <t t-foreach="range(wizard._get_last_date(wizard.date_print.year, wizard.date_print.month)[1])" t-as="i">
                                     <td class="head_table center" style="width: 2.1%;"/>
                                 </t>
                             </tr>
@@ -60,7 +60,7 @@
                                 <td class="head_table"/>
                                 <td class="head_table right" t-esc="'%.2f' % amount"/>
                                 <td class="head_table"/>
-                                <t t-foreach="range(end_date)" t-as="i">
+                                <t t-foreach="range(wizard._get_last_date(wizard.date_print.year, wizard.date_print.month)[1])" t-as="i">
                                     <td class="head_table center" style="width: 2.1%;"/>
                                 </t>
                             </tr>

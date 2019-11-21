@@ -1,15 +1,15 @@
 <odoo>
 
         <template id="report_receipt_acm_document">
-            <t t-call="acm_rental_collect.acm_external_layout">
+            <t t-call="acm_rental_collect.external_layout">
                 <t t-set="o" t-value="o.with_context(lang=lang)"/>
                 <t t-set="address">
                     <address t-field="o.partner_id" t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}' />
                     <div t-if="o.partner_id.vat" class="mt16"><t t-esc="o.company_id.country_id.vat_label or 'Tax ID'"/>: <span t-field="o.partner_id.vat"/></div>
                 </t>
-                <div class="page">
-                    <h2 class="row" style="margin-top: 30px;">
-                        <div class="col-7">
+                <div>
+                    <h2 class="page mt32 mb32">
+                        <div>
                             <span t-if="o.type == 'out_invoice' and o.state == 'open'">Invoice</span>
                             <span t-if="o.type == 'out_invoice' and o.state in ('in_payment', 'paid')">ใบเสร็จรับเงิน</span>
                             <span t-if="o.type == 'out_invoice' and o.state == 'draft'">Draft Invoice</span>
@@ -19,13 +19,14 @@
                             <span t-if="o.type == 'in_invoice'">Vendor Bill</span>
                             <span t-field="o.number"/>
                         </div>
-                        <div class="col-5">
-                            <t t-set="i" t-value="1"/>
-                            <t t-set="paid" t-value="list(set(map(lambda d: d['date'], o._get_payments_vals())))"/>
-                            <span style="width: 70px;" t-if="o.state in ('in_payment', 'paid')">วันที่ </span>
-                            <t t-set="paid" t-value="list(set(map(lambda d: d['date'], o._get_payments_vals())))"/>
-                            <t t-set="date_paid" t-value="o._get_date(paid, lang)"/>
-                            <t t-esc="date_paid"/>
+                        <div class="row" style="margin-top: -38px;">
+                            <div name="address" class="col-5  ml-auto">
+                                <t t-set="i" t-value="1"/>
+                                <t t-set="paid" t-value="list(set(map(lambda d: d['date'], o._get_payments_vals())))"/>
+                                <span style="width: 70px;" t-if="o.state in ('in_payment', 'paid')">วันที่ </span>
+                                <t t-set="paid" t-value="list(set(map(lambda d: d['date'], o._get_payments_vals())))"/>
+                                <t t-set="date_paid" t-value="o._get_date(paid, lang)"/>
+                            </div>
                         </div>
                     </h2>
 
