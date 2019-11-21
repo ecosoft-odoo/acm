@@ -3,8 +3,4 @@
         <field name="name">Lease</field>
         <field name="agreement_type_id" ref="agreement_legal.agreement_type_contract"/>
     </record>
-    <record id="agreement_subtype_service" model="agreement.subtype">
-        <field name="name">Service</field>
-        <field name="agreement_type_id" ref="agreement_legal.agreement_type_contract"/>
-    </record>
 </odoo>

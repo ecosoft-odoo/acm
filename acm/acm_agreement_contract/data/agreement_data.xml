@@ -9,15 +9,4 @@
         <field name="description">สัญญาเช่า</field>
         <field name="company_id" ref="base.main_company"/>
     </record>
-    <record id="agreement_template_service" model="agreement">
-        <field name="name">สัญญาบริการ</field>
-        <field name="code">Template</field>
-        <field name="parent_agreement_id" ref="acm.agreement_template_lease"/>
-        <field name="is_template">True</field>
-        <field name="agreement_type_id" ref="agreement_legal.agreement_type_contract"/>
-        <field name="agreement_subtype_id" ref="acm.agreement_subtype_service"/>
-        <field name="contract_type">sale</field>
-        <field name="description">สัญญาบริการ</field>
-        <field name="company_id" ref="base.main_company"/>
-    </record>
 </odoo>
