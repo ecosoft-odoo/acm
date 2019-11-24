@@ -27,22 +27,21 @@ class AccountAnalyticAccount(models.Model):
     @api.constrains('recurring_invoice_line_ids')
     def _check_recurring_invoice_line_ids(self):
         for rec in self:
-            lines = rec.recurring_invoice_line_ids
             rent_products = \
-                lines.filtered(lambda l: l.product_id.value_type == 'rent') \
-                .mapped('product_id')
+                rec.recurring_invoice_line_ids.filtered(
+                    lambda l: l.product_id.value_type == 'rent').mapped(
+                        'product_id')
             if len(rent_products) > 1:
                 raise UserError(_('Only one rental product is allowed.'))
 
     @api.depends('recurring_invoice_line_ids')
-    @api.multi
     def _compute_product_id(self):
         for rec in self:
-            rent_product = rec.recurring_invoice_line_ids.filtered(
+            rent_products = rec.recurring_invoice_line_ids.filtered(
                 lambda l: l.product_id.value_type == 'rent') \
                 .mapped('product_id')
-            if rent_product:
-                rec.rent_product_id = rent_product[0]
+            if rent_products:
+                rec.rent_product_id = rent_products[0]
 
     @api.model
     def _prepare_invoice_line(self, line, invoice_id):

@@ -26,7 +26,6 @@
         'acm_agreement_contract/wizards/agreement_create_contract_wizards.xml',
         'acm_agreement_contract/wizards/agreement_active_wizards.xml',
         'acm_agreement_contract/wizards/agreement_inactive_wizards.xml',
-        'acm_agreement_contract/wizards/agreement_create_invoice_wizards.xml',
         'acm_agreement_contract/wizards/contract_create_invoice_wizards.xml',
         'acm_agreement_contract/wizards/contract_create_manual_invoice.xml',
         'acm_agreement_contract/views/res_partner_views.xml',

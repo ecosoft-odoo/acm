@@ -1,8 +1,7 @@
 # Copyright 2019 Ecosoft Co., Ltd (https://ecosoft.co.th/)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html)
 
-from odoo import models, fields, api, _
-from odoo.exceptions import UserError
+from odoo import models, fields, api
 
 
 class AgreementTerminate(models.TransientModel):
@@ -37,10 +36,7 @@ class AgreementTerminate(models.TransientModel):
         agreement_ids = context.get('active_ids', [])
         agreements = self.env['agreement'].browse(agreement_ids)
         for agreement in agreements:
-            if agreement.state != 'active':
-                raise UserError(_('Agreement is not active.'))
-            if not agreement.is_contract_create:
-                raise UserError(_('Contract is not active.'))
+            agreement._validate_contract_create()
             agreement.write({
                 'is_termination': True,
                 'termination_by': self.termination_by,

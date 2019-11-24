@@ -4,6 +4,7 @@
         <field name="name">res.partner.form</field>
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="priority" eval="10000"/>
         <field name="arch" type="xml">
             <field name="title" position="replace"/>
             <field name="vat" position="replace"/>

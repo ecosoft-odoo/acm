@@ -1,33 +1,21 @@
 # Copyright 2019 Ecosoft Co., Ltd (https://ecosoft.co.th/)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html)
 
-from odoo import models, fields, api, _
-from odoo.exceptions import UserError
 from lxml import etree
 from num2words import num2words
+from collections import namedtuple
 from dateutil.relativedelta import relativedelta
+from odoo import models, fields, api, _
+from odoo.exceptions import UserError
 
 
 class Agreement(models.Model):
     _inherit = 'agreement'
 
+    # Normal Field
     template_id = fields.Many2one(
         comodel_name='agreement',
         string='Template',
-    )
-    is_extension = fields.Boolean(
-        string='Extension',
-    )
-    extension_agreement_id = fields.Many2one(
-        comodel_name='agreement',
-        string='Source Agreement (Extension)',
-    )
-    is_transfer = fields.Boolean(
-        string='Transfer',
-    )
-    transfer_agreement_id = fields.Many2one(
-        comodel_name='agreement',
-        string='Source Agreement (Transfer)',
     )
     contract_type = fields.Selection(
         selection=[
@@ -42,6 +30,7 @@ class Agreement(models.Model):
     recurring_interval = fields.Integer(
         string='Repeat Every',
         help='Repeat every (Days/Week/Month/Year)',
+        default=1,
     )
     recurring_rule_type = fields.Selection(
         selection=[
@@ -52,18 +41,13 @@ class Agreement(models.Model):
             ('yearly', 'Year(s)'), ],
         string='Recurrence',
         help='Specify Interval for automatic invoice generation.',
-    )
-    is_breach = fields.Boolean(
-        string='Breach',
-    )
-    is_termination = fields.Boolean(
-        string='Termination',
-    )
-    reason_termination = fields.Text(
-        string='Termination Reason',
+        default='monthly',
     )
     is_contract_create = fields.Boolean(
         compute='_compute_is_contract_create',
+    )
+    contract_count = fields.Integer(
+        compute='_compute_contract_count',
     )
     rent_product_id = fields.Many2one(
         comodel_name='product.product',
@@ -71,35 +55,14 @@ class Agreement(models.Model):
         string='Product',
         store=True,
     )
-    lump_sum_rent_product_id = fields.Many2one(
-        comodel_name='product.product',
-        compute='_compute_product_id',
+    group_id = fields.Many2one(
+        comodel_name='account.analytic.group',
+        related='rent_product_id.group_id',
+        string='Zone',
         store=True,
-    )
-    security_deposit_product_id = fields.Many2one(
-        comodel_name='product.product',
-        compute='_compute_product_id',
-        store=True,
-    )
-    transfer_product_id = fields.Many2one(
-        comodel_name='product.product',
-        compute='_compute_product_id',
-        store=True,
-    )
-    breach_ids = fields.One2many(
-        comodel_name='agreement.breach.line',
-        inverse_name='agreement_id',
-        string='Breach Lines',
-    )
-    termination_by = fields.Selection(
-        selection=[
-            ('lessee', 'Lessee'),
-            ('lessor', 'Lessor'), ],
-        string='Termination By',
     )
     payment_due_date = fields.Integer(
         string='Payment Due Date',
-        default=1,
     )
     partner_id = fields.Many2one(
         string='Lessee',
@@ -132,61 +95,81 @@ class Agreement(models.Model):
     company_contact_email = fields.Char(
         string='Lessor Email',
     )
-    group_id = fields.Many2one(
-        comodel_name='account.analytic.group',
-        related='rent_product_id.group_id',
-        string='Zone',
-        store=True,
-    )
-    product_category_id = fields.Many2one(
-        related='rent_product_id.goods_category_id',
-        string='Product Category',
-    )
-    product_number = fields.Char(
-        related='rent_product_id.lock_number',
-        string='Lock',
-    )
     state = fields.Selection(
         string='Status',
     )
+    # Extension Agreement
+    is_extension = fields.Boolean(
+        string='Extension',
+    )
+    extension_agreement_id = fields.Many2one(
+        comodel_name='agreement',
+        string='Source Agreement (Extension)',
+    )
+    # Transfer Agreement
+    is_transfer = fields.Boolean(
+        string='Transfer',
+    )
+    transfer_agreement_id = fields.Many2one(
+        comodel_name='agreement',
+        string='Source Agreement (Transfer)',
+    )
+    # Breach Agreement
+    is_breach = fields.Boolean(
+        string='Breach',
+    )
+    breach_line_ids = fields.One2many(
+        comodel_name='agreement.breach.line',
+        inverse_name='agreement_id',
+        string='Breach Lines',
+    )
+    # Termination Agreement
+    is_termination = fields.Boolean(
+        string='Termination',
+    )
+    reason_termination = fields.Text(
+        string='Termination Reason',
+    )
+    termination_by = fields.Selection(
+        selection=[
+            ('lessee', 'Lessee'),
+            ('lessor', 'Lessor'), ],
+        string='Termination By',
+    )
+    # Global variable
+    payment_due_date_type = [
+        'monthly',
+    ]
+
+    @api.model
+    def _default_company_contract_id(self):
+        company = self.env['res.company']._company_default_get()
+        company_contact = self.env['res.partner'].search(
+            [('parent_id', '=', company.partner_id.id)])
+        if len(company_contact) > 1:
+            company_contact = company_contact[0]
+        return company_contact
 
     @api.constrains('start_date', 'end_date')
-    @api.multi
     def _check_start_end_date(self):
         for rec in self:
             if rec.start_date > rec.end_date:
                 raise UserError(
-                    _('"Start Date" cannot be more than "End Date"'))
-
-    @api.constrains('rent_product_id', 'state')
-    def _check_rent_product_id(self):
-        for rec in self:
-            if rec.state == 'active':
-                # No rent product
-                if not rec.rent_product_id:
-                    raise UserError(_('Please add rental product.'))
-                # No multiple rent product
-                agreements = self.env['agreement'].search(
-                    [('state', '=', 'active'),
-                     ('rent_product_id', '=', rec.rent_product_id.id), ],
-                    order='id')
-                if len(agreements) > 1:
-                    raise UserError(_(
-                        'The rental product is duplicated with %s.'
-                        % (agreements[0].name, )))
+                    _("Agreement '%s' start date can't be later than end date")
+                    % (rec.name, ))
 
     @api.constrains('line_ids')
     def _check_line_ids(self):
         for rec in self:
-            lines = rec.line_ids
             rent_products = \
-                lines.filtered(lambda l: l.product_id.value_type == 'rent') \
-                .mapped('product_id')
+                rec.line_ids.filtered(
+                    lambda l: l.product_id.value_type == 'rent').mapped(
+                        'product_id')
             if len(rent_products) > 1:
                 raise UserError(_('Only one rental product is allowed.'))
 
     @api.multi
-    def search_contract(self):
+    def _search_contract(self):
         Contract = self.env['account.analytic.account']
         contracts = Contract.search([('agreement_id', 'in', self.ids)])
         return contracts
@@ -194,34 +177,72 @@ class Agreement(models.Model):
     @api.multi
     def _compute_is_contract_create(self):
         for rec in self:
-            if rec.search_contract():
-                rec.is_contract_create = True
+            rec.is_contract_create = rec._search_contract() and True or False
 
-    @api.depends('line_ids', 'line_ids.product_id')
-    @api.multi
+    @api.depends('line_ids')
     def _compute_product_id(self):
         for rec in self:
-            lines = rec.line_ids
-            rent_product = lines.filtered(
+            rent_products = rec.line_ids.filtered(
                 lambda l: l.product_id.value_type == 'rent') \
                 .mapped('product_id')
-            lump_sum_rent_product = lines.filtered(
-                lambda l: l.product_id.value_type == 'lump_sum_rent') \
-                .mapped('product_id')
-            security_deposit_product = lines.filtered(
-                lambda l: l.product_id.value_type == 'security_deposit') \
-                .mapped('product_id')
-            transfer_product = lines.filtered(
-                lambda l: l.product_id.value_type == 'transfer') \
-                .mapped('product_id')
-            if rent_product:
-                rec.rent_product_id = rent_product[0]
-            if lump_sum_rent_product:
-                rec.lump_sum_rent_product_id = lump_sum_rent_product[0]
-            if security_deposit_product:
-                rec.security_deposit_product_id = security_deposit_product[0]
-            if transfer_product:
-                rec.transfer_product_id = transfer_product[0]
+            if rent_products:
+                rec.rent_product_id = rent_products[0]
+
+    @api.multi
+    def _compute_contract_count(self):
+        for rec in self:
+            contracts = rec.with_context(active_test=False)._search_contract()
+            rec.contract_count = len(contracts)
+
+    @api.onchange('recurring_rule_type')
+    def _onchange_recurring_rule_type(self):
+        self.payment_due_date = 0
+
+    @api.multi
+    def _validate_active_agreement(self):
+        for rec in self:
+            # Agreement must be state to draft
+            if rec.state != 'draft':
+                raise UserError(_("Agreement's state must be draft."))
+            # Agreement must have products/services
+            if not rec.line_ids:
+                raise UserError(_('Please add Products/Services.'))
+            # Agreement must have rental product
+            if not rec.rent_product_id:
+                raise UserError(_('Please add rental product.'))
+            # Areement must have payment due date for some recurring rule type
+            if rec.recurring_rule_type in rec.payment_due_date_type \
+               and not rec.payment_due_date:
+                raise UserError(_('Please specify payment due date.'))
+            if rec.payment_due_date:
+                # Payment due date can't later start date
+                if rec.payment_due_date < rec.start_date.day:
+                    raise UserError(_(
+                        'Payment due date can not later than '
+                        'day of start date.'))
+                # Payment due date not over last day of start date's month
+                last_date = rec.start_date + relativedelta(day=31)
+                if rec.payment_due_date > last_date.day:
+                    raise UserError(
+                        _("Payment due date not over last day of "
+                          "start date's month."))
+            # Rental product not duplicated with other agreement in same date
+            Range = namedtuple('Range', ['start', 'end'])
+            agreements = self.env['agreement'].search(
+                [('state', '=', 'active'),
+                 ('rent_product_id', '=', rec.rent_product_id.id)])
+            for agreement in agreements:
+                r1 = Range(start=agreement.start_date, end=agreement.end_date)
+                r2 = Range(start=rec.start_date, end=rec.end_date)
+                latest_start = max(r1.start, r2.start)
+                earliest_end = min(r1.end, r2.end)
+                delta = (earliest_end - latest_start).days + 1
+                overlap = max(0, delta)
+                if overlap:
+                    raise UserError(
+                        _('The rental product is duplicated in same period '
+                          'with %s' % (agreement.name, )))
+        return True
 
     @api.model
     def _validate_rent_product_dates(self, product_lines):
@@ -243,23 +264,30 @@ class Agreement(models.Model):
                                   "not in continuing sequence"))
 
     @api.multi
+    def _validate_contract_create(self):
+        for rec in self:
+            if rec.state != 'active':
+                raise UserError(_('Agreement is not active.'))
+            if not rec.is_contract_create:
+                raise UserError(_('Contract is not active.'))
+        return True
+
+    @api.multi
     def active_statusbar(self):
         for rec in self:
-            # Agreement must have product / services
-            if not (rec.is_template or rec.line_ids):
-                raise UserError(_('Please add Products/Services.'))
-            # Validate rent product dates sequence
-            self._validate_rent_product_dates(rec.line_ids)
-            rec.write({
-                'state': 'active',
-            })
+            if not rec.is_template:
+                # Validate active agreement
+                rec._validate_active_agreement()
+                # Validate rent product dates sequence
+                rec._validate_rent_product_dates(rec.line_ids)
+            rec.write({'state': 'active', })
 
     @api.multi
     def inactive_statusbar(self):
         for rec in self:
-            rec.write({
-                'state': 'inactive',
-            })
+            contract = rec._search_contract()
+            contract.write({'active': False, })
+            rec.write({'state': 'inactive', })
 
     @api.multi
     def get_agreement_vals(self):
@@ -299,7 +327,6 @@ class Agreement(models.Model):
             'view_mode': 'tree,form',
             'view_type': 'form',
             'domain': [('id', 'in', self.ids)],
-            'context': {'res_ids': self.ids, },
         }
         if len(self) == 1:
             res.update({'view_mode': 'form', 'res_id': self.id, })
@@ -307,14 +334,12 @@ class Agreement(models.Model):
 
     @api.multi
     def create_agreement(self):
-        if not self:
-            raise UserError(_('No Agreement.'))
         agreement_ids = []
         for rec in self:
             vals = rec.get_agreement_vals()
             agreement = rec.copy(default=vals)
             agreement.sections_ids.mapped('clauses_ids').write({
-                'agreement_id': agreement.id})
+                'agreement_id': agreement.id, })
             for line in rec.line_ids:
                 agreement.line_ids += line.copy()
             # Update revision
@@ -327,7 +352,7 @@ class Agreement(models.Model):
         return new_agreements
 
     @api.multi
-    def prepare_contract(self):
+    def _prepare_contract(self):
         self.ensure_one()
         journal = self.env['account.journal'].search(
             [('type', '=', self.contract_type),
@@ -346,7 +371,7 @@ class Agreement(models.Model):
             'date_start': self.start_date,
             'date_end': self.end_date,
             'recurring_next_date':
-                self.recurring_rule_type == 'monthly' and
+                self.recurring_rule_type in self.payment_due_date_type and
                 '%s-%s-%s' % (self.start_date.year, self.start_date.month,
                               self.payment_due_date) or self.start_date,
             'active': True,
@@ -363,11 +388,11 @@ class Agreement(models.Model):
             if rec.is_contract_create:
                 raise UserError(_('Contract %s is still active.')
                                 % (rec.name, ))
-            contract_dict = rec.prepare_contract()
+            contract_dict = rec._prepare_contract()
             contract = Contract.create(contract_dict)
             lines = []
             for line in rec.line_ids:
-                lines.append((0, 0, line.prepare_contract_line()))
+                lines.append((0, 0, line._prepare_contract_line()))
             contract.write({'recurring_invoice_line_ids': lines})
             contracts |= contract
         return contracts
@@ -381,7 +406,11 @@ class Agreement(models.Model):
         action_id = 'contract.action_account_analytic_%s_overdue_all' \
             % (self[0].contract_type, )
         action = self.env.ref(action_id).read()[0]
-        contracts = self.search_contract()
+        contracts = self.with_context(active_test=False)._search_contract()
+        action.update({
+            'domain': [('id', 'in', contracts.ids)],
+            'context': {'active_test': False, },
+        })
         if len(contracts) == 1:
             view_id = 'contract.account_analytic_account_%s_form' \
                 % (self[0].contract_type, )
@@ -394,6 +423,10 @@ class Agreement(models.Model):
     @api.model
     def fields_view_get(self, view_id=None, view_type='form',
                         toolbar=False, submenu=False):
+        """
+        Replace permission on agreement
+        - Every user can not permission to create agreement.
+        """
         res = super(Agreement, self).fields_view_get(
             view_id, view_type, toolbar=toolbar, submenu=submenu)
         if not self._context.get('default_is_template', False):
@@ -404,12 +437,18 @@ class Agreement(models.Model):
 
     @api.model
     def create(self, vals):
+        """
+        Define code on agreement template is 'template'.
+        """
         if self._context.get('default_is_template', False):
             vals['code'] = 'Template'
         return super(Agreement, self).create(vals)
 
     @api.model
     def trans_recurring(self, type):
+        """
+        Translate recurring rule type.
+        """
         types = {
             'daily': 'รายวัน',
             'weekly': 'รายสัปดาห์',
@@ -421,6 +460,11 @@ class Agreement(models.Model):
 
     @api.model
     def trans_months(self, month, abbreviate=False):
+        """
+        Translate month
+        - abbreviate is True > month's abbreviate name.
+        - abbreviate is False > month's full name.
+        """
         months = {
             '01': ['มกราคม', 'ม.ค.'],
             '02': ['กุมภาพันธ์', 'ก.พ.'],
@@ -442,21 +486,19 @@ class Agreement(models.Model):
         return num2words(amount, to='currency', lang='th')
 
     @api.multi
-    def get_rent_text(self):
-        self.ensure_one()
-        rent_lines = self.line_ids.filtered(
-            lambda l: l.product_id.value_type == 'rent').sorted('date_start')
-        if len(rent_lines) <= 1:
-            return ' %s บาท (%s)' % (
-                '{0:,.2f}'.format(rent_lines.lst_price),
-                self.amount_text(rent_lines.lst_price))
-        else:
-            rent_text = ''
-            for index, rent_line in enumerate(rent_lines):
-                rent_text += ' ปีที่ %s %s บาท (%s)' % (
-                    str(index+1), '{0:,.2f}'.format(rent_line.lst_price),
-                    self.amount_text(rent_line.lst_price))
-            return rent_text
+    def filter_lines(self, value_type=''):
+        return self.line_ids.filtered(
+            lambda l: l.product_id.value_type == value_type)
+
+    @api.multi
+    def get_rental_period(self, date_start, date_end):
+        rent_period = ''
+        if date_start and date_end:
+            period = relativedelta(
+                date_end, date_start - relativedelta(days=1))
+            rent_period += str(period.years) + ' ปี ' + \
+                str(period.months) + ' เดือน ' + str(period.days) + ' วัน'
+        return rent_period
 
     @api.multi
     def _compute_line_start_end_date(self, rental_number):
@@ -474,32 +516,43 @@ class Agreement(models.Model):
                 raise UserError(
                     _('Date in Products/Services is not valid.'))
 
-    @api.multi
-    def filter_lines(self, value_type=''):
-        return self.line_ids.filtered(
-            lambda l: l.product_id.value_type == value_type)
 
-    @api.model
-    def _default_company_contract_id(self):
-        company = self.env['res.company']._company_default_get()
-        company_contact = self.env['res.partner'].search(
-            [('parent_id', '=', company.partner_id.id)])
-        if len(company_contact) > 1:
-            company_contact = company_contact[0]
-        return company_contact
+class AgreementLine(models.Model):
+    _inherit = 'agreement.line'
+
+    qty = fields.Float(
+        default=1,
+    )
+    lst_price = fields.Float(
+        string='Unit Price',
+    )
+    date_start = fields.Date(
+        string='Start Date',
+    )
+    date_end = fields.Date(
+        string='End Date',
+    )
+    manual = fields.Boolean(
+        string='Manual',
+        default=False,
+        help="Allow using this line to create manual invoice",
+    )
+    invoiced = fields.Boolean()
 
     @api.multi
-    def get_rental_period(self, date_start, date_end):
-        rent_period = ''
-        if date_start and date_end:
-            period = relativedelta(
-                date_end, date_start - relativedelta(days=1))
-            if period.years:
-                rent_period += str(period.years) + ' ปี'
-            if period.months:
-                rent_period += \
-                    (rent_period and ' ' or '') + str(period.months) + ' เดือน'
-            if period.days:
-                rent_period += \
-                    (rent_period and ' ' or '') + str(period.days) + ' วัน'
-        return rent_period
+    def _prepare_contract_line(self):
+        return {
+            'product_id': self.product_id.id,
+            'name': self.name,
+            'quantity': self.qty,
+            'uom_id': self.uom_id.id,
+            'specific_price': self.lst_price,
+            'date_start': self.date_start,
+            'date_end': self.date_end,
+            'manual': self.manual,
+        }
+
+    @api.onchange("product_id")
+    def _onchange_product_id(self):
+        super()._onchange_product_id()
+        self.lst_price = self.product_id.lst_price

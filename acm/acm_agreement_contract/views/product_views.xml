@@ -28,4 +28,19 @@
             </page>
         </field>
     </record>
+
+    <!-- Search View -->
+    <record id="product_template_search_view" model="ir.ui.view">
+        <field name="name">product.template.search</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_search_view"/>
+        <field name="arch" type="xml">
+            <field name="name" position="before">
+                <field name="group_id"/>
+            </field>
+            <xpath expr="//search" position="inside">
+                <filter name="group_group_id" string="Zone" icon="terp-partner" context="{'group_by':'group_id'}"/>
+            </xpath>
+        </field>
+    </record>
 </odoo>
