@@ -1,8 +1,7 @@
 # Copyright 2019 Ecosoft Co., Ltd (https://ecosoft.co.th/)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html)
 
-from odoo import models, fields, api, _
-from odoo.exceptions import UserError
+from odoo import models, fields, api
 
 
 class AgreementBreach(models.TransientModel):
@@ -34,11 +33,7 @@ class AgreementBreach(models.TransientModel):
         agreement_ids = context.get('active_ids', [])
         agreements = self.env['agreement'].browse(agreement_ids)
         for agreement in agreements:
-            if agreement.state != 'active':
-                raise UserError(_('Agreement is not active.'))
-            if not agreement.is_contract_create:
-                raise UserError(_('Contract is not active.'))
-            # Create agreement breach
+            agreement._validate_contract_create()
             if context.get('breach'):
                 self.env['agreement.breach.line'].create({
                     'date_breach': self.date_breach,
@@ -48,7 +43,7 @@ class AgreementBreach(models.TransientModel):
                 })
                 agreement.is_breach = True
             else:
-                agreement.breach_ids.filtered(
+                agreement.breach_line_ids.filtered(
                     lambda l: not l.date_cancel_breach).write({
                         'date_cancel_breach': self.date_cancel_breach,
                         'reason_cancel_breach': self.reason_cancel_breach,

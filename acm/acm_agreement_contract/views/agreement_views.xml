@@ -18,28 +18,34 @@
             <button name="create_new_agreement" position="after">
                 <button name="active_statusbar" string="Active" type="object" class="oe_highlight" confirm="Are you sure to active this agreement ?" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
                 <button name="create_new_contract" string="New Contract" type="object" class="oe_highlight" attrs="{'invisible': ['|', ('is_template', '=', True), '|', ('is_contract_create', '=', True), ('state', '!=', 'active')]}"/>
-                <button name="%(agreement_extension_action)d" string="Renew" type="action" class="oe_highlight" attrs="{'invisible': ['|', ('is_contract_create', '=', False), ('state', '!=', 'active')]}"/>
-                <button name="%(agreement_transfer_action)d" string="Transfer" type="action" class="oe_highlight" attrs="{'invisible': ['|', ('is_contract_create', '=', False), ('state', '!=', 'active')]}"/>
-                <button name="%(agreement_breach_action)d" string="Breach" type="action" class="oe_highlight" context="{'breach': True}" attrs="{'invisible': ['|', ('is_contract_create', '=', False), '|', ('state', '!=', 'active'), ('is_breach', '=', True)]}"/>
-                <button name="%(agreement_breach_action)d" string="Cancel Breach" type="action" class="oe_highlight" context="{'breach': False}" attrs="{'invisible': ['|', ('is_contract_create', '=', False), '|', ('state', '!=', 'active'), ('is_breach', '=', False)]}"/>
-                <button name="%(agreement_terminate_action)d" string="Termination" type="action" class="oe_highlight" attrs="{'invisible': ['|', ('is_contract_create', '=', False), ('state', '!=', 'active')]}"/>
+                <button name="%(agreement_extension_action)d" string="Renew" type="action" class="oe_highlight" attrs="{'invisible': ['|', ('is_template', '=', True), '|', ('is_contract_create', '=', False), ('state', '!=', 'active')]}"/>
+                <button name="%(agreement_transfer_action)d" string="Transfer" type="action" class="oe_highlight" attrs="{'invisible': ['|', ('is_template', '=', True), '|', ('is_contract_create', '=', False), ('state', '!=', 'active')]}"/>
+                <button name="%(agreement_breach_action)d" string="Breach" type="action" class="oe_highlight" context="{'breach': True}" attrs="{'invisible': ['|', ('is_template', '=', True), '|', ('is_contract_create', '=', False), '|', ('state', '!=', 'active'), ('is_breach', '=', True)]}"/>
+                <button name="%(agreement_breach_action)d" string="Cancel Breach" type="action" class="oe_highlight" context="{'breach': False}" attrs="{'invisible': ['|', ('is_template', '=', True), '|', ('is_contract_create', '=', False), '|', ('state', '!=', 'active'), ('is_breach', '=', False)]}"/>
+                <button name="%(agreement_terminate_action)d" string="Termination" type="action" class="oe_highlight" attrs="{'invisible': ['|', ('is_template', '=', True), '|', ('is_contract_create', '=', False), ('state', '!=', 'active')]}"/>
                 <button name="inactive_statusbar" string="Inactive" type="object" class="oe_highlight" confirm="Are you sure to inactive this agreement ?" attrs="{'invisible': [('state', 'not in', ['draft', 'active'])]}"/>
                 <field name="state" widget="statusbar"/>
             </button>
             <div name="button_box" position="inside">
-                <button name="action_view_contract" string="Contract" type="object" class="oe_stat_button" icon="fa-pencil-square-o" attrs="{'invisible': [('is_contract_create', '=', False)]}"/>
+                <button name="action_view_contract"
+                    type="object"
+                    class="oe_stat_button"
+                    icon="fa-book"
+                    attrs="{'invisible': [('contract_count', '=', 0)]}">
+                    <field name="contract_count" widget="statinfo" string="Contracts"/>
+                </button>
             </div>
             <field name="is_template" position="attributes">
                 <attribute name="readonly">1</attribute>
             </field>
             <field name="end_date" position="after">
-                <field name="date_contract" attrs="{'invisible': [('is_template', '=', True)]}"/>
+                <field name="date_contract" attrs="{'invisible': [('is_template', '=', True)], 'required': [('is_template', '=', False)]}"/>
                 <label for="recurring_interval" attrs="{'invisible': [('is_template', '=', True)], 'required': [('is_template', '=', False)]}"/>
                 <div attrs="{'invisible': [('is_template', '=', True)], 'required': [('is_template', '=', False)]}">
                     <field name="recurring_interval" class="oe_inline"/>
                     <field name="recurring_rule_type" class="oe_inline"/>
                 </div>
-                <field name="payment_due_date" attrs="{'invisible': ['|', ('is_template', '=', True), ('recurring_rule_type', '!=', 'monthly')]}"/>
+                <field name="payment_due_date" attrs="{'invisible': ['|', ('is_template', '=', True), ('recurring_rule_type', 'not in', ['monthly'])], 'required': [('recurring_rule_type', 'in', ['monthly'])]}"/>
             </field>
             <field name="termination_date" position="attributes">
                 <attribute name="readonly">True</attribute>
@@ -60,12 +66,13 @@
                 <field name="lst_price"/>
             </field>
             <xpath expr="//field[@name='line_ids']/tree/field[@name='name']" position="after">
+                <field name="manual"/>
                 <field name="date_start"/>
                 <field name="date_end"/>
             </xpath>
             <notebook position="inside">
-                <page name="breach" string="Breach" attrs="{'invisible': [('breach_ids', '=', [])]}">
-                    <field name="breach_ids">
+                <page name="breach" string="Breach" attrs="{'invisible': [('breach_line_ids', '=', [])]}">
+                    <field name="breach_line_ids">
                         <tree create="0" edit="0" delete="0">
                             <field name="date_breach"/>
                             <field name="type_breach"/>
