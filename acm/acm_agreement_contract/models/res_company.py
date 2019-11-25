@@ -10,3 +10,5 @@ class ResCompany(models.Model):
     market_name = fields.Char()
     market_type = fields.Char()
     market_address = fields.Char()
+    fax = fields.Char()
+    company_phone = fields.Char()

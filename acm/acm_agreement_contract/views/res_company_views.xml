@@ -12,10 +12,15 @@
                             <field name="market_name"/>
                             <field name="market_type"/>
                             <field name="market_address"/>
+                            <field name="company_phone" string="Phone"/>
                         </group>
                     </group>
                 </page>
             </notebook>
+
+            <field name="phone" position="after">
+                <field name="fax"/>
+            </field>
         </field>
     </record>
 </odoo>
