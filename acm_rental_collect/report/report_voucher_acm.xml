@@ -1,7 +1,7 @@
 <odoo>
 
         <template id="report_payment_voucher_document">
-            <t t-call="acm_rental_collect.acm_external_layout">
+            <t t-call="acm_rental_collect.external_layout">
                 <t t-set="o" t-value="o.with_context(lang=lang)"/>
                 <t t-set="address">
                     <span style="position: absolute; margin-left: -65px; width: 65px;" t-if="o.state in ('in_payment', 'paid')">Pay To: </span>
@@ -238,7 +238,6 @@
                         </table>
                     </t>
                 </div>
-
                 <div class="footer row last-page o_background_footer" id="signature">
                     <div class="col-4">
                         <p style="text-align:center" t-field="o.create_uid.display_name"/>
@@ -266,7 +265,6 @@
                         </div>
                     </div>
                 </div>
-
             </t>
         </template>
 

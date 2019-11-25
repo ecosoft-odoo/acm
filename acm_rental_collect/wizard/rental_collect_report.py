@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html)
 
 from odoo import models, fields, api
+import calendar
 
 
 class RentalCollectReport(models.TransientModel):
@@ -44,3 +45,7 @@ class RentalCollectReport(models.TransientModel):
             '12': 'ธันวาคม',
         }
         return months[month]
+
+    @api.multi
+    def _get_last_date(self, year, month):
+        return calendar.monthrange(year, month)

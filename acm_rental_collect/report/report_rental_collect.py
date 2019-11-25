@@ -3,7 +3,6 @@
 
 from odoo import models, api
 from datetime import datetime
-from dateutil.relativedelta import relativedelta
 
 
 class ReportRentalCollect(models.AbstractModel):
@@ -30,17 +29,10 @@ class ReportRentalCollect(models.AbstractModel):
                 'lst_price': '%.2f' % rec.lst_price,
             }
         amount = sum([float(x['lst_price']) for x in list(line_dict.values())])
-        current_date = datetime.today()
         return {
-            'year': wizard.date_print.year + 543,
-            'month': wizard.trans_months(wizard.date_print.strftime('%m')),
-            'end_date': (wizard.date_print + relativedelta(day=31)).day,
-            'date_print': wizard.date_print,
-            'company_name': self.env.user.company_id.name,
-            'current_date': current_date.day,
-            'current_month': wizard.trans_months(current_date.strftime('%m')),
-            'current_year': current_date.year + 543,
+            'current_date': datetime.today(),
             'amount': amount,
             'line_dict': line_dict,
             'products': products,
+            'wizard': wizard,
         }
