@@ -24,7 +24,7 @@
                 </div>
                 <span t-esc="'เลขประจำตัวผู้เสียภาษีอากร %s' % company.partner_id.vat"/>
             </div>
-            <div style="text-align: right; font-weight: bold; font-size: 24px;">
+            <div style="margin-left: 800px; font-weight: bold; font-size: 24px; position: absolute">
                 <t t-if="page == 0">
                     ต้นฉบับ
                 </t>
