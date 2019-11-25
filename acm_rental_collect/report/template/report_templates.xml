@@ -19,7 +19,7 @@
                 <span t-field="company.partner_id.zip"/>
                 <div t-esc="'โทรศัพท์ %s  โทรสาร %s' % (company.partner_id.phone, company.fax)"/>
                 <div>
-                    <strong t-esc="'สำนักงานตลาด%s' % company.market_name"/>
+                    <strong t-esc="'สำนักงาน%s' % company.market_name"/>
                     <span t-esc="'โทรศัพท์ %s' % company.company_phone"/>
                 </div>
                 <span t-esc="'เลขประจำตัวผู้เสียภาษีอากร %s' % company.partner_id.vat"/>
