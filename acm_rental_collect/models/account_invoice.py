@@ -27,3 +27,10 @@ class AccountInvoice(models.Model):
         code = self.env['res.lang'].search([('code', '=', lang)])
         date_paid = ', '.join(date.strftime(code.date_format) for date in dict)
         return date_paid
+
+    @api.multi
+    def _get_coppie(self, page):
+        message = 'ต้นฉบับ'
+        if page != 1:
+            message = 'สำเนา'
+        return message
