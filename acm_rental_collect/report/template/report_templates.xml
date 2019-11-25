@@ -10,14 +10,14 @@
 
     <template id="external_layout_background" inherit_id="web.external_layout_background" primary="True">
         <xpath expr="//div[@class='float-left company_address']" position="replace">
-            <div class="float-left company_address" style="font-size: 22px;">
+            <div class="float-left company_address" style="font-size: 24px;">
                 <div>
                     <strong t-field="company.partner_id.name"/>
                 </div>
                 <span t-field="company.partner_id" t-options='{"widget": "contact", "fields": ["address"], "no_marker": true}'/>
             </div>
-            <div style="text-align: right; font-weight: bold; font-size: 22px;">
-                <t t-if="i == 0">
+            <div style="text-align: right; font-weight: bold; font-size: 24px;">
+                <t t-if="page == 0">
                     ต้นฉบับ
                 </t>
                 <t t-else="">
