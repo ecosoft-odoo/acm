@@ -27,5 +27,7 @@
         report_type="qweb-pdf"
         name="acm_rental_collect.report_receipt_acm"
         file="acm_rental_collect.report_receipt_acm"
-        print_report_name="'Receipt_ACM - %s' %object.number"/>
+        print_report_name="'Receipt_ACM - %s' %object.number"
+        paperformat="acm_rental_collect.report_paperformat_receipt_acm"/>
+
 </odoo>
