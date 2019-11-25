@@ -14,8 +14,15 @@
                 <div>
                     <strong t-field="company.partner_id.name"/>
                 </div>
-                <span t-field="company.partner_id"
-                    t-options='{"widget": "contact", "fields": ["address"], "no_marker": true}'/>
+                <span t-field="company.partner_id" t-options='{"widget": "contact", "fields": ["address"], "no_marker": true}'/>
+            </div>
+            <div style="text-align: right; font-weight: bold; font-size: 22px;">
+                <t t-if="i == 0">
+                    ต้นฉบับ
+                </t>
+                <t t-else="">
+                    สำเนา
+                </t>
             </div>
         </xpath>
         <xpath expr="//div[@class='footer o_background_footer']" position="replace">
