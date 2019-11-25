@@ -23,12 +23,12 @@
         <field name="page_height">0</field>
         <field name="page_width">0</field>
         <field name="orientation">Portrait</field>
-        <field name="margin_top">56.1</field>
+        <field name="margin_top">69.1</field>
         <field name="margin_bottom">38.1</field>
         <field name="margin_left">38.1</field>
         <field name="margin_right">38.1</field>
         <field name="header_line" eval="False"/>
-        <field name="header_spacing">28</field>
+        <field name="header_spacing">41</field>
         <field name="dpi">90</field>
     </record>
 </odoo>

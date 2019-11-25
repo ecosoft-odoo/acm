@@ -8,10 +8,10 @@
                     <div t-if="o.partner_id.vat" class="mt16"><t t-esc="o.company_id.country_id.vat_label or 'Tax ID'"/>: <span t-field="o.partner_id.vat"/></div>
                 </t>
                 <div>
-                    <h5 class="page mt32 mb32">
+                    <h4 class="page mt32 mb32" style="color: #7c7bad;">
                         <div>
                             <span t-if="o.type == 'out_invoice' and o.state == 'open'">Invoice</span>
-                                <span t-if="o.type == 'out_invoice' and o.state in ('in_payment', 'paid')">ใบเสร็จรับเงิน</span>
+                            <span t-if="o.type == 'out_invoice' and o.state in ('in_payment', 'paid')">ใบเสร็จรับเงิน</span>
                             <span t-if="o.type == 'out_invoice' and o.state == 'draft'">Draft Invoice</span>
                             <span t-if="o.type == 'out_invoice' and o.state == 'cancel'">Cancelled Invoice</span>
                             <span t-if="o.type == 'out_refund'">Credit Note</span>
@@ -19,7 +19,7 @@
                             <span t-if="o.type == 'in_invoice'">Vendor Bill</span>
                             <span t-field="o.number"/>
                         </div>
-                        <div class="row" style="margin-top: -24px;">
+                        <div class="row" style="margin-top: -30px;">
                             <div name="address" class="col-5  ml-auto">
                                 <t t-set="i" t-value="1"/>
                                 <t t-set="paid" t-value="list(set(map(lambda d: d['date'], o._get_payments_vals())))"/>
@@ -29,7 +29,7 @@
                                 <t t-esc="date_paid"/>
                             </div>
                         </div>
-                    </h5>
+                    </h4>
 
                     <div id="informations" class="row mt32 mb32">
                         <div class="col-auto mw-100 mb-2" t-if="o.name" name="description">
