@@ -26,6 +26,7 @@
                                 <span style="width: 70px;" t-if="o.state in ('in_payment', 'paid')">วันที่ </span>
                                 <t t-set="paid" t-value="list(set(map(lambda d: d['date'], o._get_payments_vals())))"/>
                                 <t t-set="date_paid" t-value="o._get_date(paid, lang)"/>
+                                <t t-esc="date_paid"/>
                             </div>
                         </div>
                     </h5>
