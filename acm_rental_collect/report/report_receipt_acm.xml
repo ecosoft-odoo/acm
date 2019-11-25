@@ -4,12 +4,7 @@
             <t t-call="acm_rental_collect.external_layout">
                 <t t-set="o" t-value="o.with_context(lang=lang)"/>
                 <div style="text-align: right; font-weight: bold;">
-                    <t t-if="i == 0">
-                        ต้นฉบับ
-                    </t>
-                    <t t-else="">
-                        สำเนา
-                    </t>
+                    <t t-esc="o._get_coppie(i)"/>
                 </div>
                 <div class="row" style="margin-top: 94px;">
                     <div class="col-7">
