@@ -13,3 +13,9 @@ class ACMWorkingHours(models.Model):
     working_hours = fields.Char(
         required=True,
     )
+    type = fields.Selection(
+        selection=[
+            ('in_time', 'In Time'),
+            ('out_time', 'Out Time'),
+        ],
+    )

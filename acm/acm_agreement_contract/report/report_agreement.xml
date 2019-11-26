@@ -46,6 +46,16 @@
                         </div>
                     </div>
                 </div>
+                <div class="footer">
+                    <div class="row">
+                        <div class="col-6">
+                            <span t-field="doc.name"/>
+                        </div>
+                        <div class="col-6 text-right">
+                            หน้าที่ <span class="page"/> / <span class="topage"/>
+                        </div>
+                    </div>
+                </div>
             </div>
         </xpath>
     </template>

@@ -15,6 +15,12 @@ class ProductTemplate(models.Model):
     working_hours_id = fields.Many2one(
         comodel_name='acm.working.hours',
         string='Working Hours',
+        domain="[('type', '=', 'in_time')]",
+    )
+    working_hours2_id = fields.Many2one(
+        comodel_name='acm.working.hours',
+        string='Not Working Hours',
+        domain="[('type', '=', 'out_time')]",
     )
     value_type = fields.Selection(
         selection=[
