@@ -26,7 +26,7 @@
         <field name="margin_top">61.1</field>
         <field name="margin_bottom">38.1</field>
         <field name="margin_left">38.1</field>
-        <field name="margin_right">38.1</field>
+        <field name="margin_right">25.4</field>
         <field name="header_line" eval="False"/>
         <field name="header_spacing">33</field>
         <field name="dpi">90</field>

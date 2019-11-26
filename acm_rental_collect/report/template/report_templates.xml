@@ -26,10 +26,10 @@
             </div>
             <div style="margin-left: 800px; margin-top:140px; font-weight: bold; font-size: 34px; position: absolute">
                 <t t-if="page == 0">
-                    ต้นฉบับ
+                    (ต้นฉบับ)
                 </t>
                 <t t-else="">
-                    สำเนา
+                    (สำเนา)
                 </t>
             </div>
         </xpath>

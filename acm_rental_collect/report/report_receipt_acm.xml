@@ -78,7 +78,6 @@
                                     <span groups="account.group_show_line_subtotals_tax_excluded">จำนวนเงิน(บาท)</span>
                                     <span groups="account.group_show_line_subtotals_tax_included">Total Price</span>
                                 </th>
-                                <span class="page"/>
                             </tr>
                         </thead>
                         <tbody class="invoice_tbody">
@@ -91,7 +90,7 @@
 
                                 <tr t-att-class="'bg-200 font-weight-bold o_line_section' if line.display_type == 'line_section' else 'font-italic o_line_note' if line.display_type == 'line_note' else ''">
                                     <t t-if="not line.display_type" name="account_invoice_line_accountable">
-                                        <td name="account_invoice_line_name"><span t-field="line.name"/></td>
+                                        <td width="60%" name="account_invoice_line_name"><span t-field="line.name"/></td>
                                         <td class="d-none"><span t-field="line.origin"/></td>
                                         <td class="text-right">
                                             <span t-field="line.quantity"/>
