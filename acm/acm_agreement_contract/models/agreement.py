@@ -556,3 +556,5 @@ class AgreementLine(models.Model):
     def _onchange_product_id(self):
         super()._onchange_product_id()
         self.lst_price = self.product_id.lst_price
+        if self.product_id.description:
+            self.name = self.product_id.description
