@@ -46,7 +46,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="footer">
+                <div class="footer contract_form">
                     <div class="row">
                         <div class="col-6">
                             <span t-field="doc.name"/>

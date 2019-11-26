@@ -1,14 +1,14 @@
 <odoo>
     <!-- Paperformat Agreement -->
     <record id="report_paperformat_agreement" model="report.paperformat">
-        <field name="name">Agreement A4</field>
+        <field name="name">Agreement F4</field>
         <field name="default" eval="True"/>
-        <field name="format">A4</field>
+        <field name="format">Folio</field>
         <field name="page_height">0</field>
         <field name="page_width">0</field>
         <field name="orientation">Portrait</field>
         <field name="margin_top">20</field>
-        <field name="margin_bottom">28</field>
+        <field name="margin_bottom">20</field>
         <field name="margin_left">17</field>
         <field name="margin_right">17</field>
         <field name="header_line" eval="False"/>
