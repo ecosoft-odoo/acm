@@ -49,7 +49,7 @@
                 <div class="footer contract_form">
                     <div class="row">
                         <div class="col-6">
-                            <span t-field="doc.name"/>
+                            สัญญาเลขที่ <span t-field="doc.code"/>
                         </div>
                         <div class="col-6 text-right">
                             หน้าที่ <span class="page"/> / <span class="topage"/>
