@@ -20,6 +20,7 @@
                 <group>
                     <group>
                         <field name="name"/>
+                        <field name="type" invisible="1"/>
                     </group>
                     <group>
                         <field name="working_hours"/>
@@ -35,6 +36,16 @@
         <field name="res_model">acm.working.hours</field>
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
+        <field name="context">{'default_type': 'in_time'}</field>
+        <field name="domain">[('type', '=', 'in_time')]</field>
+    </record>
+    <record id="acm_working_hours_action_2" model="ir.actions.act_window">
+        <field name="name">Not Working Hours</field>
+        <field name="res_model">acm.working.hours</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'default_type': 'out_time'}</field>
+        <field name="domain">[('type', '=', 'out_time')]</field>
     </record>
 
     <!-- Menu -->
@@ -44,4 +55,10 @@
         sequence="130"
         parent="agreement_legal.agreement_masterdata"
         action="acm_working_hours_action"/>
+    <menuitem
+        name="Not Working Hours"
+        id="acm_working_hours_menu_2"
+        sequence="140"
+        parent="agreement_legal.agreement_masterdata"
+        action="acm_working_hours_action_2"/>
 </odoo>

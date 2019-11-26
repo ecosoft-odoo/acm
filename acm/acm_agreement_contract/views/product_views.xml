@@ -13,6 +13,7 @@
                             <field name="length"/>
                             <field name="area"/>
                             <field name="working_hours_id"/>
+                            <field name="working_hours2_id"/>
                         </group>
                         <group>
                             <field name="value_type"/>
