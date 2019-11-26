@@ -52,6 +52,7 @@ class ContractCreateManualInvoice(models.TransientModel):
         # Insert markers
         contract = line.analytic_account_id
         invoice_line_vals.update({
+            'name': line.name,
             'account_analytic_id': contract.id,
             'price_unit': line.price_unit,
         })
