@@ -55,6 +55,8 @@ class AccountAnalyticAccount(models.Model):
             return {}
         if not(line.date_start <= next_date <= line.date_end):
             return {}
+        if line.manual:
+            return {}
         return super(AccountAnalyticAccount, self) \
             ._prepare_invoice_line(line, invoice_id)
 

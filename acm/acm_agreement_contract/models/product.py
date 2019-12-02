@@ -63,7 +63,7 @@ class ProductTemplate(models.Model):
             names.append(self.group_id.name)
         if self.lock_number:
             names.append(self.lock_number)
-        self.name = '/'.join(names)
+        self.name = '-'.join(names)
 
 
 class ProductProduct(models.Model):
@@ -85,4 +85,4 @@ class ProductProduct(models.Model):
             names.append(self.group_id.name)
         if self.lock_number:
             names.append(self.lock_number)
-        self.name = '/'.join(names)
+        self.name = '-'.join(names)
