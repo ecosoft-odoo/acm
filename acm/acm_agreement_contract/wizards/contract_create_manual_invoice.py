@@ -12,7 +12,6 @@ class ContractCreateManualInvoice(models.TransientModel):
     date_invoice = fields.Date(
         string='Invoice Date',
         required=True,
-        default=lambda self: fields.Date.today(),
     )
     product_ids = fields.Many2many(
         comodel_name='product.product',
@@ -129,12 +128,6 @@ class ContractCreateManualInvoice(models.TransientModel):
             invoice = self._create_manual_invoice(contract, self.date_invoice,
                                                   self.product_ids)
             invoices |= invoice
-            contract_lines = contract.recurring_invoice_line_ids.filtered(
-                lambda l: l.manual and l.product_id in self.product_ids)
-            contract_lines.write({
-                'date_start': self.date_invoice,
-                'date_end': self.date_invoice,
-            })
         return self.view_manual_invoice(contracts, invoices)
 
     @api.model
