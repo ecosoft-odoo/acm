@@ -8,7 +8,6 @@ class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
     width = fields.Float()
-    length = fields.Float()
     length1 = fields.Float(
         string='Length',
     )

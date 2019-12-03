@@ -11,7 +11,6 @@
                         <group>
                             <field name="manual"/>
                             <field name="width" attrs="{'invisible': [('manual', '=', True)]}"/>
-                            <field name="length" attrs="{'invisible': [('manual', '=', True)]}"/>
                             <field name="length1" attrs="{'invisible': [('manual', '=', True)]}"/>
                             <field name="area" attrs="{'invisible': [('manual', '=', True)]}"/>
                             <field name="manual_area" attrs="{'invisible': [('manual', '=', False)]}"/>
