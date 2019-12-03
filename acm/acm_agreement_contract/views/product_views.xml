@@ -9,9 +9,12 @@
                 <page name="agreement_info" string="Agreement Info" groups="agreement_legal.group_agreement_readonly">
                     <group>
                         <group>
-                            <field name="width"/>
-                            <field name="length"/>
-                            <field name="area"/>
+                            <field name="manual"/>
+                            <field name="width" attrs="{'invisible': [('manual', '=', True)]}"/>
+                            <field name="length" attrs="{'invisible': [('manual', '=', True)]}"/>
+                            <field name="length1" attrs="{'invisible': [('manual', '=', True)]}"/>
+                            <field name="area" attrs="{'invisible': [('manual', '=', True)]}"/>
+                            <field name="manual_area" attrs="{'invisible': [('manual', '=', False)]}"/>
                             <field name="working_hours_id"/>
                             <field name="working_hours2_id"/>
                         </group>

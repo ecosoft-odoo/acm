@@ -9,8 +9,12 @@ class ProductTemplate(models.Model):
 
     width = fields.Float()
     length = fields.Float()
+    length1 = fields.Float(
+        string='Length',
+    )
     area = fields.Float(
         compute='_compute_area',
+        string='Area (Auto)',
     )
     working_hours_id = fields.Many2one(
         comodel_name='acm.working.hours',
@@ -50,11 +54,15 @@ class ProductTemplate(models.Model):
     lock_attribute = fields.Many2one(
         comodel_name='lock.attribute',
     )
+    manual = fields.Boolean()
+    manual_area = fields.Float(
+        string='Area (Manual)',
+    )
 
-    @api.depends('width', 'length')
+    @api.depends('width', 'length1')
     def _compute_area(self):
         for rec in self:
-            rec.area = rec.width * rec.length
+            rec.area = rec.width * rec.length1
 
     @api.onchange('group_id', 'lock_number')
     def _onchange_group_number(self):
@@ -64,6 +72,12 @@ class ProductTemplate(models.Model):
         if self.lock_number:
             names.append(self.lock_number)
         self.name = '-'.join(names)
+
+    @api.onchange('manual')
+    def _onchange_manual(self):
+        self.width = 0
+        self.length1 = 0
+        self.manual_area = 0
 
 
 class ProductProduct(models.Model):
@@ -73,10 +87,10 @@ class ProductProduct(models.Model):
         compute='_compute_area',
     )
 
-    @api.depends('width', 'length')
+    @api.depends('width', 'length1')
     def _compute_area(self):
         for rec in self:
-            rec.area = rec.width * rec.length
+            rec.area = rec.width * rec.length1
 
     @api.onchange('group_id', 'lock_number')
     def _onchange_group_number(self):
@@ -86,3 +100,9 @@ class ProductProduct(models.Model):
         if self.lock_number:
             names.append(self.lock_number)
         self.name = '-'.join(names)
+
+    @api.onchange('manual')
+    def _onchange_manual(self):
+        self.width = 0
+        self.length1 = 0
+        self.manual_area = 0
