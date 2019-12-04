@@ -6,6 +6,7 @@ from odoo import models, fields
 
 class ACMWorkingHours(models.Model):
     _name = 'acm.working.hours'
+    _description = 'ACM Working Hours'
 
     name = fields.Char(
         required=True,
