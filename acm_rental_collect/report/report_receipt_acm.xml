@@ -193,7 +193,7 @@
                         </p>
                     </div>
                 </div>
-                <div class="footer o_background_footer" style="font-weight: bold;">
+                <div class="footer o_background_footer last-page" style="font-weight: bold;">
                     <div style="text-align: left;">
                         <span>ลงชื่อผู้ชำระเงิน/วันที่รับ</span>
                         <div style="border: 1px solid grey; width: 150px; margin-top: 50px; display: inline-block;"/>
