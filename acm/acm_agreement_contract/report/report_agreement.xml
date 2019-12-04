@@ -35,16 +35,6 @@
                             </div>
                         </div>
                     </t>
-                    <!-- Appendix -->
-                    <div t-foreach="doc.appendix_ids" t-as="a">
-                        <div t-field="a.name" class="text-center" style="page-break-before: always; font-weight: bold;"/>
-                        <div t-field="a.title" class="text-center" style="font-weight: bold;"/>
-                        <div class="row">
-                            <div class="col-12">
-                                <span t-field="a.dynamic_content"/>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <div class="footer contract_form">
                     <div class="row">
