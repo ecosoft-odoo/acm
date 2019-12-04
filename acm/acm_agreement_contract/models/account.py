@@ -16,28 +16,19 @@ class AccountInvoice(models.Model):
         ],
         string='Invoice Type',
     )
-    rent_product_id = fields.Many2one(
-        comodel_name='product.product',
-        compute='_compute_product_id',
-        string='Product',
-        store=True,
-    )
-    group_id = fields.Many2one(
-        comodel_name='account.analytic.group',
-        related='rent_product_id.group_id',
+    groups = fields.Char(
+        compute='_compute_groups',
         string='Zone',
         store=True,
     )
 
     @api.multi
     @api.depends('invoice_line_ids')
-    def _compute_product_id(self):
+    def _compute_groups(self):
         for rec in self:
-            rent_products = rec.invoice_line_ids.filtered(
-                lambda l: l.product_id.value_type == 'rent') \
-                .mapped('product_id')
-            if rent_products:
-                rec.rent_product_id = rent_products[0]
+            groups = list(set(rec.invoice_line_ids.mapped('group_id.name')))
+            groups.sort()
+            rec.groups = ', '.join(groups)
 
 
 class AccountInvoiceLine(models.Model):
