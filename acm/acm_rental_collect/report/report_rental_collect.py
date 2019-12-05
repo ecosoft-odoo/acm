@@ -6,7 +6,7 @@ from datetime import datetime
 
 
 class ReportRentalCollect(models.AbstractModel):
-    _name = 'report.acm_rental_collect.report_rental_collection'
+    _name = 'report.acm.report_rental_collection'
     _description = 'Custom Rental Collection Report'
 
     @api.model

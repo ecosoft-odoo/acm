@@ -11,8 +11,10 @@
     'depends': [
         'agreement_legal',
         'contract',
+        'report_qweb_element_page_visibility',
     ],
     'data': [
+        # acm_agreement_contract
         'acm_agreement_contract/data/report_paperformat_data.xml',
         'acm_agreement_contract/data/report_data.xml',
         'acm_agreement_contract/data/agreement_subtype_data.xml',
@@ -39,5 +41,14 @@
         'acm_agreement_contract/views/acm_working_hours_views.xml',
         'acm_agreement_contract/report/report_templates.xml',
         'acm_agreement_contract/report/report_agreement.xml',
+        # acm_rental_collect
+        'acm_rental_collect/data/paper_format.xml',
+        'acm_rental_collect/report/template/report_templates.xml',
+        'acm_rental_collect/report/report_templates.xml',
+        'acm_rental_collect/report/rental_collect_report.xml',
+        'acm_rental_collect/report/report_voucher_acm.xml',
+        'acm_rental_collect/report/report_receipt_acm.xml',
+        'acm_rental_collect/report/report.xml',
+        'acm_rental_collect/wizard/rental_collect_report_wizards.xml',
     ],
 }

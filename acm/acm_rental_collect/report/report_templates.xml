@@ -1,0 +1,10 @@
+<odoo>
+
+    <template id="internal_layout">
+        <div class="article">
+            <link href="/acm/static/src/scss/style.scss" rel="stylesheet"/>
+            <t t-raw="0"/>
+        </div>
+    </template>
+
+</odoo>
