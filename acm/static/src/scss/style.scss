@@ -2,6 +2,7 @@
     font-family: 'THSarabunNew';
     src: url('../fonts/THSarabunNew.ttf') format('truetype');
 }
+// acm_agreement_contract
 .contract_form {
     font-family: 'THSarabunNew' !important;
     font-size: 23px !important;
@@ -30,4 +31,15 @@
             }
         }
     }
+}
+
+// acm_rental_collect
+.head_table {
+    border: 1px solid black;
+}
+.head_table.right {
+    text-align:right;
+}
+.head_table.center {
+    text-align:center;
 }
