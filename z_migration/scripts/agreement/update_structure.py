@@ -34,11 +34,11 @@ for agreement in agreements:
         Agreement.mock_unlink_recital_structure([agreement['id']])
         Agreement.mock_unlink_section_structure([agreement['id']])
         Agreement.mock_unlink_clause_structure([agreement['id']])
-        Agreement.mock_unlink_appendix_structure([agreement['id']])
+        # Agreement.mock_unlink_appendix_structure([agreement['id']])
         # Update structure
         Agreement.mock_copy_recital_structure([agreement['id']])
         Agreement.mock_copy_section_structure([agreement['id']])
-        Agreement.mock_copy_appendix_structure([agreement['id']])
+        # Agreement.mock_copy_appendix_structure([agreement['id']])
         # Write log
         log_agreement_ids[0].append(agreement['id'])
         logger.info('Pass ID: %s' % agreement['id'])
