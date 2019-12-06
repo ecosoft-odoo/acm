@@ -43,6 +43,7 @@
         'acm_agreement_contract/views/acm_working_hours_views.xml',
         'acm_agreement_contract/report/report_templates.xml',
         'acm_agreement_contract/report/report_agreement.xml',
+        'acm_agreement_contract/report/report_appendix.xml',
         # acm_rental_collect
         'acm_rental_collect/data/paper_format.xml',
         'acm_rental_collect/report/template/report_templates.xml',

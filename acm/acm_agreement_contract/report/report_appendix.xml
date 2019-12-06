@@ -1,0 +1,33 @@
+<odoo>
+    <template id="report_appendix_document">
+        <t t-name="agreement.report_appendix_document">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <div class="page">
+                        <div class="article contract_form">
+                            <!-- Appendix -->
+                            <div t-foreach="doc.appendix_ids" t-as="a">
+                                <div t-field="a.title" class="text-center" style="page-break-before: always; font-weight: bold;"/>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <span t-field="a.dynamic_content"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="footer contract_form">
+                            <div class="row">
+                                <div class="col-6">
+                                    สัญญาเลขที่ <span t-field="doc.code"/>
+                                </div>
+                                <div class="col-6 text-right">
+                                    ล็อคเลขที่ <span t-field="doc.rent_product_id.name"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
