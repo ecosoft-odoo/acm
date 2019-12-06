@@ -1,7 +1,20 @@
 <odoo>
+    <!-- Appendix -->
+    <report
+        id="appendix_document"
+        model="agreement"
+        string="Appendix Document"
+        name="acm.report_appendix_document"
+        file="acm.report_appendix_document"
+        print_report_name="'Agreement_%s' % object.name"
+        report_type="qweb-pdf"/>
+
     <!-- Setting Paperformat Agreement -->
     <record id="agreement_legal.partner_agreement_contract_document" model="ir.actions.report">
         <field name="paperformat_id" ref="acm.report_paperformat_agreement"/>
         <field name="print_report_name">'Agreement_%s' % object.name</field>
+    </record>
+    <record id="acm.appendix_document" model="ir.actions.report">
+        <field name="paperformat_id" ref="acm.report_paperformat_agreement"/>
     </record>
 </odoo>
