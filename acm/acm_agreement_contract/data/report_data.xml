@@ -6,7 +6,7 @@
         string="Appendix Document"
         name="acm.report_appendix_document"
         file="acm.report_appendix_document"
-        print_report_name="'Agreement_%s' % object.name"
+        print_report_name="'Appendix_%s' % object.name"
         report_type="qweb-pdf"/>
 
     <!-- Setting Paperformat Agreement -->
