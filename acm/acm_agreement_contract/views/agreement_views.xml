@@ -73,12 +73,12 @@
             <notebook position="inside">
                 <page name="breach" string="Breach" attrs="{'invisible': [('breach_line_ids', '=', [])]}">
                     <field name="breach_line_ids">
-                        <tree create="0" edit="0" delete="0">
-                            <field name="date_breach"/>
-                            <field name="type_breach"/>
-                            <field name="reason_breach"/>
-                            <field name="date_cancel_breach"/>
-                            <field name="reason_cancel_breach"/>
+                        <tree editable="bottom" create="0" delete="0">
+                            <field name="date_breach" readonly="1"/>
+                            <field name="type_breach" readonly="1"/>
+                            <field name="reason_breach" readonly="1"/>
+                            <field name="date_cancel_breach" readonly="1"/>
+                            <field name="reason_cancel_breach" readonly="1"/>
                         </tree>
                     </field>
                 </page>
