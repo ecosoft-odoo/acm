@@ -58,6 +58,10 @@ class ProductTemplate(models.Model):
         string='Area (Manual)',
     )
 
+    _sql_constraints = [
+        ('name_uniq', 'UNIQUE(name)', 'Name must be unique!'),
+    ]
+
     @api.depends('width', 'length1')
     def _compute_area(self):
         for rec in self:
