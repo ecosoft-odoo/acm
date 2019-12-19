@@ -1,0 +1,5 @@
+<odoo noupdate="1">
+    <record id="breach_type_1" model="acm.breach.type">
+        <field name="name">การชำระค่าเช่าและค่าตอบแทน</field>
+    </record>
+</odoo>

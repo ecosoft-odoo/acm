@@ -14,7 +14,8 @@ class AgreementBreachLine(models.Model):
     date_breach = fields.Date(
         string='Breach Date',
     )
-    type_breach = fields.Char(
+    breach_type_id = fields.Many2one(
+        comodel_name='acm.breach.type',
         string='Breach Type',
     )
     reason_breach = fields.Char(

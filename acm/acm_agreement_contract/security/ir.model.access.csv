@@ -8,3 +8,5 @@ access_lock_attribute_readonly,lock attribute readonly,model_lock_attribute,agre
 access_lock_attribute_manager,lock attribute manager,model_lock_attribute,agreement_legal.group_agreement_manager,1,1,1,1
 access_acm_working_hours_readonly,acm working hours readonly,model_acm_working_hours,agreement_legal.group_agreement_readonly,1,0,0,0
 access_acm_working_hours_manager,acm working hours manager,model_acm_working_hours,agreement_legal.group_agreement_manager,1,1,1,1
+access_acm_breach_type_readonly,acm breach type readonly,model_acm_breach_type,agreement_legal.group_agreement_readonly,1,0,0,0
+access_acm_breach_type_manager,acm breach type manager,model_acm_breach_type,agreement_legal.group_agreement_manager,1,1,1,1
