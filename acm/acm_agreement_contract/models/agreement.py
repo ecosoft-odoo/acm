@@ -16,6 +16,7 @@ class Agreement(models.Model):
     template_id = fields.Many2one(
         comodel_name='agreement',
         string='Template',
+        states={'active': [('readonly', True)]},
     )
     contract_type = fields.Selection(
         selection=[
@@ -23,14 +24,17 @@ class Agreement(models.Model):
             ('purchase', 'Supplier Contract'), ],
         default='sale',
         required=True,
+        states={'active': [('readonly', True)]},
     )
     date_contract = fields.Date(
         string='Contract Date',
+        states={'active': [('readonly', True)]},
     )
     recurring_interval = fields.Integer(
         string='Repeat Every',
         help='Repeat every (Days/Week/Month/Year)',
         default=1,
+        states={'active': [('readonly', True)]},
     )
     recurring_rule_type = fields.Selection(
         selection=[
@@ -42,6 +46,7 @@ class Agreement(models.Model):
         string='Recurrence',
         help='Specify Interval for automatic invoice generation.',
         default='monthly',
+        states={'active': [('readonly', True)]},
     )
     is_contract_create = fields.Boolean(
         compute='_compute_is_contract_create',
@@ -63,12 +68,15 @@ class Agreement(models.Model):
     )
     payment_due_date = fields.Integer(
         string='Payment Due Date',
+        states={'active': [('readonly', True)]},
     )
     partner_id = fields.Many2one(
         string='Lessee',
+        states={'active': [('readonly', True)]},
     )
     partner_contact_id = fields.Many2one(
         string='Lessee Contact',
+        states={'active': [('readonly', True)]},
     )
     partner_contact_phone = fields.Char(
         string='Lessee Phone',
@@ -78,16 +86,20 @@ class Agreement(models.Model):
     )
     partner_signed_date = fields.Date(
         string='Signed on (Lessee)',
+        states={'active': [('readonly', True)]},
     )
     partner_signed_user_id = fields.Many2one(
         string='Signed By (Lessee)',
+        states={'active': [('readonly', True)]},
     )
     company_id = fields.Many2one(
         string='Lessor',
+        states={'active': [('readonly', True)]},
     )
     company_contact_id = fields.Many2one(
         string='Lessor Contact',
         default=lambda self: self._default_company_contract_id(),
+        states={'active': [('readonly', True)]},
     )
     company_contact_phone = fields.Char(
         string='Lessor Phone',
@@ -98,43 +110,188 @@ class Agreement(models.Model):
     state = fields.Selection(
         string='Status',
     )
+    # Set field readonly = True for state is active.
+    name = fields.Char(
+        states={'active': [('readonly', True)]},
+    )
+    is_template = fields.Boolean(
+        states={'active': [('readonly', True)]},
+    )
+    version = fields.Integer(
+        states={'active': [('readonly', True)]},
+    )
+    revision = fields.Integer(
+        states={'active': [('readonly', True)]},
+    )
+    description = fields.Text(
+        states={'active': [('readonly', True)]},
+    )
+    start_date = fields.Date(
+        states={'active': [('readonly', True)]},
+    )
+    end_date = fields.Date(
+        states={'active': [('readonly', True)]},
+    )
+    color = fields.Integer(
+        states={'active': [('readonly', True)]},
+    )
+    active = fields.Boolean(
+        states={'active': [('readonly', True)]},
+    )
+    company_signed_date = fields.Date(
+        states={'active': [('readonly', True)]},
+    )
+    term = fields.Integer(
+        states={'active': [('readonly', True)]},
+    )
+    expiration_notice = fields.Integer(
+        states={'active': [('readonly', True)]},
+    )
+    change_notice = fields.Integer(
+        states={'active': [('readonly', True)]},
+    )
+    special_terms = fields.Text(
+        states={'active': [('readonly', True)]},
+    )
+    code = fields.Char(
+        states={'active': [('readonly', True)]},
+    )
+    increase_type_id = fields.Many2one(
+        states={'active': [('readonly', True)]},
+    )
+    termination_requested = fields.Date(
+        states={'active': [('readonly', True)]},
+    )
+    termination_date = fields.Date(
+        states={'active': [('readonly', True)]},
+    )
+    reviewed_date = fields.Date(
+        states={'active': [('readonly', True)]},
+    )
+    reviewed_user_id = fields.Many2one(
+        states={'active': [('readonly', True)]},
+    )
+    approved_date = fields.Date(
+        states={'active': [('readonly', True)]},
+    )
+    approved_user_id = fields.Many2one(
+        states={'active': [('readonly', True)]},
+    )
+    currency_id = fields.Many2one(
+        states={'active': [('readonly', True)]},
+    )
+    use_parties_content = fields.Boolean(
+        states={'active': [('readonly', True)]},
+    )
+    parties = fields.Html(
+        states={'active': [('readonly', True)]},
+    )
+    agreement_type_id = fields.Many2one(
+        states={'active': [('readonly', True)]},
+    )
+    agreement_subtype_id = fields.Many2one(
+        states={'active': [('readonly', True)]},
+    )
+    product_ids = fields.Many2many(
+        states={'active': [('readonly', True)]},
+    )
+    assigned_user_id = fields.Many2one(
+        states={'active': [('readonly', True)]},
+    )
+    company_signed_user_id = fields.Many2one(
+        states={'active': [('readonly', True)]},
+    )
+    parent_agreement_id = fields.Many2one(
+        states={'active': [('readonly', True)]},
+    )
+    renewal_type_id = fields.Many2one(
+        states={'active': [('readonly', True)]},
+    )
+    recital_ids = fields.One2many(
+        states={'active': [('readonly', True)]},
+    )
+    sections_ids = fields.One2many(
+        states={'active': [('readonly', True)]},
+    )
+    clauses_ids = fields.One2many(
+        states={'active': [('readonly', True)]},
+    )
+    appendix_ids = fields.One2many(
+        states={'active': [('readonly', True)]},
+    )
+    previous_version_agreements_ids = fields.One2many(
+        states={'active': [('readonly', True)]},
+    )
+    child_agreements_ids = fields.One2many(
+        states={'active': [('readonly', True)]},
+    )
+    line_ids = fields.One2many(
+        states={'active': [('readonly', True)]},
+    )
+    notification_address_id = fields.Many2one(
+        states={'active': [('readonly', True)]},
+    )
+    signed_contract_filename = fields.Char(
+        states={'active': [('readonly', True)]},
+    )
+    signed_contract = fields.Binary(
+        states={'active': [('readonly', True)]},
+    )
+    field_domain = fields.Char(
+        states={'active': [('readonly', True)]},
+    )
+    default_value = fields.Char(
+        states={'active': [('readonly', True)]},
+    )
+    copyvalue = fields.Char(
+        states={'active': [('readonly', True)]},
+    )
     # Extension Agreement
     is_extension = fields.Boolean(
         string='Extension',
+        states={'active': [('readonly', True)]},
     )
     extension_agreement_id = fields.Many2one(
         comodel_name='agreement',
         string='Source Agreement (Extension)',
+        states={'active': [('readonly', True)]},
     )
     # Transfer Agreement
     is_transfer = fields.Boolean(
         string='Transfer',
+        states={'active': [('readonly', True)]},
     )
     transfer_agreement_id = fields.Many2one(
         comodel_name='agreement',
         string='Source Agreement (Transfer)',
+        states={'active': [('readonly', True)]},
     )
     # Breach Agreement
     is_breach = fields.Boolean(
         string='Breach',
+        states={'active': [('readonly', True)]},
     )
     breach_line_ids = fields.One2many(
         comodel_name='agreement.breach.line',
         inverse_name='agreement_id',
         string='Breach Lines',
+        states={'active': [('readonly', True)]},
     )
     # Termination Agreement
     is_termination = fields.Boolean(
         string='Termination',
+        states={'active': [('readonly', True)]},
     )
     reason_termination = fields.Text(
         string='Termination Reason',
+        states={'active': [('readonly', True)]},
     )
     termination_by = fields.Selection(
         selection=[
             ('lessee', 'Lessee'),
             ('lessor', 'Lessor'), ],
         string='Termination By',
+        states={'active': [('readonly', True)]},
     )
     # Global variable
     payment_due_date_type = [
