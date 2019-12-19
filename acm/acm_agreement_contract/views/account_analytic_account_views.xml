@@ -9,9 +9,6 @@
             <field name="partner_id" position="after">
                 <field name="agreement_id" domain="[('is_template', '=', False)]"/>
             </field>
-            <button name="recurring_create_invoice" position="attributes">
-                <attribute name="groups"></attribute>
-            </button>
             <xpath expr="//field[@name='recurring_invoice_line_ids']/tree/field[@name='name']" position="after">
                 <field name="manual"/>
                 <field name="date_start"/>
