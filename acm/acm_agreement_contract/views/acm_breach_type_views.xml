@@ -1,0 +1,41 @@
+<odoo>
+    <!-- Tree View -->
+    <record id="acm_breach_type_tree_view" model="ir.ui.view">
+        <field name="name">acm.breach.type.tree.view</field>
+        <field name="model">acm.breach.type</field>
+        <field name="arch" type="xml">
+            <tree string="Breach Type">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="acm_breach_type_form_view" model="ir.ui.view">
+        <field name="name">acm.breach.type.form.view</field>
+        <field name="model">acm.breach.type</field>
+        <field name="arch" type="xml">
+            <form string="Breach Type">
+                <group>
+                    <field name="name"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="acm_breach_type_action" model="ir.actions.act_window">
+        <field name="name">Breach Type</field>
+        <field name="res_model">acm.breach.type</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem
+        name="Breach Type"
+        id="acm_breach_type_menu"
+        sequence="150"
+        parent="agreement_legal.agreement_masterdata"
+        action="acm_breach_type_action"/>
+</odoo>

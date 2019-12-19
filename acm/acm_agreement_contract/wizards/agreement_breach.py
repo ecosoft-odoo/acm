@@ -12,7 +12,8 @@ class AgreementBreach(models.TransientModel):
         string='Breach Date',
         default=fields.Date.today(),
     )
-    type_breach = fields.Char(
+    breach_type_id = fields.Many2one(
+        comodel_name='acm.breach.type',
         string='Breach Type',
     )
     reason_breach = fields.Text(
@@ -37,7 +38,7 @@ class AgreementBreach(models.TransientModel):
             if context.get('breach'):
                 self.env['agreement.breach.line'].create({
                     'date_breach': self.date_breach,
-                    'type_breach': self.type_breach,
+                    'breach_type_id': self.breach_type_id.id,
                     'reason_breach': self.reason_breach,
                     'agreement_id': agreement.id,
                 })

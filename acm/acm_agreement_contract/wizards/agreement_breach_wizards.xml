@@ -8,7 +8,7 @@
                 <group>
                     <group>
                         <field name="date_breach" invisible="not context.get('breach')" required="context.get('breach')"/>
-                        <field name="type_breach" invisible="not context.get('breach')" required="context.get('breach')"/>
+                        <field name="breach_type_id" invisible="not context.get('breach')" required="context.get('breach')"/>
                         <field name="date_cancel_breach" invisible="context.get('breach')" required="not context.get('breach')"/>
                     </group>
                 </group>
