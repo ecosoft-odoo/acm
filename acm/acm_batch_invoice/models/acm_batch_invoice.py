@@ -99,6 +99,11 @@ class ACMBatchInvoice(models.Model):
                 raise ValidationError(
                     _('As this batch already create invoice(s), '
                       'deletion is not allowed'))
+            print(rec)
+            if rec.state != 'draft':
+                raise UserError(
+                    _('You cannot delete an batch invoice which is not draft ')
+                )
         return super().unlink()
 
     @api.onchange('date_range_id', 'group_id')
