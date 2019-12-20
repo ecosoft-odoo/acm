@@ -10,7 +10,7 @@
                         <field name="template_ids" domain="[('is_template', '=', True), ('state', '=', 'active')]" widget="many2many_tags"/>
                         <label for="name"/>
                         <div>
-                            <field name="name" class="oe_inline"/> -
+                            <field name="name" class="oe_inline"/> 
                             <field name="post_name" class="oe_inline"/>
                         </div>
                         <field name="partner_id" domain="[('customer', '=', True)]"/>

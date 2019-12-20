@@ -452,7 +452,7 @@ class Agreement(models.Model):
         context = self._context.copy()
         return {
             'name': not context.get('post_name') and self.name or
-            '%s - %s' % (self.name, context.get('post_name')),
+            '%s %s' % (self.name, context.get('post_name')),
             'active': True,
             'version': 1,
             'revision': 0,
@@ -495,6 +495,9 @@ class Agreement(models.Model):
         for rec in self:
             vals = rec.get_agreement_vals()
             agreement = rec.copy(default=vals)
+            # Write description
+            if agreement.name != agreement.description:
+                agreement.description = agreement.name
             agreement.sections_ids.mapped('clauses_ids').write({
                 'agreement_id': agreement.id, })
             for line in rec.line_ids:
