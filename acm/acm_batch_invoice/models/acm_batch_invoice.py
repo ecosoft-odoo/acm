@@ -214,6 +214,8 @@ class ACMBatchInvoice(models.Model):
         if not self.batch_invoice_line_ids:
             contract = self.env['account.analytic.account'].search([
                 ('group_id', '=', self.group_id.id),
+                ('date_start', '<=', self.date_range_id.date_start),
+                ('date_end', '>=', self.date_range_id.date_end),
             ])
             Batch_line = self.env['acm.batch.invoice.line']
             for line in contract:
