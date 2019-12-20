@@ -119,12 +119,31 @@ class ContractCreateManualInvoice(models.TransientModel):
         return invoice
 
     @api.multi
+    def _check_create_manual_invoice(self, contract, date_invoice, products):
+        """
+        Check invoice is not created with same product and invoice date.
+        """
+        self.ensure_one()
+        Invoice = self.env['account.invoice']
+        invoices = Invoice.search([
+            ('contract_id', '=', contract.id), ('state', '!=', 'cancel'),
+            ('date_invoice', '=', date_invoice)])
+        product_ids = invoices.mapped('invoice_line_ids.product_id').ids
+        if set(products.ids).intersection(set(product_ids)):
+            raise ValidationError(
+                _('Invoice of %s created already.' % (contract.name, )))
+
+    @api.multi
     def action_create_manual_invoice(self):
         self.ensure_one()
         contracts = self.env['account.analytic.account'].\
             browse(self._context.get('active_ids'))
         invoices = self.env['account.invoice']
         for contract in contracts:
+            # Check create manual invoice
+            self._check_create_manual_invoice(
+                contract, self.date_invoice, self.product_ids)
+            # Create Manual Invoice
             invoice = self._create_manual_invoice(contract, self.date_invoice,
                                                   self.product_ids)
             invoices |= invoice
