@@ -57,6 +57,19 @@ class ProductTemplate(models.Model):
     manual_area = fields.Float(
         string='Area (Manual)',
     )
+    lease_area = fields.Float(
+        compute='_compute_lease_area',
+        string='Area For Lease',
+        help='Calculate from area (auto) or area (manual)',
+    )
+    occupied_area = fields.Float(
+        compute='_compute_occupied_area',
+        string='Area Occupied',
+    )
+    occupancy = fields.Float(
+        compute='_compute_occupancy',
+        string='Occupancy',
+    )
 
     _sql_constraints = [
         ('name_uniq', 'UNIQUE(name)', 'Name must be unique!'),
@@ -66,6 +79,32 @@ class ProductTemplate(models.Model):
     def _compute_area(self):
         for rec in self:
             rec.area = rec.width * rec.length1
+
+    @api.depends('area', 'manual', 'manual_area')
+    def _compute_lease_area(self):
+        for rec in self:
+            rec.lease_area = rec.manual and rec.manual_area or rec.area
+
+    @api.multi
+    def _compute_occupied_area(self):
+        Product = self.env['product.product']
+        Agreement = self.env['agreement']
+        now = fields.Date.today()
+        for rec in self:
+            product = Product.search([('product_tmpl_id', '=', rec.id)])
+            agreement = Agreement.search([
+                ('rent_product_id', '=', product.id),
+                ('state', '=', 'active'),
+                ('start_date', '<=', now),
+                ('end_date', '>=', now), ])
+            if agreement:
+                rec.occupied_area = rec.lease_area
+
+    @api.multi
+    def _compute_occupancy(self):
+        total_lease_area = sum(self.search([]).mapped('lease_area'))
+        for rec in self:
+            rec.occupancy = (rec.occupied_area / total_lease_area) * 100
 
     @api.onchange('group_id', 'lock_number')
     def _onchange_group_number(self):
@@ -81,6 +120,20 @@ class ProductTemplate(models.Model):
         self.width = 0
         self.length1 = 0
         self.manual_area = 0
+
+    @api.model
+    def read_group(self, domain, fields, groupby, offset=0, limit=None,
+                   orderby=False, lazy=True):
+        res = super(ProductTemplate, self).read_group(
+            domain, fields, groupby, offset=offset, limit=limit,
+            orderby=orderby, lazy=lazy)
+        for line in res:
+            if '__domain' in line:
+                product = self.search(line['__domain'])
+                line['lease_area'] = sum(product.mapped('lease_area'))
+                line['occupied_area'] = sum(product.mapped('occupied_area'))
+                line['occupancy'] = sum(product.mapped('occupancy'))
+        return res
 
 
 class ProductProduct(models.Model):
