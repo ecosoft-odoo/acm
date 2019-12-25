@@ -70,6 +70,10 @@ class ProductTemplate(models.Model):
         compute='_compute_occupancy',
         string='Occupancy',
     )
+    total_occupancy = fields.Float(
+        compute='_compute_occupancy',
+        string='Contribution to Total Occupancy',
+    )
 
     _sql_constraints = [
         ('name_uniq', 'UNIQUE(name)', 'Name must be unique!'),
@@ -104,7 +108,8 @@ class ProductTemplate(models.Model):
     def _compute_occupancy(self):
         total_lease_area = sum(self.search([]).mapped('lease_area'))
         for rec in self:
-            rec.occupancy = (rec.occupied_area / total_lease_area) * 100
+            rec.occupancy = (rec.occupied_area / (rec.lease_area or 1)) * 100
+            rec.total_occupancy = (rec.occupied_area / total_lease_area) * 100
 
     @api.onchange('group_id', 'lock_number')
     def _onchange_group_number(self):
@@ -127,12 +132,16 @@ class ProductTemplate(models.Model):
         res = super(ProductTemplate, self).read_group(
             domain, fields, groupby, offset=offset, limit=limit,
             orderby=orderby, lazy=lazy)
+        total_lease_area = sum(self.search([]).mapped('lease_area'))
         for line in res:
             if '__domain' in line:
                 product = self.search(line['__domain'])
                 line['lease_area'] = sum(product.mapped('lease_area'))
                 line['occupied_area'] = sum(product.mapped('occupied_area'))
-                line['occupancy'] = sum(product.mapped('occupancy'))
+                line['occupancy'] = \
+                    (line['occupied_area'] / (line['lease_area'] or 1)) * 100
+                line['total_occupancy'] = \
+                    (line['occupied_area'] / total_lease_area) * 100
         return res
 
 

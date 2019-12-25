@@ -17,17 +17,19 @@
             <field name="categ_id" position="attributes">
                 <attribute name="invisible">1</attribute>
             </field>
+            <field name="type" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
             <field name="uom_id" position="attributes">
                 <attribute name="invisible">1</attribute>
             </field>
             <field name="name" position="after">
                 <field name="group_id"/>
                 <field name="subzone"/>
-            </field>
-            <field name="type" position="after">
                 <field name="lease_area"/>
                 <field name="occupied_area"/>
                 <field name="occupancy"/>
+                <field name="total_occupancy"/>
             </field>
         </field>
     </record>
