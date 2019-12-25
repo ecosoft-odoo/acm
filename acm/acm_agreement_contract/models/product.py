@@ -132,6 +132,7 @@ class ProductTemplate(models.Model):
         res = super(ProductTemplate, self).read_group(
             domain, fields, groupby, offset=offset, limit=limit,
             orderby=orderby, lazy=lazy)
+        total_lease_area = sum(self.search([]).mapped('lease_area'))
         for line in res:
             if '__domain' in line:
                 product = self.search(line['__domain'])
@@ -140,7 +141,7 @@ class ProductTemplate(models.Model):
                 line['occupancy'] = \
                     (line['occupied_area'] / (line['lease_area'] or 1)) * 100
                 line['total_occupancy'] = \
-                    sum(product.mapped('total_occupancy'))
+                    (line['occupied_area'] / total_lease_area) * 100
         return res
 
 
