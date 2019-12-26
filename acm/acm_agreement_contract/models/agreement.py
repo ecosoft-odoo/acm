@@ -7,6 +7,7 @@ from collections import namedtuple
 from dateutil.relativedelta import relativedelta
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
+from datetime import timedelta
 
 
 class Agreement(models.Model):
@@ -366,6 +367,9 @@ class Agreement(models.Model):
             expiry_time = '0.00'
             if rec.state == 'active' and rec.end_date >= now:
                 time = relativedelta(rec.end_date, now)
+                if rec.start_date > now:
+                    time = relativedelta(
+                        rec.end_date, rec.start_date - timedelta(1))
                 expiry_time = '%s.%s' % (
                     time.years * 12 + time.months, str(time.days).zfill(2))
             rec.expiry_time = expiry_time
