@@ -129,6 +129,7 @@
             </field>
             <field name="partner_id" position="before">
                 <field name="group_id" invisible="context.get('default_is_template', False)"/>
+                <field name="subzone" invisible="context.get('default_is_template', False)"/>
                 <field name="rent_product_id" invisible="context.get('default_is_template', False)"/>
             </field>
             <field name="company_id" position="attributes">
@@ -140,6 +141,7 @@
             <field name="parent_agreement_id" position="after">
                 <field name="start_date" invisible="context.get('default_is_template', False)"/>
                 <field name="end_date"  invisible="context.get('default_is_template', False)"/>
+                <field name="expiry_time" invisible="context.get('default_is_template', False)"/>
             </field>
             <field name="agreement_type_id" position="attributes">
                 <attribute name="invisible">not context.get('default_is_template', False)</attribute>
