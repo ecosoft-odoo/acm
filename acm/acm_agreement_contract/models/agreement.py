@@ -66,6 +66,10 @@ class Agreement(models.Model):
         string='Zone',
         store=True,
     )
+    subzone = fields.Char(
+        related='rent_product_id.subzone',
+        string='Subzone',
+    )
     payment_due_date = fields.Integer(
         string='Payment Due Date',
         states={'active': [('readonly', True)]},
@@ -109,6 +113,10 @@ class Agreement(models.Model):
     )
     state = fields.Selection(
         string='Status',
+    )
+    expiry_time = fields.Char(
+        string='Time to Expiry (Months)',
+        compute='_compute_expiry_time',
     )
     # Set field readonly = True for state is active.
     name = fields.Char(
@@ -350,6 +358,17 @@ class Agreement(models.Model):
         for rec in self:
             contracts = rec.with_context(active_test=False)._search_contract()
             rec.contract_count = len(contracts)
+
+    @api.multi
+    def _compute_expiry_time(self):
+        now = fields.Date.today()
+        for rec in self:
+            expiry_time = '0.00'
+            if rec.state == 'active' and rec.end_date >= now:
+                time = relativedelta(rec.end_date, now)
+                expiry_time = '%s.%s' % (
+                    time.years * 12 + time.months, str(time.days).zfill(2))
+            rec.expiry_time = expiry_time
 
     @api.onchange('recurring_rule_type')
     def _onchange_recurring_rule_type(self):
