@@ -685,20 +685,22 @@ class Agreement(models.Model):
         return rent_period
 
     @api.multi
-    def _compute_line_start_end_date(self, rental_number):
+    def _compute_line_start_end_date(self, time):
         for line in self.mapped('line_ids'):
-            date_valid = False
-            start_date = line.agreement_id.start_date
-            end_date = line.agreement_id.end_date
+            # Manual Lines (Start Date, End Date = Contract Date)
+            # e.g., Security Deposit, Lum Sum Rent
+            if line.manual:
+                line.write({
+                    'date_start': line.agreement_id.date_contract,
+                    'date_end': line.agreement_id.date_contract,
+                })
+                continue
+            # Not Manual Lines
+            # e.g., Rental
             if line.date_start:
-                line.date_start += relativedelta(years=rental_number)
-                date_valid = start_date <= line.date_start <= end_date
+                line.date_start += time
             if line.date_end:
-                line.date_end += relativedelta(years=rental_number)
-                date_valid = start_date <= line.date_end <= end_date
-            if (line.date_start or line.date_end) and not date_valid:
-                raise UserError(
-                    _('Date in Products/Services is not valid.'))
+                line.date_end += time
 
 
 class AgreementLine(models.Model):
@@ -721,7 +723,6 @@ class AgreementLine(models.Model):
         default=False,
         help="Allow using this line to create manual invoice",
     )
-    invoiced = fields.Boolean()
 
     @api.multi
     def _prepare_contract_line(self):

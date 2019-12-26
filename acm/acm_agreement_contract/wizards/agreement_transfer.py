@@ -53,10 +53,5 @@ class AgreementTransfer(models.TransientModel):
                 'transfer_agreement_id': agreement.id,
             })
             new_agreement = agreement.create_agreement()
-            # Remove Start Date and End Date for line invoiced
-            new_agreement.line_ids.filtered(lambda l: l.invoiced).write({
-                'date_start': False,
-                'date_end': False,
-            })
             new_agreements |= new_agreement
         return new_agreements.view_agreement()

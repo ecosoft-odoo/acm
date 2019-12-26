@@ -10,7 +10,12 @@
                         <field name="date_contract"/>
                         <field name="date_start"/>
                         <field name="date_end"/>
-                        <field name="rental_number"/>
+                    </group>
+                    <group>
+                        <field name="force"/>
+                        <p style="color: red; font-size: 20px;" attrs="{'invisible': [('force', '=', False)]}">
+                            If you click force, please change start date and end date in Products/Services by yourself.
+                        </p>
                     </group>
                 </group>
                 <footer>
