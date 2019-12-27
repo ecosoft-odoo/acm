@@ -44,4 +44,6 @@ class AgreementTerminate(models.TransientModel):
                 'termination_date': self.date_termination,
                 'reason_termination': self.reason_termination,
             })
+            # Inactive agreement
+            agreement.inactive_statusbar()
         return agreements
