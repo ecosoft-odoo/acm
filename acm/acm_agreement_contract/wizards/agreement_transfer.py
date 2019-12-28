@@ -33,6 +33,14 @@ class AgreementTransfer(models.TransientModel):
         required=True,
     )
 
+    @api.model
+    def default_get(self, fields):
+        res = super(AgreementTransfer, self).default_get(fields)
+        active_id = self._context.get('active_id')
+        agreement = self.env['agreement'].browse(active_id)
+        res['date_end'] = agreement.end_date
+        return res
+
     @api.multi
     def action_transfer_agreement(self):
         context = self._context.copy()
@@ -54,4 +62,6 @@ class AgreementTransfer(models.TransientModel):
             })
             new_agreement = agreement.create_agreement()
             new_agreements |= new_agreement
+            # Inactive old agreement
+            agreement.inactive_statusbar()
         return new_agreements.view_agreement()
