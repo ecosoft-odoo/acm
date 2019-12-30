@@ -365,7 +365,7 @@ class Agreement(models.Model):
         now = fields.Date.today()
         for rec in self:
             expiry_time = '0.00'
-            if rec.state == 'active' and rec.end_date >= now:
+            if rec.state == 'active' and rec.end_date and rec.end_date >= now:
                 time = relativedelta(rec.end_date, now)
                 if rec.start_date > now:
                     time = relativedelta(

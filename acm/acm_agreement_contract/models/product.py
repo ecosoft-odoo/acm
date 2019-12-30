@@ -12,8 +12,7 @@ class ProductTemplate(models.Model):
         string='Length',
     )
     area = fields.Float(
-        compute='_compute_area',
-        string='Area (Auto)',
+        string='Area For Lease',
     )
     working_hours_id = fields.Many2one(
         comodel_name='acm.working.hours',
@@ -54,14 +53,6 @@ class ProductTemplate(models.Model):
         comodel_name='lock.attribute',
     )
     manual = fields.Boolean()
-    manual_area = fields.Float(
-        string='Area (Manual)',
-    )
-    lease_area = fields.Float(
-        compute='_compute_lease_area',
-        string='Area For Lease',
-        help='Calculate from area (auto) or area (manual)',
-    )
     occupied_area = fields.Float(
         compute='_compute_occupied_area',
         string='Area Occupied',
@@ -79,37 +70,27 @@ class ProductTemplate(models.Model):
         ('name_uniq', 'UNIQUE(name)', 'Name must be unique!'),
     ]
 
-    @api.depends('width', 'length1')
-    def _compute_area(self):
-        for rec in self:
-            rec.area = rec.width * rec.length1
-
-    @api.depends('area', 'manual', 'manual_area')
-    def _compute_lease_area(self):
-        for rec in self:
-            rec.lease_area = rec.manual and rec.manual_area or rec.area
-
     @api.multi
     def _compute_occupied_area(self):
         Product = self.env['product.product']
         Agreement = self.env['agreement']
         now = fields.Date.today()
         for rec in self:
-            product = Product.search([('product_tmpl_id', '=', rec.id)])
-            agreement = Agreement.search([
-                ('rent_product_id', '=', product.id),
+            products = Product.search([('product_tmpl_id', '=', rec.id)])
+            agreements = Agreement.search([
+                ('rent_product_id', 'in', products.ids),
                 ('state', '=', 'active'),
                 ('start_date', '<=', now),
                 ('end_date', '>=', now), ])
-            if agreement:
-                rec.occupied_area = rec.lease_area
+            if agreements:
+                rec.occupied_area = rec.area
 
     @api.multi
     def _compute_occupancy(self):
-        total_lease_area = sum(self.search([]).mapped('lease_area'))
+        total_area = sum(self.search([]).mapped('area'))
         for rec in self:
-            rec.occupancy = (rec.occupied_area / (rec.lease_area or 1)) * 100
-            rec.total_occupancy = (rec.occupied_area / total_lease_area) * 100
+            rec.occupancy = (rec.occupied_area / (rec.area or 1)) * 100
+            rec.total_occupancy = (rec.occupied_area / total_area) * 100
 
     @api.onchange('group_id', 'lock_number')
     def _onchange_group_number(self):
@@ -124,7 +105,11 @@ class ProductTemplate(models.Model):
     def _onchange_manual(self):
         self.width = 0
         self.length1 = 0
-        self.manual_area = 0
+        self.area = 0
+
+    @api.onchange('width', 'length1')
+    def _onchange_width_length(self):
+        self.area = self.width * self.length1
 
     @api.model
     def read_group(self, domain, fields, groupby, offset=0, limit=None,
@@ -132,30 +117,21 @@ class ProductTemplate(models.Model):
         res = super(ProductTemplate, self).read_group(
             domain, fields, groupby, offset=offset, limit=limit,
             orderby=orderby, lazy=lazy)
-        total_lease_area = sum(self.search([]).mapped('lease_area'))
+        total_area = sum(self.search([]).mapped('area'))
         for line in res:
             if '__domain' in line:
                 product = self.search(line['__domain'])
-                line['lease_area'] = sum(product.mapped('lease_area'))
+                line['area'] = sum(product.mapped('area'))
                 line['occupied_area'] = sum(product.mapped('occupied_area'))
                 line['occupancy'] = \
-                    (line['occupied_area'] / (line['lease_area'] or 1)) * 100
+                    (line['occupied_area'] / (line['area'] or 1)) * 100
                 line['total_occupancy'] = \
-                    (line['occupied_area'] / total_lease_area) * 100
+                    (line['occupied_area'] / total_area) * 100
         return res
 
 
 class ProductProduct(models.Model):
     _inherit = 'product.product'
-
-    area = fields.Float(
-        compute='_compute_area',
-    )
-
-    @api.depends('width', 'length1')
-    def _compute_area(self):
-        for rec in self:
-            rec.area = rec.width * rec.length1
 
     @api.onchange('group_id', 'lock_number')
     def _onchange_group_number(self):
@@ -170,4 +146,8 @@ class ProductProduct(models.Model):
     def _onchange_manual(self):
         self.width = 0
         self.length1 = 0
-        self.manual_area = 0
+        self.area = 0
+
+    @api.onchange('width', 'length1')
+    def _onchange_width_length(self):
+        self.area = self.width * self.length1
