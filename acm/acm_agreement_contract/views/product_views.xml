@@ -26,7 +26,7 @@
             <field name="name" position="after">
                 <field name="group_id"/>
                 <field name="subzone"/>
-                <field name="lease_area"/>
+                <field name="area"/>
                 <field name="occupied_area"/>
                 <field name="occupancy"/>
                 <field name="total_occupancy"/>
@@ -60,8 +60,7 @@
                             <field name="manual"/>
                             <field name="width" attrs="{'invisible': [('manual', '=', True)]}"/>
                             <field name="length1" attrs="{'invisible': [('manual', '=', True)]}"/>
-                            <field name="area" attrs="{'invisible': [('manual', '=', True)]}"/>
-                            <field name="manual_area" attrs="{'invisible': [('manual', '=', False)]}"/>
+                            <field name="area" attrs="{'readonly': [('manual', '=', False)]}" force_save="1"/>
                             <field name="working_hours_id"/>
                             <field name="working_hours2_id"/>
                         </group>
