@@ -17,29 +17,19 @@ class ProductTemplate(models.Model):
     working_hours_id = fields.Many2one(
         comodel_name='acm.working.hours',
         string='Working Hours',
+        compute='_compute_working_hours_id',
+        inverse='_set_working_hours_id',
         domain="[('type', '=', 'in_time')]",
+        store=True,
     )
     working_hours2_id = fields.Many2one(
         comodel_name='acm.working.hours',
         string='Not Working Hours',
+        compute='_compute_working_hours2_id',
+        inverse='_set_working_hours2_id',
         domain="[('type', '=', 'out_time')]",
+        store=True,
     )
-    # working_hours_id = fields.Many2one(
-    #     comodel_name='acm.working.hours',
-    #     string='Working Hours',
-    #     compute='_compute_working_hours_id',
-    #     inverse='_set_working_hours_id',
-    #     domain="[('type', '=', 'in_time')]",
-    #     store=True,
-    # )
-    # working_hours2_id = fields.Many2one(
-    #     comodel_name='acm.working.hours',
-    #     string='Not Working Hours',
-    #     compute='_compute_working_hours2_id',
-    #     inverse='_set_working_hours2_id',
-    #     domain="[('type', '=', 'out_time')]",
-    #     store=True,
-    # )
     value_type = fields.Selection(
         selection=[
             ('rent', 'Rent'),
@@ -50,24 +40,17 @@ class ProductTemplate(models.Model):
     )
     goods_type = fields.Char(
         string='Goods Type',
+        compute='_compute_goods_type',
+        inverse='_set_goods_type',
+        store=True,
     )
     goods_category_id = fields.Many2one(
         comodel_name='goods.category',
         string='Goods Category',
+        compute='_compute_goods_category_id',
+        inverse='_set_goods_category_id',
+        store=True,
     )
-    # goods_type = fields.Char(
-    #     string='Goods Type',
-    #     compute='_compute_goods_type',
-    #     inverse='_set_goods_type',
-    #     store=True,
-    # )
-    # goods_category_id = fields.Many2one(
-    #     comodel_name='goods.category',
-    #     string='Goods Category',
-    #     compute='_compute_goods_category_id',
-    #     inverse='_set_goods_category_id',
-    #     store=True,
-    # )
     group_id = fields.Many2one(
         comodel_name='account.analytic.group',
         string='Zone',
