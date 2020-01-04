@@ -13,5 +13,6 @@
     ],
     'data': [
         'views/agreement_views.xml',
+        'views/product_attribute_views.xml',
     ],
 }
