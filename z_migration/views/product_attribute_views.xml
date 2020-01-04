@@ -1,0 +1,17 @@
+<odoo>
+    <!-- Action -->
+    <record id="product_template_attribute_line_action" model="ir.actions.act_window">
+        <field name="name">Variants</field>
+        <field name="res_model">product.template.attribute.line</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem
+            name="Variants"
+            id="product_template_attribute_line_menu"
+            parent="agreement_legal.agreement_masterdata"
+            sequence="105"
+            action="product_template_attribute_line_action"/>
+</odoo>
