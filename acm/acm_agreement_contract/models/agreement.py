@@ -71,10 +71,6 @@ class Agreement(models.Model):
         related='rent_product_id.subzone',
         string='Subzone',
     )
-    payment_due_date = fields.Integer(
-        string='Payment Due Date',
-        states={'active': [('readonly', True)]},
-    )
     partner_id = fields.Many2one(
         string='Lessee',
         states={'active': [('readonly', True)]},
@@ -302,10 +298,6 @@ class Agreement(models.Model):
         string='Termination By',
         states={'active': [('readonly', True)]},
     )
-    # Global variable
-    payment_due_date_type = [
-        'monthly',
-    ]
 
     @api.model
     def _default_company_contract_id(self):
@@ -375,10 +367,6 @@ class Agreement(models.Model):
                     str(time.days).zfill(2))
             rec.expiry_time = expiry_time
 
-    @api.onchange('recurring_rule_type')
-    def _onchange_recurring_rule_type(self):
-        self.payment_due_date = 0
-
     @api.multi
     def _validate_active_agreement(self):
         for rec in self:
@@ -391,22 +379,6 @@ class Agreement(models.Model):
             # Agreement must have rental product
             if not rec.rent_product_id:
                 raise UserError(_('Please add rental product.'))
-            # Areement must have payment due date for some recurring rule type
-            if rec.recurring_rule_type in rec.payment_due_date_type \
-               and not rec.payment_due_date:
-                raise UserError(_('Please specify payment due date.'))
-            if rec.payment_due_date:
-                # Payment due date can't later start date
-                if rec.payment_due_date < rec.start_date.day:
-                    raise UserError(_(
-                        'Payment due date can not later than '
-                        'day of start date.'))
-                # Payment due date not over last day of start date's month
-                last_date = rec.start_date + relativedelta(day=31)
-                if rec.payment_due_date > last_date.day:
-                    raise UserError(
-                        _("Payment due date not over last day of "
-                          "start date's month."))
             # Rental product not duplicated with other agreement in same date
             Range = namedtuple('Range', ['start', 'end'])
             agreements = self.env['agreement'].search(
@@ -554,10 +526,7 @@ class Agreement(models.Model):
             'recurring_rule_type': self.recurring_rule_type,
             'date_start': self.start_date,
             'date_end': self.end_date,
-            'recurring_next_date':
-                self.recurring_rule_type in self.payment_due_date_type and
-                '%s-%s-%s' % (self.start_date.year, self.start_date.month,
-                              self.payment_due_date) or self.start_date,
+            'recurring_next_date': self.start_date,
             'active': True,
             'group_id': self.group_id.id,
         }
