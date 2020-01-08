@@ -190,8 +190,8 @@ class ACMBatchInvoice(models.Model):
     def _create_invoices(self):
         self.ensure_one()
         Invoice = self.env['account.invoice']
-        utility_types = ['water_amount', 'electric_amount',
-                         'electric_amount_2', 'flat_rate']
+        utility_types = ['electric_amount', 'electric_amount_2',
+                         'flat_rate', 'water_amount']
         for line in self.batch_invoice_line_ids:
             if not line.amount_subtotal:
                 continue
