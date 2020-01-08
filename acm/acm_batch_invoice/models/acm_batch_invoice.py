@@ -130,6 +130,8 @@ class ACMBatchInvoice(models.Model):
             if not rec.name:
                 ctx = {'ir_sequence_date': rec.date_invoice}
                 rec.name = Sequene.with_context(ctx).next_by_code(seq_code)
+            # Check no negative amount
+            rec.batch_invoice_line_ids._check_no_negative_amount()
         self.write({'state': 'confirm'})
 
     @api.multi
@@ -212,6 +214,22 @@ class ACMBatchInvoice(models.Model):
         self.write({'state': 'done'})
         return self.action_view_invoice()
 
+    @api.model
+    def _update_batch_invoice_line(self, contract, batch_invoice_line):
+        batch_invoice = self.env['acm.batch.invoice'].search([
+            ('state', '=', 'done'),
+            ('group_id', '=', self.group_id.id),
+            ('date_range_id.date_end', '<=', self.date_range_id.date_start),
+        ], limit=1)
+        line = batch_invoice.batch_invoice_line_ids.filtered(
+            lambda l: l.contract_id == contract)
+        batch_invoice_line.update({
+            'flat_rate': line.flat_rate,
+            'electric_from': line.electric_to,
+            'electric_from_2': line.electric_to_2,
+            'water_from': line.water_to,
+        })
+
     @api.multi
     def retriveve_product_line(self):
         self.batch_invoice_line_ids = False
@@ -224,13 +242,16 @@ class ACMBatchInvoice(models.Model):
             Batch_line = self.env['acm.batch.invoice.line']
             for line in contract:
                 lock_number = line.agreement_id.rent_product_id.lock_number
-                self.batch_invoice_line_ids += Batch_line.new(
+                batch_invoice_line = Batch_line.new(
                     {
                         'contract_id': line.id,
                         'lock_number': lock_number,
                         'partner_id': line.partner_id.id,
                     }
                 )
+                # Update batch invoice line
+                self._update_batch_invoice_line(line, batch_invoice_line)
+                self.batch_invoice_line_ids += batch_invoice_line
 
 
 class ACMBatchInvoiceLine(models.Model):
@@ -312,18 +333,6 @@ class ACMBatchInvoiceLine(models.Model):
         store=True,
     )
 
-    @api.constrains('water_to', 'water_from', 'water_amount', 'electric_from',
-                    'electric_to', 'electric_amount', 'electric_from_2',
-                    'electric_to_2', 'electric_amount_2', 'flat_rate')
-    def _check_no_negative_amount(self):
-        field_lst = ['water_to', 'water_from', 'water_amount', 'electric_from',
-                     'electric_to', 'electric_amount', 'electric_from_2',
-                     'electric_to_2', 'electric_amount_2', 'flat_rate']
-        for rec in self:
-            for f in field_lst:
-                if rec[f] < 0:
-                    raise UserError(_('Negative amount is not allowed'))
-
     @api.depends('flat_rate', 'water_to', 'water_from', 'electric_from',
                  'electric_to', 'electric_from_2', 'electric_to_2')
     def _compute_all_amount(self):
@@ -336,6 +345,16 @@ class ACMBatchInvoiceLine(models.Model):
                 rec[type] = info['quantity'] * info['price_unit']
                 amount_subtotal += rec[type]
             rec.amount_subtotal = amount_subtotal
+
+    @api.multi
+    def _check_no_negative_amount(self):
+        field_lst = ['water_to', 'water_from', 'water_amount', 'electric_from',
+                     'electric_to', 'electric_amount', 'electric_from_2',
+                     'electric_to_2', 'electric_amount_2', 'flat_rate']
+        for rec in self:
+            for f in field_lst:
+                if rec[f] < 0:
+                    raise UserError(_('Negative amount is not allowed'))
 
     @api.multi
     def _get_utility_info(self, type):
