@@ -29,4 +29,16 @@
           'template_import_states': [],
         }"/>
 
+    <!-- Export utility -->
+    <act_window id="action_acm_utility_export_xlsx"
+        name="Export Utility Excel"
+        res_model="export.xlsx.wizard"
+        src_model="acm.batch.invoice"
+        view_mode="form"
+        target="new"
+        context="{
+          'template_domain': [('res_model', '=', 'acm.batch.invoice'),
+                              ('fname', '=', 'acm_utility.xlsx'),
+                              ('gname', '=', False)],
+        }"/>
 </odoo>

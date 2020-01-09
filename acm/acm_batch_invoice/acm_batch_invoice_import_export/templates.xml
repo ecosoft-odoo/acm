@@ -53,8 +53,46 @@
         </field>
     </record>
 
+    <!-- Utility -->
+    <record id="acm_utility_xlsx_template" model="xlsx.template">
+        <field name="res_model">acm.batch.invoice</field>
+        <field name="fname">acm_utility.xlsx</field>
+        <field name="name">ACM Utility</field>
+        <field name="description">ACM Utility</field>
+        <field name="input_instruction">
+            {
+                '__EXPORT__': {
+                    'utility': {
+                        '_HEAD_': {
+                            'C2': 'name${value or ""}#{align=left;style=text}',
+                            'C3': 'date_invoice${value or ""}#{align=left;style=date}',
+                            'C4': 'date_range_id.display_name${value or ""}#{align=left;style=text}',
+                            'C5': 'group_id.display_name${value or ""}#{align=left;style=text}',
+                        },
+                        'batch_invoice_line_ids': {
+                            'A8': 'lock_number${value or ""}#{align=center;style=text}',
+                            'B8': 'partner_id.display_name${value or ""}#{align=left;style=text}',
+                            'C8': 'flat_rate${value or 0.0}#{style=number}',
+                            'D8': 'electric_to${value or 0}',
+                            'E8': 'electric_from${value or 0}',
+                            'F8': 'electric_amount${value or 0.0}#{style=number}',
+                            'G8': 'electric_to_2${value or 0}',
+                            'H8': 'electric_from_2${value or 0}',
+                            'I8': 'electric_amount_2${value or 0.0}#{style=number}',
+                            'J8': 'water_to${value or 0}',
+                            'K8': 'water_from${value or 0}',
+                            'L8': 'water_amount${value or 0.0}#{style=number}',
+                            'M8': 'invoice_id.display_name${value or ""}#{align=left;style=text}',
+                        },
+                    },
+                },
+            }
+        </field>
+    </record>
+
     <function model="xlsx.template" name="load_xlsx_template">
-        <value eval="[ref('acm_batch_invoice_xlsx_template')]"/>
+        <value eval="[ref('acm_batch_invoice_xlsx_template'),
+                      ref('acm_utility_xlsx_template')]"/>
     </function>
 
 </odoo>
