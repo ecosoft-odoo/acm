@@ -1,0 +1,21 @@
+<odoo>
+
+    <template id="report_receipt_tax_invoice_acm_document_with_payments" inherit_id="acm.report_receipt_acm_document_with_payments" primary="True">
+        <xpath expr="//div/h5/div/span[2]/span" position="replace">
+            <span>ใบเสร็จรับเงิน/ใบกำกับภาษี</span>
+        </xpath>
+    </template>
+
+    <template id="report_receipt_tax_invoice_acm">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-set="ncopies" t-value="2"/>
+                <t t-foreach="range(ncopies)" t-as="page">
+                    <t t-set="lang" t-value="o.env.user.lang"/>
+                    <t t-call="acm.report_receipt_tax_invoice_acm_document_with_payments" t-lang="lang"/>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

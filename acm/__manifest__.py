@@ -54,6 +54,9 @@
         'acm_rental_collect/report/rental_collect_report.xml',
         'acm_rental_collect/report/report_voucher_acm.xml',
         'acm_rental_collect/report/report_receipt_acm.xml',
+        'acm_rental_collect/report/report_receipt_tax_invoice_abb_acm.xml',
+        'acm_rental_collect/report/report_receipt_tax_invoice_acm.xml',
+        'acm_rental_collect/report/report_tax_invoice_abb_acm.xml',
         'acm_rental_collect/report/report.xml',
         'acm_rental_collect/wizard/rental_collect_report_wizards.xml',
         # acm_batch_invoice

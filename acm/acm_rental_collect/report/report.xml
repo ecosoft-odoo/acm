@@ -20,6 +20,7 @@
         file="acm.report_payment_voucher"
         print_report_name="'Voucher_ACM - %s' %object.number"/>
 
+    <!-- Receipt Form -->
     <report
         id="action_report_receipt_acm"
         model="account.invoice"
@@ -28,6 +29,39 @@
         name="acm.report_receipt_acm"
         file="acm.report_receipt_acm"
         print_report_name="'Receipt_ACM - %s' %object.number"
+        paperformat="acm.report_paperformat_receipt_acm"/>
+
+    <!-- Receipt/Tax Invoice (ABB) -->
+    <report
+        id="action_report_receipt_tax_invoice_abb_acm"
+        model="account.invoice"
+        string="Receipt/Tax Invoice (ABB) ACM"
+        report_type="qweb-pdf"
+        name="acm.report_receipt_tax_invoice_abb_acm"
+        file="acm.report_receipt_tax_invoice_abb_acm"
+        print_report_name="'Receipt_ACM - %s' %object.number"
+        paperformat="acm.report_paperformat_receipt_acm"/>
+
+    <!-- Receipt/Tax Invoice -->
+    <report
+        id="action_report_receipt_tax_invoice_acm"
+        model="account.invoice"
+        string="Receipt/Tax Invoice ACM"
+        report_type="qweb-pdf"
+        name="acm.report_receipt_tax_invoice_acm"
+        file="acm.report_receipt_tax_invoice_acm"
+        print_report_name="'Receipt_ACM - %s' %object.number"
+        paperformat="acm.report_paperformat_receipt_acm"/>
+
+    <!-- Tax Invoice (ABB) -->
+    <report
+        id="action_report_tax_invoice_abb_acm"
+        model="account.invoice"
+        string="Tax Invoice (ABB) ACM"
+        report_type="qweb-pdf"
+        name="acm.report_tax_invoice_abb_acm"
+        file="acm.report_tax_invoice_abb_acm"
+        print_report_name="'Tax_Invoice_ABB_ACM - %s' %object.number"
         paperformat="acm.report_paperformat_receipt_acm"/>
 
 </odoo>
