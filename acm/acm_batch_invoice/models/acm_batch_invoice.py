@@ -176,14 +176,14 @@ class ACMBatchInvoice(models.Model):
 
     @api.model
     def _prepare_invoice_line_dict(self, type, line, invoice):
-        line_vals = {'invoice_id': invoice.id,
-                     'account_analytic_id': line.contract_id.id}
+        line_vals = {'invoice_id': invoice.id}
         utility_info = line._get_utility_info(type)
         line_vals.update(utility_info)
         invoice_line = self.env['account.invoice.line'].new(line_vals)
         invoice_line._onchange_product_id()
         res = invoice_line._convert_to_write(invoice_line._cache)
         res.update(utility_info)  # Ensure untility_info
+        res['account_analytic_id'] = line.contract_id.id  # Ensure contract
         return res
 
     @api.multi
