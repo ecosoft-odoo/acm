@@ -9,19 +9,21 @@
                     <group>
                         <field name="termination_by"/>
                         <field name="date_termination"/>
+                        <field name="is_refund_deposit"/>
                     </group>
                     <group>
                         <field name="reason_termination"/>
                     </group>
                 </group>
-                <group string="Refund Security Deposit">
+                <p attrs="{'invisible': [('is_refund_deposit', '=', False)]}" style="color: red;">Create vendor bill for refund security deposit.</p>
+                <group string="Refund Security Deposit" attrs="{'invisible': [('is_refund_deposit', '=', False)]}">
                     <group>
-                        <field name="product_id"/>
-                        <field name="amount" attrs="{'required': [('product_id', '!=', False)]}"/>
+                        <field name="product_id" attrs="{'required': [('is_refund_deposit', '=', True)]}"/>
+                        <field name="amount" attrs="{'required': [('is_refund_deposit', '=', True)]}"/>
                     </group>
                     <group>
-                        <field name="date_invoice" attrs="{'required': [('product_id', '!=', False)]}"/>
-                        <field name="journal_id" attrs="{'required': [('product_id', '!=', False)]}"/>
+                        <field name="date_invoice" attrs="{'required': [('is_refund_deposit', '=', True)]}"/>
+                        <field name="journal_id" attrs="{'required': [('is_refund_deposit', '=', True)]}"/>
                     </group>
                 </group>
                 <group string="Attachment">

@@ -30,6 +30,9 @@ class AgreementTerminate(models.TransientModel):
         inverse_name='terminate_id',
         string='Attachment',
     )
+    is_refund_deposit = fields.Boolean(
+        string='Refund Deposit ?',
+    )
     product_id = fields.Many2one(
         comodel_name='product.product',
         string='Product',
@@ -56,44 +59,22 @@ class AgreementTerminate(models.TransientModel):
     @api.model
     def default_get(self, fields_list):
         res = super(AgreementTerminate, self).default_get(fields_list)
-        active_ids = self._context.get('active_ids')
-        agreements = self.env['agreement'].browse(active_ids)
-        if len(agreements) <= 1:
-            products = self._get_products(agreements, type='security_deposit')
-            if len(products) <= 1:
-                res['product_id'] = products.id
         journal = self.env['account.journal'].search(
             self._get_domain_journal_id())
-        if len(journal) > 1:
-            journal = journal[0]
-        res.update({
-            'journal_id': journal.id,
-        })
+        if len(journal) <= 1:
+            res['journal_id'] = journal.id
         return res
 
     @api.model
     def _get_domain_product_id(self):
-        active_ids = self._context.get('active_ids')
-        agreements = self.env['agreement'].browse(active_ids)
-        products = self._get_products(agreements, type='security_deposit')
+        products = self.env['product.product'].search(
+            [('value_type', '=', 'security_deposit')])
         return [('id', 'in', products.ids)]
 
     @api.model
     def _get_domain_journal_id(self):
         return [('type', '=', 'purchase'),
                 ('company_id', '=', self.env.user.company_id.id)]
-
-    @api.onchange('product_id')
-    def _onchange_product_id(self):
-        active_ids = self._context.get('active_ids')
-        agreements = self.env['agreement'].browse(active_ids)
-        if len(agreements) <= 1:
-            contracts = agreements._search_contract()
-            invoices = self.env['account.invoice'].search(
-                [('state', '=', 'paid'), ('contract_id', 'in', contracts.ids)])
-            invoice_lines = invoices.mapped('invoice_line_ids').filtered(
-                lambda l: l.product_id == self.product_id)
-            self.amount = sum(invoice_lines.mapped('price_subtotal'))
 
     @api.model
     def _prepare_invoice(self, agreement):
@@ -113,21 +94,17 @@ class AgreementTerminate(models.TransientModel):
 
     @api.model
     def _prepare_invoice_line(self, agreement, invoice):
-        agreement_line = agreement.line_ids.filtered(
-            lambda l: l.product_id == self.product_id)
-        if len(agreement_line) > 1:
-            agreement_line = agreement_line[0]
         contract = agreement._search_contract()
         invoice_line = self.env['account.invoice.line'].new({
             'invoice_id': invoice.id,
             'product_id': self.product_id.id,
-            'quantity': agreement_line.qty,
-            'uom_id': agreement_line.uom_id.id,
+            'quantity': 1,
+            'uom_id': self.product_id.uom_id.id,
         })
         invoice_line._onchange_product_id()
         invoice_line_vals = invoice_line._convert_to_write(invoice_line._cache)
         invoice_line_vals.update({
-            'name': agreement_line.name,
+            'name': self.product_id.description or self.product_id.name,
             'account_analytic_id': contract.id,
             'price_unit': self.amount,
         })
@@ -162,7 +139,7 @@ class AgreementTerminate(models.TransientModel):
                 'reason_termination': self.reason_termination,
             })
             # Create vendor bill
-            if self.product_id:
+            if self.is_refund_deposit:
                 if not self.amount:
                     raise UserError(_('Please specify security deposit.'))
                 self._create_invoice(agreement)
