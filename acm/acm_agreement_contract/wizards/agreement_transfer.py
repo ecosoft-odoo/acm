@@ -181,6 +181,7 @@ class AgreementTransfer(models.TransientModel):
         (change lessee, contract date, start date and end date)
         2. Create vendor bill (refund security deposit to old lessee)
         3. Attach file in agreement (if any)
+        4. Terminate old agreement (Change state from active to inactive)
         """
         if self.date_termination >= self.date_start:
             raise UserError(_('Termination date is no more than start date.'))
@@ -201,18 +202,18 @@ class AgreementTransfer(models.TransientModel):
             })
             new_agreement = agreement.create_agreement()
             new_agreements |= new_agreement
-            # Create vendor bill for refund security deposit
-            if self.product_id:
-                self._create_invoice(agreement)
-                if not self.amount:
-                    raise UserError(_('Please specify security deposit.'))
             # Write old agreement
             agreement.write({
                 'termination_date': self.date_termination,
                 'termination_by': self.termination_by,
                 'reason_termination': self.reason_termination,
             })
-            # Write attachment
+            # Create vendor bill for refund security deposit
+            if self.product_id:
+                if not self.amount:
+                    raise UserError(_('Please specify security deposit.'))
+                self._create_invoice(agreement)
+            # Create attachment
             for attachment in self.attachment_ids + self.attachment2_ids:
                 self.env['ir.attachment'].create({
                     'name': attachment.filename,

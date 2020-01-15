@@ -5,15 +5,32 @@
         <field name="model">agreement.terminate</field>
         <field name="arch" type="xml">
             <form string="Terminate Agreement">
-                <group>
+                <group string="Agreement">
                     <group>
                         <field name="termination_by"/>
-                        <field name="date_termination_requested"/>
                         <field name="date_termination"/>
                     </group>
+                    <group>
+                        <field name="reason_termination"/>
+                    </group>
                 </group>
-                <group string="Reason">
-                    <field name="reason_termination" nolabel="1"/>
+                <group string="Refund Security Deposit">
+                    <group>
+                        <field name="product_id"/>
+                        <field name="amount" attrs="{'required': [('product_id', '!=', False)]}"/>
+                    </group>
+                    <group>
+                        <field name="date_invoice" attrs="{'required': [('product_id', '!=', False)]}"/>
+                        <field name="journal_id" attrs="{'required': [('product_id', '!=', False)]}"/>
+                    </group>
+                </group>
+                <group string="Attachment">
+                    <field name="attachment_ids" nolabel="1">
+                        <tree editable="top">
+                            <field name="file" filename="filename"/>
+                            <field name="filename" readonly="1" force_save="1"/>
+                        </tree>
+                    </field>
                 </group>
                 <footer>
                     <button name="action_terminate_agreement" string="Confirm" type="object" default_focus="1" class="btn-primary"/>
