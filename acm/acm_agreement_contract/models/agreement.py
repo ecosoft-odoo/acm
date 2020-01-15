@@ -261,16 +261,6 @@ class Agreement(models.Model):
         string='Source Agreement (Extension)',
         states={'active': [('readonly', True)]},
     )
-    # Transfer Agreement
-    is_transfer = fields.Boolean(
-        string='Transfer',
-        states={'active': [('readonly', True)]},
-    )
-    transfer_agreement_id = fields.Many2one(
-        comodel_name='agreement',
-        string='Source Agreement (Transfer)',
-        states={'active': [('readonly', True)]},
-    )
     # Breach Agreement
     is_breach = fields.Boolean(
         string='Breach',
@@ -467,8 +457,6 @@ class Agreement(models.Model):
                 context.get('recurring_rule_type') or self.recurring_rule_type,
             'is_extension': context.get('is_extension'),
             'extension_agreement_id': context.get('extension_agreement_id'),
-            'is_transfer': context.get('is_transfer'),
-            'transfer_agreement_id': context.get('transfer_agreement_id'),
         }
 
     @api.multi

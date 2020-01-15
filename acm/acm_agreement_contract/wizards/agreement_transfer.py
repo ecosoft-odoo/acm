@@ -11,7 +11,7 @@ class AgreementTransfer(models.TransientModel):
 
     partner_id = fields.Many2one(
         comodel_name='res.partner',
-        string='New Partner',
+        string='New Lessee',
         required=True,
     )
     partner_contact_id = fields.Many2one(
@@ -29,23 +29,164 @@ class AgreementTransfer(models.TransientModel):
     )
     date_contract = fields.Date(
         string='Contract Date',
-        default=fields.Date.today(),
         required=True,
+    )
+    date_termination = fields.Date(
+        string='Termination Date',
+        required=True,
+    )
+    termination_by = fields.Selection(
+        selection=[
+            ('lessee', 'Lessee'),
+            ('lessor', 'Lessor'), ],
+        string='Termination By',
+        required=True,
+    )
+    reason_termination = fields.Text(
+        string='Termination Reason',
+        required=True,
+    )
+    product_id = fields.Many2one(
+        comodel_name='product.product',
+        string='Product',
+        domain=lambda self: self._get_domain_product_id(),
+    )
+    amount = fields.Float(
+        string='Amount',
+    )
+    date_invoice = fields.Date(
+        string='Bill Date',
+    )
+    journal_id = fields.Many2one(
+        comodel_name='account.journal',
+        string='Journal',
+        domain=lambda self: self._get_domain_journal_id(),
+    )
+    attachment_ids = fields.One2many(
+        comodel_name='agreement.transfer.attachment',
+        inverse_name='transfer_id',
+        string='Attachment',
+        domain=[('type', '=', 'old')],
+    )
+    attachment2_ids = fields.One2many(
+        comodel_name='agreement.transfer.attachment',
+        inverse_name='transfer_id',
+        string='Attachment',
+        domain=[('type', '=', 'new')],
     )
 
     @api.model
-    def default_get(self, fields):
-        res = super(AgreementTransfer, self).default_get(fields)
-        active_id = self._context.get('active_id')
-        agreement = self.env['agreement'].browse(active_id)
-        res['date_end'] = agreement.end_date
+    def _get_products(self, agreements, type=''):
+        products = agreements.mapped('line_ids').filtered(
+            lambda l: l.product_id.value_type == type).mapped('product_id')
+        return products
+
+    @api.model
+    def default_get(self, fields_list):
+        res = super(AgreementTransfer, self).default_get(fields_list)
+        active_ids = self._context.get('active_ids')
+        agreements = self.env['agreement'].browse(active_ids)
+        if len(agreements) <= 1:
+            res['date_end'] = agreements.end_date
+            products = self._get_products(agreements, type='security_deposit')
+            if len(products) <= 1:
+                res['product_id'] = products.id
+        journal = self.env['account.journal'].search(
+            self._get_domain_journal_id())
+        if len(journal) > 1:
+            journal = journal[0]
+        res.update({
+            'journal_id': journal.id,
+            'termination_by': 'lessee',
+            'reason_termination': 'Transfer leasehold rights',
+        })
         return res
+
+    @api.model
+    def _get_domain_product_id(self):
+        active_ids = self._context.get('active_ids')
+        agreements = self.env['agreement'].browse(active_ids)
+        products = self._get_products(agreements, type='security_deposit')
+        return [('id', 'in', products.ids)]
+
+    @api.model
+    def _get_domain_journal_id(self):
+        return [('type', '=', 'purchase'),
+                ('company_id', '=', self.env.user.company_id.id)]
+
+    @api.onchange('product_id')
+    def _onchange_product_id(self):
+        active_ids = self._context.get('active_ids')
+        agreements = self.env['agreement'].browse(active_ids)
+        if len(agreements) <= 1:
+            contracts = agreements._search_contract()
+            invoices = self.env['account.invoice'].search(
+                [('state', '=', 'paid'), ('contract_id', 'in', contracts.ids)])
+            invoice_lines = invoices.mapped('invoice_line_ids').filtered(
+                lambda l: l.product_id == self.product_id)
+            self.amount = sum(invoice_lines.mapped('price_subtotal'))
+
+    @api.model
+    def _prepare_invoice(self, agreement):
+        invoice = self.env['account.invoice'].new({
+            'type': 'in_invoice',
+            'partner_id': agreement.partner_id.id,
+            'origin': agreement.name,
+            'name': agreement.rent_product_id.name,
+            'currency_id': self.env.user.company_id.currency_id.id,
+            'journal_id': self.journal_id.id,
+            'date_invoice': self.date_invoice,
+            'company_id': self.env.user.company_id.id,
+            'user_id': self.env.user.id,
+        })
+        invoice._onchange_partner_id()
+        return invoice._convert_to_write(invoice._cache)
+
+    @api.model
+    def _prepare_invoice_line(self, agreement, invoice):
+        agreement_line = agreement.line_ids.filtered(
+            lambda l: l.product_id == self.product_id)
+        if len(agreement_line) > 1:
+            agreement_line = agreement_line[0]
+        contract = agreement._search_contract()
+        invoice_line = self.env['account.invoice.line'].new({
+            'invoice_id': invoice.id,
+            'product_id': self.product_id.id,
+            'quantity': agreement_line.qty,
+            'uom_id': agreement_line.uom_id.id,
+        })
+        invoice_line._onchange_product_id()
+        invoice_line_vals = invoice_line._convert_to_write(invoice_line._cache)
+        invoice_line_vals.update({
+            'name': agreement_line.name,
+            'account_analytic_id': contract.id,
+            'price_unit': self.amount,
+        })
+        return invoice_line_vals
+
+    @api.model
+    def _create_invoice(self, agreement):
+        invoice = self.env['account.invoice'].create(
+            self._prepare_invoice(agreement))
+        self.env['account.invoice.line'].create(
+            self._prepare_invoice_line(agreement, invoice))
+        invoice.compute_taxes()
+        return invoice
 
     @api.multi
     def action_transfer_agreement(self):
-        context = self._context.copy()
+        """
+        Step to transfer agreement
+        1. Create new agreement
+        (change lessee, contract date, start date and end date)
+        2. Create vendor bill (refund security deposit to old lessee)
+        3. Attach file in agreement (if any)
+        """
+        if self.date_termination >= self.date_start:
+            raise UserError(_('Termination date is no more than start date.'))
         Agreement = self.env['agreement']
-        agreements = Agreement.browse(context.get('active_ids', []))
+        agreements = Agreement.browse(self._context.get('active_ids', []))
+        agreements.ensure_one()
         new_agreements = Agreement
         for agreement in agreements:
             if not agreement.is_contract_create:
@@ -57,11 +198,52 @@ class AgreementTransfer(models.TransientModel):
                 'date_contract': self.date_contract,
                 'date_start': self.date_start,
                 'date_end': self.date_end,
-                'is_transfer': True,
-                'transfer_agreement_id': agreement.id,
             })
             new_agreement = agreement.create_agreement()
             new_agreements |= new_agreement
-            # Inactive old agreement
-            agreement.inactive_statusbar()
+            # Create vendor bill for refund security deposit
+            if self.product_id:
+                self._create_invoice(agreement)
+                if not self.amount:
+                    raise UserError(_('Please specify security deposit.'))
+            # Write old agreement
+            agreement.write({
+                'termination_date': self.date_termination,
+                'termination_by': self.termination_by,
+                'reason_termination': self.reason_termination,
+            })
+            # Write attachment
+            for attachment in self.attachment_ids + self.attachment2_ids:
+                self.env['ir.attachment'].create({
+                    'name': attachment.filename,
+                    'datas': attachment.file,
+                    'datas_fname': attachment.filename,
+                    'res_model': 'agreement',
+                    'res_id': attachment.type == 'new' and new_agreement.id
+                    or agreement.id,
+                    'type': 'binary',
+                })
         return new_agreements.view_agreement()
+
+
+class AgreementTransferAttachment(models.TransientModel):
+    _name = 'agreement.transfer.attachment'
+
+    file = fields.Binary(
+        string='File',
+        required=True,
+    )
+    filename = fields.Char(
+        string='File Name',
+    )
+    type = fields.Selection(
+        selection=[
+            ('old', 'Old Agreement Attachment'),
+            ('new', 'New Agreement Attachment'),
+        ],
+        string='Type',
+    )
+    transfer_id = fields.Many2one(
+        comodel_name='agreement.transfer',
+        string='Transfer',
+    )

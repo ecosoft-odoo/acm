@@ -48,15 +48,15 @@
             </field>
             <field name="termination_date" position="attributes">
                 <attribute name="readonly">True</attribute>
-                <attribute name="attrs">{'invisible': [('is_termination', '=', False)]}</attribute>
+                <attribute name="attrs">{'invisible': [('termination_date', '=', False)]}</attribute>
             </field>
             <field name="termination_requested" position="attributes">
                 <attribute name="readonly">True</attribute>
-                <attribute name="attrs">{'invisible': [('is_termination', '=', False)]}</attribute>
+                <attribute name="attrs">{'invisible': [('termination_requested', '=', False)]}</attribute>
             </field>
             <field name="termination_date" position="after">
-                <field name="termination_by" readonly="True" attrs="{'invisible': [('is_termination', '=', False)]}"/>
-                <field name="reason_termination" readonly="True" attrs="{'invisible': [('is_termination', '=', False)]}"/>
+                <field name="termination_by" readonly="True" attrs="{'invisible': [('termination_by', '=', False)]}"/>
+                <field name="reason_termination" readonly="True" attrs="{'invisible': [('reason_termination', '=', False)]}"/>
             </field>
             <field name="partner_id" position="attributes">
                 <attribute name="attrs">{'required': [('is_template', '=', False)]}</attribute>
@@ -88,8 +88,6 @@
                 <field name="template_id" readonly="True" attrs="{'invisible': [('is_template', '=', True)]}"/>
                 <field name="is_extension" readonly="True" attrs="{'invisible': [('is_extension', '=', False)]}"/>
                 <field name="extension_agreement_id" readonly="True" attrs="{'invisible': [('is_extension', '=', False)]}"/>
-                <field name="is_transfer" readonly="True" attrs="{'invisible': [('is_transfer', '=', False)]}"/>
-                <field name="transfer_agreement_id" readonly="True" attrs="{'invisible': [('is_transfer', '=', False)]}"/>
                 <field name="is_breach" readonly="True" attrs="{'invisible': [('is_breach', '=', False)]}"/>
                 <field name="is_termination" readonly="True" attrs="{'invisible': [('is_termination', '=', False)]}"/>
             </xpath>
