@@ -6,12 +6,47 @@
         <field name="arch" type="xml">
             <form string="Transfer Agreement">
                 <group>
-                    <group>
+                    <group string="Old Agreement">
+                        <field name="date_termination"/>
+                        <field name="termination_by"/>
+                        <field name="reason_termination"/>
+                    </group>
+                    <group string="New Agreement">
                         <field name="partner_id" domain="[('customer', '=', True)]"/>
                         <field name="partner_contact_id" attrs="{'invisible':[('partner_id', '=', False)]}" domain="[('parent_id', '=', partner_id)]"/>
                         <field name="date_contract"/>
                         <field name="date_start"/>
                         <field name="date_end"/>
+                    </group>
+                </group>
+                <group>
+                    <group>
+                        <field name="attachment_ids" context="{'default_type': 'old'}">
+                            <tree editable="top">
+                                <field name="file" filename="filename"/>
+                                <field name="filename" readonly="1" force_save="1"/>
+                                <field name="type" invisible="1"/>
+                            </tree>
+                        </field>
+                    </group>
+                    <group>
+                        <field name="attachment2_ids" context="{'default_type': 'new'}">
+                            <tree editable="top">
+                                <field name="file" filename="filename"/>
+                                <field name="filename" readonly="1" force_save="1"/>
+                                <field name="type" invisible="1"/>
+                            </tree>
+                        </field>
+                    </group>
+                </group>
+                <group string="Refund Security Deposit">
+                    <group>
+                        <field name="product_id"/>
+                        <field name="amount" attrs="{'required': [('product_id', '!=', False)]}"/>
+                    </group>
+                    <group>
+                        <field name="date_invoice" attrs="{'required': [('product_id', '!=', False)]}"/>
+                        <field name="journal_id" attrs="{'required': [('product_id', '!=', False)]}"/>
                     </group>
                 </group>
                 <footer>

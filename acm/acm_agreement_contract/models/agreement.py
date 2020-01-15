@@ -115,6 +115,21 @@ class Agreement(models.Model):
         string='Time to Expiry (Months)',
         compute='_compute_expiry_time',
     )
+    inactive_reason = fields.Selection(
+        selection=[
+            ('cancel', 'Cancelled'),
+            ('terminate', 'Terminated'),
+            ('transfer', 'Transferred'),
+            ('expire', 'Expired'),
+        ],
+        string='Inactive Reason',
+    )
+    is_transfer = fields.Boolean(
+        string='Is transfer ?',
+    )
+    is_terminate = fields.Boolean(
+        string='Is terminate ?',
+    )
     # Set field readonly = True for state is active.
     name = fields.Char(
         states={'active': [('readonly', True)]},
@@ -162,9 +177,6 @@ class Agreement(models.Model):
         states={'active': [('readonly', True)]},
     )
     increase_type_id = fields.Many2one(
-        states={'active': [('readonly', True)]},
-    )
-    termination_requested = fields.Date(
         states={'active': [('readonly', True)]},
     )
     termination_date = fields.Date(
@@ -261,16 +273,6 @@ class Agreement(models.Model):
         string='Source Agreement (Extension)',
         states={'active': [('readonly', True)]},
     )
-    # Transfer Agreement
-    is_transfer = fields.Boolean(
-        string='Transfer',
-        states={'active': [('readonly', True)]},
-    )
-    transfer_agreement_id = fields.Many2one(
-        comodel_name='agreement',
-        string='Source Agreement (Transfer)',
-        states={'active': [('readonly', True)]},
-    )
     # Breach Agreement
     is_breach = fields.Boolean(
         string='Breach',
@@ -283,10 +285,6 @@ class Agreement(models.Model):
         states={'active': [('readonly', True)]},
     )
     # Termination Agreement
-    is_termination = fields.Boolean(
-        string='Termination',
-        states={'active': [('readonly', True)]},
-    )
     reason_termination = fields.Text(
         string='Termination Reason',
         states={'active': [('readonly', True)]},
@@ -467,8 +465,6 @@ class Agreement(models.Model):
                 context.get('recurring_rule_type') or self.recurring_rule_type,
             'is_extension': context.get('is_extension'),
             'extension_agreement_id': context.get('extension_agreement_id'),
-            'is_transfer': context.get('is_transfer'),
-            'transfer_agreement_id': context.get('transfer_agreement_id'),
         }
 
     @api.multi
@@ -670,6 +666,24 @@ class Agreement(models.Model):
                 line.date_start += time
             if line.date_end:
                 line.date_end += time
+
+    @api.model
+    def cron_inactive_statusbar(self):
+        today = fields.Date.today()
+        agreements = self.with_context(cron=True).search(
+            [('state', '=', 'active'),
+             '|', ('is_transfer', '=', True),
+             '|', ('is_terminate', '=', True),
+             ('end_date', '<', today)])
+        for agreement in agreements:
+            agreement.inactive_statusbar()
+            if agreement.is_transfer:
+                agreement.inactive_reason = 'transfer'
+            elif agreement.is_terminate:
+                agreement.inactive_reason = 'terminate'
+            elif agreement.end_date < today:
+                agreement.inactive_reason = 'expire'
+        return True
 
 
 class AgreementLine(models.Model):
