@@ -11,9 +11,6 @@ class AgreementInActive(models.TransientModel):
     inactive_reason = fields.Selection(
         selection=[
             ('cancel', 'Cancelled'),
-            ('terminate', 'Terminated'),
-            ('transfer', 'Transferred'),
-            ('expire', 'Expired'),
         ],
         string='Inactive Reason',
         default='cancel',

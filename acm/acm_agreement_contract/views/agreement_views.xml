@@ -18,12 +18,12 @@
             <button name="create_new_agreement" position="after">
                 <button name="active_statusbar" string="Active" type="object" class="oe_highlight" confirm="Are you sure to active this agreement ?" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
                 <button name="create_new_contract" string="New Contract" type="object" class="oe_highlight" attrs="{'invisible': ['|', ('is_template', '=', True), '|', ('is_contract_create', '=', True), ('state', '!=', 'active')]}"/>
-                <button name="%(agreement_extension_action)d" string="Renew" type="action" class="oe_highlight" attrs="{'invisible': ['|', ('is_template', '=', True), '|', ('is_contract_create', '=', False), ('state', '!=', 'active')]}"/>
-                <button name="%(agreement_transfer_action)d" string="Transfer" type="action" class="oe_highlight" attrs="{'invisible': ['|', ('is_template', '=', True), '|', ('is_contract_create', '=', False), ('state', '!=', 'active')]}"/>
-                <button name="%(agreement_breach_action)d" string="Breach" type="action" class="oe_highlight" context="{'breach': True}" attrs="{'invisible': ['|', ('is_template', '=', True), '|', ('is_contract_create', '=', False), '|', ('state', '!=', 'active'), ('is_breach', '=', True)]}"/>
-                <button name="%(agreement_breach_action)d" string="Cancel Breach" type="action" class="oe_highlight" context="{'breach': False}" attrs="{'invisible': ['|', ('is_template', '=', True), '|', ('is_contract_create', '=', False), '|', ('state', '!=', 'active'), ('is_breach', '=', False)]}"/>
-                <button name="%(agreement_terminate_action)d" string="Termination" type="action" class="oe_highlight" attrs="{'invisible': ['|', ('is_template', '=', True), '|', ('is_contract_create', '=', False), ('state', '!=', 'active')]}"/>
-                <button name="%(agreement_inactive_action)d" string="Inactive" type="action" class="oe_highlight" attrs="{'invisible': [('state', 'not in', ['draft', 'active'])]}"/>
+                <button name="%(agreement_extension_action)d" string="Renew" type="action" class="oe_highlight" attrs="{'invisible': ['|', ('is_template', '=', True), '|', ('is_contract_create', '=', False), '|', ('state', '!=', 'active'), '|', ('is_transfer', '=', True), ('is_terminate', '=', True)]}"/>
+                <button name="%(agreement_transfer_action)d" string="Transfer" type="action" class="oe_highlight" attrs="{'invisible': ['|', ('is_template', '=', True), '|', ('is_contract_create', '=', False), '|', ('state', '!=', 'active'), '|', ('is_transfer', '=', True), ('is_terminate', '=', True)]}"/>
+                <button name="%(agreement_breach_action)d" string="Breach" type="action" class="oe_highlight" context="{'breach': True}" attrs="{'invisible': ['|', ('is_template', '=', True), '|', ('is_contract_create', '=', False), '|', ('state', '!=', 'active'), '|', ('is_breach', '=', True), '|', ('is_transfer', '=', True), ('is_terminate', '=', True)]}"/>
+                <button name="%(agreement_breach_action)d" string="Cancel Breach" type="action" class="oe_highlight" context="{'breach': False}" attrs="{'invisible': ['|', ('is_template', '=', True), '|', ('is_contract_create', '=', False), '|', ('state', '!=', 'active'), '|', ('is_breach', '=', False), '|', ('is_transfer', '=', True), ('is_terminate', '=', True)]}"/>
+                <button name="%(agreement_terminate_action)d" string="Termination" type="action" class="oe_highlight" attrs="{'invisible': ['|', ('is_template', '=', True), '|', ('is_contract_create', '=', False), '|', ('state', '!=', 'active'), '|', ('is_transfer', '=', True), ('is_terminate', '=', True)]}"/>
+                <button name="%(agreement_inactive_action)d" string="Inactive" type="action" class="oe_highlight" attrs="{'invisible': ['|', ('state', 'not in', ['draft', 'active']), '|', ('is_transfer', '=', True), ('is_terminate', '=', True)]}"/>
                 <field name="state" widget="statusbar"/>
             </button>
             <div name="button_box" position="inside">
@@ -90,6 +90,8 @@
                 <field name="is_extension" readonly="True" attrs="{'invisible': [('is_extension', '=', False)]}"/>
                 <field name="extension_agreement_id" readonly="True" attrs="{'invisible': [('is_extension', '=', False)]}"/>
                 <field name="is_breach" readonly="True" attrs="{'invisible': [('is_breach', '=', False)]}"/>
+                <field name="is_transfer" invisible="1"/>
+                <field name="is_terminate" invisible="1"/>
             </xpath>
             <xpath expr="//page[@name='products']/field/tree" position="attributes">
                 <attribute name="editable">buttom</attribute>

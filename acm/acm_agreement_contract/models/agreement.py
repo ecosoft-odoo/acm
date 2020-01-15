@@ -126,9 +126,11 @@ class Agreement(models.Model):
     )
     is_transfer = fields.Boolean(
         string='Is transfer ?',
+        copy=False,
     )
     is_terminate = fields.Boolean(
         string='Is terminate ?',
+        copy=False,
     )
     # Set field readonly = True for state is active.
     name = fields.Char(
@@ -181,6 +183,7 @@ class Agreement(models.Model):
     )
     termination_date = fields.Date(
         states={'active': [('readonly', True)]},
+        copy=False,
     )
     reviewed_date = fields.Date(
         states={'active': [('readonly', True)]},
@@ -288,6 +291,7 @@ class Agreement(models.Model):
     reason_termination = fields.Text(
         string='Termination Reason',
         states={'active': [('readonly', True)]},
+        copy=False,
     )
     termination_by = fields.Selection(
         selection=[
@@ -295,6 +299,7 @@ class Agreement(models.Model):
             ('lessor', 'Lessor'), ],
         string='Termination By',
         states={'active': [('readonly', True)]},
+        copy=False,
     )
 
     @api.model
@@ -381,7 +386,9 @@ class Agreement(models.Model):
             Range = namedtuple('Range', ['start', 'end'])
             agreements = self.env['agreement'].search(
                 [('state', '=', 'active'),
-                 ('rent_product_id', '=', rec.rent_product_id.id)])
+                 ('rent_product_id', '=', rec.rent_product_id.id),
+                 # no check for transfer agreement case
+                 ('is_transfer', '=', False), ])
             for agreement in agreements:
                 r1 = Range(start=agreement.start_date, end=agreement.end_date)
                 r2 = Range(start=rec.start_date, end=rec.end_date)
