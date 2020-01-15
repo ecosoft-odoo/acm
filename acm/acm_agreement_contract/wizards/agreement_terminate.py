@@ -156,6 +156,7 @@ class AgreementTerminate(models.TransientModel):
         for agreement in agreements:
             agreement._validate_contract_create()
             agreement.write({
+                'is_terminate': True,
                 'termination_by': self.termination_by,
                 'termination_date': self.date_termination,
                 'reason_termination': self.reason_termination,

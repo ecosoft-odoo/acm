@@ -23,7 +23,7 @@
                 <button name="%(agreement_breach_action)d" string="Breach" type="action" class="oe_highlight" context="{'breach': True}" attrs="{'invisible': ['|', ('is_template', '=', True), '|', ('is_contract_create', '=', False), '|', ('state', '!=', 'active'), ('is_breach', '=', True)]}"/>
                 <button name="%(agreement_breach_action)d" string="Cancel Breach" type="action" class="oe_highlight" context="{'breach': False}" attrs="{'invisible': ['|', ('is_template', '=', True), '|', ('is_contract_create', '=', False), '|', ('state', '!=', 'active'), ('is_breach', '=', False)]}"/>
                 <button name="%(agreement_terminate_action)d" string="Termination" type="action" class="oe_highlight" attrs="{'invisible': ['|', ('is_template', '=', True), '|', ('is_contract_create', '=', False), ('state', '!=', 'active')]}"/>
-                <button name="inactive_statusbar" string="Inactive" type="object" class="oe_highlight" confirm="Are you sure to inactive this agreement ?" attrs="{'invisible': [('state', 'not in', ['draft', 'active'])]}"/>
+                <button name="%(agreement_inactive_action)d" string="Inactive" type="action" class="oe_highlight" attrs="{'invisible': [('state', 'not in', ['draft', 'active'])]}"/>
                 <field name="state" widget="statusbar"/>
             </button>
             <div name="button_box" position="inside">
@@ -52,7 +52,7 @@
             </field>
             <field name="termination_requested" position="attributes">
                 <attribute name="readonly">True</attribute>
-                <attribute name="attrs">{'invisible': [('termination_requested', '=', False)]}</attribute>
+                <attribute name="invisible">True</attribute>
             </field>
             <field name="termination_date" position="after">
                 <field name="termination_by" readonly="True" attrs="{'invisible': [('termination_by', '=', False)]}"/>
@@ -86,10 +86,10 @@
                 <field name="is_contract_create" invisible="1"/>
                 <field name="contract_type"/>
                 <field name="template_id" readonly="True" attrs="{'invisible': [('is_template', '=', True)]}"/>
+                <field name="inactive_reason" readonly="True" attrs="{'invisible': [('state', '!=', 'inactive')]}"/>
                 <field name="is_extension" readonly="True" attrs="{'invisible': [('is_extension', '=', False)]}"/>
                 <field name="extension_agreement_id" readonly="True" attrs="{'invisible': [('is_extension', '=', False)]}"/>
                 <field name="is_breach" readonly="True" attrs="{'invisible': [('is_breach', '=', False)]}"/>
-                <field name="is_termination" readonly="True" attrs="{'invisible': [('is_termination', '=', False)]}"/>
             </xpath>
             <xpath expr="//page[@name='products']/field/tree" position="attributes">
                 <attribute name="editable">buttom</attribute>

@@ -204,6 +204,7 @@ class AgreementTransfer(models.TransientModel):
             new_agreements |= new_agreement
             # Write old agreement
             agreement.write({
+                'is_transfer': True,
                 'termination_date': self.date_termination,
                 'termination_by': self.termination_by,
                 'reason_termination': self.reason_termination,

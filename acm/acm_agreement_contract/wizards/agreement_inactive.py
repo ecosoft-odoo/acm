@@ -8,24 +8,27 @@ class AgreementInActive(models.TransientModel):
     _name = 'agreement.inactive'
     _description = 'Inactive Agreement'
 
-    group_ids = fields.Many2many(
-        comodel_name='account.analytic.group',
-        string='Zone',
-        default=lambda self: self._default_group_ids(),
-        readonly=True,
+    inactive_reason = fields.Selection(
+        selection=[
+            ('cancel', 'Cancelled'),
+            ('terminate', 'Terminated'),
+            ('transfer', 'Transferred'),
+            ('expire', 'Expired'),
+        ],
+        string='Inactive Reason',
+        default='cancel',
+        required=True,
     )
-
-    @api.model
-    def _default_group_ids(self):
-        active_ids = self._context.get('active_ids', [])
-        agreements = self.env['agreement'].browse(active_ids)
-        group_ids = agreements.mapped('group_id')
-        return group_ids
 
     @api.multi
     def action_inactive_agreement(self):
+        """
+        This is for manual inactive agreement.
+        """
         self.ensure_one()
         active_ids = self._context.get('active_ids', [])
         agreements = self.env['agreement'].browse(active_ids)
-        agreements.inactive_statusbar()
+        for agreement in agreements:
+            agreement.inactive_statusbar()
+            agreement.inactive_reason = 'cancel'
         return agreements.view_agreement()
