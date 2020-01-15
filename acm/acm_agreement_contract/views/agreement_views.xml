@@ -87,8 +87,6 @@
                 <field name="contract_type"/>
                 <field name="template_id" readonly="True" attrs="{'invisible': [('is_template', '=', True)]}"/>
                 <field name="inactive_reason" readonly="True" attrs="{'invisible': [('state', '!=', 'inactive')]}"/>
-                <field name="is_extension" readonly="True" attrs="{'invisible': [('is_extension', '=', False)]}"/>
-                <field name="extension_agreement_id" readonly="True" attrs="{'invisible': [('is_extension', '=', False)]}"/>
                 <field name="is_breach" readonly="True" attrs="{'invisible': [('is_breach', '=', False)]}"/>
                 <field name="is_transfer" invisible="1"/>
                 <field name="is_terminate" invisible="1"/>
