@@ -677,9 +677,9 @@ class Agreement(models.Model):
              ('end_date', '<', today)])
         for agreement in agreements:
             agreement.inactive_statusbar()
-            if agreement.is_transfer:
+            if agreement.is_transfer and agreement.termination_date < today:
                 agreement.inactive_reason = 'transfer'
-            elif agreement.is_terminate:
+            elif agreement.is_terminate and agreement.termination_date < today:
                 agreement.inactive_reason = 'terminate'
             elif agreement.end_date < today:
                 agreement.inactive_reason = 'expire'
