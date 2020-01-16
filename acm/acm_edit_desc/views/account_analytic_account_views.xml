@@ -1,0 +1,12 @@
+<odoo>
+    <record id="account_analytic_account_edit_desc_form_view" model="ir.ui.view">
+        <field name="name">account.analytic.account.edit.desc.form.view</field>
+        <field name="model">account.analytic.account</field>
+        <field name="inherit_id" ref="acm.account_analytic_account_recurring_form_form"/>
+        <field name="arch" type="xml">
+            <field name="manual" position="before">
+                <button name="%(acm.action_edit_desc)d" string="Edit" type="action" icon="fa-external-link" context="{'edit_field': 'name'}"/>
+            </field>
+        </field>
+    </record>
+</odoo>

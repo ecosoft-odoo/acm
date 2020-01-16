@@ -70,5 +70,10 @@
         # Excel Import/Export
         'acm_batch_invoice/acm_batch_invoice_import_export/actions.xml',
         'acm_batch_invoice/acm_batch_invoice_import_export/templates.xml',
+        # acm_edit_desc
+        'acm_edit_desc/wizards/edit_desc_wizards.xml',
+        'acm_edit_desc/views/agreement_views.xml',
+        'acm_edit_desc/views/account_analytic_account_views.xml',
+        'acm_edit_desc/views/account_views.xml',
     ],
 }
