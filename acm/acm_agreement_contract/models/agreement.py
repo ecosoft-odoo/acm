@@ -237,9 +237,6 @@ class Agreement(models.Model):
     clauses_ids = fields.One2many(
         states={'active': [('readonly', True)]},
     )
-    appendix_ids = fields.One2many(
-        states={'active': [('readonly', True)]},
-    )
     previous_version_agreements_ids = fields.One2many(
         states={'active': [('readonly', True)]},
     )
