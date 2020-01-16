@@ -64,8 +64,6 @@ class AgreementExtension(models.TransientModel):
                 'date_contract': self.date_contract,
                 'date_start': self.date_start,
                 'date_end': self.date_end,
-                'is_extension': True,
-                'extension_agreement_id': agreement.id,
             })
             new_agreement = agreement.create_agreement()
             if not self.force:

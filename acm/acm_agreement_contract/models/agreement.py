@@ -8,6 +8,7 @@ from dateutil.relativedelta import relativedelta
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 from datetime import timedelta
+import datetime
 
 
 class Agreement(models.Model):
@@ -266,16 +267,6 @@ class Agreement(models.Model):
     copyvalue = fields.Char(
         states={'active': [('readonly', True)]},
     )
-    # Extension Agreement
-    is_extension = fields.Boolean(
-        string='Extension',
-        states={'active': [('readonly', True)]},
-    )
-    extension_agreement_id = fields.Many2one(
-        comodel_name='agreement',
-        string='Source Agreement (Extension)',
-        states={'active': [('readonly', True)]},
-    )
     # Breach Agreement
     is_breach = fields.Boolean(
         string='Breach',
@@ -470,8 +461,6 @@ class Agreement(models.Model):
                 context.get('recurring_interval') or self.recurring_interval,
             'recurring_rule_type':
                 context.get('recurring_rule_type') or self.recurring_rule_type,
-            'is_extension': context.get('is_extension'),
-            'extension_agreement_id': context.get('extension_agreement_id'),
         }
 
     @api.multi
@@ -676,7 +665,7 @@ class Agreement(models.Model):
 
     @api.model
     def cron_inactive_statusbar(self):
-        today = fields.Date.today()
+        today = datetime.datetime.now().date()
         agreements = self.with_context(cron=True).search(
             [('state', '=', 'active'),
              '|', ('is_transfer', '=', True),
@@ -689,7 +678,8 @@ class Agreement(models.Model):
             elif agreement.is_terminate and agreement.termination_date < today:
                 agreement.inactive_statusbar()
                 agreement.inactive_reason = 'terminate'
-            elif agreement.end_date < today:
+            elif not(agreement.is_transfer or agreement.is_terminate) and \
+                    agreement.end_date < today:
                 agreement.inactive_statusbar()
                 agreement.inactive_reason = 'expire'
         return True
