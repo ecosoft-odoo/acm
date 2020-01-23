@@ -164,7 +164,7 @@ class ACMBatchInvoice(models.Model):
             'type2': 'utility',
             'partner_id': line.partner_id.id,
             'origin': batch.name,
-            'name': '%s/%s' % (batch.group_id.name, line.lock_number),
+            'name': line.contract_id.rent_product_id.name,
             'currency_id': self.env.user.company_id.currency_id.id,
             'journal_id': batch.journal_id.id,
             'date_invoice': batch.date_invoice,
@@ -220,7 +220,7 @@ class ACMBatchInvoice(models.Model):
             ('state', '=', 'done'),
             ('group_id', '=', self.group_id.id),
             ('date_range_id.date_end', '<=', self.date_range_id.date_start),
-        ], limit=1)
+        ], order="date_invoice desc", limit=1)
         line = batch_invoice.batch_invoice_line_ids.filtered(
             lambda l: l.contract_id == contract)
         batch_invoice_line.update({
