@@ -1,6 +1,7 @@
 # Copyright 2019 Ecosoft Co., Ltd (https://ecosoft.co.th)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html)
 
+from collections import namedtuple
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError, UserError
 
@@ -231,16 +232,31 @@ class ACMBatchInvoice(models.Model):
         })
 
     @api.multi
+    def _get_overlap(self, date_start, date_end):
+        self.ensure_one()
+        Range = namedtuple('Range', ['start', 'end'])
+        r1 = Range(start=date_start, end=date_end)
+        r2 = Range(start=self.date_range_id.date_start,
+                   end=self.date_range_id.date_end)
+        latest_start = max(r1.start, r2.start)
+        earliest_end = min(r1.end, r2.end)
+        delta = (earliest_end - latest_start).days + 1
+        overlap = max(0, delta)
+        return overlap
+
+    @api.multi
     def retriveve_product_line(self):
         self.batch_invoice_line_ids = False
         if not self.batch_invoice_line_ids:
             contract = self.env['account.analytic.account'].search([
                 ('group_id', '=', self.group_id.id),
-                ('date_start', '<=', self.date_range_id.date_start),
-                ('date_end', '>=', self.date_range_id.date_end),
             ])
             Batch_line = self.env['acm.batch.invoice.line']
             for line in contract:
+                # Skip some contract as date not overlap with range date
+                overlap = self._get_overlap(line.date_start, line.date_end)
+                if not overlap:
+                    continue
                 lock_number = line.agreement_id.rent_product_id.lock_number
                 batch_invoice_line = Batch_line.new(
                     {
