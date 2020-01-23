@@ -45,6 +45,7 @@
         'acm_agreement_contract/views/agreement_views.xml',
         'acm_agreement_contract/views/acm_working_hours_views.xml',
         'acm_agreement_contract/views/acm_breach_type_views.xml',
+        'acm_agreement_contract/views/account_payment_views.xml',
         'acm_agreement_contract/report/report_templates.xml',
         'acm_agreement_contract/report/report_agreement.xml',
         'acm_agreement_contract/report/report_appendix.xml',
@@ -70,10 +71,7 @@
         # Excel Import/Export
         'acm_batch_invoice/acm_batch_invoice_import_export/actions.xml',
         'acm_batch_invoice/acm_batch_invoice_import_export/templates.xml',
-        # acm_edit_desc
-        # 'acm_edit_desc/wizards/edit_desc_wizards.xml',
-        # 'acm_edit_desc/views/agreement_views.xml',
-        # 'acm_edit_desc/views/account_analytic_account_views.xml',
-        # 'acm_edit_desc/views/account_views.xml',
+        # ACM Report
+        'acm_reports/report/report_payment_receipt_templates.xml',
     ],
 }
