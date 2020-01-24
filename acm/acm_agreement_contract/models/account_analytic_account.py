@@ -17,7 +17,7 @@ class AccountAnalyticAccount(models.Model):
     rent_product_id = fields.Many2one(
         comodel_name='product.product',
         compute='_compute_product_id',
-        string='Product',
+        string='Rental Product',
         store=True,
     )
     group_id = fields.Many2one(
