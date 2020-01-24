@@ -188,7 +188,7 @@
         <field name="arch" type="xml">
             <field name="name" position="before">
                 <field name="group_id"/>
-                <field name="rent_product_id"/>
+                <field name="line_ids" string="Product" filter_domain="[('line_ids.product_id', 'ilike', self)]"/>
             </field>
             <filter name="group_partner_id" position="before">
                 <filter name="group_group_id" string="Zone" icon="terp-partner" context="{'group_by':'group_id'}"/>
