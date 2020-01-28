@@ -22,7 +22,6 @@ class ResPartner(models.Model):
             ('prospective_lessee', 'Prospective Lessee'), ],
         compute='_compute_partner_type',
         string='Type',
-        readonly=False,
         store=True,
     )
     agreement_number = fields.Integer(
