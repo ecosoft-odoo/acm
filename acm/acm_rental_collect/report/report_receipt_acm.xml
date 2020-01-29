@@ -10,10 +10,12 @@
                 <div>
                     <h5 class="page mt32 mb32" style="color: #7c7bad;">
                         <div>
-                            <span t-if="o.type == 'out_invoice' and o.state == 'open'">Invoice</span>
+                            <!-- Customize : Change label for ACM project -->
+                            <span t-if="o.type == 'out_invoice' and o.state == 'open'">ใบแทนใบเสร็จรับเงิน</span>
                             <span t-if="o.type == 'out_invoice' and o.state in ('in_payment', 'paid')">
                                 <span>ใบเสร็จรับเงิน</span>
                             </span>
+                            <!-- -->
                             <span t-if="o.type == 'out_invoice' and o.state == 'draft'">Draft Invoice</span>
                             <span t-if="o.type == 'out_invoice' and o.state == 'cancel'">Cancelled Invoice</span>
                             <span t-if="o.type == 'out_refund'">Credit Note</span>
@@ -196,7 +198,7 @@
                 </div>
                 <div class="footer o_background_footer last-page" style="font-weight: bold;">
                     <div style="text-align: left;">
-                        <span>ลงชื่อผู้ชำระเงิน/วันที่รับ</span>
+                        <span>ลงชื่อผู้ชำระเงิน/วันที่รับเงิน</span>
                         <div style="border: 1px solid grey; width: 150px; margin-top: 50px; display: inline-block;"/>
                     </div>
                     <div style="text-align: right; margin-top: -59px;">

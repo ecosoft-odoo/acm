@@ -24,7 +24,7 @@
     <report
         id="action_report_receipt_acm"
         model="account.invoice"
-        string="Receipt ACM"
+        string="Receipt ใบเสร็จรับเงิน/ใบแทนใบเสร็จรับเงิน"
         report_type="qweb-pdf"
         name="acm.report_receipt_acm"
         file="acm.report_receipt_acm"
