@@ -67,7 +67,7 @@
                             <field name="lock_attribute"/>
                             <field name="group_id" attrs="{'required': [('value_type', '=', 'rent')]}"/>
                             <field name="subzone"/>
-                            <field name="lock_number"/>
+                            <field name="lock_number" attrs="{'required': [('value_type', '=', 'rent')]}"/>
                         </group>
                     </group>
                 </page>
