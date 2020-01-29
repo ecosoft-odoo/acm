@@ -50,7 +50,7 @@
             <attribute name="style"></attribute>
         </xpath>
         <xpath expr="//div[@name='original_copy']" position="attributes">
-            <attribute name="style">margin-left: 700px; margin-top:140px; font-weight: bold; font-size: 34px; position: absolute</attribute>
+            <attribute name="style">margin-left: 800px; margin-top:90px; font-weight: bold; font-size: 28px; position: absolute;</attribute>
         </xpath>
     </template>
 
