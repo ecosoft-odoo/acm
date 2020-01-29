@@ -64,4 +64,15 @@
         print_report_name="'Tax_Invoice_ABB_ACM - %s' %object.number"
         paperformat="acm.report_paperformat_receipt_acm"/>
 
+    <!-- Multiday Receipt -->
+    <report
+        id="action_report_multiday_receipt"
+        model="account.payment"
+        string="MultiDay_Receipt ใบเสร็จรับเงินหลายวัน"
+        report_type="qweb-pdf"
+        name="acm.report_multiday_receipt"
+        file="acm.report_multiday_receipt"
+        menu="True"
+    />
+
 </odoo>

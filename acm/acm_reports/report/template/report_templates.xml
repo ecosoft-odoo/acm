@@ -1,5 +1,6 @@
 <odoo>
 
+    <!-- Layout1 -->
     <template id="external_layout" inherit_id="web.external_layout" primary="True">
         <xpath expr="//t[@t-if='company.external_report_layout_id']" position="replace">
             <t t-if="company.external_report_layout_id" t-call="acm.external_layout_background">
@@ -7,7 +8,6 @@
             </t>
         </xpath>
     </template>
-
     <template id="external_layout_background" inherit_id="web.external_layout_background" primary="True">
         <xpath expr="//div[@class='float-left company_address']" position="replace">
             <div class="float-left company_address" style="font-size: 24px;">
@@ -24,7 +24,7 @@
                 </div>
                 <span t-esc="'เลขประจำตัวผู้เสียภาษีอากร %s' % company.partner_id.vat"/>
             </div>
-            <div style="margin-left: 800px; margin-top:140px; font-weight: bold; font-size: 34px; position: absolute">
+            <div name="original_copy" style="margin-left: 800px; margin-top:140px; font-weight: bold; font-size: 34px; position: absolute">
                 <t t-if="page == 0">
                     (ต้นฉบับ)
                 </t>
@@ -34,6 +34,23 @@
             </div>
         </xpath>
         <xpath expr="//div[@class='footer o_background_footer']" position="replace">
+        </xpath>
+    </template>
+
+    <!-- Layout2 -->
+    <template id="external_layout_2" inherit_id="acm.external_layout" primary="True">
+        <xpath expr="//t[@t-if='company.external_report_layout_id']" position="replace">
+            <t t-if="company.external_report_layout_id" t-call="acm.external_layout_background_2">
+                <t t-raw="0"/>
+            </t>
+        </xpath>
+    </template>
+    <template id="external_layout_background_2" inherit_id="acm.external_layout_background" primary="True">
+        <xpath expr="//div[@class='float-left company_address']" position="attributes">
+            <attribute name="style"></attribute>
+        </xpath>
+        <xpath expr="//div[@name='original_copy']" position="attributes">
+            <attribute name="style">margin-left: 700px; margin-top:140px; font-weight: bold; font-size: 34px; position: absolute</attribute>
         </xpath>
     </template>
 

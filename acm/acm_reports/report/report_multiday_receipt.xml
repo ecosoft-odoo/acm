@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_multiday_receipt_document">
+        <t t-call="acm.external_layout_2">
+            <t t-set="o" t-value="o.with_context(lang=lang)"/>
+            <div class="page">
+                <h5 style="color: #7c7bad;"><strong>Payment Receipt: <span t-field="o.name"/></strong></h5>
+                <div class="row mt64">
+                    <div class="col-6" t-if="o.payment_date">
+                        <strong>Payment Date: </strong> <span t-field="o.payment_date"/>
+                    </div>
+                    <div class="col-6" t-if="o.partner_id">
+                        <address t-field="o.partner_id" t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>
+                        <div t-if="o.partner_id.vat" class="mt16"><t t-esc="o.company_id.country_id.vat_label or 'Tax ID'"/>: <span t-field="o.partner_id.vat"/></div>
+                    </div>
+                </div>
+                <div class="row mb64">
+                    <div class="col-6" t-if="o.description">
+                        <strong>Reference/Description: </strong><span t-field="o.description"/>
+                     </div>
+                    <div class="col-6"></div>
+                </div>
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th><span>Invoice Date</span></th>
+                            <th><span>Invoice Number</span></th>
+                            <th class="text-right"><span>Original Amount</span></th>
+                            <th class="text-right"><span>Amount Paid</span></th>
+                            <th class="text-right"><span>Balance</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="o.reconciled_invoice_ids" t-as="inv">
+                            <td><span t-field="inv.date_invoice"/></td>
+                            <td><span t-field="inv.number"/></td>
+                            <td class="text-right"><span t-field="inv.amount_total"/></td>
+                            <td class="text-right"><span t-esc="o._get_invoice_payment_amount(inv)" t-options="{'widget': 'monetary', 'display_currency': inv.currency_id}"/></td>
+                            <td class="text-right"><span t-field="inv.residual"/></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td class="text-right"><strong>Payment Amount</strong></td>
+                            <td class="text-right"><strong t-field="o.amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="footer o_background_footer last-page row text-center" style="font-weight: bold;">
+                <div class="col-6">
+                    <span>ลงชื่อผู้รับชำระเงิน/วันที่รับเงิน</span>
+                    <div style="border: 1px solid grey; width: 150px; margin-top: 50px; display: inline-block;"/>
+                </div>
+                <div class="col-6">
+                    <span>ลงชื่อ</span>
+                    <div style="border: 1px solid grey; width: 150px; margin-top: 50px; display: inline-block;"/>
+                    <span >บัญชี/การเงิน</span>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_multiday_receipt">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-set="ncopies" t-value="2"/>
+                <t t-foreach="range(ncopies)" t-as="page">
+                    <t t-set="lang" t-value="o.partner_id.lang"/>
+                    <t t-call="acm.report_multiday_receipt_document" t-lang="lang"/>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
