@@ -49,18 +49,6 @@
         'acm_agreement_contract/report/report_templates.xml',
         'acm_agreement_contract/report/report_agreement.xml',
         'acm_agreement_contract/report/report_appendix.xml',
-        # acm_rental_collect
-        'acm_rental_collect/data/paper_format.xml',
-        'acm_rental_collect/report/template/report_templates.xml',
-        'acm_rental_collect/report/report_templates.xml',
-        'acm_rental_collect/report/rental_collect_report.xml',
-        'acm_rental_collect/report/report_voucher_acm.xml',
-        'acm_rental_collect/report/report_receipt_acm.xml',
-        'acm_rental_collect/report/report_receipt_tax_invoice_abb_acm.xml',
-        'acm_rental_collect/report/report_receipt_tax_invoice_acm.xml',
-        'acm_rental_collect/report/report_tax_invoice_abb_acm.xml',
-        'acm_rental_collect/report/report.xml',
-        'acm_rental_collect/wizard/rental_collect_report_wizards.xml',
         # acm_batch_invoice
         'acm_batch_invoice/data/batch_invoice_sequence.xml',
         'acm_batch_invoice/data/date_range.xml',
@@ -71,7 +59,18 @@
         # Excel Import/Export
         'acm_batch_invoice/acm_batch_invoice_import_export/actions.xml',
         'acm_batch_invoice/acm_batch_invoice_import_export/templates.xml',
-        # ACM Report
-        'acm_reports/report/report_payment_receipt_templates.xml',
+        # acm_reports
+        'acm_reports/data/paper_format.xml',
+        'acm_reports/report/template/report_templates.xml',
+        'acm_reports/report/report_templates.xml',
+        'acm_reports/report/rental_collect_report.xml',
+        'acm_reports/report/report_voucher_acm.xml',
+        'acm_reports/report/report_receipt_acm.xml',
+        'acm_reports/report/report_receipt_tax_invoice_abb_acm.xml',
+        'acm_reports/report/report_receipt_tax_invoice_acm.xml',
+        'acm_reports/report/report_tax_invoice_abb_acm.xml',
+        'acm_reports/report/report_multiday_receipt.xml',
+        'acm_reports/report/report.xml',
+        'acm_reports/wizard/rental_collect_report_wizards.xml',
     ],
 }
