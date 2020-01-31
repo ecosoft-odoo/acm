@@ -11,6 +11,7 @@
         <field name="model_id" ref="model_agreement"/>
         <field name="state">code</field>
         <field name="code">model.cron_inactive_statusbar()</field>
+        <field name="active">False</field>
     </record>
 
 </odoo>

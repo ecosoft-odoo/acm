@@ -431,6 +431,8 @@ class Agreement(models.Model):
     @api.multi
     def inactive_statusbar(self):
         for rec in self:
+            if rec.state == 'inactive':
+                raise UserError(_("Agreement's state must not be inactive."))
             contract = rec._search_contract()
             contract.write({'active': False, })
             rec.write({'state': 'inactive', })
