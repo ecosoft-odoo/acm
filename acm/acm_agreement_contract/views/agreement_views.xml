@@ -23,7 +23,7 @@
                 <button name="%(agreement_breach_action)d" string="Breach" type="action" class="oe_highlight" context="{'breach': True}" attrs="{'invisible': ['|', ('is_template', '=', True), '|', ('is_contract_create', '=', False), '|', ('state', '!=', 'active'), '|', ('is_breach', '=', True), '|', ('is_transfer', '=', True), ('is_terminate', '=', True)]}"/>
                 <button name="%(agreement_breach_action)d" string="Cancel Breach" type="action" class="oe_highlight" context="{'breach': False}" attrs="{'invisible': ['|', ('is_template', '=', True), '|', ('is_contract_create', '=', False), '|', ('state', '!=', 'active'), '|', ('is_breach', '=', False), '|', ('is_transfer', '=', True), ('is_terminate', '=', True)]}"/>
                 <button name="%(agreement_terminate_action)d" string="Termination" type="action" class="oe_highlight" attrs="{'invisible': ['|', ('is_template', '=', True), '|', ('is_contract_create', '=', False), '|', ('state', '!=', 'active'), '|', ('is_transfer', '=', True), ('is_terminate', '=', True)]}"/>
-                <button name="%(agreement_inactive_action)d" string="Inactive" type="action" class="oe_highlight" attrs="{'invisible': ['|', ('state', 'not in', ['draft', 'active']), '|', ('is_transfer', '=', True), ('is_terminate', '=', True)]}"/>
+                <button name="%(agreement_inactive_action)d" string="Inactive" type="action" class="oe_highlight" attrs="{'invisible': [('state', 'not in', ['draft', 'active'])]}"/>
                 <field name="state" widget="statusbar"/>
             </button>
             <div name="button_box" position="inside">
@@ -86,10 +86,10 @@
                 <field name="is_contract_create" invisible="1"/>
                 <field name="contract_type"/>
                 <field name="template_id" readonly="True" attrs="{'invisible': [('is_template', '=', True)]}"/>
-                <field name="inactive_reason" readonly="True" attrs="{'invisible': [('state', '!=', 'inactive')]}"/>
                 <field name="is_breach" readonly="True" attrs="{'invisible': [('is_breach', '=', False)]}"/>
-                <field name="is_transfer" invisible="1"/>
-                <field name="is_terminate" invisible="1"/>
+                <field name="is_transfer" attrs="{'invisible': [('is_transfer', '=', False)]}"/>
+                <field name="is_terminate" attrs="{'invisible': [('is_terminate', '=', False)]}"/>
+                <field name="inactive_reason" readonly="True" attrs="{'invisible': [('state', '!=', 'inactive')]}"/>
             </xpath>
             <xpath expr="//page[@name='products']/field/tree" position="attributes">
                 <attribute name="editable">buttom</attribute>
