@@ -4,6 +4,17 @@
         <xpath expr="//div/h5/div/span[2]/span" position="replace">
             <span>ใบเสร็จรับเงิน/ใบกำกับภาษี</span>
         </xpath>
+        <xpath expr="//table[@name='invoice_line_table']/thead/tr/th[1]" position="after">
+            <th class="text-right"><span>มาตรหลัง</span></th>
+            <th class="text-right"><span>มาตรก่อน</span></th>
+        </xpath>
+        <xpath expr="//table[@name='invoice_line_table']/tbody//tr//td[1]" position="after">
+            <td class="text-right"><span t-field="line.meter_to"/></td>
+            <td class="text-right"><span t-field="line.meter_from"/></td>
+        </xpath>
+        <xpath expr="//table[@name='invoice_line_table']/tbody//tr//td[1]" position="attributes">
+            <attribute name="width">30%</attribute>
+        </xpath>
     </template>
 
     <template id="report_receipt_tax_invoice_acm">

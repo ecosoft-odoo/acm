@@ -55,6 +55,7 @@
         'acm_batch_invoice/data/product.xml',
         'acm_batch_invoice/security/ir.model.access.csv',
         'acm_batch_invoice/wizard/acm_batch_invoice_wizard.xml',
+        'acm_batch_invoice/views/account_invoice_views.xml',
         'acm_batch_invoice/views/acm_batch_invoice_views.xml',
         # Excel Import/Export
         'acm_batch_invoice/acm_batch_invoice_import_export/actions.xml',
