@@ -18,7 +18,6 @@ class PettyCash(models.Model):
     account_id = fields.Many2one(
         comodel_name='account.account',
         string='Petty Cash Account',
-        domain=[('internal_group', '=', 'asset')],
         required=True,
     )
     petty_cash_limit = fields.Float(

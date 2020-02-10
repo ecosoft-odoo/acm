@@ -23,7 +23,7 @@ Petty Cash
     :target: https://runbot.odoo-community.org/runbot/116/12.0
     :alt: Try me on Runbot
 
-|badge1| |badge2| |badge3| |badge4| |badge5| 
+|badge1| |badge2| |badge3| |badge4| |badge5|
 
 This module work about expense that paid by petty cash.
 
@@ -59,7 +59,7 @@ Usage
 
 #. Go to Invoicing > Configuration > Petty Cash
 #. Create a new petty cash holder
-#. Petty Cash Account = Petty Cash or Account that is asset
+#. Select Petty Cash Account
 
 **Add Balance for Petty Cash Holder**
 
