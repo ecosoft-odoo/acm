@@ -2,3 +2,4 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html)
 
 from . import report_rental_collect
+from . import rental_analysis_report

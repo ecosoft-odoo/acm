@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_rental_analysis_report_allusers,rental analysis report all users,model_rental_analysis_report,agreement_legal.group_agreement_user,1,0,0,0
