@@ -1,0 +1,55 @@
+<odoo>
+    <record id="rental_analysis_report_tree_view" model="ir.ui.view">
+        <field name="name">rental.analysis.report.tree.view</field>
+        <field name="model">rental.analysis.report</field>
+        <field name="arch" type="xml">
+            <tree string="Rental Analysis Report">
+                <field name="product_id"/>
+                <field name="group_id"/>
+                <field name="subzone"/>
+                <field name="attribute_value_ids" widget="many2many_tags"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="area"/>
+                <field name="occupied_area"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="rental_analysis_report_timeline_view" model="ir.ui.view">
+        <field name="name">rental.analysis.report.timeline.view</field>
+        <field name="model">rental.analysis.report</field>
+        <field name="arch" type="xml">
+            <timeline date_start="start_date"
+                      date_stop="end_date"
+                      default_group_by="product_id"
+                      event_open_popup="true">
+                <field name="agreement_id"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <templates>
+                    <t t-name="timeline-item">
+                        <div>
+                            <t t-esc="record.agreement_id[1]"/>
+                            (<t t-esc="record.start_date"/> - <t t-esc="record.end_date"/>)
+                        </div>
+                    </t>
+                </templates>
+            </timeline>
+        </field>
+    </record>
+
+    <record id="rental_analysis_report_action" model="ir.actions.act_window">
+        <field name="name">การวิเคราะห์การเช่า / Rent Analysis</field>
+        <field name="res_model">rental.analysis.report</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,timeline</field>
+    </record>
+
+    <menuitem
+        name="การวิเคราะห์การเช่า / Rent Analysis"
+        id="rental_analysis_report_menu"
+        sequence="30"
+        parent="agreement_legal.agreement_reporting"
+        action="rental_analysis_report_action"/>
+</odoo>
