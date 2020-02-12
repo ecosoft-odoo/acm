@@ -14,6 +14,7 @@
         'report_qweb_element_page_visibility',
         'date_range',
         'excel_import_export',
+        'web_timeline',
     ],
     'data': [
         # acm_agreement_contract
