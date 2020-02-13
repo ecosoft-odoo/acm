@@ -1,7 +1,7 @@
 <odoo>
 
         <template id="report_payment_voucher_document">
-            <t t-call="acm.external_layout">
+            <t t-call="acm.external_layout_2">
                 <t t-set="o" t-value="o.with_context(lang=lang)"/>
                 <t t-set="address">
                     <span style="position: absolute; margin-left: -65px; width: 65px;" t-if="o.state in ('in_payment', 'paid')">Pay To: </span>
