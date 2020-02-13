@@ -23,15 +23,15 @@
                 <table class="table table-sm">
                     <thead>
                         <tr>
-                            <th><span>Invoice Date</span></th>
-                            <th><span>Invoice Number</span></th>
-                            <th class="text-right"><span>Original Amount</span></th>
-                            <th class="text-right"><span>Amount Paid</span></th>
-                            <th class="text-right"><span>Balance</span></th>
+                            <th><span>ค่าเช่ารายวัน</span></th>
+                            <th><span>เลขที่ใบแจ้งหนี้</span></th>
+                            <th class="text-right"><span>จำนวนเงิน</span></th>
+                            <th class="text-right"><span>ชำระแล้ว</span></th>
+                            <th class="text-right"><span>คงค้าง</span></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr t-foreach="o.invoice_ids" t-as="inv">
+                        <tr t-foreach="o.invoice_ids.sorted(lambda l: (l.date_invoice, l.number))" t-as="inv">
                             <td><span t-field="inv.date_invoice"/></td>
                             <td><span t-field="inv.number"/></td>
                             <td class="text-right"><span t-field="inv.amount_total"/></td>
