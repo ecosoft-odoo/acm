@@ -572,7 +572,8 @@ class Agreement(models.Model):
         - Every user can not permission to create agreement.
         """
         res = super(Agreement, self).fields_view_get(
-            view_id, view_type, toolbar=toolbar, submenu=submenu)
+            view_id=view_id, view_type=view_type, toolbar=toolbar,
+            submenu=submenu)
         if not self._context.get('default_is_template', False):
             root = etree.fromstring(res['arch'])
             root.set('create', 'false')
