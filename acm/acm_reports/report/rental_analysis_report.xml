@@ -22,8 +22,7 @@
         <field name="arch" type="xml">
             <timeline date_start="start_date"
                       date_stop="end_date"
-                      default_group_by="product_id"
-                      event_open_popup="true">
+                      default_group_by="group_id">
                 <field name="agreement_id"/>
                 <field name="start_date"/>
                 <field name="end_date"/>
@@ -31,11 +30,26 @@
                     <t t-name="timeline-item">
                         <div>
                             <t t-esc="record.agreement_id[1]"/>
-                            (<t t-esc="record.start_date"/> - <t t-esc="record.end_date"/>)
+                            (<t t-esc="field_utils.format.date(moment(record.start_date))"/> - <t t-esc="field_utils.format.date(moment(record.end_date))"/>)
                         </div>
                     </t>
                 </templates>
             </timeline>
+        </field>
+    </record>
+
+    <record id="rental_analysis_report_search_view" model="ir.ui.view">
+        <field name="name">rental.analysis.report.search.view</field>
+        <field name="model">rental.analysis.report</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="group_id"/>
+                <field name="product_id"/>
+                <filter name="filter_rented" string="Rented" domain="[('agreement_id','!=',False)]"/>
+                <filter name="filter_no_rented" string="No rented" domain="[('agreement_id','=',False)]"/>
+                <filter name="group_group_id" string="Zone" icon="terp-partner" context="{'group_by':'group_id'}"/>
+                <filter name="group_product_id" string="Product" icon="terp-partner" context="{'group_by':'product_id'}"/>
+            </search>
         </field>
     </record>
 
