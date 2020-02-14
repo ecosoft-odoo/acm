@@ -21,19 +21,24 @@ class RentalAnalysisReport(models.Model):
         comodel_name='account.analytic.group',
         string='Zone',
     )
-    subzone = fields.Char(
-        string='Subzone',
-    )
     attribute_value_ids = fields.Many2many(
         comodel_name='product.attribute.value',
         string='Attribute Values',
         related='product_id.attribute_value_ids',
     )
     start_date = fields.Date(
-        string='Agreement Start Date',
+        string='Start Date',
     )
     end_date = fields.Date(
-        string='Agreement End Date',
+        string='End Date',
+    )
+    value_type = fields.Selection(
+        selection=[
+            ('rent', 'Rent'),
+            ('lump_sum_rent', 'Lump Sum Rent'),
+            ('security_deposit', 'Security Deposit'),
+            ('transfer', 'Transfer'), ],
+        string='Value Type',
     )
     agreement_id = fields.Many2one(
         comodel_name='agreement',
@@ -120,8 +125,8 @@ class RentalAnalysisReport(models.Model):
         sql = """
             SELECT ROW_NUMBER() OVER(ORDER BY pp.id, a.id) AS id,
                    pp.id AS product_id, pp.product_tmpl_id,
-                   pt.group_id, pt.subzone, a.start_date, a.end_date,
-                   a.id AS agreement_id, %s AS area, %s AS occupied_area,
+                   pt.group_id, a.start_date, a.end_date, a.id AS agreement_id,
+                   pt.value_type, %s AS area, %s AS occupied_area,
                    ((%s) / (%s)) * 100 AS occupancy,
                    ((%s) / (%s)) * 100 AS total_occupancy
             FROM product_product pp
