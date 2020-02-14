@@ -12,6 +12,8 @@
                 <field name="end_date"/>
                 <field name="area"/>
                 <field name="occupied_area"/>
+                <field name="occupancy"/>
+                <field name="total_occupancy"/>
             </tree>
         </field>
     </record>
