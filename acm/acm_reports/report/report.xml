@@ -74,5 +74,14 @@
         file="acm.report_multiday_receipt"
         menu="True"
     />
+    <report
+        id="action_report_multi_day_receipt"
+        model="account.payment"
+        string="ใบเสร็จรับเงินหลายวัน"
+        report_type="qweb-pdf"
+        name="acm.report_multi_day_receipt"
+        file="acm.report_multi_day_receipt"
+        menu="True"
+    />
 
 </odoo>
