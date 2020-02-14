@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_multi_day_receipt_document">
+        <t t-call="acm.external_layout_2">
+            <t t-set="o" t-value="o.with_context(lang=lang)"/>
+            <div class="page">
+                <h5 style="color: #7c7bad;"><strong>ใบเสร็จรับเงิน <span t-field="o.name"/></strong></h5>
+                <div class="row mt64">
+                    <div class="col-6" t-if="o.payment_date">
+                        <strong>Payment Date: </strong> <span t-field="o.payment_date"/>
+                    </div>
+                    <div class="col-6" t-if="o.partner_id">
+                        <address t-field="o.partner_id" t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>
+                        <div t-if="o.partner_id.vat" class="mt16"><t t-esc="o.company_id.country_id.vat_label or 'Tax ID'"/>: <span t-field="o.partner_id.vat"/></div>
+                    </div>
+                </div>
+                <div class="row mb64">
+                    <div class="col-6" t-if="o.description">
+                        <strong>Reference/Description: </strong><span t-field="o.description"/>
+                     </div>
+                    <div class="col-6"></div>
+                </div>
+                <div class="row mb64">
+                    <div class="col-6">
+                        <strong>Narration: </strong><span t-field="o.narration"/>
+                     </div>
+                    <div class="col-6">
+                        <t t-set="move_line" t-value="request.env['account.move.line'].search([('payment_id', 'in', o.ids)]).filtered(lambda l: l.account_id.internal_type == 'receivable' and l.full_reconcile_id)"/>
+                        <strong>Amount: </strong><span t-esc="'{:,.2f}'.format(move_line.credit - move_line.debit)"/>
+                    </div>
+                </div>
+            </div>
+            <div class="footer o_background_footer last-page row text-center" style="font-weight: bold;">
+                <div class="col-6">
+                    <span>ลงชื่อผู้รับชำระเงิน/วันที่รับเงิน</span>
+                    <div style="border: 1px solid grey; width: 150px; margin-top: 50px; display: inline-block;"/>
+                </div>
+                <div class="col-6">
+                    <span>ลงชื่อ</span>
+                    <div style="border: 1px solid grey; width: 150px; margin-top: 50px; display: inline-block;"/>
+                    <span >บัญชี/การเงิน</span>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_multi_day_receipt">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-set="ncopies" t-value="2"/>
+                <t t-foreach="range(ncopies)" t-as="page">
+                    <t t-set="lang" t-value="o.partner_id.lang"/>
+                    <t t-call="acm.report_multi_day_receipt_document" t-lang="lang"/>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

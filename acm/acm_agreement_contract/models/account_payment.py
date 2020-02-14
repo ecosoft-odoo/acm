@@ -11,6 +11,10 @@ class AccountPayment(models.Model):
         string='Reference/Description',
         compute='_compute_description',
     )
+    narration = fields.Text(
+        string='Narration',
+        copy=False,
+    )
 
     @api.multi
     def _compute_description(self):

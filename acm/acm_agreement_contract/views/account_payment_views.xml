@@ -7,6 +7,9 @@
             <xpath expr="//sheet/group[1]/group[2]" position="inside">
                 <field name="description"/>
             </xpath>
+            <xpath expr="//sheet/group[1]/group[1]" position="inside">
+                <field name="narration"/>
+            </xpath>
         </field>
     </record>
 </odoo>
