@@ -27,15 +27,8 @@
     </record>
 
     <!-- Action -->
-    <record id="agreement_extension_action" model="ir.actions.act_window">
-        <field name="name">Renew Agreement</field>
-        <field name="res_model">agreement.extension</field>
-        <field name="view_type">form</field>
-        <field name="view_mode">form</field>
-        <field name="target">new</field>
-    </record>
     <act_window
-        id="agreement_extension_action_2"
+        id="agreement_extension_action"
         name="Renew Agreement"
         src_model="agreement"
         res_model="agreement.extension"
