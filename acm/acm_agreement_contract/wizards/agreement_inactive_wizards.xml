@@ -19,11 +19,13 @@
     </record>
 
     <!-- Action -->
-    <record id="agreement_inactive_action" model="ir.actions.act_window">
-        <field name="name">Inactive Agreement</field>
-        <field name="res_model">agreement.inactive</field>
-        <field name="view_type">form</field>
-        <field name="view_mode">form</field>
-        <field name="target">new</field>
-    </record>
+    <act_window id="agreement_inactive_action"
+        multi="True"
+        key2="client_action_multi"
+        name="Inactive Agreement"
+        res_model="agreement.inactive"
+        src_model="agreement"
+        view_mode="form"
+        target="new"
+        view_type="form"/>
 </odoo>
