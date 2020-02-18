@@ -22,11 +22,14 @@ class AgreementInActive(models.TransientModel):
         selection = [
             ('cancel', 'Cancelled'),
             ('expire', 'Expired'), ]
-        if len(agreements) == 1:
-            if agreements[0].is_transfer:
-                selection = [('transfer', 'Transferred')]
-            elif agreements[0].is_terminate:
-                selection = [('terminate', 'Terminated')]
+        try:
+            if len(agreements) == 1:
+                if agreements[0].is_transfer:
+                    selection = [('transfer', 'Transferred')]
+                elif agreements[0].is_terminate:
+                    selection = [('terminate', 'Terminated')]
+        except Exception as ex:
+            print(ex)
         return selection
 
     @api.model

@@ -206,6 +206,7 @@ class AgreementTransfer(models.TransientModel):
 
 class AgreementTransferAttachment(models.TransientModel):
     _name = 'agreement.transfer.attachment'
+    _description = 'Agreement Transfer Attachment'
 
     file = fields.Binary(
         string='File',
