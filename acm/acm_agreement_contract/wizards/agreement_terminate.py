@@ -158,6 +158,7 @@ class AgreementTerminate(models.TransientModel):
 
 class AgreementTerminateAttachment(models.TransientModel):
     _name = 'agreement.terminate.attachment'
+    _description = 'Agreement Terminated Attachment'
 
     file = fields.Binary(
         string='File',
