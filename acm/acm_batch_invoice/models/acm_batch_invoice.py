@@ -275,6 +275,10 @@ class ACMBatchInvoiceLine(models.Model):
     _description = 'ACM Batch Invoice Lines'
     _order = 'lock_number'
 
+    _sql_constraints = [
+        ('contract_id', 'unique(contract_id, batch_invoice_id)', 'Meter Line already exists!'),
+    ]
+
     batch_invoice_id = fields.Many2one(
         comodel_name='acm.batch.invoice',
         index=True,
