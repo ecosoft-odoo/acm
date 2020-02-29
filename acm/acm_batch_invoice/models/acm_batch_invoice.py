@@ -266,7 +266,7 @@ class ACMBatchInvoice(models.Model):
                     }
                 )
                 # Update batch invoice line
-                self._update_batch_invoice_line(line, batch_invoice_line)
+                # self._update_batch_invoice_line(line, batch_invoice_line)
                 self.batch_invoice_line_ids += batch_invoice_line
 
 
