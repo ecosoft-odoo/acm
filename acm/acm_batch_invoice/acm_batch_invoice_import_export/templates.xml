@@ -37,6 +37,11 @@
                 },
                 '__IMPORT__': {
                     'batch_invoice': {
+                        '_HEAD_': {
+                            'D2': 'name',
+                            'D4': 'date_range_id',
+                            'D5': 'group_id',
+                        },
                         '_NODEL_batch_invoice_line_ids': {
                             'A8': 'id',  # External ID matching
                             'D8': 'flat_rate',
@@ -49,6 +54,7 @@
                         }
                     }
                 },
+                '__POST_IMPORT__': '${object._check_file_import()}',
             }
         </field>
     </record>

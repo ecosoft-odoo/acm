@@ -88,6 +88,23 @@ class ACMBatchInvoice(models.Model):
     )
 
     @api.multi
+    def _check_file_import(self):
+        "If need a great performance, You need to check before _IMPORT_"
+        context = self._context.copy()
+        batch_name = context.get('name')
+        batch_zone = context.get('zone')
+        batch_date = context.get('date_name')
+        if self.name != batch_name:
+            raise UserError(
+                _('Not a same name'))
+        if self.group_id.name != batch_zone:
+            raise UserError(
+                _('Not a same zone'))
+        if self.date_range_id.name != batch_date:
+            raise UserError(
+                _('Not a same date'))
+
+    @api.multi
     def _compute_invoice_count(self):
         for rec in self:
             rec.invoice_count = \
@@ -142,9 +159,7 @@ class ACMBatchInvoice(models.Model):
     def action_view_invoice(self):
         tree_view = self.env.ref("account.invoice_tree")
         form_view = self.env.ref("account.invoice_form")
-        val = self.env['account.invoice'].search(
-            [('origin', '=', self.name)]
-        )
+        invoices = self.batch_invoice_line_ids.mapped('invoice_id')
         result = {
             'name': _('Invoices'),
             'view_mode': 'tree,form',
@@ -152,7 +167,7 @@ class ACMBatchInvoice(models.Model):
             "views": [(tree_view.id, "tree"), (form_view.id, "form")],
             'view_id': False,
             'type': 'ir.actions.act_window',
-            'domain': [('id', 'in', val.ids)],
+            'domain': [('id', 'in', invoices.ids)],
             "context": {"create": False},
         }
         return result
@@ -266,7 +281,7 @@ class ACMBatchInvoice(models.Model):
                     }
                 )
                 # Update batch invoice line
-                # self._update_batch_invoice_line(line, batch_invoice_line)
+                self._update_batch_invoice_line(line, batch_invoice_line)
                 self.batch_invoice_line_ids += batch_invoice_line
 
 
