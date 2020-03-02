@@ -371,7 +371,8 @@ class Agreement(models.Model):
                     time = relativedelta(
                         rec.end_date, rec.start_date - timedelta(1))
                 expiry_time = '%s.%s' % (
-                    time.years * 12 + time.months, str(time.days).zfill(2))
+                    str(time.years * 12 + time.months).zfill(2),
+                    str(time.days).zfill(2))
             rec.expiry_time = expiry_time
 
     @api.onchange('recurring_rule_type')
