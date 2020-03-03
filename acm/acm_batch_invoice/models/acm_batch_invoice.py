@@ -142,9 +142,7 @@ class ACMBatchInvoice(models.Model):
     def action_view_invoice(self):
         tree_view = self.env.ref("account.invoice_tree")
         form_view = self.env.ref("account.invoice_form")
-        val = self.env['account.invoice'].search(
-            [('origin', '=', self.name)]
-        )
+        invoices = self.batch_invoice_line_ids.mapped('invoice_id')
         result = {
             'name': _('Invoices'),
             'view_mode': 'tree,form',
@@ -152,7 +150,7 @@ class ACMBatchInvoice(models.Model):
             "views": [(tree_view.id, "tree"), (form_view.id, "form")],
             'view_id': False,
             'type': 'ir.actions.act_window',
-            'domain': [('id', 'in', val.ids)],
+            'domain': [('id', 'in', invoices.ids)],
             "context": {"create": False},
         }
         return result
