@@ -1,0 +1,55 @@
+<odoo>
+    <record id="occupancy_analysis_report_tree_view" model="ir.ui.view">
+        <field name="name">occupancy.analysis.report.tree.view</field>
+        <field name="model">occupancy.analysis.report</field>
+        <field name="inherit_id" ref="acm.rental_analysis_report_tree_view"/>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <tree position="attributes">
+                <attribute name="string">Occupancy Analysis Report</attribute>
+            </tree>
+            <field name="occupied_area" position="after">
+                <field name="occupancy"/>
+                <field name="total_occupancy"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="occupancy_analysis_report_search_view" model="ir.ui.view">
+        <field name="name">occupancy.analysis.report.search.view</field>
+        <field name="model">occupancy.analysis.report</field>
+        <field name="inherit_id" ref="acm.rental_analysis_report_search_view"/>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <search position="attributes">
+                <attribute name="string">Occupancy Analysis Report</attribute>
+            </search>
+        </field>
+    </record>
+
+    <record id="occupancy_analysis_report_timeline_view" model="ir.ui.view">
+        <field name="name">occupancy.analysis.report.timeline.view</field>
+        <field name="model">occupancy.analysis.report</field>
+        <field name="inherit_id" ref="acm.rental_analysis_report_timeline_view"/>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <timeline position="attributes">
+                <attribute name="string">Occupancy Analysis Report</attribute>
+            </timeline>
+        </field>
+    </record>
+
+    <record id="occupancy_analysis_report_action" model="ir.actions.act_window">
+        <field name="name">Occupancy Analysis</field>
+        <field name="res_model">occupancy.analysis.report</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,timeline</field>
+    </record>
+
+    <menuitem
+        name="Occupancy Analysis"
+        id="occupancy_analysis_report_menu"
+        sequence="30"
+        parent="agreement_legal.agreement_reporting"
+        action="occupancy_analysis_report_action"/>
+</odoo>

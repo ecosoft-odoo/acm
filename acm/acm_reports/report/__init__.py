@@ -3,3 +3,4 @@
 
 from . import report_rental_collect
 from . import rental_analysis_report
+from . import occupancy_analysis_report

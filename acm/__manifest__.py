@@ -69,6 +69,7 @@
         'acm_reports/report/report_templates.xml',
         'acm_reports/report/rental_collect_report.xml',
         'acm_reports/report/rental_analysis_report.xml',
+        'acm_reports/report/occupancy_analysis_report.xml',
         'acm_reports/report/report_voucher_acm.xml',
         'acm_reports/report/report_receipt_acm.xml',
         'acm_reports/report/report_receipt_tax_invoice_abb_acm.xml',
