@@ -54,8 +54,9 @@
         </field>
     </record>
 
-    <!-- Menu -->
+    <!-- Change Invoicing to Accounting Menu -->
     <record id="account.menu_finance" model="ir.ui.menu">
-        <field name="sequence">3</field>
+        <field name="name">Accounting</field>
+        <field name="sequence">4</field>
     </record>
 </odoo>

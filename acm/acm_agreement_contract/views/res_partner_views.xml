@@ -56,4 +56,9 @@
             </group>
         </field>
     </record>
+
+    <!-- Change sequence in contacts menu -->
+    <record id="contacts.menu_contacts" model="ir.ui.menu">
+        <field name="sequence">3</field>
+    </record>
 </odoo>
