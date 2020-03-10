@@ -1,0 +1,6 @@
+<odoo>
+    <!-- Hide Discuss Menu -->
+    <record id="mail.menu_root_discuss" model="ir.ui.menu">
+        <field name="active">False</field>
+    </record>
+</odoo>
