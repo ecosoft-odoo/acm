@@ -1,2 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_rental_analysis_report_allusers,rental analysis report all users,model_rental_analysis_report,agreement_legal.group_agreement_user,1,0,0,0
+access_occupancy_analysis_report_allusers,occupancy analysis report all users,model_occupancy_analysis_report,agreement_legal.group_agreement_user,1,0,0,0
+access_rental_rate_analysis_report_allusers,rental rate analysis report all users,model_rental_rate_analysis_report,agreement_legal.group_agreement_user,1,0,0,0
