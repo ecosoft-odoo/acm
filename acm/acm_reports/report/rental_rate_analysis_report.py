@@ -28,6 +28,15 @@ class RentalRateAnalysisReport(models.Model):
         compute='_compute_rent_period',
         string='Rent Period 3+',
     )
+    # Calculate Lum Sum Rent
+    lump_sum_rent = fields.Float(
+        compute='_compute_lump_sum_rent',
+    )
+    # Calculate Average Rental Rate / Sqm / Month
+    average_rental_rate = fields.Float(
+        compute='_compute_average_rental_rate',
+        string='Average Rental Rate / Sqm / Month',
+    )
 
     @api.multi
     def _compute_rent_period(self):
@@ -48,6 +57,24 @@ class RentalRateAnalysisReport(models.Model):
                 else:
                     sum += line.lst_price * days
             rec['rent_period_4'] = sum
+
+    @api.multi
+    def _compute_lump_sum_rent(self):
+        for rec in self:
+            agreement_lines = rec.agreement_id.line_ids.filtered(
+                lambda l: l.product_id.value_type == 'lump_sum_rent').sorted(
+                    'date_start')
+            rec.lump_sum_rent = sum(agreement_lines.mapped('lst_price'))
+
+    @api.multi
+    def _compute_average_rental_rate(self):
+        for rec in self:
+            total_rent = 0
+            for i in range(4):
+                total_rent += rec['rent_period_%s' % str(i+1)]
+            rec.average_rental_rate = \
+                (total_rent + rec['lump_sum_rent']) / (rec['area'] or 1) / \
+                (rec['agreement_length'] or 1)
 
     @api.model
     def _get_sql(self):

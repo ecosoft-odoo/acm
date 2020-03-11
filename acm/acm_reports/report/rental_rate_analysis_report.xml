@@ -16,6 +16,8 @@
                 <field name="rent_period_2"/>
                 <field name="rent_period_3"/>
                 <field name="rent_period_4"/>
+                <field name="lump_sum_rent"/>
+                <field name="average_rental_rate"/>
             </field>
         </field>
     </record>
