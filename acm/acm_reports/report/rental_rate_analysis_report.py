@@ -77,6 +77,24 @@ class RentalRateAnalysisReport(models.Model):
                 (rec['agreement_length'] or 1)
 
     @api.model
+    def read_group(self, domain, fields, groupby, offset=0, limit=None,
+                   orderby=False, lazy=True):
+        res = super(RentalRateAnalysisReport, self).read_group(
+            domain, fields, groupby, offset=offset, limit=limit,
+            orderby=orderby, lazy=lazy)
+        for line in res:
+            if '__domain' in line:
+                report = self.search(line['__domain'])
+                for i in range(4):
+                    line['rent_period_%s' % str(i+1)] = \
+                        sum(report.mapped('rent_period_%s' % str(i+1)))
+                line['lump_sum_rent'] = sum(report.mapped('lump_sum_rent'))
+                line['average_rental_rate'] = \
+                    sum(report.mapped('average_rental_rate'))
+                line.pop('agreement_length')
+        return res
+
+    @api.model
     def _get_sql(self):
         res = super(RentalRateAnalysisReport, self)._get_sql()
         sql_list = res.split('FROM')
