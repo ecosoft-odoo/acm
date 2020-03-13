@@ -90,7 +90,7 @@ class RentalRateAnalysisReport(models.Model):
                         sum(report.mapped('rent_period_%s' % str(i+1)))
                 line['lump_sum_rent'] = sum(report.mapped('lump_sum_rent'))
                 line['average_rental_rate'] = \
-                    sum(report.mapped('average_rental_rate'))
+                    sum(report.mapped('average_rental_rate')) / len(report)
                 line.pop('agreement_length')
         return res
 
