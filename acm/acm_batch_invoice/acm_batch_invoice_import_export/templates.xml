@@ -31,7 +31,6 @@
                             'H8': 'electric_from_2${value or 0}',
                             'I8': 'water_to${value or 0}',
                             'J8': 'water_from${value or 0}',
-                            'K8': 'invoice_id.display_name${value or ""}#{align=left;style=text}',
                         },
                     }
                 },
@@ -88,7 +87,6 @@
                             'J8': 'water_to${value or 0}',
                             'K8': 'water_from${value or 0}',
                             'L8': 'water_amount${value or 0.0}#{style=number}',
-                            'M8': 'invoice_id.display_name${value or ""}#{align=left;style=text}',
                         },
                     },
                 },

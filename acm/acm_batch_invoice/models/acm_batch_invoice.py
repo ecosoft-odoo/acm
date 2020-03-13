@@ -91,18 +91,12 @@ class ACMBatchInvoice(models.Model):
     def _check_file_import(self):
         "If need a great performance, You need to check before _IMPORT_"
         context = self._context.copy()
-        batch_name = context.get('name')
-        batch_zone = context.get('zone')
-        batch_date = context.get('date_name')
-        if self.name != batch_name:
-            raise UserError(
-                _('Not a same name'))
-        if self.group_id.name != batch_zone:
-            raise UserError(
-                _('Not a same zone'))
-        if self.date_range_id.name != batch_date:
-            raise UserError(
-                _('Not a same date'))
+        if self.name != context.get('name'):
+            raise UserError(_('Not a same name'))
+        if self.group_id.id != context.get('group_id'):
+            raise UserError(_('Not a same zone'))
+        if self.date_range_id.id != context.get('date_range_id'):
+            raise UserError(_('Not a same date range'))
 
     @api.multi
     def _compute_invoice_count(self):
