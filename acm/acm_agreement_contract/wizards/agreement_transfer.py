@@ -78,6 +78,21 @@ class AgreementTransfer(models.TransientModel):
         domain=[('type', '=', 'new')],
     )
 
+    @api.onchange('is_refund_deposit', 'amount')
+    def _check_is_refund_deposit(self):
+        if self.is_refund_deposit:
+            Agreement = self.env['agreement']
+            active_id = self._context.get('active_id')
+            agreement = Agreement.browse(active_id)
+            security_deposit = agreement.line_ids.filtered(
+                lambda l: l.product_id.categ_id.id == 28
+            )
+            if not security_deposit:
+                raise UserError(
+                    _('Agreement "%s" have not security deposit.') %
+                    agreement.name
+                )
+
     @api.model
     def default_get(self, fields_list):
         res = super(AgreementTransfer, self).default_get(fields_list)
@@ -164,6 +179,14 @@ class AgreementTransfer(models.TransientModel):
         Agreement = self.env['agreement']
         agreements = Agreement.browse(self._context.get('active_ids', []))
         agreements.ensure_one()
+        security_deposit = agreements.line_ids.filtered(
+            lambda l: l.product_id.categ_id.id == 28
+        )
+        if self.amount > security_deposit.lst_price:
+            raise UserError(
+                _('Maximum amount is "%d".') %
+                security_deposit.lst_price
+            )
         new_agreements = Agreement
         for agreement in agreements:
             if not agreement.is_contract_create:

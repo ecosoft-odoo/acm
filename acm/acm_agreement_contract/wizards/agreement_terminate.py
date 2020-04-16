@@ -50,6 +50,21 @@ class AgreementTerminate(models.TransientModel):
         domain=lambda self: self._get_domain_journal_id(),
     )
 
+    @api.onchange('is_refund_deposit')
+    def _check_is_refund_deposit(self):
+        if self.is_refund_deposit:
+            Agreement = self.env['agreement']
+            active_id = self._context.get('active_id')
+            agreement = Agreement.browse(active_id)
+            security_deposit = agreement.line_ids.filtered(
+                lambda l: l.product_id.categ_id.id == 28
+            )
+            if not security_deposit:
+                raise UserError(
+                    _('Agreement "%s" have not security deposit.') %
+                    agreement.name
+                )
+
     @api.model
     def _get_products(self, agreements, type=''):
         products = agreements.mapped('line_ids').filtered(
@@ -130,6 +145,14 @@ class AgreementTerminate(models.TransientModel):
         Agreement = self.env['agreement']
         agreements = Agreement.browse(self._context.get('active_ids', []))
         agreements.ensure_one()
+        security_deposit = agreements.line_ids.filtered(
+            lambda l: l.product_id.categ_id.id == 28
+        )
+        if self.amount > security_deposit.lst_price:
+            raise UserError(
+                _('Maximum amount is "%d".') %
+                security_deposit.lst_price
+            )
         for agreement in agreements:
             agreement._validate_contract_create()
             agreement.write({
