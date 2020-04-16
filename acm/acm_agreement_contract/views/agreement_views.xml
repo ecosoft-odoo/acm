@@ -152,6 +152,14 @@
         </field>
     </record>
 
+    <record id="action_termination_work" model="ir.actions.act_window">
+        <field name="name">Termination Works</field>
+        <field name="res_model">agreement</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">['|', '|', ('is_terminate', '=', True), ('is_transfer', '=', True), ('end_date','&lt;',time.strftime('%Y-%m-%d')), ('state', '=', 'active')]</field>
+    </record>
+
     <!-- Graph View -->
     <record id="agreement_graph_view" model="ir.ui.view">
         <field name="name">agreement.graph</field>
@@ -214,4 +222,11 @@
         <field name="action" ref="agreement_legal.agreement_operations_agreement"/>
         <field name="sequence">2</field>
     </record>
+
+    <menuitem
+      name="Termination Works"
+      action="action_termination_work"
+      id="menu_action_termination_work"
+      parent="agreement_legal.agreement_operations"
+      sequence="30"/>
 </odoo>
