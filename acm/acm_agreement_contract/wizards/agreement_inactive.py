@@ -58,6 +58,9 @@ class AgreementInActive(models.TransientModel):
         active_ids = self._context.get('active_ids', [])
         agreements = self.env['agreement'].browse(active_ids)
         for agreement in agreements:
+            invoice = agreement.invoice_id
+            if invoice and invoice.state != 'paid':
+                raise UserError(_("Vendor Bill's still open."))
             agreement.inactive_statusbar()
             agreement.inactive_reason = self.inactive_reason
         return agreements.view_agreement()

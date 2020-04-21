@@ -201,18 +201,19 @@ class AgreementTransfer(models.TransientModel):
             })
             new_agreement = agreement.create_agreement()
             new_agreements |= new_agreement
+            # Create vendor bill for refund security deposit
+            if self.is_refund_deposit:
+                if not self.amount:
+                    raise UserError(_('Please specify security deposit.'))
+                invoice = self._create_invoice(agreement)
             # Write old agreement
             agreement.write({
                 'is_transfer': True,
                 'termination_date': self.date_termination,
                 'termination_by': self.termination_by,
                 'reason_termination': self.reason_termination,
+                'invoice_id': invoice.id,
             })
-            # Create vendor bill for refund security deposit
-            if self.is_refund_deposit:
-                if not self.amount:
-                    raise UserError(_('Please specify security deposit.'))
-                self._create_invoice(agreement)
             # Create attachment
             for attachment in self.attachment_ids + self.attachment2_ids:
                 self.env['ir.attachment'].create({

@@ -289,6 +289,10 @@ class Agreement(models.Model):
         states={'active': [('readonly', True)]},
         copy=False,
     )
+    invoice_id = fields.Many2one(
+        'account.invoice',
+        string='Vendor Bill',
+    )
 
     @api.model
     def _default_company_contract_id(self):
