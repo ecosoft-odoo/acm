@@ -202,6 +202,7 @@ class AgreementTransfer(models.TransientModel):
             new_agreement = agreement.create_agreement()
             new_agreements |= new_agreement
             # Create vendor bill for refund security deposit
+            invoice = self.env['account.invoice']
             if self.is_refund_deposit:
                 if not self.amount:
                     raise UserError(_('Please specify security deposit.'))

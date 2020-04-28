@@ -156,6 +156,7 @@ class AgreementTerminate(models.TransientModel):
         for agreement in agreements:
             agreement._validate_contract_create()
             # Create vendor bill
+            invoice = self.env['account.invoice']
             if self.is_refund_deposit:
                 if not self.amount:
                     raise UserError(_('Please specify security deposit.'))
