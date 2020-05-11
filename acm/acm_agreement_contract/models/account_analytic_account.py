@@ -3,7 +3,6 @@
 
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError, ValidationError
-import datetime
 
 
 class AccountAnalyticAccount(models.Model):
@@ -74,10 +73,12 @@ class AccountAnalyticAccount(models.Model):
     def _create_invoice(self, invoice=False):
         self.ensure_one()
         # Can not create invoice after termination date
-        current_date = datetime.datetime.now().date()
         termination_date = self.agreement_id.termination_date
-        if not self.active or (termination_date and current_date > termination_date):
-            raise ValidationError(_("Contract %s is terminated.") % self.name)
+        if not self.active:
+            raise ValidationError(_("Can not create invoice of %s with inactive contract.") % self.name)
+        if termination_date and self.recurring_next_date > termination_date:
+            raise ValidationError(_("Can not create invoice of %s after termination date.") % self.name)
+        # Create invoice
         inv = super()._create_invoice(invoice=invoice)
         # Update invoice type
         inv.write({

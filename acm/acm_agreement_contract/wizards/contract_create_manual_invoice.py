@@ -3,7 +3,6 @@
 
 from odoo import models, api, fields, _
 from odoo.exceptions import ValidationError
-import datetime
 
 
 class ContractCreateManualInvoice(models.TransientModel):
@@ -107,6 +106,13 @@ class ContractCreateManualInvoice(models.TransientModel):
 
     @api.model
     def _create_manual_invoice(self, contract, date_invoice, products):
+        # Can not create invoice after termination date
+        termination_date = contract.agreement_id.termination_date
+        if not contract.active:
+            raise ValidationError(_("Can not create invoice of %s with inactive contract.") % contract.name)
+        if termination_date and date_invoice > termination_date:
+            raise ValidationError(_("Can not create invoice of %s after termination date.") % contract.name)
+        # Create invoice
         invoice = self.env['account.invoice'].create(
             self._prepare_manaul_invoice(contract, date_invoice))
         lines = contract.recurring_invoice_line_ids.filtered(
@@ -140,12 +146,7 @@ class ContractCreateManualInvoice(models.TransientModel):
         contracts = self.env['account.analytic.account'].\
             browse(self._context.get('active_ids'))
         invoices = self.env['account.invoice']
-        current_date = datetime.datetime.now().date()
         for contract in contracts:
-            # Can not create invoice after termination date
-            termination_date = contract.agreement_id.termination_date
-            if not contract.active or (termination_date and current_date > termination_date):
-                raise ValidationError(_("Contract %s is terminated.") % contract.name)
             # Check create manual invoice
             self._check_create_manual_invoice(
                 contract, self.date_invoice, self.product_ids)
