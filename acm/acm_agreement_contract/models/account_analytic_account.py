@@ -3,6 +3,7 @@
 
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
+import datetime
 
 
 class AccountAnalyticAccount(models.Model):
@@ -63,6 +64,17 @@ class AccountAnalyticAccount(models.Model):
     @api.multi
     def recurring_create_invoice(self):
         """Create invoice only if Invoice contain some lines."""
+        inactive = self.filtered(lambda l: not l.active)
+        if inactive:
+            raise UserError(
+                _("Contract '%s' not active") %
+                ', '.join(inactive.mapped('name'))
+            )
+        for agreement in self.mapped('agreement_id'):
+            if datetime.datetime.now().date() > agreement.termination_date:
+                raise UserError(
+                    _("Agreement '%s' is Terminated") % agreement.name
+                )
         invoices = super().recurring_create_invoice()
         no_line_invs = invoices.filtered(lambda inv: not inv.invoice_line_ids)
         invoices -= no_line_invs

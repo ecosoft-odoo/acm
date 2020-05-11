@@ -2,7 +2,8 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html)
 
 from odoo import models, api, fields, _
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError, UserError
+import datetime
 
 
 class ContractCreateManualInvoice(models.TransientModel):
@@ -138,6 +139,17 @@ class ContractCreateManualInvoice(models.TransientModel):
         self.ensure_one()
         contracts = self.env['account.analytic.account'].\
             browse(self._context.get('active_ids'))
+        inactive = contracts.filtered(lambda l: not l.active)
+        if inactive:
+            raise ValidationError(
+                _("Contract '%s' not active") %
+                ', '.join(inactive.mapped('name'))
+            )
+        for agreement in contracts.mapped('agreement_id'):
+            if datetime.datetime.now().date() > agreement.termination_date:
+                raise UserError(
+                    _("Agreement '%s' is Terminated") % agreement.name
+                )
         invoices = self.env['account.invoice']
         for contract in contracts:
             # Check create manual invoice
