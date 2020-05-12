@@ -1,0 +1,30 @@
+<odoo>
+
+    <record id="product_normal_form_view" model="ir.ui.view">
+        <field name="name">product.product.form</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+            <notebook position="inside">
+                <page name="spread_cost_revenue" string="Spread Cost/Revenue Template">
+                    <div>
+                        If a template is set, on invoice validation, invoice line with this
+                        product will auto create spread cost/revenue table using the template.
+                    </div>
+                    <group>
+                        <group>
+                            <field name="spread_template_id"/>
+                            <field name="use_invoice_line_account"/>
+                            <field name="spread_account_id" attrs="{'invisible': [('use_invoice_line_account', '=', True)]}"/>
+                            <field name="exp_rev_account_id" attrs="{'invisible': [('use_invoice_line_account', '!=', True)]}"/>
+                        </group>
+                        <group>
+                            <field name="spread_over" widget="radio" attrs="{'invisible': [('spread_template_id', '=', False)]}"/>
+                        </group>
+                    </group>
+                </page>
+            </notebook>
+        </field>
+    </record>
+
+</odoo>
