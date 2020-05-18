@@ -1,7 +1,8 @@
 # Copyright 2018-2019 Onestein (<https://www.onestein.eu>)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-from odoo import api, fields, models
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError
 
 
 class AccountSpreadTemplate(models.Model):
@@ -44,6 +45,16 @@ class AccountSpreadTemplate(models.Model):
         ('year', 'Year')],
         help="Period length for the entries")
     start_date = fields.Date()
+    auto_spread = fields.Boolean(
+        string='Auto assign template on invoice validate',
+        help="If checked, provide option to auto create spread during "
+        "invoice validation, based on product and/or account in invoice line."
+    )
+    auto_spread_ids = fields.One2many(
+        comodel_name='account.spread.template.auto',
+        string='Auto Spread On',
+        inverse_name='template_id',
+    )
 
     @api.model
     def default_get(self, fields):
@@ -59,6 +70,14 @@ class AccountSpreadTemplate(models.Model):
         if 'spread_journal_id' not in res and default_journal:
             res['spread_journal_id'] = default_journal.id
         return res
+
+    @api.constrains('auto_spread', 'auto_spread_ids')
+    def _check_product_account(self):
+        for rec in self.filtered('auto_spread'):
+            for line in rec.auto_spread_ids:
+                if not line.product_id and not line.account_id:
+                    raise UserError(_('Please select product and/or account '
+                                      'on auto spread options'))
 
     @api.onchange('spread_type', 'company_id')
     def onchange_spread_type(self):
@@ -106,3 +125,28 @@ class AccountSpreadTemplate(models.Model):
 
         spread_vals['invoice_type'] = invoice_type
         return spread_vals
+
+
+class AccountSpreadTemplate(models.Model):
+    _name = 'account.spread.template.auto'
+    _description = 'Auto create spread, based on product/account'
+
+    template_id = fields.Many2one(
+        comodel_name='account.spread.template',
+        string='Spread Template',
+        required=True,
+        ondelete='cascade',
+        index=True,
+    )
+    name = fields.Char(
+        required=True,
+        default='/',
+    )
+    product_id = fields.Many2one(
+        comodel_name='product.product',
+        string='Product',
+    )
+    account_id = fields.Many2one(
+        comodel_name='account.account',
+        string='Account',
+    )

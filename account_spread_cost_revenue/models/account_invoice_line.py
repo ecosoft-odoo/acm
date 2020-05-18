@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 from odoo import _, api, fields, models
+from odoo.exceptions import UserError
 
 
 class AccountInvoiceLine(models.Model):
@@ -65,3 +66,39 @@ class AccountInvoiceLine(models.Model):
             'target': 'new',
             'context': ctx,
         }
+
+    def create_auto_spread(self):
+        """ Create auto spread table for each invoice line, when needed """
+        for line in self:
+            if line.spread_check == 'linked':
+                continue
+            spread_type = (
+                line.invoice_type in ['out_invoice', 'out_refund'] and
+                'sale' or 'purchase')
+            spread_auto = self.env['account.spread.template.auto'].search(
+                [('template_id.auto_spread', '=', True),
+                 ('template_id.spread_type', '=', spread_type)])
+            matched = spread_auto.filtered(
+                lambda l:
+                (l.product_id == line.product_id and
+                 l.account_id == line.account_id)
+                or
+                (l.product_id == line.product_id and not l.account_id)
+                or
+                (l.account_id == line.account_id and not l.product_id)
+            )
+            template = matched.mapped('template_id')
+            if not template:
+                continue
+            elif len(template) > 1:
+                raise UserError(
+                    _('Too many auto spread templates (%s) matched with the '
+                      'invoice line, %s') % (len(template), line.display_name))
+            # Found auto spread template for this invoice line, create it
+            wizard = self.env['account.spread.invoice.line.link.wizard'].new({
+                'invoice_line_id': line.id,
+                'company_id': line.company_id.id,
+                'spread_action_type': 'template',
+                'template_id': template.id,
+            })
+            wizard.confirm()
