@@ -15,6 +15,7 @@
         'date_range',
         'excel_import_export',
         'web_timeline',
+        'account_spread_cost_revenue',
     ],
     'data': [
         # acm_agreement_contract
@@ -80,7 +81,7 @@
         'acm_reports/report/report_multi_day_receipt.xml',
         'acm_reports/report/report.xml',
         'acm_reports/wizard/rental_collect_report_wizards.xml',
-        # acm_reports
-        'acm_spread_cost_revenue/views/product_view.xml',
+        # acm_spread_cost_revenue
+        'acm_spread_cost_revenue/views/account_spread_view.xml',
     ],
 }

@@ -28,6 +28,20 @@
                             <field name="spread_journal_id" domain="[('company_id', '=', company_id)]" widget="selection"/>
                         </group>
                     </group>
+                    <div>
+                        <field name="auto_spread"/>
+                        <label for="auto_spread"/>
+                    </div>
+                    <p attrs="{'invisible': [('auto_spread', '!=', True)]}">
+                        Automatically use this spread template on invoice validation for invoice lines using below product and/or account,
+                    </p>
+                    <field name="auto_spread_ids" attrs="{'invisible': [('auto_spread', '!=', True)]}" nolabel="1">
+                        <tree editable="bottom">
+                            <field name="name"/>
+                            <field name="product_id"/>
+                            <field name="account_id"/>
+                        </tree>
+                    </field>
                 </sheet>
             </form>
         </field>

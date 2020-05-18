@@ -8,14 +8,6 @@ from odoo.exceptions import UserError
 class AccountSpreadTemplate(models.Model):
     _inherit = 'account.spread.template'
 
-    period_type = fields.Selection(
-        default='month',  # For ACM, only allow spread by month
-        readonly=True,
-    )
-    start_date = fields.Date(
-        readonly=True,  # For ACM, do not allow start date
-    )
-
     def _prepare_spread_from_template(self, spread_account_id=False):
         res = super()._prepare_spread_from_template(
             spread_account_id=spread_account_id)
