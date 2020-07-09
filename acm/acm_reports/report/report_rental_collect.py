@@ -15,6 +15,7 @@ class ReportRentalCollect(models.AbstractModel):
         wizard = Wizard.browse(self.env.context.get('active_ids'))
         products = self.env['product.product'].search(
             [('value_type', '=', 'rent'),
+             ('categ_id', '=', wizard.categ_id.ids),
              ('group_id', '=', wizard.group_id.id), ])
         agreement_lines = self.env['agreement.line'].search(
             [('product_id', 'in', products.ids),

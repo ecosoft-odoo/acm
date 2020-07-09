@@ -9,6 +9,7 @@
                     <group>
                         <field name="group_id"/>
                         <field name="date_print"/>
+                        <field name="categ_id"/>
                     </group>
                 </group>
                 <footer>
