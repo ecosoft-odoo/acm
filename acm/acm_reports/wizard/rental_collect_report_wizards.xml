@@ -10,6 +10,9 @@
                         <field name="group_id"/>
                         <field name="date_print"/>
                     </group>
+                    <group>
+                        <field name="categ_id"/>
+                    </group>
                 </group>
                 <footer>
                     <button name="print_report" type="object" string="Print" class="oe_highlight"/>
