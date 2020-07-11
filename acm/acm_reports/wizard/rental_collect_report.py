@@ -19,6 +19,19 @@ class RentalCollectReport(models.TransientModel):
         string='Date',
         required=True,
     )
+    categ_id = fields.Many2one(
+        comodel_name='product.category',
+        string='Product Category',
+        domain=lambda self: self._get_domain_categ_id(),
+        required=True,
+    )
+
+    @api.model
+    def _get_domain_categ_id(self):
+        products = self.env['product.template'].search([
+            ('value_type', '=', 'rent')])
+        categs = products.mapped('categ_id')
+        return [('id', 'in', categs.ids)]
 
     @api.multi
     def print_report(self):
