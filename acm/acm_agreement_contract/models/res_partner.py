@@ -29,6 +29,10 @@ class ResPartner(models.Model):
         compute='_compute_agreement_number',
     )
 
+    _sql_constraints = [
+        ('name_uniq', 'unique (name)', 'Name must be unique!'),
+    ]
+
     @api.depends('agreement_ids', 'agreement_ids.state')
     def _compute_partner_type(self):
         for rec in self:
