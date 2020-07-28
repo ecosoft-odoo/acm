@@ -28,15 +28,11 @@
         <field name="priority" eval="10000"/>
         <field name="arch" type="xml">
             <field name="title" position="replace"/>
-            <field name="vat" position="replace"/>
             <field name="company_type" position="after">
                 <div class="o_row">
                     <field name="title" options="{&quot;no_open&quot;: True}" attrs="{'invisible': [('is_company', '=', True)]}" placeholder="Title"/>
                 </div>
             </field>
-            <xpath expr="//sheet/div[2]/h1[1]" position="after">
-                <field name="vat" placeholder="e.g. BE0477472701" attrs="{'readonly': [('parent_id','!=',False)]}"/>
-            </xpath>
             <xpath expr="//group[1]/group[1]" position="inside">
                 <field name="partner_type"/>
                 <field name="date_birth" attrs="{'invisible': [('company_type', '!=', 'person')]}"/>
