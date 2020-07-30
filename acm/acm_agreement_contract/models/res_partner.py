@@ -19,7 +19,8 @@ class ResPartner(models.Model):
         selection=[
             ('active_lessee', 'Active Lessee'),
             ('inactive_lessee', 'Inactive Lessee'),
-            ('prospective_lessee', 'Prospective Lessee'), ],
+            ('prospective_lessee', 'Prospective Lessee'),
+            ('non_lessee', 'Non Lessee'), ],
         compute='_compute_partner_type',
         string='Type',
         store=True,
@@ -37,12 +38,12 @@ class ResPartner(models.Model):
     def _compute_partner_type(self):
         for rec in self:
             agreements = rec.agreement_ids
-            if not agreements:
-                continue
             if agreements.filtered(lambda l: l.state == 'active'):
                 rec.partner_type = 'active_lessee'
-            else:
+            elif agreements.filtered(lambda l: l.state == 'inactive'):
                 rec.partner_type = 'inactive_lessee'
+            else:
+                rec.partner_type = 'non_lessee'
 
     @api.multi
     def _compute_age(self):
