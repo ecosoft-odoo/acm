@@ -16,14 +16,20 @@ class AccountMove(models.Model):
                      l.tax_line_id.tax_exigibility == 'on_payment')
         if move_lines.filtered(lambda l: not l.tax_invoice_manual):
             return False
+
+        res = super().post(invoice=invoice)
+
         # Cleanup, delete lines with same account_id and sum(amount) == 0
         for move in self:
             accounts = move.line_ids.mapped("account_id")
             for account in accounts:
                 lines = move.line_ids.filtered(lambda l: l.account_id == account)
                 if sum(lines.mapped("balance")) == 0:
-                    lines.unlink()
-        return super().post(invoice=invoice)
+                    self._cr.execute("""
+                        delete from account_move_line where id in %s
+                    """, (tuple(lines.ids), ))
+
+        return res
 
     @api.multi
     def _reverse_move(self, date=None, journal_id=None, auto=False):
