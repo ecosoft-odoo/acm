@@ -23,6 +23,13 @@ class AccountInvoice(models.Model):
     )
 
     @api.multi
+    def _get_computed_reference(self):
+        self.ensure_one()
+        if self.company_id.invoice_reference_type == 'invoice_number':
+            return self.number
+        return super()._get_computed_reference()
+
+    @api.multi
     @api.depends('invoice_line_ids')
     def _compute_groups(self):
         for rec in self:
