@@ -48,15 +48,16 @@ class VatReport(models.TransientModel):
         self._cr.execute("""
             SELECT id, company_id, name, account_id, tax_invoice, partner_id,
                 date, tax_date, tax_amount,
-                CASE when tax_amount < 0 then -tax_base_amount
-                else tax_base_amount end as tax_base_amount
+                CASE when tax_amount < 0 THEN -tax_base_amount
+                ELSE tax_base_amount END as tax_base_amount
             FROM (
                 SELECT aml.id as id, am.company_id, am.name, aml.account_id,
                     aml.tax_invoice, aml.partner_id, aml.date, aml.tax_date,
                     abs(aml.tax_base_amount) as tax_base_amount,
                     CASE WHEN tx.type_tax_use = 'sale'
-                    then -aml.balance
-                    else aml.balance end as tax_amount
+                    THEN -aml.balance
+                    WHEN tx.type_tax_use = 'adjustment' THEN abs(aml.balance)
+                    ELSE aml.balance END as tax_amount
                 FROM account_move_line aml
                 JOIN account_move am on aml.move_id = am.id
                 JOIN account_account aa on aa.id = aml.account_id
