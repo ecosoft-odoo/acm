@@ -83,5 +83,7 @@
         'acm_reports/wizard/rental_collect_report_wizards.xml',
         # acm_spread_cost_revenue
         'acm_spread_cost_revenue/views/account_spread_view.xml',
+        # acm_hr_expense_petty_cash
+        'acm_hr_expense_petty_cash/views/hr_expense_sheet_view.xml'
     ],
 }
