@@ -5,8 +5,7 @@
     'name': 'Petty Cash',
     'version': '12.0.1.0.0',
     'category': 'Human Resources',
-    'author': 'Ecosoft, '
-              'Odoo Community Association (OCA)',
+    'author': 'Ecosoft, Odoo Community Association (OCA)',
     'license': 'AGPL-3',
     'website': 'https://github.com/OCA/hr',
     'depends': [
