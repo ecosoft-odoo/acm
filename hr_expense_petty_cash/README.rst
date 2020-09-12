@@ -23,14 +23,14 @@ Petty Cash
     :target: https://runbot.odoo-community.org/runbot/116/12.0
     :alt: Try me on Runbot
 
-|badge1| |badge2| |badge3| |badge4| |badge5|
+|badge1| |badge2| |badge3| |badge4| |badge5| 
 
 This module work about expense that paid by petty cash.
 
 General Process:
 
 #. Create Petty Cash Holder
-#. Transfer cash to Petty Cash Holder By Vendor bill
+#. Transfer cash to Petty Cash Holder
 #. You can create expense paid by petty cash and select petty cash holder.
 #. Then balance of petty cash holder less than amount of expense, you must transfer cash to petty cash holder before Submit Report to Manager.
 
@@ -59,7 +59,7 @@ Usage
 
 #. Go to Invoicing > Configuration > Petty Cash
 #. Create a new petty cash holder
-#. Select Petty Cash Account
+#. Select Petty Cash Account and Journal (optional)
 
 **Add Balance for Petty Cash Holder**
 
@@ -71,15 +71,17 @@ Usage
 **Create an Expense paid by Petty Cash**
 
 #. Go to Expenses > My Expenses
-#. Create a new Expense
+#. Create a new expense
 #. Select Paid by = Petty Cash and Select Petty Cash Holder
 
 **Create an Expense Report paid by Petty Cash**
 
-#. Go to Expenses > My Expenses
-#. Create a new Expense
-#. Select Paid by = Petty Cash and Select Petty Cash Holder
-#. Click Create Report Button
+#. Go to Expenses > My Expense Reports
+#. Create a new expense report
+#. Select or Create expenses Paid by Petty Cash and same Petty Cash Holder
+
+Note : Bill and Expense will default journal from petty cash holder,
+if you configure journal in petty cash holder.
 
 Bug Tracker
 ===========
@@ -102,7 +104,10 @@ Authors
 Contributors
 ~~~~~~~~~~~~
 
-* Pimolnat Suntian <pimolnats@ecosoft.co.th>
+* `Ecosoft <http://ecosoft.co.th>`__:
+
+  * Pimolnat Suntian <pimolnats@ecosoft.co.th>
+  * Saran Lim. <saranl@ecosoft.co.th>
 
 Maintainers
 ~~~~~~~~~~~

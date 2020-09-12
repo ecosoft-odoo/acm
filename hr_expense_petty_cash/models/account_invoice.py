@@ -3,6 +3,7 @@
 
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
+from odoo.tools import float_compare
 
 
 class AccountInvoice(models.Model):
@@ -31,8 +32,12 @@ class AccountInvoice(models.Model):
             amount = sum(rec.invoice_line_ids.filtered(
                 lambda l: l.account_id == account).mapped('price_subtotal'))
             company_currency = rec.company_id.currency_id
-            amount_company = rec.currency_id.compute(amount, company_currency)
-            if amount_company > max_amount:
+            amount_company = rec.currency_id._convert(
+                amount, company_currency, rec.company_id,
+                rec.date_invoice or fields.Date.today())
+            prec = rec.currency_id.rounding
+            if float_compare(
+                    amount_company, max_amount, precision_rounding=prec) == 1:
                 raise ValidationError(
                     _('Petty Cash balance is %s %s.\n'
                       'Max amount to add is %s %s.') %
@@ -45,8 +50,9 @@ class AccountInvoice(models.Model):
         # Get suggested currency amount
         amount = petty_cash.petty_cash_limit - petty_cash.petty_cash_balance
         company_currency = self.env.user.company_id.currency_id
-        amount_doc_currency = \
-            company_currency.compute(amount, self.currency_id)
+        amount_doc_currency = company_currency._convert(
+            amount, self.currency_id, self.company_id,
+            self.date_invoice or fields.Date.today())
 
         inv_line = self.env['account.invoice.line'].new({
             'name': petty_cash.account_id.name,
@@ -61,6 +67,7 @@ class AccountInvoice(models.Model):
     @api.onchange('is_petty_cash', 'partner_id')
     def _onchange_is_petty_cash(self):
         self.invoice_line_ids = False
+        ctx = self._context.copy()
         if self.is_petty_cash:
             if not self.partner_id:
                 raise ValidationError(_('Please select petty cash holder'))
@@ -71,3 +78,6 @@ class AccountInvoice(models.Model):
                 raise ValidationError(_('%s is not a petty cash holder') %
                                       self.partner_id.name)
             self._add_petty_cash_invoice_line(petty_cash)
+            if petty_cash.journal_id:
+                ctx.update({'default_journal_id': petty_cash.journal_id.id})
+        self.journal_id = self.with_context(ctx)._default_journal()
