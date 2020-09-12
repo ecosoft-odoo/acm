@@ -62,7 +62,7 @@ class HrExpenseSheet(models.Model):
                     rec.accounting_date or fields.Date.today())
                 prec = rec.currency_id.rounding
                 if float_compare(
-                        amount_company, balance, precision_rounding=prec):
+                        amount_company, balance, precision_rounding=prec) == 1:
                     raise ValidationError(
                         _('Not enough money in petty cash holder.\n'
                           'You are requesting %s%s, '

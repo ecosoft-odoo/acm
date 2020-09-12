@@ -37,7 +37,7 @@ class AccountInvoice(models.Model):
                 rec.date_invoice or fields.Date.today())
             prec = rec.currency_id.rounding
             if float_compare(
-                    amount_company, max_amount, precision_rounding=prec):
+                    amount_company, max_amount, precision_rounding=prec) == 1:
                 raise ValidationError(
                     _('Petty Cash balance is %s %s.\n'
                       'Max amount to add is %s %s.') %
