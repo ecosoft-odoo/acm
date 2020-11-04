@@ -12,3 +12,8 @@ class ResCompany(models.Model):
     market_address = fields.Char()
     fax = fields.Char()
     company_phone = fields.Char()
+    show_invoice_date = fields.Boolean(
+        string="Show Invoice Date (Days) ?",
+        default=False,
+        help="When you click this, the system will Show Invoice Date (Days) on the agreement if repeat every only 'Month(s)'"
+    )

@@ -45,6 +45,8 @@
                     <field name="recurring_interval" class="oe_inline"/>
                     <field name="recurring_rule_type" class="oe_inline"/>
                 </div>
+                <field name="show_invoice_date" invisible="1"/>
+                <field name="invoice_date_days" attrs="{'invisible': ['|', '|', ('show_invoice_date', '!=', True), ('is_template', '=', True), ('recurring_rule_type', '!=', 'monthly')], 'required': [('show_invoice_date', '=', True), ('is_template', '=', False), ('recurring_rule_type', '=', 'monthly')]}"/>
             </field>
             <field name="termination_date" position="attributes">
                 <attribute name="readonly">True</attribute>

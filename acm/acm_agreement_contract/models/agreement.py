@@ -293,6 +293,14 @@ class Agreement(models.Model):
         'account.invoice',
         string='Vendor Bill',
     )
+    invoice_date_days = fields.Integer(
+        string="Invoice Date (Days)",
+        states={'active': [('readonly', True)]},
+        default=1,
+    )
+    show_invoice_date = fields.Boolean(
+        related="company_id.show_invoice_date",
+    )
 
     @api.model
     def _default_company_contract_id(self):
@@ -320,6 +328,12 @@ class Agreement(models.Model):
                         'product_id')
             if len(rent_products) > 1:
                 raise UserError(_('Only one rental product is allowed.'))
+
+    @api.constrains("invoice_date_days")
+    def _check_invoice_date_days(self):
+        for rec in self:
+            if rec.invoice_date_days <= 0:
+                raise UserError(_("Invoice Date (Days) must greater than 0."))
 
     @api.multi
     def _search_contract(self):
@@ -503,6 +517,47 @@ class Agreement(models.Model):
         return new_agreements
 
     @api.multi
+    def _get_recurring_next_date(
+            self, start_date, invoice_date_days, message, date):
+        self.ensure_one()
+        max_day = (start_date + relativedelta(day=31)).day
+        if invoice_date_days > max_day:
+            message = "Invoice Date (Days) greater than last day of %s/%s" % (
+                str(start_date.month).rjust(2, "0"), start_date.year)
+        else:
+            date = "%s-%s-%s" % (
+                start_date.year, str(start_date.month).rjust(2, "0"),
+                invoice_date_days)
+        return message, date
+
+    @api.multi
+    def _compute_recurring_next_date(self):
+        """
+        This method is compute Date of Next Invoice by Invoice Date (Days)
+        """
+        self.ensure_one()
+        if not self.show_invoice_date or self.recurring_rule_type != "monthly":
+            return self.start_date
+
+        # Compute 'Date of Next Invoice'
+        message = ""
+        date = ""
+        if self.start_date.day <= self.invoice_date_days:
+            message, date = self._get_recurring_next_date(
+                self.start_date, self.invoice_date_days, message, date)
+        else:
+            message, date = self._get_recurring_next_date(
+                self.start_date + relativedelta(months=+1, day=1),
+                self.invoice_date_days, message, date)
+        if message:
+            raise UserError(_(message))
+        if not date:
+            raise UserError(_("Can not compute Date of Next Invoice."))
+        if not (self.start_date <= datetime.datetime.strptime(date, "%Y-%m-%d").date() <= self.end_date):
+            raise UserError(_("Date of Next Invoice %s is greater than End Date.") % (date, ))
+        return date
+
+    @api.multi
     def _prepare_contract(self):
         self.ensure_one()
         journal = self.env['account.journal'].search(
@@ -521,7 +576,7 @@ class Agreement(models.Model):
             'recurring_rule_type': self.recurring_rule_type,
             'date_start': self.start_date,
             'date_end': self.end_date,
-            'recurring_next_date': self.start_date,
+            'recurring_next_date': self._compute_recurring_next_date(),
             'active': True,
             'group_id': self.group_id.id,
         }
@@ -687,6 +742,10 @@ class Agreement(models.Model):
                 agreement.inactive_statusbar()
                 agreement.inactive_reason = 'expire'
         return True
+
+    @api.onchange("recurring_rule_type")
+    def _onchange_recurring_rule_type(self):
+        self.invoice_date_days = 1
 
 
 class AgreementLine(models.Model):
