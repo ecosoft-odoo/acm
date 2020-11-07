@@ -28,6 +28,8 @@
                 <field name="partner_id"/>
                 <filter name="filter_rented" string="Rented" domain="[('agreement_id','!=',False)]"/>
                 <filter name="filter_no_rented" string="No rented" domain="[('agreement_id','=',False)]"/>
+                <separator/>
+                <filter name="filter_active_current" string="Active Current" domain="['|', ('start_date', '=', False), ('start_date','&lt;=', time.strftime('%Y-%m-%d'))]"/>
                 <filter name="group_value_type" string="Value Type" icon="terp-partner" context="{'group_by':'value_type'}"/>
                 <filter name="group_group_id" string="Zone" icon="terp-partner" context="{'group_by':'group_id'}"/>
                 <filter name="group_product_id" string="Product" icon="terp-partner" context="{'group_by':'product_id'}"/>

@@ -87,6 +87,10 @@
             <filter name="associatedpartner" position="before">
                 <filter name="group_group_id" string="Zone" icon="terp-partner" context="{'group_by':'group_id'}"/>
             </filter>
+            <filter name="inactive" position="before">
+                <filter name="filter_active_current" string="Active Current" domain="[('date_start','&lt;=', time.strftime('%Y-%m-%d'))]"/>
+                <separator/>
+            </filter>
         </field>
     </record>
 </odoo>
