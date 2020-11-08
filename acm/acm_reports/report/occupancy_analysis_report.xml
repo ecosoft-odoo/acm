@@ -44,6 +44,7 @@
         <field name="res_model">occupancy.analysis.report</field>
         <field name="view_type">form</field>
         <field name="view_mode">tree,timeline</field>
+        <field name="context">{'search_default_filter_active_current': 1}</field>
     </record>
 
     <menuitem

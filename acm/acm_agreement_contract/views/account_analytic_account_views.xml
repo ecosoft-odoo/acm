@@ -89,6 +89,7 @@
             </filter>
             <filter name="inactive" position="before">
                 <filter name="filter_active_current" string="Active Current" domain="[('date_start','&lt;=', time.strftime('%Y-%m-%d'))]"/>
+                <filter name="filter_no_active_current" string="No Active Current" domain="[('date_start','&gt;', time.strftime('%Y-%m-%d'))]"/>
                 <separator/>
             </filter>
         </field>

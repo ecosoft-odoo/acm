@@ -212,6 +212,7 @@
             <filter name="filter_templates" position="after">
                 <separator/>
                 <filter name="filter_active_current" string="Active Current" domain="[('state', '=', 'active'), ('start_date','&lt;=', time.strftime('%Y-%m-%d'))]"/>
+                <filter name="filter_no_active_current" string="No Active Current" domain="[('state', 'in', ['draft', 'active']), ('start_date','&gt;', time.strftime('%Y-%m-%d'))]"/>
             </filter>
         </field>
     </record>
