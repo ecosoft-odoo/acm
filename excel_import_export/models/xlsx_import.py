@@ -46,7 +46,7 @@ class XLSXImport(models.AbstractModel):
         xml_id = record.get_external_id()
         if not xml_id or (record.id in xml_id and xml_id[record.id] == ''):
             ModelData.create({'name': '%s_%s' % (record._table, record.id),
-                              'module': 'excel_import_export',
+                              'module': '__excel_import_export__',
                               'model': record._name,
                               'res_id': record.id, })
             xml_id = record.get_external_id()
@@ -203,14 +203,19 @@ class XLSXImport(models.AbstractModel):
                  'encoding': '',
                  'separator': '',
                  'quoting': '"',
-                 'date_style': '',
-                 'datetime_style': '%Y-%m-%d %H:%M:%S',
+                 'date_format': '%Y-%m-%d',
+                 'datetime_format': '%Y-%m-%d %H:%M:%S',
                  'float_thousand_separator': ',',
                  'float_decimal_separator': '.',
                  'fields': []})
             if errors.get('messages'):
-                message = errors['messages']['message'].encode('utf-8')
-                raise ValidationError(message)
+                message = _('Error importing data')
+                messages = errors['messages']
+                if isinstance(messages, dict):
+                    message = messages['message']
+                if isinstance(messages, list):
+                    message = ', '.join([x['message'] for x in messages])
+                raise ValidationError(message.encode('utf-8'))
             return self.env.ref(xml_id)
         except xlrd.XLRDError:
             raise ValidationError(
