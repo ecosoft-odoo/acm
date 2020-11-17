@@ -158,8 +158,7 @@ class AgreementTerminate(models.TransientModel):
         debit_account_id = self.journal_id.default_debit_account_id.id
         credit_account_id = self.journal_id.default_credit_account_id.id
         if not debit_account_id or not credit_account_id:
-            raise UserError(
-                _('Please define account on the journal.'))
+            raise UserError(_('Wrong journal !!'))
         return {
             'date': self.date_invoice,
             'ref': self.ref,
