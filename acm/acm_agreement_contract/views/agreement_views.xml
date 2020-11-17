@@ -90,7 +90,8 @@
                 <field name="is_transfer" attrs="{'invisible': [('is_transfer', '=', False)]}"/>
                 <field name="is_terminate" attrs="{'invisible': [('is_terminate', '=', False)]}"/>
                 <field name="inactive_reason" readonly="True" attrs="{'invisible': [('state', '!=', 'inactive')]}"/>
-                <field name="invoice_id" readonly="True" attrs="{'invisible': [('is_transfer', '=', False), ('is_terminate', '=', False)]}"/>
+                <field name="invoice_id" readonly="True" attrs="{'invisible': [('invoice_id', '=', False)]}"/>
+                <field name="move_id" readonly="True" attrs="{'invisible': [('move_id', '=', False)]}"/>
             </xpath>
             <xpath expr="//page[@name='products']/field/tree" position="attributes">
                 <attribute name="editable">buttom</attribute>

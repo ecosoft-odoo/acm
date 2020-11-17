@@ -25,12 +25,20 @@ class AgreementTerminate(models.TransientModel):
         string='Termination Reason',
         required=True,
     )
+    is_attachment = fields.Boolean(
+        string='Attachment ?',
+        default=False,
+    )
     attachment_ids = fields.One2many(
         comodel_name='agreement.terminate.attachment',
         inverse_name='terminate_id',
         string='Attachment',
     )
-    is_refund_deposit = fields.Boolean(
+    refund_deposit_type = fields.Selection(
+        selection=[
+            ('refund_deposit', 'Refund Deposit'),
+            ('no_refund_deposit', 'No Refund Deposit'),
+        ],
         string='Refund Deposit ?',
     )
     product_id = fields.Many2one(
@@ -42,42 +50,50 @@ class AgreementTerminate(models.TransientModel):
         string='Amount',
     )
     date_invoice = fields.Date(
-        string='Bill Date',
+        string='Date',
     )
     journal_id = fields.Many2one(
         comodel_name='account.journal',
         string='Journal',
-        domain=lambda self: self._get_domain_journal_id(),
+    )
+    ref = fields.Char(
+        string='Reference',
     )
 
-    @api.onchange('is_refund_deposit')
-    def _check_is_refund_deposit(self):
-        if self.is_refund_deposit:
-            Agreement = self.env['agreement']
+    @api.onchange('refund_deposit_type')
+    def _check_refund_deposit_type(self):
+        domain = []
+        if self.refund_deposit_type:
             active_id = self._context.get('active_id')
-            agreement = Agreement.browse(active_id)
+            agreement = self.env['agreement'].browse(active_id)
             security_deposit = agreement.line_ids.filtered(
-                lambda l: l.product_id.categ_id.id == 28
+                lambda l: l.product_id.value_type == 'security_deposit'
             )
             if not security_deposit:
                 raise UserError(
                     _('Agreement "%s" have not security deposit.') %
                     agreement.name
                 )
-
-    @api.model
-    def _get_products(self, agreements, type=''):
-        products = agreements.mapped('line_ids').filtered(
-            lambda l: l.product_id.value_type == type).mapped('product_id')
-        return products
+            if self.refund_deposit_type == 'refund_deposit':
+                domain = [('type', '=', 'purchase')]
+            else:
+                domain = [('type', '=', 'general')]
+        return {'domain': {'journal_id': domain}}
 
     @api.model
     def default_get(self, fields_list):
         res = super(AgreementTerminate, self).default_get(fields_list)
-        journal = self.env['account.journal'].search(
-            self._get_domain_journal_id())
-        if len(journal) <= 1:
-            res['journal_id'] = journal.id
+        active_ids = self._context.get('active_ids')
+        agreements = self.env['agreement'].browse(active_ids)
+        # Make sure no have multiple agreements
+        agreements.ensure_one()
+        agreement_lines = agreements.line_ids.filtered(
+            lambda l: l.product_id.value_type == 'security_deposit')
+        if len(agreement_lines) == 1:
+            res.update({
+                'product_id': agreement_lines[0].product_id.id,
+                'amount': agreement_lines[0].lst_price,
+            })
         return res
 
     @api.model
@@ -86,13 +102,12 @@ class AgreementTerminate(models.TransientModel):
             [('value_type', '=', 'security_deposit')])
         return [('id', 'in', products.ids)]
 
-    @api.model
-    def _get_domain_journal_id(self):
-        return [('type', '=', 'purchase'),
-                ('company_id', '=', self.env.user.company_id.id)]
-
-    @api.model
+    @api.multi
     def _prepare_invoice(self, agreement):
+        self.ensure_one()
+        if self.journal_id.type != 'purchase':
+            raise UserError(
+                _('This journal is not supported for create vendor bills.'))
         invoice = self.env['account.invoice'].new({
             'type': 'in_invoice',
             'partner_id': agreement.partner_id.id,
@@ -107,8 +122,9 @@ class AgreementTerminate(models.TransientModel):
         invoice._onchange_partner_id()
         return invoice._convert_to_write(invoice._cache)
 
-    @api.model
+    @api.multi
     def _prepare_invoice_line(self, agreement, invoice):
+        self.ensure_one()
         contract = agreement._search_contract()
         invoice_line = self.env['account.invoice.line'].new({
             'invoice_id': invoice.id,
@@ -125,14 +141,55 @@ class AgreementTerminate(models.TransientModel):
         })
         return invoice_line_vals
 
-    @api.model
+    @api.multi
     def _create_invoice(self, agreement):
+        self.ensure_one()
         invoice = self.env['account.invoice'].create(
             self._prepare_invoice(agreement))
         self.env['account.invoice.line'].create(
             self._prepare_invoice_line(agreement, invoice))
         invoice.compute_taxes()
         return invoice
+
+    @api.multi
+    def _prepare_move(self, agreement):
+        self.ensure_one()
+        contract = agreement._search_contract()
+        debit_account_id = self.journal_id.default_debit_account_id.id
+        credit_account_id = self.journal_id.default_credit_account_id.id
+        if not debit_account_id or not credit_account_id:
+            raise UserError(_('Wrong journal !!'))
+        return {
+            'date': self.date_invoice,
+            'ref': self.ref,
+            'journal_id': self.journal_id.id,
+            'line_ids': [
+                (0, 0, {
+                    'name': agreement.name,
+                    'account_id': debit_account_id,
+                    'debit': self.amount,
+                    'credit': 0.0,
+                    'partner_id': agreement.partner_id.id,
+                    'analytic_account_id': contract.id,
+                }),
+                (0, 0, {
+                    'name': agreement.name,
+                    'account_id': credit_account_id,
+                    'debit': 0.0,
+                    'credit': self.amount,
+                    'partner_id': agreement.partner_id.id,
+                    'analytic_account_id': contract.id,
+                })
+            ]
+        }
+
+    @api.multi
+    def _create_move(self, agreement):
+        self.ensure_one()
+        move = self.env['account.move'].create(self._prepare_move(agreement))
+        # Post move
+        move.post()
+        return move
 
     @api.multi
     def action_terminate_agreement(self):
@@ -142,11 +199,12 @@ class AgreementTerminate(models.TransientModel):
         2. Attach file in agreement (if any)
         3. Terminate agreement (Change state from active to inactive)
         """
+        self.ensure_one()
         Agreement = self.env['agreement']
         agreements = Agreement.browse(self._context.get('active_ids', []))
         agreements.ensure_one()
         security_deposit = agreements.line_ids.filtered(
-            lambda l: l.product_id.categ_id.id == 28
+            lambda l: l.product_id.value_type == 'security_deposit'
         )
         if self.amount > security_deposit.lst_price:
             raise UserError(
@@ -157,27 +215,33 @@ class AgreementTerminate(models.TransientModel):
             agreement._validate_contract_create()
             # Create vendor bill
             invoice = self.env['account.invoice']
-            if self.is_refund_deposit:
+            move = self.env['account.move']
+            if self.refund_deposit_type:
                 if not self.amount:
                     raise UserError(_('Please specify security deposit.'))
-                invoice = self._create_invoice(agreement)
+                if self.refund_deposit_type == 'refund_deposit':
+                    invoice = self._create_invoice(agreement)
+                else:
+                    move = self._create_move(agreement)
             agreement.write({
                 'is_terminate': True,
                 'termination_by': self.termination_by,
                 'termination_date': self.date_termination,
                 'reason_termination': self.reason_termination,
                 'invoice_id': invoice.id,
+                'move_id': move.id,
             })
             # Create attachment
-            for attachment in self.attachment_ids:
-                self.env['ir.attachment'].create({
-                    'name': attachment.filename,
-                    'datas': attachment.file,
-                    'datas_fname': attachment.filename,
-                    'res_model': 'agreement',
-                    'res_id': agreement.id,
-                    'type': 'binary',
-                })
+            if self.is_attachment:
+                for attachment in self.attachment_ids:
+                    self.env['ir.attachment'].create({
+                        'name': attachment.filename,
+                        'datas': attachment.file,
+                        'datas_fname': attachment.filename,
+                        'res_model': 'agreement',
+                        'res_id': agreement.id,
+                        'type': 'binary',
+                    })
         return agreements
 
 
