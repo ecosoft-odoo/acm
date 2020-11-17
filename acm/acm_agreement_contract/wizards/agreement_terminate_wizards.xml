@@ -9,24 +9,27 @@
                     <group>
                         <field name="termination_by"/>
                         <field name="date_termination"/>
-                        <field name="is_refund_deposit"/>
+                        <field name="refund_deposit_type"/>
+                        <field name="is_attachment"/>
                     </group>
                     <group>
                         <field name="reason_termination"/>
                     </group>
                 </group>
-                <p attrs="{'invisible': [('is_refund_deposit', '=', False)]}" style="color: red;">Create vendor bill for refund security deposit.</p>
-                <group string="Refund Security Deposit" attrs="{'invisible': [('is_refund_deposit', '=', False)]}">
+                <p attrs="{'invisible': [('refund_deposit_type', '!=', 'refund_deposit')]}" style="color: red;">Create vendor bill for refund security deposit.</p>
+                <p attrs="{'invisible': [('refund_deposit_type', '!=', 'no_refund_deposit')]}" style="color: red;">Create journal entries for no refund security deposit.</p>
+                <group string="Refund Security Deposit" attrs="{'invisible': [('refund_deposit_type', 'not in', ['refund_deposit', 'no_refund_deposit'])]}">
                     <group>
-                        <field name="product_id" attrs="{'required': [('is_refund_deposit', '=', True)]}"/>
-                        <field name="amount" attrs="{'required': [('is_refund_deposit', '=', True)]}"/>
+                        <field name="product_id" attrs="{'required': [('refund_deposit_type', 'in', ['refund_deposit', 'no_refund_deposit'])]}" options="{'no_create': True, 'no_open': True}"/>
+                        <field name="amount" attrs="{'required': [('refund_deposit_type', 'in', ['refund_deposit', 'no_refund_deposit'])]}"/>
                     </group>
                     <group>
-                        <field name="date_invoice" attrs="{'required': [('is_refund_deposit', '=', True)]}"/>
-                        <field name="journal_id" attrs="{'required': [('is_refund_deposit', '=', True)]}"/>
+                        <field name="date_invoice" attrs="{'required': [('refund_deposit_type', 'in', ['refund_deposit', 'no_refund_deposit'])]}"/>
+                        <field name="journal_id" attrs="{'required': [('refund_deposit_type', 'in', ['refund_deposit', 'no_refund_deposit'])]}" options="{'no_create': True, 'no_open': True}"/>
+                        <field name="ref" attrs="{'invisible': [('refund_deposit_type', '!=', 'no_refund_deposit')]}"/>
                     </group>
                 </group>
-                <group string="Attachment">
+                <group string="Attachment" attrs="{'invisible': [('is_attachment', '=', False)]}">
                     <field name="attachment_ids" nolabel="1">
                         <tree editable="top">
                             <field name="file" filename="filename"/>

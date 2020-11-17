@@ -293,6 +293,10 @@ class Agreement(models.Model):
         'account.invoice',
         string='Vendor Bill',
     )
+    move_id = fields.Many2one(
+        'account.move',
+        string='Journal Entry',
+    )
 
     @api.model
     def _default_company_contract_id(self):
