@@ -52,6 +52,7 @@
                         <field name="date_invoice" attrs="{'required': [('refund_deposit_type', 'in', ['refund_deposit', 'no_refund_deposit'])]}"/>
                         <field name="journal_id" attrs="{'required': [('refund_deposit_type', 'in', ['refund_deposit', 'no_refund_deposit'])]}" options="{'no_create': True, 'no_open': True}"/>
                         <field name="ref" attrs="{'invisible': [('refund_deposit_type', '!=', 'no_refund_deposit')]}"/>
+                        <field name="description" attrs="{'required': [('refund_deposit_type', '=', 'refund_deposit')], 'invisible': [('refund_deposit_type', '!=', 'refund_deposit')]}"/>
                     </group>
                 </group>
                 <footer>
