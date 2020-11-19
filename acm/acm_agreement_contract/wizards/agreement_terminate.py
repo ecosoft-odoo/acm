@@ -59,6 +59,9 @@ class AgreementTerminate(models.TransientModel):
     ref = fields.Char(
         string='Reference',
     )
+    description = fields.Text(
+        string='Description',
+    )
 
     @api.onchange('refund_deposit_type')
     def _check_refund_deposit_type(self):
@@ -135,7 +138,7 @@ class AgreementTerminate(models.TransientModel):
         invoice_line._onchange_product_id()
         invoice_line_vals = invoice_line._convert_to_write(invoice_line._cache)
         invoice_line_vals.update({
-            'name': self.product_id.description or self.product_id.name,
+            'name': self.description,
             'account_analytic_id': contract.id,
             'price_unit': self.amount,
         })
