@@ -67,6 +67,19 @@ class AccountAnalyticAccount(models.Model):
         no_line_invs = invoices.filtered(lambda inv: not inv.invoice_line_ids)
         invoices -= no_line_invs
         no_line_invs.unlink()
+        # Update date of next invoice
+        for contract in self:
+            agreement = contract.agreement_id
+            if not agreement.agreement_invoice_line:
+                continue
+            next_date = contract.recurring_next_date
+            invoice_date_days = agreement.invoice_date_days
+            if next_date.day == invoice_date_days:
+                continue
+            contract.write({
+                'recurring_next_date': '%s-%s-%s' % (
+                    next_date.year, next_date.month, invoice_date_days)
+            })
         return invoices
 
     @api.multi
