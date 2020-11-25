@@ -297,6 +297,20 @@ class Agreement(models.Model):
         'account.move',
         string='Journal Entry',
     )
+    invoice_date_days = fields.Integer(
+        string='Invoice Date (Days)',
+        states={'active': [('readonly', True)]},
+        copy=False,
+    )
+    agreement_invoice_line = fields.One2many(
+        comodel_name='agreement.invoice.line',
+        inverse_name='agreement_id',
+        readonly=True,
+        copy=False,
+    )
+    show_invoice_date = fields.Boolean(
+        related='company_id.show_invoice_date',
+    )
 
     @api.model
     def _default_company_contract_id(self):
@@ -427,6 +441,43 @@ class Agreement(models.Model):
         return True
 
     @api.multi
+    def _create_agreement_invoice_line(self):
+        for rec in self:
+            vals = []
+            rec.agreement_invoice_line.unlink()
+            # Not create agreement invoice line
+            if not rec.show_invoice_date or rec.is_template or \
+               rec.recurring_rule_type != 'monthly':
+                return
+            # Create agreement invoice line
+            try:
+                if rec.invoice_date_days < rec.start_date.day:
+                    date = rec.start_date + relativedelta(months=+1)
+                    vals.extend([{
+                        'number': 1,
+                        'date_invoice': rec.start_date,
+                        'agreement_id': rec.id,
+                    }, {
+                        'number': 2,
+                        'date_invoice': '%s-%s-%s' % (
+                            date.year, date.month, rec.invoice_date_days
+                        ),
+                        'agreement_id': rec.id,
+                    }])
+                else:
+                    vals.extend([{
+                        'number': 1,
+                        'date_invoice': '%s-%s-%s' % (
+                            rec.start_date.year, rec.start_date.month,
+                            rec.invoice_date_days
+                        ),
+                        'agreement_id': rec.id,
+                    }])
+                self.env['agreement.invoice.line'].create(vals)
+            except Exception as ex:
+                raise UserError(_(ex))
+
+    @api.multi
     def active_statusbar(self):
         for rec in self:
             if not rec.is_template:
@@ -434,6 +485,8 @@ class Agreement(models.Model):
                 rec._validate_active_agreement()
                 # Validate rent product dates sequence
                 rec._validate_rent_product_dates(rec.line_ids)
+                # Create agreement invoice line
+                rec._create_agreement_invoice_line()
             rec.write({'state': 'active', })
 
     @api.multi
@@ -512,6 +565,10 @@ class Agreement(models.Model):
         journal = self.env['account.journal'].search(
             [('type', '=', self.contract_type),
              ('company_id', '=', self.company_id.id), ], limit=1, )
+        recurring_next_date = self.start_date
+        line = self.agreement_invoice_line.filtered(lambda l: l.number == 1)
+        if line:
+            recurring_next_date = line.date_invoice
         return {
             'code': self.code,
             'name': self.name,
@@ -525,7 +582,7 @@ class Agreement(models.Model):
             'recurring_rule_type': self.recurring_rule_type,
             'date_start': self.start_date,
             'date_end': self.end_date,
-            'recurring_next_date': self.start_date,
+            'recurring_next_date': recurring_next_date,
             'active': True,
             'group_id': self.group_id.id,
         }
@@ -733,3 +790,18 @@ class AgreementLine(models.Model):
         self.lst_price = self.product_id.lst_price
         if self.product_id.description:
             self.name = self.product_id.description
+
+
+class AgreementInvoiceLine(models.Model):
+    _name = 'agreement.invoice.line'
+    _description = 'Agreement Invoice Line'
+
+    number = fields.Integer(
+        string='No.',
+    )
+    date_invoice = fields.Date(
+        string='Invoice Date',
+    )
+    agreement_id = fields.Many2one(
+        comodel_name='agreement',
+    )
