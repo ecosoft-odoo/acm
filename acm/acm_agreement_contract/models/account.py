@@ -21,6 +21,10 @@ class AccountInvoice(models.Model):
         string='Zone',
         store=True,
     )
+    is_merge = fields.Boolean(
+        string='Merged',
+        default=False,
+    )
 
     @api.multi
     def _get_computed_reference(self):
@@ -36,6 +40,13 @@ class AccountInvoice(models.Model):
             groups = list(set(rec.invoice_line_ids.mapped('group_id.name')))
             groups.sort()
             rec.groups = ', '.join(groups)
+
+    @api.multi
+    def action_invoice_cancel(self):
+        res = super().action_invoice_cancel()
+        if self._context.get('is_merge'):
+            self.write({'is_merge': True})
+        return res
 
 
 class AccountInvoiceLine(models.Model):

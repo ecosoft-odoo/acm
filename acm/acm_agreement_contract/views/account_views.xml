@@ -7,6 +7,7 @@
         <field name="arch" type="xml">
             <xpath expr="//sheet/group[1]/group[2]" position="inside">
                 <field name="type2" required="True"/>
+                <field name="is_merge" attrs="{'invisible': [('is_merge', '=', False)]}"/>
             </xpath>
             <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='account_analytic_id']" position="after">
                 <field name="group_id"/>

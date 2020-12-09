@@ -16,6 +16,7 @@
         'excel_import_export',
         'web_timeline',
         'account_spread_cost_revenue',
+        'account_invoice_merge',
     ],
     'data': [
         # acm_agreement_contract
