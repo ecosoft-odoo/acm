@@ -48,6 +48,18 @@ class AccountInvoice(models.Model):
             self.write({'is_merge': True})
         return res
 
+    @api.model
+    def _get_invoice_key_cols(self):
+        invoice_key = super()._get_invoice_key_cols()
+        invoice_key.append('type2')
+        return invoice_key
+
+    @api.model
+    def _get_first_invoice_fields(self, invoice):
+        vals = super()._get_first_invoice_fields(invoice)
+        vals['type2'] = invoice.type2
+        return vals
+
 
 class AccountInvoiceLine(models.Model):
     _inherit = 'account.invoice.line'
