@@ -128,10 +128,14 @@ class ContractCreateManualInvoice(models.TransientModel):
     @api.multi
     def _check_create_manual_invoice(self, contract, date_invoice, products):
         """
-        Check invoice is not created with same product and invoice date.
+        This function for check
+        1. Invoice don't created with same product and invoice date on the contract.
+        2. Invoice don't created with same deposit and lum sum rent product on the contract.
         """
         self.ensure_one()
         Invoice = self.env['account.invoice']
+        InvoiceLine = self.env['account.invoice.line']
+        # For point 1
         invoices = Invoice.search([
             ('contract_id', '=', contract.id), ('state', '!=', 'cancel'),
             ('date_invoice', '=', date_invoice)])
@@ -139,6 +143,16 @@ class ContractCreateManualInvoice(models.TransientModel):
         if set(products.ids).intersection(set(product_ids)):
             raise ValidationError(
                 _('Invoice of %s created already.' % (contract.name, )))
+        # For point 2 (Fix for KT)
+        val_types = set(products.mapped('value_type'))
+        if val_types.intersection(set(['lump_sum_rent', 'security_deposit'])):
+            invoice_lines = InvoiceLine.search([
+                ('invoice_id.state', '!=', 'cancel'),
+                ('account_analytic_id', '=', contract.id),
+                ('product_id', 'in', products.ids)])
+            if invoice_lines:
+                raise ValidationError(
+                    _('Invoice of %s created already.' % (contract.name, )))
 
     @api.multi
     def action_create_manual_invoice(self):
