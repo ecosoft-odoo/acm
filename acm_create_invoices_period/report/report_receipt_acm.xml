@@ -1,0 +1,9 @@
+<odoo>
+    <template id="report_receipt_acm_document" inherit_id="acm.report_receipt_acm_document">
+        <xpath expr="//div[@id='informations']" position="after">
+            <div t-if="o.date_range_id">
+                ค่าเช่าของเดือน <span t-field="o.date_range_id.name"/>
+            </div>
+        </xpath>
+    </template>
+</odoo>
