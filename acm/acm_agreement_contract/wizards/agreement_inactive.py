@@ -42,8 +42,8 @@ class AgreementInActive(models.TransientModel):
                 res['inactive_reason'] = 'transfer'
             elif agreements[0].is_terminate:
                 res['inactive_reason'] = 'terminate'
-        elif agreements.mapped('is_transfer') or \
-                agreements.mapped('is_terminate'):
+        elif any(agreements.mapped('is_transfer')) or \
+                any(agreements.mapped('is_terminate')):
             raise UserError(
                 _('Transferred or terminated agreement '
                   'can not batch inactive agreement.'))
