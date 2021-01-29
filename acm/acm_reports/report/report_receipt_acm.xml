@@ -1,15 +1,16 @@
 <odoo>
 
         <template id="report_receipt_acm_document">
-            <t t-call="acm.external_layout" style="color: #000000;">
+            <t t-call="acm.external_layout" style="color: #000000; font-size:20px;">
                 <t t-set="o" t-value="o.with_context(lang=lang)"/>
                 <t t-if="o.type2 != 'toilet'" t-set="address">
                     <!-- No show partner when invoice type is toilet -->
-                    <address t-field="o.partner_id" style="font-size:20px"  t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}' />
+                    <b t-field="o.partner_id" style="font-size:20px" />
+                    <address t-field="o.partner_id" style="font-size:20px"  t-options='{"widget": "contact", "fields": ["address"], "no_marker": True}' />
                     <div t-if="o.partner_id.vat" class="mt16" style="font-size:20px" ><t t-esc="o.company_id.country_id.vat_label or 'Tax ID'"/>: <span t-field="o.partner_id.vat" /></div>
                 </t>
                 <div>
-                    <h5 class="page mt32 mb32" style="color: #7c7bad;">
+                    <h5 class="page mt32 mb32">
                         <div>
                             <!-- Customize : Change label for ACM project -->
                             <span t-if="o.type == 'out_invoice' and o.state == 'open'">ใบแทนใบเสร็จรับเงิน</span>
@@ -63,7 +64,7 @@
                     </div>
 
                     <t t-set="display_discount" t-value="any([l.discount for l in o.invoice_line_ids])"/>
-       <!-- report รายละเอียด -->
+                    <!-- report รายละเอียด -->
                     <table class="table table-sm o_main_table" name="invoice_line_table" style="font-size:20px ">
                         <thead>
                             <tr >
@@ -156,9 +157,9 @@
                     <div class="clearfix">
                         <div id="total" class="row" >
                             <div t-attf-class="#{'col-4' if report_type != 'html' else 'col-sm-7 col-md-5'} ml-auto">
-                                <table class="table-sm" style="page-break-inside: avoid; font-size:20px ">
-                                    <tr class="border-black o_subtotal" style="">
-                                        <td><strong style="color: #000000;">มูลค่าก่อนภาษี</strong></td>
+                                <table style="page-break-inside: avoid; font-size:20px ">
+                                    <tr class="border-black">
+                                        <td style="color: #000000;"><strong>มูลค่าก่อนภาษี</strong></td>
                                         <td class="text-right" style="color: #000000;">
                                             <span t-field="o.amount_untaxed"/>
                                         </td>
@@ -166,19 +167,19 @@
                                     <t t-foreach="o.amount_by_group" t-as="amount_by_group" >
                                         <tr style="">
                                             <t t-if="len(o.tax_line_ids) == 1 and o.amount_untaxed == amount_by_group[2]">
-                                                <td><span t-esc="amount_by_group[0]"/></td>
-                                                <td class="text-right o_price_total">
+                                                <td style="color: #000000;"><span t-esc="amount_by_group[0]"/></td>
+                                                <td class="text-right o_price_total" style="color: #000000;">
                                                     <span t-esc="amount_by_group[3]" />
                                                 </td>
                                             </t>
                                             <t t-else="">
-                                                <td>
+                                                <td style="color: #000000;">
                                                     <span t-esc="amount_by_group[0]"/>
                                                     <span>&amp;nbsp;<span>on</span>
                                                         <t t-esc="amount_by_group[4]"/>
                                                     </span>
                                                 </td>
-                                                <td class="text-right o_price_total">
+                                                <td class="text-right o_price_total" style="color: #000000;">
                                                     <span t-esc="amount_by_group[3]"/>
                                                 </td>
                                             </t>
@@ -229,18 +230,18 @@
                 <t t-set="payments_vals" t-value="o._get_payments_vals()"/>
                 <t t-foreach="payments_vals" t-as="payment_vals">
                     <tr>
-                        <td>
+                        <td style="color: #000000;">
                             <i class="oe_form_field text-right oe_payment_label">ชำระ <t t-esc="payment_vals['date']" t-options='{"widget": "date"}'/></i>
                         </td>
-                        <td class="text-right">
+                        <td class="text-right" style="color: #000000;">
                             <span t-esc="payment_vals['amount']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
                         </td>
                     </tr>
                 </t>
                 <t t-if="len(payments_vals) > 0">
                     <tr class="border-black">
-                        <td><strong>ยอดค้างชำระ</strong></td>
-                        <td class="text-right">
+                        <td style="color: #000000;"><strong>ยอดค้างชำระ</strong></td>
+                        <td class="text-right" style="color: #000000;">
                              <span t-field="o.residual"/>
                         </td>
                     </tr>

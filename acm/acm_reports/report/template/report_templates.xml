@@ -10,7 +10,7 @@
     </template>
     <template id="external_layout_background" inherit_id="web.external_layout_background" primary="True">
         <xpath expr="//div[@class='float-left company_address']" position="replace">
-            <div class="float-left company_address" style="font-size: 24px;">
+            <div class="float-left company_address" style="font-size: 26px;">
                 <div>
                     <strong t-field="company.display_name"/>
                 </div>
