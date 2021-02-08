@@ -1,45 +1,58 @@
 @font-face {
-    font-family: 'THSarabunNew';
-    src: url('../fonts/THSarabunNew.ttf') format('truetype');
+  font-family: "THSarabunNew";
+  src: url("../fonts/THSarabunNew.ttf") format("truetype");
 }
 // acm_agreement_contract
 .contract_form {
-    font-family: 'THSarabunNew' !important;
-    font-size: 23px !important;
-    text-align: justify !important;
-    line-height: 30px !important;
-    p {
-        margin-bottom: 10px !important;
-        page-break-inside: avoid !important;
+  font-family: "THSarabunNew" !important;
+  font-size: 23px !important;
+  text-align: justify !important;
+  line-height: 30px !important;
+  p {
+    margin-bottom: 10px !important;
+    page-break-inside: avoid !important;
+  }
+  .section {
+    text-indent: 56px !important;
+  }
+  .clauses {
+    ol {
+      list-style-position: inside !important;
+      counter-reset: item !important;
+      li {
+        display: block !important;
+        text-indent: 112px !important;
+      }
+      li:before {
+        content: "ข้อ " counter(item) ". " !important;
+        counter-increment: item !important;
+        position: absolute !important;
+        margin-left: -56px !important;
+      }
     }
-    .section {
-        text-indent: 56px !important;
-    }
-    .clauses {
-        ol {
-            list-style-position: inside !important;
-            counter-reset: item !important;
-            li {
-                display: block !important;
-                text-indent: 112px !important;
-            }
-            li:before {
-                content: "ข้อ " counter(item) ". " !important;
-                counter-increment: item !important;
-                position: absolute !important;
-                margin-left: -56px !important;
-            }
-        }
-    }
+  }
 }
 
 // acm_rental_collect
 .head_table {
-    border: 1px solid black;
+  border: 1px solid black;
 }
 .head_table.right {
-    text-align:right;
+  text-align: right;
 }
 .head_table.center {
-    text-align:center;
+  text-align: center;
+}
+
+// acm_reports
+.report_receipt {
+  color: #000000;
+  th,
+  td {
+    color: #000000 !important;
+  }
+  #informations td {
+    background-color: #ffffff !important;
+    padding: 5px;
+  }
 }

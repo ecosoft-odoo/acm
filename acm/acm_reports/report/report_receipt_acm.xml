@@ -5,11 +5,12 @@
                 <t t-set="o" t-value="o.with_context(lang=lang)"/>
                 <t t-if="o.type2 != 'toilet'" t-set="address">
                     <!-- No show partner when invoice type is toilet -->
-                    <address t-field="o.partner_id" t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>
-                    <div t-if="o.partner_id.vat" class="mt16"><t t-esc="o.company_id.country_id.vat_label or 'Tax ID'"/>: <span t-field="o.partner_id.vat"/></div>
+                    <strong t-field="o.partner_id.name" style="font-size: 20px;color: #000000;"/>
+                    <address t-field="o.partner_id" t-options='{"widget": "contact", "fields": ["address"], "no_marker": True}' style="color: #000000;"/>
+                    <div t-if="o.partner_id.vat" class="mt16" style="color: #000000;"><t t-esc="o.company_id.country_id.vat_label or 'Tax ID'"/>: <span t-field="o.partner_id.vat"/></div>
                 </t>
-                <div>
-                    <h5 class="page mt32 mb32" style="color: #7c7bad;">
+                <div class="report_receipt">
+                    <h5 class="page mt32 mb32">
                         <div>
                             <!-- Customize : Change label for ACM project -->
                             <span t-if="o.type == 'out_invoice' and o.state == 'open'">ใบแทนใบเสร็จรับเงิน</span>
@@ -35,31 +36,25 @@
                         </div>
                     </h5>
 
-                    <div id="informations" class="row mt32 mb32">
-                        <div class="col-auto mw-100 mb-2" t-if="o.name" name="description">
-                            <strong>รายการ</strong>
-                            <p class="m-0" t-field="o.name"/>
-                        </div>
-                        <div class="col-auto mw-100 mb-2" t-if="o.date_invoice" name="invoice_date">
-                            <strong>วันที่ใบแจ้งหนี้</strong>
-                            <p class="m-0" t-field="o.date_invoice" t-options='{"widget": "date"}'/>
-                        </div>
-                        <div class="col-auto mw-100 mb-2" t-if="o.date_due and o.type == 'out_invoice' and o.state in ('open', 'in_payment', 'paid')" name="due_date">
-                            <strong>วันที่ครบกำหนดชำระ</strong>
-                            <p class="m-0" t-field="o.date_due" t-options='{"widget": "date"}'/>
-                        </div>
-                        <div class="col-auto mw-100 mb-2" t-if="o.origin" name="origin">
-                            <strong>เอกสารต้นทาง</strong>
-                            <p class="m-0" t-field="o.origin"/>
-                        </div>
-                        <div class="col-auto mw-100 mb-2" t-if="o.partner_id.ref" name="customer_code">
-                            <strong>Customer Code:</strong>
-                            <p class="m-0" t-field="o.partner_id.ref"/>
-                        </div>
-                        <div name="reference" class="col-auto mw-100 mb-2" t-if="o.reference">
-                            <strong>อ้างอิงถึง</strong>
-                            <p class="m-0" t-field="o.reference"/>
-                        </div>
+                    <div id="informations">
+                        <table>
+                            <tr>
+                                <td t-if="o.name" style="width: 15%;"><strong>รายการ</strong></td>
+                                <td t-if="o.date_invoice" style="width: 18%;"><strong>วันที่ใบแจ้งหนี้</strong></td>
+                                <td t-if="o.date_due and o.type == 'out_invoice' and o.state in ('open', 'in_payment', 'paid')" style="width: 17%;"><strong>วันที่ครบกำหนดชำระ</strong></td>
+                                <td t-if="o.origin"><strong>เอกสารต้นทาง</strong></td>
+                                <td t-if="o.partner_id.ref" style="width: 15%;"><strong>Customer Code:</strong></td>
+                                <td t-if="o.reference" style="width: 15%;"><strong>อ้างอิงถึง</strong></td>
+                            </tr>
+                            <tr>
+                                <td t-if="o.name"><p t-field="o.name"/></td>
+                                <td t-if="o.date_invoice"><p t-field="o.date_invoice" t-options='{"widget": "date"}'/></td>
+                                <td t-if="o.date_due and o.type == 'out_invoice' and o.state in ('open', 'in_payment', 'paid')"><p t-field="o.date_due" t-options='{"widget": "date"}'/></td>
+                                <td t-if="o.origin"><p t-field="o.origin"/></td>
+                                <td t-if="o.partner_id.ref"><p t-field="o.partner_id.ref"/></td>
+                                <td t-if="o.reference"><p t-field="o.reference"/></td>
+                            </tr>
+                        </table>
                     </div>
 
                     <t t-set="display_discount" t-value="any([l.discount for l in o.invoice_line_ids])"/>
@@ -153,40 +148,44 @@
                         </tbody>
                     </table>
 
-                    <div class="clearfix">
+                    <div class="clearfix" style="font-size: 20px;">
                         <div id="total" class="row">
-                            <div t-attf-class="#{'col-4' if report_type != 'html' else 'col-sm-7 col-md-5'} ml-auto">
-                                <table class="table-sm" style="page-break-inside: avoid;">
+                            <div class="col-12">
+                                <table class="table-sm" style="page-break-inside: avoid;width: 100%;">
                                     <tr class="border-black o_subtotal" style="">
+                                        <td style="width: 55%;border: 0px !important;"></td>
                                         <td><strong>มูลค่าก่อนภาษี</strong></td>
-                                        <td class="text-right">
+                                        <td class="text-right" style="width: 20%;">
                                             <span t-field="o.amount_untaxed"/>
                                         </td>
                                     </tr>
                                     <t t-foreach="o.amount_by_group" t-as="amount_by_group">
                                         <tr style="">
                                             <t t-if="len(o.tax_line_ids) == 1 and o.amount_untaxed == amount_by_group[2]">
+                                                <td style="width: 55%;border: 0px !important;"></td>
                                                 <td><span t-esc="amount_by_group[0]"/></td>
-                                                <td class="text-right o_price_total">
+                                                <td class="text-right o_price_total" style="width: 20%;">
                                                     <span t-esc="amount_by_group[3]" />
                                                 </td>
                                             </t>
                                             <t t-else="">
+                                                <td style="width: 55%;border: 0px !important;"></td>
                                                 <td>
                                                     <span t-esc="amount_by_group[0]"/>
                                                     <span>&amp;nbsp;<span>on</span>
                                                         <t t-esc="amount_by_group[4]"/>
                                                     </span>
                                                 </td>
-                                                <td class="text-right o_price_total">
+                                                <td class="text-right o_price_total" style="width: 20%;">
                                                     <span t-esc="amount_by_group[3]"/>
                                                 </td>
                                             </t>
                                         </tr>
                                     </t>
                                     <tr class="border-black o_total">
+                                        <td style="width: 55%;border: 0px !important;"></td>
                                         <td><strong>มูลค่ารวมภาษี</strong></td>
-                                        <td class="text-right">
+                                        <td class="text-right" style="width: 20%;">
                                             <span t-field="o.amount_total"/>
                                         </td>
                                     </tr>
@@ -210,7 +209,7 @@
                         </p>
                     </div>
                 </div>
-                <div class="footer o_background_footer last-page" style="font-weight: bold;">
+                <div class="footer o_background_footer last-page" style="font-weight: bold;color: #000000;">
                     <div style="text-align: left;">
                         <span>ลงชื่อผู้รับชำระเงิน/วันที่รับเงิน</span>
                         <div style="border: 1px solid grey; width: 150px; margin-top: 50px; display: inline-block;"/>
@@ -229,18 +228,20 @@
                 <t t-set="payments_vals" t-value="o._get_payments_vals()"/>
                 <t t-foreach="payments_vals" t-as="payment_vals">
                     <tr>
+                        <td style="width: 55%;border: 0px !important;"></td>
                         <td>
                             <i class="oe_form_field text-right oe_payment_label">ชำระ <t t-esc="payment_vals['date']" t-options='{"widget": "date"}'/></i>
                         </td>
-                        <td class="text-right">
+                        <td class="text-right" style="width: 20%;">
                             <span t-esc="payment_vals['amount']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
                         </td>
                     </tr>
                 </t>
                 <t t-if="len(payments_vals) > 0">
                     <tr class="border-black">
+                        <td style="width: 55%;border: 0px !important;"></td>
                         <td><strong>ยอดค้างชำระ</strong></td>
-                        <td class="text-right">
+                        <td class="text-right" style="width: 20%;">
                              <span t-field="o.residual"/>
                         </td>
                     </tr>
