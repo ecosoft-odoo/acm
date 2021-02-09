@@ -2,7 +2,10 @@
     <template id="report_receipt_acm_document" inherit_id="acm.report_receipt_acm_document">
         <xpath expr="//div[@id='informations']" position="after">
             <div t-if="o.date_range_id">
-                ค่าเช่าของเดือน <span t-field="o.date_range_id.name"/>
+                <t t-set="invoice_type" t-value="{'rent': 'ค่าเช่า', 'utility': 'ค่าไฟฟ้า-ค่าน้ำประปา', 'toilet': '', 'others': ''}"/>
+                <t t-if="invoice_type[o.type2]">
+                    <span t-esc="invoice_type[o.type2]"/>ของเดือน <span t-field="o.date_range_id.name"/>
+                </t>
             </div>
         </xpath>
     </template>
