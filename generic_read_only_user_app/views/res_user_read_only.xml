@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data> 
+    	
+       <record id="view_users_form_inherit" model="ir.ui.view">
+            <field name="name">res.users.form</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form"/>
+            <field name="arch" type="xml">
+                <button name="toggle_active" position="after">
+                    <button name="set_read_only_user" type="object" class="oe_stat_button" icon="fa-eye">
+                        <field name="read_only" widget="boolean_button" options="{&quot;terminology&quot;: {&quot;string_false&quot;: &quot;Make Read Only&quot;,&quot;string_true&quot;: &quot;Reset Read Only&quot;,&quot;hover_true&quot;: &quot;Remove Read Only&quot;}}"/>
+                    </button>
+                </button>
+            </field>
+        </record>
+
+    </data>
+</odoo>
