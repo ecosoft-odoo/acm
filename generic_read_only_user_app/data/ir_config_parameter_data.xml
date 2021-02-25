@@ -1,0 +1,6 @@
+<odoo noupdate="1">
+    <record id="ignore_models" model="ir.config_parameter">
+        <field name="key">ignore_model_read_only_access_group</field>
+        <field name="value">['general.ledger.report.wizard', 'journal.ledger.report.wizard', 'trial.balance.report.wizard', 'open.items.report.wizard', 'aged.partner.balance.wizard', 'vat.report.wizard', 'l10n.vat.report.wizard', 'withholding.tax.report.wizard']</field>
+    </record>
+</odoo>
