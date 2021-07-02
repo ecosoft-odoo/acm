@@ -3,6 +3,7 @@
 
 from datetime import timedelta
 from odoo import models, fields, api, tools
+from dateutil.relativedelta import relativedelta
 
 
 class RentalRateAnalysisReport(models.Model):
@@ -45,17 +46,20 @@ class RentalRateAnalysisReport(models.Model):
             agreement_lines = rec.agreement_id.line_ids.filtered(
                 lambda l: l.product_id.value_type == 'rent').sorted(
                     'date_start')
-            days, sum = 1, 0
+            multiplier, sum = 1, 0
             for i, line in enumerate(agreement_lines):
                 # Calculate days of period.
                 if line.agreement_id.recurring_rule_type == 'daily':
-                    days = \
+                    multiplier = \
                         (line.date_end + timedelta(1) - line.date_start).days
+                elif line.agreement_id.recurring_rule_type == 'monthly':
+                    period = relativedelta(line.date_end + timedelta(1), line.date_start)
+                    multiplier = period.years * 12 + periods.months
                 # Calculate Rent Period
                 if i <= 2:
-                    rec['rent_period_%s' % str(i+1)] = line.lst_price * days
+                    rec['rent_period_%s' % str(i+1)] = line.lst_price * multiplier
                 else:
-                    sum += line.lst_price * days
+                    sum += line.lst_price * multiplier
             rec['rent_period_4'] = sum
 
     @api.multi
