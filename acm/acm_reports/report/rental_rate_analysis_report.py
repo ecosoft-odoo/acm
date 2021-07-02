@@ -54,7 +54,7 @@ class RentalRateAnalysisReport(models.Model):
                         (line.date_end + timedelta(1) - line.date_start).days
                 elif line.agreement_id.recurring_rule_type == 'monthly':
                     period = relativedelta(line.date_end + timedelta(1), line.date_start)
-                    multiplier = period.years * 12 + periods.months
+                    multiplier = period.years * 12 + period.months
                 # Calculate Rent Period
                 if i <= 2:
                     rec['rent_period_%s' % str(i+1)] = line.lst_price * multiplier
