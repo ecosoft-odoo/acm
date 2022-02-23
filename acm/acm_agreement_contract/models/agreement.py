@@ -311,6 +311,13 @@ class Agreement(models.Model):
     show_invoice_date = fields.Boolean(
         related='company_id.show_invoice_date',
     )
+    goods_type = fields.Char(
+        string='Goods Type',
+    )
+    goods_category_id = fields.Many2one(
+        comodel_name='goods.category',
+        string='Goods Category',
+    )
 
     @api.model
     def _default_company_contract_id(self):

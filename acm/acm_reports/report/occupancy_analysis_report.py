@@ -1,20 +1,24 @@
 # Copyright 2019 Ecosoft Co., Ltd (https://ecosoft.co.th)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html)
 
-from odoo import models, fields, api, tools
+from odoo import models, fields, api
 
 
-class OccupancyAnalysisReport(models.Model):
+class OccupancyAnalysisReport(models.TransientModel):
     _name = 'occupancy.analysis.report'
     _inherit = 'rental.analysis.report'
     _description = 'Occupancy Analysis Report'
-    _auto = False
 
     occupancy = fields.Float(
         string='Occupancy',
     )
     total_occupancy = fields.Float(
         string='Contribution to Total Occupancy',
+    )
+    wizard_id = fields.Many2one(
+        comodel_name='occupancy.analysis.report.wizard',
+        string='Wizard',
+        index=True,
     )
 
     @api.model
@@ -66,8 +70,3 @@ class OccupancyAnalysisReport(models.Model):
                self._get_sql_total_area_select(),
                sql_list[1])
         return sql
-
-    def init(self):
-        tools.drop_view_if_exists(self._cr, self._table)
-        self._cr.execute("""CREATE OR REPLACE VIEW %s AS (%s)""" % (
-            self._table, self._get_sql()))

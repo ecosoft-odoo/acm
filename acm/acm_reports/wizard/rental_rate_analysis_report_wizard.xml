@@ -1,0 +1,37 @@
+<odoo>
+
+    <record id="rental_rate_analysis_report_wizard_view" model="ir.ui.view">
+        <field name="name">rental.rate.analysis.report.wizard</field>
+        <field name="model">rental.rate.analysis.report.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="at_date"/>
+                    </group>
+                    <group/>
+                </group>
+                <footer>
+                    <button name="view_report" type="object" string="View" class="oe_highlight"/>
+                    <button special="cancel" class="oe_link" string="Cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="rental_rate_analysis_report_wizard_action" model="ir.actions.act_window">
+        <field name="name">Rental Rate Analysis</field>
+        <field name="res_model">rental.rate.analysis.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="rental_rate_analysis_report_wizard_view"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem
+        name="Rental Rate Analysis"
+        id="rental_rate_analysis_report_menu"
+        sequence="40"
+        parent="agreement_legal.agreement_reporting"
+        action="rental_rate_analysis_report_wizard_action"/>
+
+</odoo>

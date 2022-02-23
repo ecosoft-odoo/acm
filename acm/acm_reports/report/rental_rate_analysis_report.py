@@ -2,15 +2,14 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html)
 
 from datetime import timedelta
-from odoo import models, fields, api, tools
+from odoo import models, fields, api
 from dateutil.relativedelta import relativedelta
 
 
-class RentalRateAnalysisReport(models.Model):
+class RentalRateAnalysisReport(models.TransientModel):
     _name = 'rental.rate.analysis.report'
     _inherit = 'rental.analysis.report'
     _description = 'Rental Rate Analysis Report'
-    _auto = False
 
     agreement_length = fields.Integer(
         string='Agreement Length (Months)',
@@ -37,6 +36,11 @@ class RentalRateAnalysisReport(models.Model):
     average_rental_rate = fields.Float(
         compute='_compute_average_rental_rate',
         string='Average Rental Rate / Sqm / Month',
+    )
+    wizard_id = fields.Many2one(
+        comodel_name='rental.rate.analysis.report.wizard',
+        string='Wizard',
+        index=True,
     )
 
     @api.multi
@@ -113,8 +117,3 @@ class RentalRateAnalysisReport(models.Model):
         """ % (sql_list[0],
                sql_list[1])
         return sql
-
-    def init(self):
-        tools.drop_view_if_exists(self._cr, self._table)
-        self._cr.execute("""CREATE OR REPLACE VIEW %s AS (%s)""" % (
-            self._table, self._get_sql()))

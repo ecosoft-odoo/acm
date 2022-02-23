@@ -22,6 +22,29 @@
         </field>
     </record>
 
+    <record id="rental_rate_analysis_report_form_view" model="ir.ui.view">
+        <field name="name">rental.rate.analysis.report.form.view</field>
+        <field name="model">rental.rate.analysis.report</field>
+        <field name="inherit_id" ref="acm.rental_analysis_report_form_view"/>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <form position="attributes">
+                <attribute name="string">Rental Rate Analysis Report</attribute>
+            </form>
+            <field name="end_date" position="after">
+                <field name="agreement_length"/>
+            </field>
+            <field name="occupied_area" position="after">
+                <field name="rent_period_1"/>
+                <field name="rent_period_2"/>
+                <field name="rent_period_3"/>
+                <field name="rent_period_4"/>
+                <field name="lump_sum_rent"/>
+                <field name="average_rental_rate"/>
+            </field>
+        </field>
+    </record>
+
     <record id="rental_rate_analysis_report_search_view" model="ir.ui.view">
         <field name="name">rental.rate.analysis.report.search.view</field>
         <field name="model">rental.rate.analysis.report</field>
@@ -38,14 +61,6 @@
         <field name="name">Rental Rate Analysis</field>
         <field name="res_model">rental.rate.analysis.report</field>
         <field name="view_type">form</field>
-        <field name="view_mode">tree</field>
-        <field name="context">{'search_default_filter_active_current': 1}</field>
+        <field name="view_mode">tree,form</field>
     </record>
-
-    <menuitem
-        name="Rental Rate Analysis"
-        id="rental_rate_analysis_report_menu"
-        sequence="40"
-        parent="agreement_legal.agreement_reporting"
-        action="rental_rate_analysis_report_action"/>
 </odoo>
