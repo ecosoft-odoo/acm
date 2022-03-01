@@ -5,3 +5,6 @@ from . import report_rental_collect
 from . import rental_analysis_report
 from . import occupancy_analysis_report
 from . import rental_rate_analysis_report
+from . import historical_rental_analysis_report
+from . import historical_occupancy_analysis_report
+from . import historical_rental_rate_analysis_report

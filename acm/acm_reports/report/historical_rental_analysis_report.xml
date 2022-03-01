@@ -1,0 +1,88 @@
+<odoo>
+    <record id="historical_rental_analysis_report_tree_view" model="ir.ui.view">
+        <field name="name">historical.rental.analysis.report.tree.view</field>
+        <field name="model">historical.rental.analysis.report</field>
+        <field name="arch" type="xml">
+            <tree string="Historical Rental Analysis Report" create="0" edit="0" delete="0">
+                <field name="group_id"/>
+                <field name="product_id"/>
+                <field name="attribute_value_ids" widget="many2many_tags"/>
+                <field name="partner_id"/>
+                <field name="agreement_id"/>
+                <field name="goods_category_id"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="area"/>
+                <field name="occupied_area"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="historical_rental_analysis_report_form_view" model="ir.ui.view">
+        <field name="name">historical.rental.analysis.report.form.view</field>
+        <field name="model">historical.rental.analysis.report</field>
+        <field name="arch" type="xml">
+            <form string="Historical Rental Analysis Report" create="0" edit="0" delete="0">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="group_id"/>
+                            <field name="product_id"/>
+                            <field name="attribute_value_ids" widget="many2many_tags"/>
+                            <field name="area"/>
+                            <field name="occupied_area"/>
+                        </group>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="agreement_id"/>
+                            <field name="goods_category_id"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="historical_rental_analysis_report_search_view" model="ir.ui.view">
+        <field name="name">historical.rental.analysis.report.search.view</field>
+        <field name="model">historical.rental.analysis.report</field>
+        <field name="arch" type="xml">
+            <search  string="Historical Rental Analysis Report">
+                <field name="group_id"/>
+                <field name="product_id"/>
+                <field name="partner_id"/>
+                <filter name="filter_rented" string="Rented" domain="[('agreement_id','!=',False)]"/>
+                <filter name="filter_no_rented" string="No rented" domain="[('agreement_id','=',False)]"/>
+                <separator/>
+                <filter name="group_value_type" string="Value Type" icon="terp-partner" context="{'group_by':'value_type'}"/>
+                <filter name="group_group_id" string="Zone" icon="terp-partner" context="{'group_by':'group_id'}"/>
+                <filter name="group_product_id" string="Product" icon="terp-partner" context="{'group_by':'product_id'}"/>
+                <filter name="group_partner_id" string="Lessee" icon="terp-partner" context="{'group_by':'partner_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="historical_rental_analysis_report_timeline_view" model="ir.ui.view">
+        <field name="name">historical.rental.analysis.report.timeline.view</field>
+        <field name="model">historical.rental.analysis.report</field>
+        <field name="arch" type="xml">
+            <timeline date_start="start_date"
+                      date_stop="end_date"
+                      default_group_by="group_id">
+                <field name="agreement_id"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <templates>
+                    <t t-name="timeline-item">
+                        <div>
+                            <t t-esc="record.agreement_id[1]"/>
+                            (<t t-esc="field_utils.format.date(moment(record.start_date))"/> - <t t-esc="field_utils.format.date(moment(record.end_date))"/>)
+                        </div>
+                    </t>
+                </templates>
+            </timeline>
+        </field>
+    </record>
+</odoo>

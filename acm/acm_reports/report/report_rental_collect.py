@@ -26,7 +26,8 @@ class ReportRentalCollect(models.AbstractModel):
         for rec in agreement_lines:
             line_dict[rec.product_id.id] = {
                 'partner_name': rec.agreement_id.partner_id.display_name,
-                'goods_type': rec.product_id.goods_type,
+                # 'goods_type': rec.product_id.goods_type,
+                'goods_type': rec.agreement_id.goods_type,
                 'lst_price': '%.2f' % rec.lst_price,
             }
         amount = sum([float(x['lst_price']) for x in list(line_dict.values())])

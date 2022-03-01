@@ -47,7 +47,7 @@ class ResPartner(models.Model):
     @api.multi
     def _compute_age(self):
         for rec in self:
-            rec.age = relativedelta(fields.Date.today(), rec.date_birth).years
+            rec.age = relativedelta(fields.Date.context_today(self), rec.date_birth).years
 
     @api.multi
     def _compute_agreement_number(self):

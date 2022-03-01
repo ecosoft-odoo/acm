@@ -10,7 +10,7 @@ class AgreementBreach(models.TransientModel):
 
     date_breach = fields.Date(
         string='Breach Date',
-        default=fields.Date.today(),
+        default=fields.Date.context_today,
     )
     breach_type_id = fields.Many2one(
         comodel_name='acm.breach.type',
@@ -21,7 +21,7 @@ class AgreementBreach(models.TransientModel):
     )
     date_cancel_breach = fields.Date(
         string='Cancel Breach Date',
-        default=fields.Date.today(),
+        default=fields.Date.context_today,
     )
     reason_cancel_breach = fields.Text(
         string='Cancel Breach Reason',

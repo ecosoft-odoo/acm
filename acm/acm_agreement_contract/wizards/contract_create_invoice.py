@@ -33,7 +33,7 @@ class ContractCreateInvoice(models.TransientModel):
         if self.num_inv_advance > 1:
             contracts.ensure_one()
             contract = contracts[0]
-            ref_date = contract.recurring_next_date or fields.Date.today()
+            ref_date = contract.recurring_next_date or fields.Date.context_today(self)
             for i in range(self.num_inv_advance-1):
                 old_date = fields.Date.from_string(ref_date)
                 ref_date = old_date + Contract.get_relative_delta(

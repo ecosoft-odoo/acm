@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html)
 
 from odoo import models, fields, api
+from odoo.addons import decimal_precision as dp
 
 
 class ProductTemplate(models.Model):
@@ -13,6 +14,7 @@ class ProductTemplate(models.Model):
     )
     area = fields.Float(
         string='Area For Lease',
+        digits=dp.get_precision('Area'),
     )
     working_hours_id = fields.Many2one(
         comodel_name='acm.working.hours',

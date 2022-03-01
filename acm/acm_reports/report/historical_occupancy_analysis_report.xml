@@ -1,0 +1,64 @@
+<odoo>
+    <record id="historical_occupancy_analysis_report_tree_view" model="ir.ui.view">
+        <field name="name">historical.occupancy.analysis.report.tree.view</field>
+        <field name="model">historical.occupancy.analysis.report</field>
+        <field name="inherit_id" ref="acm.historical_rental_analysis_report_tree_view"/>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <tree position="attributes">
+                <attribute name="string">Occupancy Analysis Report</attribute>
+            </tree>
+            <field name="occupied_area" position="after">
+                <field name="occupancy"/>
+                <field name="total_occupancy"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="historical_occupancy_analysis_report_form_view" model="ir.ui.view">
+        <field name="name">historical.occupancy.analysis.report.form.view</field>
+        <field name="model">historical.occupancy.analysis.report</field>
+        <field name="inherit_id" ref="acm.historical_rental_analysis_report_form_view"/>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <form position="attributes">
+                <attribute name="string">Occupancy Analysis Report</attribute>
+            </form>
+            <field name="occupied_area" position="after">
+                <field name="occupancy"/>
+                <field name="total_occupancy"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="historical_occupancy_analysis_report_search_view" model="ir.ui.view">
+        <field name="name">historical.occupancy.analysis.report.search.view</field>
+        <field name="model">historical.occupancy.analysis.report</field>
+        <field name="inherit_id" ref="acm.historical_rental_analysis_report_search_view"/>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <search position="attributes">
+                <attribute name="string">Occupancy Analysis Report</attribute>
+            </search>
+        </field>
+    </record>
+
+    <record id="historical_occupancy_analysis_report_timeline_view" model="ir.ui.view">
+        <field name="name">historical.occupancy.analysis.report.timeline.view</field>
+        <field name="model">historical.occupancy.analysis.report</field>
+        <field name="inherit_id" ref="acm.historical_rental_analysis_report_timeline_view"/>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <timeline position="attributes">
+                <attribute name="string">Occupancy Analysis Report</attribute>
+            </timeline>
+        </field>
+    </record>
+
+    <record id="historical_occupancy_analysis_report_action" model="ir.actions.act_window">
+        <field name="name">Occupancy Analysis</field>
+        <field name="res_model">historical.occupancy.analysis.report</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form,timeline</field>
+    </record>
+</odoo>

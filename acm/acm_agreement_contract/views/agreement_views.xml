@@ -131,6 +131,15 @@
             <xpath expr="//field[@name='previous_version_agreements_ids']/tree" position="inside">
                 <field name="state" invisible="1"/>
             </xpath>
+            <xpath expr="//sheet/group[1]" position="after">
+                <group string="Goods" attrs="{'invisible': [('is_template', '=', True)]}">
+                    <group>
+                        <field name="goods_category_id" string="Category" attrs="{'required': [('is_template', '=', False)]}"/>
+                        <field name="goods_type" string="Type" attrs="{'required': [('is_template', '=', False)]}"/>
+                    </group>
+                    <group/>
+                </group>
+            </xpath>
         </field>
     </record>
 
@@ -222,6 +231,7 @@
             </field>
             <filter name="group_partner_id" position="before">
                 <filter name="group_group_id" string="Zone" icon="terp-partner" context="{'group_by':'group_id'}"/>
+                <filter name="group_goods_category_id" string="Goods Category" icon="terp-partner" context="{'group_by':'goods_category_id'}"/>
             </filter>
             <filter name="filter_templates" position="after">
                 <separator/>

@@ -311,6 +311,13 @@ class Agreement(models.Model):
     show_invoice_date = fields.Boolean(
         related='company_id.show_invoice_date',
     )
+    goods_type = fields.Char(
+        string='Goods Type',
+    )
+    goods_category_id = fields.Many2one(
+        comodel_name='goods.category',
+        string='Goods Category',
+    )
 
     @api.model
     def _default_company_contract_id(self):
@@ -367,7 +374,7 @@ class Agreement(models.Model):
 
     @api.multi
     def _compute_expiry_time(self):
-        now = fields.Date.today()
+        now = fields.Date.context_today(self)
         for rec in self:
             expiry_time = '0.00'
             if rec.state == 'active' and rec.end_date and rec.end_date >= now:
