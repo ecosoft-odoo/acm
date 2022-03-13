@@ -13,6 +13,11 @@ class HistoricalOccupancyAnalysisReportWizard(models.TransientModel):
         required=True,
         default=fields.Date.context_today,
     )
+    report_ids = fields.One2many(
+        comodel_name='historical.occupancy.analysis.report',
+        inverse_name='wizard_id',
+        string='Report',
+    )
 
     @api.multi
     def view_report(self):

@@ -1,0 +1,38 @@
+<odoo>
+    <record id="lessee_info_wizard_form_view" model="ir.ui.view">
+        <field name="name">lessee.info.wizard.form.view</field>
+        <field name="model">lessee.info.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="total_partner"/>
+                        </group>
+                        <group/>
+                    </group>
+                </sheet>
+                <notebook>
+                    <page string="Lessee">
+                        <field name="partner_ids">
+                            <tree>
+                                <field name="name"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+                <footer>
+                    <button special="cancel" class="oe_link" string="Cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="lessee_info_wizard_action" model="ir.actions.act_window">
+        <field name="name">Lessee Info</field>
+        <field name="res_model">lessee.info.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="lessee_info_wizard_form_view"/>
+        <field name="target">new</field>
+    </record>
+</odoo>

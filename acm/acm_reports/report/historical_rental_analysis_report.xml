@@ -3,7 +3,7 @@
         <field name="name">historical.rental.analysis.report.tree.view</field>
         <field name="model">historical.rental.analysis.report</field>
         <field name="arch" type="xml">
-            <tree string="Historical Rental Analysis Report" create="0" edit="0" delete="0">
+            <tree string="Historical Rental Analysis Report" delete="0">
                 <field name="group_id"/>
                 <field name="product_id"/>
                 <field name="attribute_value_ids" widget="many2many_tags"/>

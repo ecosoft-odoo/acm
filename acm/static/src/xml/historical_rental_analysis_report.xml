@@ -1,0 +1,12 @@
+<templates>
+    <t t-extend="ListView.buttons">
+        <t t-jquery="button.o_list_button_add" t-operation="after">
+            <button
+                type="button"
+                t-if="widget and widget.modelName and (widget.modelName == 'historical.occupancy.analysis.report' or widget.modelName == 'historical.rental.rate.analysis.report')"
+                class="lessee_info btn btn-primary"
+            >Lessee Info
+            </button>
+        </t>
+    </t>
+</templates>

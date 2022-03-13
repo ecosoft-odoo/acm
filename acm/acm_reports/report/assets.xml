@@ -1,0 +1,14 @@
+<odoo>
+    <template
+        id="assets_backend"
+        name="acm_reports assets"
+        inherit_id="web.assets_backend"
+    >
+        <xpath expr="." position="inside">
+            <script
+                type="text/javascript"
+                src="/acm/static/src/js/historical_rental_analysis_report.js"
+            />
+        </xpath>
+    </template>
+</odoo>

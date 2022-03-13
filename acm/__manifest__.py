@@ -86,10 +86,15 @@
         'acm_reports/report/report_multiday_receipt.xml',
         'acm_reports/report/report_multi_day_receipt.xml',
         'acm_reports/report/report.xml',
+        'acm_reports/report/assets.xml',
         'acm_reports/wizard/rental_collect_report_wizards.xml',
         'acm_reports/wizard/historical_rental_rate_analysis_report_wizard.xml',
         'acm_reports/wizard/historical_occupancy_analysis_report_wizard.xml',
+        'acm_reports/wizard/lessee_info_wizard.xml',
         # acm_spread_cost_revenue
         'acm_spread_cost_revenue/views/account_spread_view.xml',
+    ],
+    'qweb': [
+        'static/src/xml/historical_rental_analysis_report.xml',
     ],
 }

@@ -4,3 +4,4 @@
 from . import rental_collect_report
 from . import historical_rental_rate_analysis_report_wizard
 from . import historical_occupancy_analysis_report_wizard
+from . import lessee_info_wizard
