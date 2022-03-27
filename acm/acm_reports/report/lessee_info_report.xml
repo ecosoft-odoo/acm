@@ -1,0 +1,39 @@
+<odoo>
+    <record id="lessee_info_template" model="xlsx.template">
+        <field name="res_model">lessee.info.wizard</field>
+        <field name="fname">lessee_info.xlsx</field>
+        <field name="name">Lessee Info</field>
+        <field name="description">Lessee Info</field>
+        <field name="input_instruction">
+            {
+                '__EXPORT__': {
+                    'lessee_info': {
+                        '_HEAD_': {
+                            'B1': 'total_partner',
+                        },
+                        'partner_ids': {
+                            'A4': '${"=row() - 3"}',
+                            'B4': 'name${value or ""}',
+                        },
+                    },
+                },
+            }
+        </field>
+    </record>
+
+    <function model="xlsx.template" name="load_xlsx_template">
+        <value eval="[ref('lessee_info_template')]"/>
+    </function>
+
+    <act_window id="action_lessee_info_export_xlsx"
+        name="Export Excel"
+        res_model="export.xlsx.wizard"
+        src_model="lessee.info.wizard"
+        view_mode="form"
+        target="new"
+        context="{
+          'template_domain': [('res_model', '=', 'lessee.info.wizard'),
+                              ('fname', '=', 'lessee_info.xlsx'),
+                              ('gname', '=', False)],
+        }"/>
+</odoo>

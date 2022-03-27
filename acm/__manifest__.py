@@ -87,6 +87,7 @@
         'acm_reports/report/report_multi_day_receipt.xml',
         'acm_reports/report/report.xml',
         'acm_reports/report/assets.xml',
+        'acm_reports/report/lessee_info_report.xml',
         'acm_reports/wizard/rental_collect_report_wizards.xml',
         'acm_reports/wizard/historical_rental_rate_analysis_report_wizard.xml',
         'acm_reports/wizard/historical_occupancy_analysis_report_wizard.xml',

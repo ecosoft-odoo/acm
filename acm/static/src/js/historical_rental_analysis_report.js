@@ -16,12 +16,22 @@ odoo.define("acm_reports.historical_rental_analysis_report", function (require) 
                 this.$buttons
                     .find(".lessee_info")
                     .on("click", function () {
-                        self.do_action(
-                            "acm.lessee_info_wizard_action",
-                            {
-                                additional_context: data.context,
-                            }
-                        );
+                        self._rpc({
+                            model: "lessee.info.wizard",
+                            method: "create",
+                            args: [{}],
+                            context: data.context,
+                        }).then(function (res_id) {
+                            self.do_action({
+                                name: "Lessee Info",
+                                type: "ir.actions.act_window",
+                                res_model: "lessee.info.wizard",
+                                res_id: res_id,
+                                target: "current",
+                                views: [[false, "form"]],
+                                context: data.context,
+                            });
+                        })
                     });
             }
         },
