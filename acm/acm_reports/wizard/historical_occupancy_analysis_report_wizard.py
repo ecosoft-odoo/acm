@@ -37,4 +37,5 @@ class HistoricalOccupancyAnalysisReportWizard(models.TransientModel):
         action = self.env.ref('acm.historical_occupancy_analysis_report_action')
         vals = action.read()[0]
         vals['domain'] = [('wizard_id', '=', self.id)]
+        vals['context'] = {'at_date': self.at_date.strftime('%d/%m/%Y')}
         return vals
