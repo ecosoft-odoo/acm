@@ -15,7 +15,7 @@ class RentalCollectReport(models.TransientModel):
         required=True,
     )
     date_print = fields.Date(
-        default=fields.Date.today,
+        default=fields.Date.context_today,
         string='Date',
         required=True,
     )

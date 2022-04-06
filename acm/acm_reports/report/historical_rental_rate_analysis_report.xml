@@ -1,0 +1,66 @@
+<odoo>
+    <record id="historical_rental_rate_analysis_report_tree_view" model="ir.ui.view">
+        <field name="name">historical.rental.rate.analysis.report.tree.view</field>
+        <field name="model">historical.rental.rate.analysis.report</field>
+        <field name="inherit_id" ref="acm.historical_rental_analysis_report_tree_view"/>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <tree position="attributes">
+                <attribute name="string">Rental Rate Analysis Report</attribute>
+            </tree>
+            <field name="end_date" position="after">
+                <field name="agreement_length"/>
+            </field>
+            <field name="occupied_area" position="after">
+                <field name="rent_period_1"/>
+                <field name="rent_period_2"/>
+                <field name="rent_period_3"/>
+                <field name="rent_period_4"/>
+                <field name="lump_sum_rent"/>
+                <field name="average_rental_rate"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="historical_rental_rate_analysis_report_form_view" model="ir.ui.view">
+        <field name="name">historical.rental.rate.analysis.report.form.view</field>
+        <field name="model">historical.rental.rate.analysis.report</field>
+        <field name="inherit_id" ref="acm.historical_rental_analysis_report_form_view"/>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <form position="attributes">
+                <attribute name="string">Historical Rental Rate Analysis Report</attribute>
+            </form>
+            <field name="end_date" position="after">
+                <field name="agreement_length"/>
+            </field>
+            <field name="occupied_area" position="after">
+                <field name="rent_period_1"/>
+                <field name="rent_period_2"/>
+                <field name="rent_period_3"/>
+                <field name="rent_period_4"/>
+                <field name="lump_sum_rent"/>
+                <field name="average_rental_rate"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="historical_rental_rate_analysis_report_search_view" model="ir.ui.view">
+        <field name="name">historical.rental.rate.analysis.report.search.view</field>
+        <field name="model">historical.rental.rate.analysis.report</field>
+        <field name="inherit_id" ref="acm.historical_rental_analysis_report_search_view"/>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <search position="attributes">
+                <attribute name="string">Rental Rate Analysis Report</attribute>
+            </search>
+        </field>
+    </record>
+
+    <record id="historical_rental_rate_analysis_report_action" model="ir.actions.act_window">
+        <field name="name">Rental Rate Analysis</field>
+        <field name="res_model">historical.rental.rate.analysis.report</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

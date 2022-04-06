@@ -35,7 +35,7 @@ class ACMBatchInvoice(models.Model):
     )
     date_invoice = fields.Date(
         string='Invoice Date',
-        default=fields.Date.today,
+        default=fields.Date.context_today,
         required=True,
         readonly=True,
         states={'draft': [('readonly', False)]},

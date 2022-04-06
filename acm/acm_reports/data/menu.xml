@@ -1,0 +1,7 @@
+<odoo>
+    <menuitem
+        name="Historical Report"
+        id="historical_report_menu"
+        sequence="50"
+        parent="agreement_legal.agreement_reporting"/>
+</odoo>

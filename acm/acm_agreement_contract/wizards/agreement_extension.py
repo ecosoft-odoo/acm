@@ -21,7 +21,7 @@ class AgreementExtension(models.TransientModel):
     )
     date_contract = fields.Date(
         string='Contract Date',
-        default=fields.Date.today(),
+        default=fields.Date.context_today,
         required=True,
     )
     force = fields.Boolean()

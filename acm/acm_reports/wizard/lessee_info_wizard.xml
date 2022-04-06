@@ -1,0 +1,22 @@
+<odoo>
+    <record id="lessee_info_wizard_form_view" model="ir.ui.view">
+        <field name="name">lessee.info.wizard.form.view</field>
+        <field name="model">lessee.info.wizard</field>
+        <field name="arch" type="xml">
+            <form create="0" edit="0" delete="0">
+                <sheet>
+                    <group>
+                        <field name="total_partner"/>
+                    </group>
+                    <group>
+                        <field name="partner_ids" nolabel="1">
+                            <tree>
+                                <field name="name"/>
+                            </tree>
+                        </field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,37 @@
+<odoo>
+
+    <record id="historical_occupancy_analysis_report_wizard_view" model="ir.ui.view">
+        <field name="name">historical.occupancy.analysis.report.wizard</field>
+        <field name="model">historical.occupancy.analysis.report.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="at_date"/>
+                    </group>
+                    <group/>
+                </group>
+                <footer>
+                    <button name="view_report" type="object" string="View" class="oe_highlight"/>
+                    <button special="cancel" class="oe_link" string="Cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="historical_occupancy_analysis_report_wizard_action" model="ir.actions.act_window">
+        <field name="name">Occupancy Analysis</field>
+        <field name="res_model">historical.occupancy.analysis.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="historical_occupancy_analysis_report_wizard_view"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem
+        name="Occupancy Analysis"
+        id="historical_occupancy_analysis_report_menu"
+        sequence="10"
+        parent="acm.historical_report_menu"
+        action="historical_occupancy_analysis_report_wizard_action"/>
+
+</odoo>
