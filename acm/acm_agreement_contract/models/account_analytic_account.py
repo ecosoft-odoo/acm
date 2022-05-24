@@ -23,6 +23,12 @@ class AccountAnalyticAccount(models.Model):
     group_id = fields.Many2one(
         string='Zone',
     )
+    recurring_rule_type = fields.Selection(
+        selection=[
+            ('daily', 'Day(s)'),
+            ('monthly', 'Month(s)'),
+            ('yearly', 'Year(s)'), ],
+    )
 
     @api.constrains('recurring_invoice_line_ids')
     def _check_recurring_invoice_line_ids(self):

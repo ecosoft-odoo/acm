@@ -51,9 +51,7 @@ class AgreementCreate(models.TransientModel):
     recurring_rule_type = fields.Selection(
         selection=[
             ('daily', 'Day(s)'),
-            ('weekly', 'Week(s)'),
             ('monthly', 'Month(s)'),
-            ('monthlylastday', 'Month(s) last day'),
             ('yearly', 'Year(s)'), ],
         string='Recurrence',
         required=True,
