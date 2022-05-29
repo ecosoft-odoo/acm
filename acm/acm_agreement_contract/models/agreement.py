@@ -316,6 +316,14 @@ class Agreement(models.Model):
         comodel_name='goods.category',
         string='Goods Category',
     )
+    income_type_id = fields.Many2one(
+        comodel_name='agreement.income.type',
+        string='Income Type',
+        index=True,
+    )
+    show_income_type = fields.Boolean(
+        related='company_id.show_income_type',
+    )
 
     @api.model
     def _default_company_contract_id(self):
@@ -526,6 +534,7 @@ class Agreement(models.Model):
                 context.get('recurring_interval') or self.recurring_interval,
             'recurring_rule_type':
                 context.get('recurring_rule_type') or self.recurring_rule_type,
+            'income_type_id': context.get('income_type_id') or self.income_type_id.id,
         }
 
     @api.multi
@@ -546,13 +555,17 @@ class Agreement(models.Model):
     def create_agreement(self):
         agreement_ids = []
         for rec in self:
+            # Prepare agreement
             vals = rec.get_agreement_vals()
+            # Create agreement
             agreement = rec.copy(default=vals)
             # Write description
             if agreement.name != agreement.description:
                 agreement.description = agreement.name
+            # Write agreement_id in clause
             agreement.sections_ids.mapped('clauses_ids').write({
                 'agreement_id': agreement.id, })
+            # Copy lines
             for line in rec.line_ids:
                 agreement.line_ids += line.copy()
             # Update revision
@@ -590,6 +603,7 @@ class Agreement(models.Model):
             'recurring_next_date': recurring_next_date,
             'active': True,
             'group_id': self.group_id.id,
+            'income_type_id': self.income_type_id.id,
         }
 
     @api.multi
@@ -666,9 +680,7 @@ class Agreement(models.Model):
         """
         types = {
             'daily': 'รายวัน',
-            'weekly': 'รายสัปดาห์',
             'monthly': 'รายเดือน',
-            'monthlylastday': 'วันสุดท้ายของเดือน',
             'yearly': 'รายปี',
         }
         return types[type]

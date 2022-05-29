@@ -1,8 +1,11 @@
 # Copyright 2019 Ecosoft Co., Ltd (https://ecosoft.co.th/)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html)
 
+import logging
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
+
+_logger = logging.getLogger(__name__)
 
 
 class AgreementInActive(models.TransientModel):
@@ -16,9 +19,14 @@ class AgreementInActive(models.TransientModel):
     )
 
     @api.model
-    def _get_selection_inactive_reason(self):
+    def _get_agreements(self):
         agreement_ids = self._context.get('active_ids')
         agreements = self.env['agreement'].browse(agreement_ids)
+        return agreements
+
+    @api.model
+    def _get_selection_inactive_reason(self):
+        agreements = self._get_agreements()
         selection = [
             ('cancel', 'Cancelled'),
             ('expire', 'Expired'), ]
@@ -29,14 +37,13 @@ class AgreementInActive(models.TransientModel):
                 elif agreements[0].is_terminate:
                     selection = [('terminate', 'Terminated')]
         except Exception as ex:
-            print(ex)
+            _logger.debug(ex)
         return selection
 
     @api.model
     def default_get(self, fields):
         res = super(AgreementInActive, self).default_get(fields)
-        agreement_ids = self._context.get('active_ids')
-        agreements = self.env['agreement'].browse(agreement_ids)
+        agreements = self._get_agreements()
         if len(agreements) == 1:
             if agreements[0].is_transfer:
                 res['inactive_reason'] = 'transfer'
@@ -55,8 +62,7 @@ class AgreementInActive(models.TransientModel):
         This is for manual inactive agreement.
         """
         self.ensure_one()
-        active_ids = self._context.get('active_ids', [])
-        agreements = self.env['agreement'].browse(active_ids)
+        agreements = self._get_agreements()
         for agreement in agreements:
             invoice = agreement.invoice_id
             if invoice and invoice.state != 'paid':
