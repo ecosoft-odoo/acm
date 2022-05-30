@@ -51,6 +51,7 @@
         'acm_agreement_contract/views/acm_breach_type_views.xml',
         'acm_agreement_contract/views/account_payment_views.xml',
         'acm_agreement_contract/views/mail_channel_views.xml',
+        'acm_agreement_contract/views/agreement_income_type_views.xml',
         'acm_agreement_contract/report/report_templates.xml',
         'acm_agreement_contract/report/report_agreement.xml',
         'acm_agreement_contract/report/report_appendix.xml',

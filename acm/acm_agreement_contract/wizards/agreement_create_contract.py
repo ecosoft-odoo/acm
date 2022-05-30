@@ -16,16 +16,20 @@ class AgreementCreateContract(models.TransientModel):
     )
 
     @api.model
-    def _default_group_ids(self):
+    def _get_agreements(self):
         active_ids = self._context.get('active_ids', [])
         agreements = self.env['agreement'].browse(active_ids)
+        return agreements
+
+    @api.model
+    def _default_group_ids(self):
+        agreements = self._get_agreements()
         group_ids = agreements.mapped('group_id')
         return group_ids
 
     @api.multi
     def action_create_contract(self):
         self.ensure_one()
-        active_ids = self._context.get('active_ids', [])
-        agreements = self.env['agreement'].browse(active_ids)
+        agreements = self._get_agreements()
         agreements.create_new_contract()
         return agreements.action_view_contract()

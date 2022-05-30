@@ -1,0 +1,47 @@
+<odoo>
+    <record id="agreement_income_type_tree_view" model="ir.ui.view">
+        <field name="name">agreement.income.type.tree.view</field>
+        <field name="model">agreement.income.type</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="value_type"/>
+                <field name="account_id"/>
+                <field name="tax_ids" widget="many2many_tags"/>
+            </tree>
+        </field>
+    </record>
+    <record id="agreement_income_type_form_view" model="ir.ui.view">
+        <field name="name">agreement.income.type.form.view</field>
+        <field name="model">agreement.income.type</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="value_type" string="Filter Value Type"/>
+                        </group>
+                        <group>
+                            <field name="account_id"/>
+                            <field name="tax_ids" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="agreement_income_type_action" model="ir.actions.act_window">
+        <field name="name">Income Types</field>
+        <field name="res_model">agreement.income.type</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <menuitem
+        name="Income Types"
+        id="agreement_income_type_menu"
+        sequence="999"
+        parent="agreement_legal.agreement_configuration"
+        action="agreement_income_type_action"
+        groups="account.group_account_invoice"/>
+</odoo>

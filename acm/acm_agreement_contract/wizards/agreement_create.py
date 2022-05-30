@@ -31,7 +31,6 @@ class AgreementCreate(models.TransientModel):
     )
     date_contract = fields.Date(
         string='Contract Date',
-        # default=fields.Date.context_today,
         required=True,
     )
     date_start = fields.Date(
@@ -57,6 +56,18 @@ class AgreementCreate(models.TransientModel):
         required=True,
         help='Specify Interval for automatic invoice generation.',
     )
+    income_type_id = fields.Many2one(
+        comodel_name='agreement.income.type',
+        string='Income Type',
+        index=True,
+    )
+    company_id = fields.Many2one(
+        comodel_name='res.company',
+        default=lambda self: self.env.user.company_id,
+    )
+    show_income_type = fields.Boolean(
+        related='company_id.show_income_type',
+    )
 
     @api.onchange('template_ids')
     def _onchange_template_ids(self):
@@ -74,19 +85,7 @@ class AgreementCreate(models.TransientModel):
             'date_end': self.date_end,
             'recurring_interval': self.recurring_interval,
             'recurring_rule_type': self.recurring_rule_type,
+            'income_type_id': self.income_type_id.id,
         })
         new_agreements = agreements.create_agreement()
-        # Write Child Agreements
-        for new_agreement in new_agreements:
-            child_templates = new_agreement.template_id.child_agreements_ids
-            if not child_templates:
-                continue
-            child_agreements = new_agreements.filtered(
-                lambda l: l.template_id in child_templates)
-            if child_agreements:
-                self._cr.execute("""
-                    update agreement set parent_agreement_id = %s
-                    where id in %s""", (
-                        new_agreement.id,
-                        tuple(child_agreements.ids)))
         return new_agreements.view_agreement()

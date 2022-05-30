@@ -55,6 +55,13 @@ class ContractCreateManualInvoice(models.TransientModel):
             'account_analytic_id': contract.id,
             'price_unit': line.price_unit,
         })
+        # Overwrite account and taxs
+        income_type = line.analytic_account_id.income_type_id
+        if income_type and line.product_id.value_type == income_type.value_type:
+            if income_type.account_id:
+                invoice_line_vals['account_id'] = income_type.account_id.id
+            if income_type.tax_ids:
+                invoice_line_vals['invoice_line_tax_ids'] = [(6, 0, income_type.tax_ids.ids)]
         return invoice_line_vals
 
     @api.model

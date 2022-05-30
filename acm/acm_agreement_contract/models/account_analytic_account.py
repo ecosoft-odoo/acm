@@ -29,6 +29,14 @@ class AccountAnalyticAccount(models.Model):
             ('monthly', 'Month(s)'),
             ('yearly', 'Year(s)'), ],
     )
+    income_type_id = fields.Many2one(
+        comodel_name='agreement.income.type',
+        string='Income Type',
+        index=True,
+    )
+    show_income_type = fields.Boolean(
+        related='company_id.show_income_type',
+    )
 
     @api.constrains('recurring_invoice_line_ids')
     def _check_recurring_invoice_line_ids(self):
@@ -63,8 +71,15 @@ class AccountAnalyticAccount(models.Model):
             return {}
         if line.manual:
             return {}
-        return super(AccountAnalyticAccount, self) \
-            ._prepare_invoice_line(line, invoice_id)
+        invoice_line_vals = super(AccountAnalyticAccount, self)._prepare_invoice_line(line, invoice_id)
+        # Overwrite account and taxs
+        income_type = line.analytic_account_id.income_type_id
+        if income_type and line.product_id.value_type == income_type.value_type:
+            if income_type.account_id:
+                invoice_line_vals['account_id'] = income_type.account_id.id
+            if income_type.tax_ids:
+                invoice_line_vals['invoice_line_tax_ids'] = [(6, 0, income_type.tax_ids.ids)]
+        return invoice_line_vals
 
     @api.multi
     def recurring_create_invoice(self):

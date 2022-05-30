@@ -7,7 +7,9 @@
         <field name="priority" eval="10000"/>
         <field name="arch" type="xml">
             <field name="partner_id" position="after">
+                <field name="show_income_type" invisible="1"/>
                 <field name="agreement_id" domain="[('is_template', '=', False)]"/>
+                <field name="income_type_id" attrs="{'required': [('show_income_type', '=', True)], 'invisible': [('show_income_type', '=', False)]}"/>
             </field>
             <xpath expr="//field[@name='recurring_invoice_line_ids']/tree/field[@name='name']" position="after">
                 <field name="manual"/>

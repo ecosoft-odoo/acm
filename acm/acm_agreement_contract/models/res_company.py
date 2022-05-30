@@ -19,6 +19,10 @@ class ResCompany(models.Model):
         help="When you click this, the system will Show Invoice Date (Days) "
              "on the agreement if repeat every only 'Month(s)'",
     )
+    show_income_type = fields.Boolean(
+        string='Show Income Type',
+        default=False,
+    )
 
     @api.constrains('show_invoice_date')
     def _check_show_invoice_date(self):

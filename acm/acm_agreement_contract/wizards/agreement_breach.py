@@ -36,6 +36,7 @@ class AgreementBreach(models.TransientModel):
         for agreement in agreements:
             agreement._validate_contract_create()
             if context.get('breach'):
+                # Breach Agreement
                 self.env['agreement.breach.line'].create({
                     'date_breach': self.date_breach,
                     'breach_type_id': self.breach_type_id.id,
@@ -44,6 +45,7 @@ class AgreementBreach(models.TransientModel):
                 })
                 agreement.is_breach = True
             else:
+                # Cancel Breach Agreement
                 agreement.breach_line_ids.filtered(
                     lambda l: not l.date_cancel_breach).write({
                         'date_cancel_breach': self.date_cancel_breach,
