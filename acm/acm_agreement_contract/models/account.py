@@ -10,6 +10,7 @@ class AccountInvoice(models.Model):
     type2 = fields.Selection(
         selection=[
             ('rent', 'Rent'),
+            ('service', 'Service'),
             ('utility', 'Utility'),
             ('toilet', 'Toilet'),
             ('others', 'Others'),
