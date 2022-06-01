@@ -115,8 +115,12 @@ class AccountAnalyticAccount(models.Model):
         # Create invoice
         inv = super()._create_invoice(invoice=invoice)
         # Update invoice type
+        type2 = 'rent'
+        income_type = self.income_type_id
+        if income_type and self.rent_product_id.value_type == income_type.value_type:
+            type2 = income_type.invoice_type
         inv.write({
-            'type2': 'rent',
+            'type2': type2,
             'name': self.rent_product_id.name,
         })
         return inv

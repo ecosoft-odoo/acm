@@ -14,11 +14,16 @@ class AgreementIncomeType(models.Model):
     value_type = fields.Selection(
         selection=[
             ('rent', 'Rent'),
-            ('lump_sum_rent', 'Lump Sum Rent'),
-            ('security_deposit', 'Security Deposit'),
-            ('transfer', 'Transfer'),
         ],
         string='Value Type',
+        required=True,
+    )
+    invoice_type = fields.Selection(
+        selection=[
+            ('rent', 'Rent'),
+            ('service', 'Service'),
+        ],
+        string='Invoice Type',
         required=True,
     )
     account_id = fields.Many2one(

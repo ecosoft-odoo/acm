@@ -55,7 +55,7 @@ class ContractCreateManualInvoice(models.TransientModel):
             'account_analytic_id': contract.id,
             'price_unit': line.price_unit,
         })
-        # Overwrite account and taxs
+        # Overwrite account and taxes
         income_type = line.analytic_account_id.income_type_id
         if income_type and line.product_id.value_type == income_type.value_type:
             if income_type.account_id:
@@ -92,6 +92,10 @@ class ContractCreateManualInvoice(models.TransientModel):
         invoice_type = 'out_invoice'
         if contract.contract_type == 'purchase':
             invoice_type = 'in_invoice'
+        type2 = 'rent'
+        income_type = contract.income_type_id
+        if income_type and contract.rent_product_id.value_type == income_type.value_type:
+            type2 = income_type.invoice_type
         invoice = self.env['account.invoice'].new({
             'reference': contract.code,
             'type': invoice_type,
@@ -104,7 +108,7 @@ class ContractCreateManualInvoice(models.TransientModel):
             'company_id': contract.company_id.id,
             'contract_id': contract.id,
             'user_id': contract.partner_id.user_id.id,
-            'type2': 'rent',
+            'type2': type2,
             'name': contract.rent_product_id.name,
         })
         # Get other invoice values from partner onchange

@@ -6,6 +6,7 @@
             <tree>
                 <field name="name"/>
                 <field name="value_type"/>
+                <field name="invoice_type"/>
                 <field name="account_id"/>
                 <field name="tax_ids" widget="many2many_tags"/>
             </tree>
@@ -18,11 +19,12 @@
             <form>
                 <sheet>
                     <group>
-                        <group>
+                        <group string="General">
                             <field name="name"/>
                             <field name="value_type" string="Filter Value Type"/>
                         </group>
-                        <group>
+                        <group string="Accounting">
+                            <field name="invoice_type"/>
                             <field name="account_id"/>
                             <field name="tax_ids" widget="many2many_tags"/>
                         </group>
