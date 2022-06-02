@@ -84,4 +84,15 @@
         menu="True"
     />
 
+    <!-- Journal Voucher Form -->
+    <report
+        id="action_report_journal_voucher"
+        model="account.move"
+        string="Journal Voucher"
+        report_type="qweb-pdf"
+        name="acm.report_journal_voucher"
+        file="acm.report_journal_voucher"
+        print_report_name="'Journal Voucher - %s' % object.name"
+    />
+
 </odoo>

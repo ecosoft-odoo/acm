@@ -86,6 +86,7 @@
         'acm_reports/report/report_tax_invoice_abb_acm.xml',
         'acm_reports/report/report_multiday_receipt.xml',
         'acm_reports/report/report_multi_day_receipt.xml',
+        'acm_reports/report/report_journal_voucher.xml',
         'acm_reports/report/report.xml',
         'acm_reports/report/assets.xml',
         'acm_reports/report/lessee_info_report.xml',
