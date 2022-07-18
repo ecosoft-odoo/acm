@@ -7,11 +7,10 @@
             <form string="Create Agreement">
                 <group>
                     <group>
-                        <field name="company_id" invisible="1"/>
-                        <field name="template_ids" domain="[('is_template', '=', True), ('state', '=', 'active')]" widget="many2many_tags"/>
+                        <field name="template_id" domain="[('is_template', '=', True), ('state', '=', 'active')]"/>
                         <label for="name"/>
                         <div>
-                            <field name="name" class="oe_inline"/> 
+                            <field name="name" class="oe_inline" force_save="1"/>
                             <field name="post_name" class="oe_inline"/>
                         </div>
                         <field name="partner_id" domain="[('customer', '=', True)]"/>
@@ -26,8 +25,7 @@
                         </div>
                     </group>
                     <group>
-                        <field name="show_income_type" invisible="1"/>
-                        <field name="income_type_id" attrs="{'required': [('show_income_type', '=', True)], 'invisible': [('show_income_type', '=', False)]}"/>
+                        <field name="income_type_id" invisible="1"/>
                     </group>
                 </group>
                 <footer>

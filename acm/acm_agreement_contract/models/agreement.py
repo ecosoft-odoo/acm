@@ -319,10 +319,8 @@ class Agreement(models.Model):
     income_type_id = fields.Many2one(
         comodel_name='agreement.income.type',
         string='Income Type',
+        required=True,
         index=True,
-    )
-    show_income_type = fields.Boolean(
-        related='company_id.show_income_type',
     )
 
     @api.model
@@ -516,8 +514,7 @@ class Agreement(models.Model):
         self.ensure_one()
         context = self._context.copy()
         return {
-            'name': not context.get('post_name') and self.name or
-            '%s %s' % (self.name, context.get('post_name')),
+            'name': context.get('name') or self.name,
             'active': True,
             'version': 1,
             'revision': 0,
