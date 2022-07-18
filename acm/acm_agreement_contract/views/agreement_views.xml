@@ -84,9 +84,8 @@
             </notebook>
             <xpath expr="//sheet/group[1]/group[2]" position="inside">
                 <field name="is_contract_create" invisible="1"/>
-                <field name="show_income_type" invisible="1"/>
                 <field name="contract_type"/>
-                <field name="income_type_id" attrs="{'required': [('show_income_type', '=', True), ('is_template', '=', False)], 'invisible': ['|', ('show_income_type', '=', False), ('is_template', '=', True)]}"/>
+                <field name="income_type_id"/>
                 <field name="template_id" readonly="True" attrs="{'invisible': [('is_template', '=', True)]}"/>
                 <field name="is_breach" readonly="True" attrs="{'invisible': [('is_breach', '=', False)]}"/>
                 <field name="is_transfer" attrs="{'invisible': [('is_transfer', '=', False)]}"/>

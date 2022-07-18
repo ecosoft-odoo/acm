@@ -3,6 +3,7 @@
 
 from odoo import models, fields, api
 from odoo.addons import decimal_precision as dp
+from odoo.tools import pycompat
 
 
 class ProductTemplate(models.Model):
@@ -137,11 +138,13 @@ class ProductTemplate(models.Model):
             self.product_variant_ids.working_hours2_id = \
                 self.working_hours2_id.id
 
-    @api.onchange('group_id', 'lock_number')
+    @api.onchange('group_id', 'subzone', 'lock_number')
     def _onchange_group_number(self):
         names = []
         if self.group_id:
             names.append(self.group_id.name)
+        if self.subzone:
+            names.append(self.subzone)
         if self.lock_number:
             names.append(self.lock_number)
         self.name = '-'.join(names)
@@ -155,6 +158,23 @@ class ProductTemplate(models.Model):
     @api.onchange('width', 'length1')
     def _onchange_width_length(self):
         self.area = self.width * self.length1
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        templates = super(ProductTemplate, self).create(vals_list)
+        for template, vals in pycompat.izip(templates, vals_list):
+            related_vals = {}
+            if vals.get('working_hours_id'):
+                related_vals['working_hours_id'] = vals['working_hours_id']
+            if vals.get('working_hours2_id'):
+                related_vals['working_hours2_id'] = vals['working_hours2_id']
+            if vals.get('goods_type'):
+                related_vals['goods_type'] = vals['goods_type']
+            if vals.get('goods_category_id'):
+                related_vals['goods_category_id'] = vals['goods_category_id']
+            if related_vals:
+                template.write(related_vals)
+        return templates
 
 
 class ProductProduct(models.Model):
@@ -178,11 +198,13 @@ class ProductProduct(models.Model):
         domain="[('type', '=', 'out_time')]",
     )
 
-    @api.onchange('group_id', 'lock_number')
+    @api.onchange('group_id', 'subzone', 'lock_number')
     def _onchange_group_number(self):
         names = []
         if self.group_id:
             names.append(self.group_id.name)
+        if self.subzone:
+            names.append(self.subzone)
         if self.lock_number:
             names.append(self.lock_number)
         self.name = '-'.join(names)

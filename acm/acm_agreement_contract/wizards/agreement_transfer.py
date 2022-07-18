@@ -92,7 +92,7 @@ class AgreementTransfer(models.TransientModel):
     )
 
     @api.onchange('refund_deposit_type')
-    def _check_refund_deposit_type(self):
+    def _onchange_refund_deposit_type(self):
         domain = []
         if self.refund_deposit_type:
             active_id = self._context.get('active_id')

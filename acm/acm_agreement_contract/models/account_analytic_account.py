@@ -32,10 +32,8 @@ class AccountAnalyticAccount(models.Model):
     income_type_id = fields.Many2one(
         comodel_name='agreement.income.type',
         string='Income Type',
+        required=True,
         index=True,
-    )
-    show_income_type = fields.Boolean(
-        related='company_id.show_income_type',
     )
 
     @api.constrains('recurring_invoice_line_ids')

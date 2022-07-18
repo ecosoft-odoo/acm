@@ -7,9 +7,8 @@
         <field name="priority" eval="10000"/>
         <field name="arch" type="xml">
             <field name="partner_id" position="after">
-                <field name="show_income_type" invisible="1"/>
                 <field name="agreement_id" domain="[('is_template', '=', False)]"/>
-                <field name="income_type_id" attrs="{'required': [('show_income_type', '=', True)], 'invisible': [('show_income_type', '=', False)]}"/>
+                <field name="income_type_id"/>
             </field>
             <xpath expr="//field[@name='recurring_invoice_line_ids']/tree/field[@name='name']" position="after">
                 <field name="manual"/>
@@ -95,5 +94,13 @@
                 <separator/>
             </filter>
         </field>
+    </record>
+
+    <record id="contract.action_account_analytic_sale_overdue_all" model="ir.actions.act_window">
+        <field name="context">{'is_contract':1, 'default_recurring_invoices': 1, 'default_contract_type': 'sale'}</field>
+    </record>
+
+    <record id="contract.action_account_analytic_purchase_overdue_all" model="ir.actions.act_window">
+        <field name="context">{'is_contract':1, 'default_recurring_invoices': 1, 'default_contract_type': 'purchase'}</field>
     </record>
 </odoo>

@@ -8,7 +8,7 @@ class AgreementCreate(models.TransientModel):
     _name = 'agreement.create'
     _description = 'Create Agreement'
 
-    template_ids = fields.Many2many(
+    template_id = fields.Many2one(
         comodel_name='agreement',
         string='Template',
         required=True,
@@ -59,25 +59,23 @@ class AgreementCreate(models.TransientModel):
     income_type_id = fields.Many2one(
         comodel_name='agreement.income.type',
         string='Income Type',
+        required=True,
         index=True,
     )
-    company_id = fields.Many2one(
-        comodel_name='res.company',
-        default=lambda self: self.env.user.company_id,
-    )
-    show_income_type = fields.Boolean(
-        related='company_id.show_income_type',
-    )
 
-    @api.onchange('template_ids')
-    def _onchange_template_ids(self):
-        self.name = '{%s}' % ', '.join(self.template_ids.mapped('name'))
+    @api.onchange('template_id')
+    def _onchange_template_id(self):
+        if self.template_id:
+            self.update({
+                "name": self.template_id.name,
+                "income_type_id": self.template_id.income_type_id,
+            })
 
     @api.multi
     def action_create_agreement(self):
         self.ensure_one()
-        agreements = self.template_ids.with_context({
-            'post_name': self.post_name,
+        agreement = self.template_id.with_context({
+            'name': '%s %s' % (self.name, self.post_name),
             'partner_id': self.partner_id.id,
             'partner_contact_id': self.partner_contact_id.id,
             'date_contract': self.date_contract,
@@ -87,5 +85,5 @@ class AgreementCreate(models.TransientModel):
             'recurring_rule_type': self.recurring_rule_type,
             'income_type_id': self.income_type_id.id,
         })
-        new_agreements = agreements.create_agreement()
-        return new_agreements.view_agreement()
+        new_agreement = agreement.create_agreement()
+        return new_agreement.view_agreement()
