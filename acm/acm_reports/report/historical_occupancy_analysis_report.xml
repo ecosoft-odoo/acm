@@ -8,6 +8,10 @@
             <tree position="attributes">
                 <attribute name="string">Occupancy Analysis Report</attribute>
             </tree>
+            <field name="end_date" position="after">
+                <field name="expiry_day" invisible="1"/>
+                <field name="expiry_time"/>
+            </field>
             <field name="occupied_area" position="after">
                 <field name="occupancy"/>
                 <field name="total_occupancy"/>

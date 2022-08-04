@@ -380,13 +380,13 @@ class Agreement(models.Model):
     def _compute_expiry_time(self):
         now = fields.Date.context_today(self)
         for rec in self:
-            expiry_time = '0.00'
+            expiry_time = '00M.00D'
             if rec.state == 'active' and rec.end_date and rec.end_date >= now:
                 time = relativedelta(rec.end_date, now)
                 if rec.start_date > now:
                     time = relativedelta(
                         rec.end_date, rec.start_date - timedelta(1))
-                expiry_time = '%s.%s' % (
+                expiry_time = '%sM.%sD' % (
                     str(time.years * 12 + time.months).zfill(2),
                     str(time.days).zfill(2))
             rec.expiry_time = expiry_time
