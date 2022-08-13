@@ -10,6 +10,7 @@ access_acm_working_hours_readonly,acm working hours readonly,model_acm_working_h
 access_acm_working_hours_manager,acm working hours manager,model_acm_working_hours,agreement_legal.group_agreement_manager,1,1,1,1
 access_acm_breach_type_readonly,acm breach type readonly,model_acm_breach_type,agreement_legal.group_agreement_readonly,1,0,0,0
 access_acm_breach_type_manager,acm breach type manager,model_acm_breach_type,agreement_legal.group_agreement_manager,1,1,1,1
+access_agreement_invoice_line,agreement invoice line,model_agreement_invoice_line,,1,0,0,0
 access_agreement_invoice_line_readonly,agreement invoice line readonly,model_agreement_invoice_line,agreement_legal.group_agreement_readonly,1,0,0,0
 access_agreement_invoice_line_allusers,agreement invoice line all users,model_agreement_invoice_line,agreement_legal.group_agreement_user,1,1,1,1
 access_agreement_income_type_users,agreement income type users,model_agreement_income_type,base.group_user,1,0,0,0
