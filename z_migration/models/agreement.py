@@ -67,3 +67,16 @@ class Agreement(models.Model):
             appendix = rec.copy()
             appendix.agreement_id = self.id
         return True
+
+
+class AgreementLine(models.Model):
+    _inherit = 'agreement.line'
+
+    agreement_state = fields.Selection(
+        selection=[
+            ('draft', 'Draft'),
+            ('active', 'Active'),
+            ('inactive', 'Inactive'),
+        ],
+        related='agreement_id.state',
+    )
