@@ -79,14 +79,17 @@ class AgreementLine(models.Model):
             ('inactive', 'Inactive'),
         ],
         related='agreement_id.state',
+        string='Agreement Status',
         store=True,
     )
     agreement_end_date = fields.Date(
         related='agreement_id.end_date',
+        string='Agreement End Date',
         store=True,
     )
     agreement_template = fields.Many2one(
         comodel_name='agreement',
         related='agreement_id.template_id',
+        string='Agreement Template',
         store=True,
     )
