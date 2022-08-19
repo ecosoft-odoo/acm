@@ -79,4 +79,5 @@ class AgreementLine(models.Model):
             ('inactive', 'Inactive'),
         ],
         related='agreement_id.state',
+        store=True,
     )
