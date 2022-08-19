@@ -23,7 +23,7 @@
             <search>
                 <field name="product_id"/>
                 <field name="name"/>
-                <filter name="group_by_agreement_state" string="Status" context="{'group_by':'agreement_stage'}"/>
+                <filter name="group_by_agreement_state" string="Status" context="{'group_by':'agreement_state'}"/>
             </search>
         </field>
     </record>
