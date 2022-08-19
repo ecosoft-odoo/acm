@@ -15,19 +15,6 @@
         </field>
     </record>
 
-    <!-- Search View -->
-    <record id="agreement_line_view_search" model="ir.ui.view">
-        <field name="name">areement.line.view.search</field>
-        <field name="model">agreement.line</field>
-        <field name="arch" type="xml">
-            <search>
-                <field name="product_id"/>
-                <field name="name"/>
-                <filter name="group_by_agreement_state" string="Status" context="{'group_by':'agreement_state'}"/>
-            </search>
-        </field>
-    </record>
-
     <!-- Action -->
     <record id="agreement_line_action" model="ir.actions.act_window">
         <field name="name">Agreement Lines</field>
