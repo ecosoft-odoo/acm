@@ -340,6 +340,14 @@ class Agreement(models.Model):
                     _("Agreement '%s' start date can't be later than end date")
                     % (rec.name, ))
 
+    @api.constrains('date_contract', 'start_date')
+    def _check_contract_start_date(self):
+        for rec in self:
+            if rec.date_contract > rec.start_date:
+                raise UserError(
+                    _("Agreement '%s' contract date can't be later than start date")
+                    % (rec.name, ))
+
     @api.constrains('line_ids')
     def _check_line_ids(self):
         for rec in self:
