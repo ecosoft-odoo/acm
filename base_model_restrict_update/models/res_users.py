@@ -16,6 +16,13 @@ class ResUsers(models.Model):
         "Ready User",
         help="Set to true and the user are readonly user on all models",
     )
+    except_readonly_model_ids = fields.Many2many(
+        "ir.model",
+        "res_users_ir_model_rel",
+        "user_id",
+        "model_id",
+        help="The user is readonly user except selected model",
+    )
 
     @api.constrains("is_readonly_user")
     def _check_is_readonly_user(self):

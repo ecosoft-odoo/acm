@@ -25,6 +25,11 @@
                     />
                 </button>
             </div>
+            <notebook position="inside">
+                <page name="except_readonly_model" string="Except Readonly Model" attrs="{'invisible': [('is_readonly_user', '=', False)]}">
+                    <field name="except_readonly_model_ids"/>
+                </page>
+            </notebook>
         </field>
     </record>
 
