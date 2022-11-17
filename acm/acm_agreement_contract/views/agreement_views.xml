@@ -45,6 +45,9 @@
                     <field name="recurring_interval" class="oe_inline"/>
                     <field name="recurring_rule_type" class="oe_inline"/>
                 </div>
+                <field name="rental_area_delivery_date" attrs="{'invisible': [('is_template', '=', True)]}"/>
+                <field name="rental_free_start_date" attrs="{'invisible': [('is_template', '=', True)]}"/>
+                <field name="rental_free_end_date" attrs="{'invisible': [('is_template', '=', True)]}"/>
             </field>
             <field name="termination_date" position="attributes">
                 <attribute name="readonly">True</attribute>
@@ -133,10 +136,11 @@
                 <field name="state" invisible="1"/>
             </xpath>
             <xpath expr="//sheet/group[1]" position="after">
-                <group string="Goods" attrs="{'invisible': [('is_template', '=', True)]}">
+                <group string="Business Type" attrs="{'invisible': [('is_template', '=', True)]}">
                     <group>
-                        <field name="goods_category_id" string="Category" attrs="{'required': [('is_template', '=', False)]}"/>
-                        <field name="goods_type" string="Type" attrs="{'required': [('is_template', '=', False)]}"/>
+                        <field name="business_name"/>
+                        <field name="goods_category_id"/>
+                        <field name="goods_type"/>
                     </group>
                     <group/>
                 </group>

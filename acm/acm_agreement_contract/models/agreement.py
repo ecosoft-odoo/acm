@@ -131,6 +131,18 @@ class Agreement(models.Model):
         string='Is terminate ?',
         copy=False,
     )
+    business_name = fields.Char(
+        string="Business Name",
+    )
+    rental_area_delivery_date = fields.Date(
+        string="Rental Area Delivery Date",
+    )
+    rental_free_start_date = fields.Date(
+        string="Rental Free Start Date",
+    )
+    rental_free_end_date = fields.Date(
+        string="Rental Free End Date",
+    )
     # Set field readonly = True for state is active.
     name = fields.Char(
         states={'active': [('readonly', True)]},
