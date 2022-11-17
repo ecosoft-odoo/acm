@@ -15,16 +15,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="footer contract_form">
-                            <div class="row">
-                                <div class="col-6">
-                                    สัญญาเลขที่ <span t-field="doc.code"/>
-                                </div>
-                                <div class="col-6 text-right">
-                                    ล็อคเลขที่ <span t-field="doc.rent_product_id.name"/>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </t>
             </t>
