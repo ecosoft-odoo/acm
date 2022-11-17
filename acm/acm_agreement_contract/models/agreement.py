@@ -730,9 +730,15 @@ class Agreement(models.Model):
         return num2words(amount, to='currency', lang='th')
 
     @api.multi
-    def filter_lines(self, value_type=''):
-        return self.line_ids.filtered(
-            lambda l: l.product_id.value_type == value_type)
+    def filter_lines(self, value_type='', product_name=''):
+        lines = self.env["agreement.line"]
+        if value_type:
+            lines = self.line_ids.filtered(
+                lambda l: l.product_id.value_type == value_type)
+        elif product_name:
+             lines = self.line_ids.filtered(
+                lambda l: l.product_id.name == product_name)
+        return lines
 
     @api.multi
     def get_rental_period(self, date_start, date_end):
