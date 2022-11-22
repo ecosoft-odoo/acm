@@ -99,7 +99,6 @@ class Agreement(models.Model):
     company_contact_id = fields.Many2one(
         string='Lessor Contact',
         default=lambda self: self._default_company_contract_id(),
-        states={'active': [('readonly', True)]},
     )
     company_contact_phone = fields.Char(
         string='Lessor Phone',
@@ -142,6 +141,13 @@ class Agreement(models.Model):
     )
     rental_free_end_date = fields.Date(
         string="Rental Free End Date",
+    )
+    company_witness = fields.Char(
+        string="Company Witness",
+    )
+    partner_witness = fields.Char(
+        string="Partner Witness",
+        states={'active': [('readonly', True)]},
     )
     # Set field readonly = True for state is active.
     name = fields.Char(

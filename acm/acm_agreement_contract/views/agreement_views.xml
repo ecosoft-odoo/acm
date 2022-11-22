@@ -128,6 +128,17 @@
                     </field>
                 </group>
             </group>
+            <group name="contact_right" position="after">
+                <group name="partner_witness" string="Witness">
+                    <field name="partner_witness" nolabel="1"/>
+                </group>
+                <group name="company_witness" string="Witness">
+                    <field name="company_witness" nolabel="1" attrs="{'readonly': [('state', '=', 'active'), ('is_template', '=', False)]}"/>
+                </group>
+            </group>
+            <field name="company_contact_id" position="attributes">
+                <attribute name="attrs">{'readonly': [('state', '=', 'active'), ('is_template', '=', False)]}</attribute>
+            </field>
             <!-- Make sure for no error 'Unknown field state in domain' in the agreement -->
             <xpath expr="//field[@name='child_agreements_ids']/tree" position="inside">
                 <field name="state" invisible="1"/>

@@ -14,6 +14,13 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="footer contract_form">
+                            <div class="row">
+                                <div class="col-12 text-right">
+                                    หน้าที่ <span class="page"/> / <span class="topage"/>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </t>
             </t>
