@@ -36,6 +36,7 @@
             <field name="parent_id" position="after">
                 <field name="weight1"/>
                 <field name="weight2"/>
+                <field name="market_zone_map"/>
             </field>
         </field>
     </record>

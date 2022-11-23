@@ -133,3 +133,6 @@ class AccountAnalyticGroup(models.Model):
     weight2 = fields.Char(
         string='Other weight',
     )
+    market_zone_map = fields.Binary(
+        string="Market Zone Map",
+    )
