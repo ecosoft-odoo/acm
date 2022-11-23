@@ -133,6 +133,48 @@ class AccountAnalyticGroup(models.Model):
     weight2 = fields.Char(
         string='Other weight',
     )
-    market_zone_map = fields.Binary(
-        string="Market Zone Map",
+    market_zone_map_ids = fields.One2many(
+        comodel_name='market.zone.map',
+        inverse_name='group_id',
+        string='Market Zone Map',
     )
+
+    @api.multi
+    @api.constrains('market_zone_map_ids')
+    def _check_market_zone_map_ids(self):
+        for rec in self:
+            if len(list(set(rec.market_zone_map_ids.mapped('use_for_lock')))) > 1:
+                raise UserError(_('No mix use for lock.'))
+
+
+class MarketZoneMap(models.Model):
+    _name = 'market.zone.map'
+    _description = 'Market Zone Map'
+
+    use_for_lock = fields.Selection(
+        selection=[
+            ('all', 'All'),
+            ('custom', 'Custom')
+        ],
+        string='Use For Lock',
+    )
+    start_lock_number = fields.Char(
+        strong='Start Lock Number',
+    )
+    end_lock_number = fields.Char(
+        string='End Lock Number',
+    )
+    map = fields.Binary(
+        string='Map',
+    )
+    group_id = fields.Many2one(
+        comodel_name='account.analytic.group',
+        string='Analytic Group',
+    )
+
+    @api.onchange("use_for_lock")
+    def _onchange_use_for_lock(self):
+        self.update({
+            "start_lock_number": False,
+            "end_lock_number": False,
+        })
