@@ -36,8 +36,12 @@
             <field name="parent_id" position="after">
                 <field name="weight1"/>
                 <field name="weight2"/>
-                <field name="market_zone_map"/>
             </field>
+            <xpath expr="//group[2]" position="after">
+                <group>
+                    <field name="market_zone_map"/>
+                </group>
+            </xpath>
         </field>
     </record>
 
