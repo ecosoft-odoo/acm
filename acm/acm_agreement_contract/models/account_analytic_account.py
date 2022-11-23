@@ -157,6 +157,8 @@ class MarketZoneMap(models.Model):
             ('custom', 'Custom')
         ],
         string='Use For Lock',
+        default='all',
+        required=True,
     )
     start_lock_number = fields.Char(
         strong='Start Lock Number',

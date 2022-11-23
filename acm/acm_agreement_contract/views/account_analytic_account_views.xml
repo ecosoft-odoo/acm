@@ -44,8 +44,18 @@
                             <field name="use_for_lock"/>
                             <field name="start_lock_number" attrs="{'readonly': [('use_for_lock', '=', 'all')], 'required': [('use_for_lock', '=', 'custom')]}"/>
                             <field name="end_lock_number" attrs="{'readonly': [('use_for_lock', '=', 'all')], 'required': [('use_for_lock', '=', 'custom')]}"/>
-                            <field name="map" widget="image" class="oe_avatar"/>
+                            <field name="map"/>
                         </tree>
+                        <form>
+                            <sheet>
+                                <group>
+                                    <field name="use_for_lock"/>
+                                    <field name="start_lock_number" attrs="{'readonly': [('use_for_lock', '=', 'all')], 'required': [('use_for_lock', '=', 'custom')]}"/>
+                                    <field name="end_lock_number" attrs="{'readonly': [('use_for_lock', '=', 'all')], 'required': [('use_for_lock', '=', 'custom')]}"/>
+                                    <field name="map" widget="image"/>
+                                </group>
+                            </sheet>
+                        </form>
                     </field>
                 </group>
             </xpath>
