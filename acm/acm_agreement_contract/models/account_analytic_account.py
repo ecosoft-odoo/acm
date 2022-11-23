@@ -139,12 +139,6 @@ class AccountAnalyticGroup(models.Model):
         string='Market Zone Map',
     )
 
-    @api.multi
-    @api.constrains('market_zone_map_ids')
-    def _check_market_zone_map_ids(self):
-        for rec in self:
-            if len(list(set(rec.market_zone_map_ids.mapped('use_for_lock')))) > 1:
-                raise UserError(_('No mix use for lock.'))
 
 
 class MarketZoneMap(models.Model):
@@ -180,3 +174,18 @@ class MarketZoneMap(models.Model):
             "start_lock_number": False,
             "end_lock_number": False,
         })
+
+    @api.multi
+    def has_map(self, lock_number):
+        self.ensure_one()
+        has_map = False
+        if self.map:
+            if self.use_for_lock == 'all':
+                has_map = True
+            elif self.use_for_lock == 'custom':
+                try:
+                    if float(self.start_lock_number) <= float(lock_number) <= float(self.end_lock_number):
+                        has_map = True
+                except Exception as ex:
+                    has_map = False
+        return has_map
