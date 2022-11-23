@@ -39,7 +39,7 @@
             </field>
             <xpath expr="//group[2]" position="after">
                 <group>
-                    <field name="market_zone_map"/>
+                    <field name="market_zone_map" widget="image" options="{'size': [500, 500]}"/>
                 </group>
             </xpath>
         </field>
