@@ -44,7 +44,7 @@
                             <field name="use_for_lock"/>
                             <field name="start_lock_number" attrs="{'readonly': [('use_for_lock', '=', 'all')], 'required': [('use_for_lock', '=', 'custom')]}"/>
                             <field name="end_lock_number" attrs="{'readonly': [('use_for_lock', '=', 'all')], 'required': [('use_for_lock', '=', 'custom')]}"/>
-                            <field name="map"/>
+                            <field name="map" widget="image" class="oe_avatar"/>
                         </tree>
                         <form>
                             <sheet>
