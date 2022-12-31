@@ -43,7 +43,7 @@ class HistoricalOccupancyAnalysisReport(models.TransientModel):
     @api.model
     def _get_expiry_time(self, expiry_month):
         month = int(expiry_month)
-        day = int((30 / 100 * (expiry_month - month)) * 100)
+        day = int(round((30 / 100 * (expiry_month - month)) * 100, 0))
         expiry_time = '{month}M{day}D'.format(month=month, day=day)
         return expiry_time
 
