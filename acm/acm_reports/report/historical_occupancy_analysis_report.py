@@ -29,17 +29,16 @@ class HistoricalOccupancyAnalysisReport(models.TransientModel):
     )
 
     @api.multi
-    def _get_expiry_month(self):
+    def _get_expiry_day(self):
         self.ensure_one()
         at_date = datetime.datetime.strptime(
             self._context.get('at_date'), '%d/%m/%Y').date()
-        expiry_month = 0
+        expiry_day = 0
         if self.end_date and self.end_date >= at_date:
             expiry_day = (self.end_date - at_date).days + 1
             if self.start_date > at_date:
                 expiry_day = (self.end_date - self.start_date).days + 1
-            expiry_month = round(expiry_day / 30, 2)
-        return expiry_month
+        return expiry_day
 
     @api.model
     def _get_expiry_time(self, expiry_month):
@@ -51,7 +50,8 @@ class HistoricalOccupancyAnalysisReport(models.TransientModel):
     @api.multi
     def _compute_expiry_time(self):
         for rec in self:
-            expiry_month = rec._get_expiry_month()
+            expiry_day = rec._get_expiry_day()
+            expiry_month = expiry_day / 30
             rec.expiry_time = rec._get_expiry_time(expiry_month)
 
     @api.model
@@ -75,7 +75,8 @@ class HistoricalOccupancyAnalysisReport(models.TransientModel):
                 line['total_occupancy'] = \
                     (line['occupied_area'] / (total_area or 1)) * 100
                 # Time to Expiry (Months)
-                expiry_month = sum([r._get_expiry_month() for r in report]) / len(report.filtered(lambda l: l.agreement_id)) / 30
+                expiry_day = sum([r._get_expiry_day() for r in report])
+                expiry_month = expiry_day / len(report.filtered(lambda l: l.agreement_id)) / 30
                 line['expiry_time'] = self._get_expiry_time(expiry_month)
         return res
 
