@@ -34,7 +34,7 @@ class HistoricalOccupancyAnalysisReport(models.TransientModel):
         at_date = datetime.datetime.strptime(
             self._context.get('at_date'), '%d/%m/%Y').date()
         expiry_month = 0
-        if self.end_date >= at_date:
+        if self.end_date and self.end_date >= at_date:
             expiry_day = (self.end_date - at_date).days + 1
             if self.start_date > at_date:
                 expiry_day = (self.end_date - self.start_date).days + 1
