@@ -16,10 +16,6 @@ class OccupancyAnalysisReport(models.Model):
         string='Time to Expiry (Months)',
         compute='_compute_expiry_time',
     )
-    expiry_day = fields.Integer(
-        string='Time to Expiry (Days)',
-        compute='_compute_expiry_day',
-    )
     occupancy = fields.Float(
         string='Occupancy',
     )
@@ -28,32 +24,29 @@ class OccupancyAnalysisReport(models.Model):
     )
 
     @api.multi
-    def _compute_expiry_time(self):
+    def _get_expiry_day(self):
+        self.ensure_one()
         now = fields.Date.context_today(self)
-        for rec in self:
-            expiry_time = '00M.00D'
-            if rec.end_date and rec.end_date >= now:
-                time = relativedelta(rec.end_date, now)
-                if rec.start_date > now:
-                    time = relativedelta(
-                        rec.end_date, rec.start_date - timedelta(1))
-                expiry_time = '%sM.%sD' % (
-                    str(time.years * 12 + time.months).zfill(2),
-                    str(time.days).zfill(2))
-            if not rec.agreement_id:
-                expiry_time = ''
-            rec.expiry_time = expiry_time
+        expiry_day = 0
+        if self.end_date and self.end_date >= now:
+            expiry_day = (self.end_date - now).days + 1
+            if self.start_date > now:
+                expiry_day = (self.end_date - self.start_date).days + 1
+        return expiry_day
+
+    @api.model
+    def _get_expiry_time(self, expiry_month):
+        month = int(expiry_month)
+        day = int(round((30 / 100 * (expiry_month - month)) * 100, 0))
+        expiry_time = '{month}M{day}D'.format(month=month, day=day)
+        return expiry_time
 
     @api.multi
-    def _compute_expiry_day(self):
-        now = fields.Date.context_today(self)
+    def _compute_expiry_time(self):
         for rec in self:
-            expiry_day = 0
-            if rec.end_date and rec.end_date >= now:
-                expiry_day = (rec.end_date - now).days
-                if rec.start_date > now:
-                    expiry_day = (rec.end_date - (rec.start_date - timedelta(1))).days
-            rec.expiry_day = expiry_day
+            expiry_day = rec._get_expiry_day()
+            expiry_month = round(expiry_day / 30, 2)
+            rec.expiry_time = rec._get_expiry_time(expiry_month)
 
     @api.model
     def read_group(self, domain, fields, groupby, offset=0, limit=None,
@@ -76,7 +69,9 @@ class OccupancyAnalysisReport(models.Model):
                 line['total_occupancy'] = \
                     (line['occupied_area'] / (total_area or 1)) * 100
                 # Time to Expiry (Months)
-                line['expiry_time'] = '%sM' % '{:,.2f}'.format(sum(report.mapped('expiry_day')) / len(report) / 30)
+                expiry_day = sum([r._get_expiry_day() for r in report])
+                expiry_month = round(expiry_day / len(report.filtered(lambda l: l.agreement_id)) / 30, 2)
+                line['expiry_time'] = self._get_expiry_time(expiry_month)
         return res
 
     @api.model

@@ -109,10 +109,10 @@ class Agreement(models.Model):
     state = fields.Selection(
         string='Status',
     )
-    expiry_time = fields.Char(
-        string='Time to Expiry (Months)',
-        compute='_compute_expiry_time',
-    )
+    # expiry_time = fields.Char(
+    #     string='Time to Expiry (Months)',
+    #     compute='_compute_expiry_time',
+    # )
     inactive_reason = fields.Selection(
         selection=[
             ('cancel', 'Cancelled'),
@@ -402,20 +402,20 @@ class Agreement(models.Model):
             contracts = rec.with_context(active_test=False)._search_contract()
             rec.contract_count = len(contracts)
 
-    @api.multi
-    def _compute_expiry_time(self):
-        now = fields.Date.context_today(self)
-        for rec in self:
-            expiry_time = '00M.00D'
-            if rec.state == 'active' and rec.end_date and rec.end_date >= now:
-                time = relativedelta(rec.end_date, now)
-                if rec.start_date > now:
-                    time = relativedelta(
-                        rec.end_date, rec.start_date - timedelta(1))
-                expiry_time = '%sM.%sD' % (
-                    str(time.years * 12 + time.months).zfill(2),
-                    str(time.days).zfill(2))
-            rec.expiry_time = expiry_time
+    # @api.multi
+    # def _compute_expiry_time(self):
+    #     now = fields.Date.context_today(self)
+    #     for rec in self:
+    #         expiry_time = '00M.00D'
+    #         if rec.state == 'active' and rec.end_date and rec.end_date >= now:
+    #             time = relativedelta(rec.end_date, now)
+    #             if rec.start_date > now:
+    #                 time = relativedelta(
+    #                     rec.end_date, rec.start_date - timedelta(1))
+    #             expiry_time = '%sM.%sD' % (
+    #                 str(time.years * 12 + time.months).zfill(2),
+    #                 str(time.days).zfill(2))
+    #         rec.expiry_time = expiry_time
 
     @api.multi
     def _validate_active_agreement(self):
