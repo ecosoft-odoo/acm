@@ -20,3 +20,7 @@ access_account_analytic_account_agreement_user,account.analytic.account agreemen
 access_account_analytic_invoice_line_agreement_readonly,account.analytic.invoice.line agreement readonly,contract.model_account_analytic_invoice_line,agreement_legal.group_agreement_readonly,1,0,0,0
 access_account_analytic_invoice_line_agreement_user,account.analytic.invoice.line agreement user,contract.model_account_analytic_invoice_line,agreement_legal.group_agreement_user,1,1,1,0
 access_market_zone_map,access_market_zone_map,model_market_zone_map,analytic.group_analytic_accounting,1,1,1,1
+access_stock_warehouse_orderpoint_allusers,stock.warehouse.orderpoint allusers,stock.model_stock_warehouse_orderpoint,,1,0,0,0
+access_stock_move_allusers,stock.move allusers,stock.model_stock_move,,1,0,0,0
+access_product_template_agreement_user,product.template agreement user,product.model_product_template,agreement_legal.group_agreement_user,1,1,1,1
+access_product_product_agreement_user,product.product agreement user,product.model_product_product,agreement_legal.group_agreement_user,1,1,1,1
