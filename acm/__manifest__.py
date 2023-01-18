@@ -23,7 +23,7 @@
         'acm_agreement_contract/data/report_paperformat_data.xml',
         'acm_agreement_contract/data/report_data.xml',
         'acm_agreement_contract/data/agreement_subtype_data.xml',
-        'acm_agreement_contract/data/agreement_data.xml',
+        # 'acm_agreement_contract/data/agreement_data.xml',
         'acm_agreement_contract/data/breach_type_data.xml',
         'acm_agreement_contract/data/ir_cron.xml',
         'acm_agreement_contract/data/decimal_precision_data.xml',
