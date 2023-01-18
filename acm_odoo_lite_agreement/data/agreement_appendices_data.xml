@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- <odoo noupdate="1"> -->
+<odoo>
+
+    <!-- สัญญาเช่าที่ดินเพื่อทำประโยชน์ -->
+    <record id="agreement_odoo_lite_appendix" model="agreement.appendix">
+        <field name="name">เอกสารแนบท้ายสัญญาเงื่อนไขการเช่า สัญญาเช่าที่ดินเพื่อทำประโยชน์</field>
+        <field name="title">เอกสารแนบท้ายสัญญาเงื่อนไขการเช่า สัญญาเช่าที่ดินเพื่อทำประโยชน์</field>
+        <field name="sequence">10</field>
+        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite"/>
+        <field name="content" type="html">
+            <p style="text-align: center; ">
+                <b>เอกสารแนบท้ายสัญญารายละเอียดและเงื่อนไขการเช่า ${object.agreement_id.company_id.market_name or '-'} หมายเลข ${object.agreement_id.code or ''}</b>
+            </p>
+            <table style="width: 100%;">
+                <tbody>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>1.</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>ชื่อผู้เช่า (นิติบุคคล)</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;">${object.agreement_id.company_id.name or '-'}</td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>เลขทะเบียนนิติบุคคล</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;">${object.agreement_id.company_id.vat or '-'}</td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>2.</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>ชื่อผู้เช่า (บุคคลธรรมดา)</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>เลขประจำตัวประชาชน</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>3.</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>ที่อยู่</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>4.</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>เบอร์ติดต่อ</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>5.</b></td>
+                        <td colspan="2" style="border : 1px solid black; padding-left: 10px;"><b>ประเภทการใช้ประโยชน์</b></td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>-ชื่อกิจการ</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>-ลักษณะการใช้ประโยชน์</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>6.</b></td>
+                        <td colspan="2" style="border : 1px solid black; padding-left: 10px;"><b>ทรัพย์สินเช่า</b></td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><p><b>-ที่ดินที่เช่า<br/>(หากมีมากกว่า 1 โฉนด ควรระบุทุกโฉนด)</b></p></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><p><b>-เนื้อที่ดินที่เช่า<br/>(ระบุรวม)</b></p></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>7.</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>ระยะเวลาการเช่า</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>8.</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>วันส่งมอบทรัพย์สินที่เช่า</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>9.</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>ระยะเวลาปลอดค่าเช่า</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>10.</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>วันชำระค่าเช่า</b></td><td style="border : 1px solid black; padding-left: 10px;"></td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>11.</b></td>
+                        <td colspan="2" style="border : 1px solid black; padding-left: 10px;"><b>ค่าตอบแทน/ค่าเช่า</b></td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>-ค่าตอบแทนการให้เช่า</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>-ค่าเช่ารายวัน</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>-ค่าเช่ารายเดือน</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>-ค่าช่ารายปี</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>12.</b></td>
+                        <td colspan="2" style="border : 1px solid black; padding-left: 10px;"><b>เงินประกันการปฏิบัติตามสัญญา</b></td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>-เงินประกันการปฏิบัติตามสัญญา</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <br/>
+            <br/>
+            <div style="page-break-inside: avoid !important;">
+            <div class="row justify-content-center">
+                <div class="col-6" style="text-align:center;">ลงชื่อ.....................................................ผู้ให้เช่า<br/>(${object.agreement_id.company_contact_id and object.agreement_id.company_contact_id.name or '.....................................................'})
+                </div>
+                <div class="col-6" style="text-align:center;">ลงชื่อ.....................................................ผู้เช่า<br/>(${object.agreement_id.partner_id and  object.agreement_id.partner_id.name or '.....................................................'})
+                </div>
+            </div>
+            </div>
+        </field>
+    </record>
+
+    <!-- สัญญาเช่าที่ดินและสิ่งปลูกสร้าง -->
+    <record id="agreement_odoo_lite_building_appendix" model="agreement.appendix">
+        <field name="name">เอกสารแนบท้ายสัญญาเงื่อนไขการเช่า สัญญาเช่าที่ดินและสิ่งปลูกสร้าง</field>
+        <field name="title">เอกสารแนบท้ายสัญญาเงื่อนไขการเช่า สัญญาเช่าที่ดินและสิ่งปลูกสร้าง</field>
+        <field name="sequence">10</field>
+        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite_1"/>
+        <field name="content" type="html">
+            <p style="text-align: center; ">
+                <b>เอกสารแนบท้ายสัญญารายละเอียดและเงื่อนไขการเช่า ${object.agreement_id.company_id.market_name or '-'} หมายเลข ${object.agreement_id.code or ''}</b>
+            </p>
+            <table style="width: 100%;">
+                <tbody>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>1.</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>ชื่อผู้เช่า (นิติบุคคล)</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;">${object.agreement_id.company_id.name or '-'}</td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>เลขทะเบียนนิติบุคคล</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;">${object.agreement_id.company_id.vat or '-'}</td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>2.</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>ชื่อผู้เช่า (บุคคลธรรมดา)</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>เลขประจำตัวประชาชน</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>3.</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>ที่อยู่</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>4.</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>เบอร์ติดต่อ</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>5.</b></td>
+                        <td colspan="2" style="border : 1px solid black; padding-left: 10px;"><b>ประเภทการใช้ประโยชน์</b></td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>-ชื่อกิจการ</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>-ลักษณะการใช้ประโยชน์</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>6.</b></td>
+                        <td colspan="2" style="border : 1px solid black; padding-left: 10px;"><b>ทรัพย์สินเช่า</b></td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><p><b>-ที่ดินที่เช่า<br/>(หากมีมากกว่า 1 โฉนด ควรระบุทุกโฉนด)</b></p></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><p><b>-เนื้อที่ดินที่เช่า<br/>(ระบุรวม)</b></p></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>7.</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>ระยะเวลาการเช่า</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>8.</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>วันส่งมอบทรัพย์สินที่เช่า</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>9.</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>ระยะเวลาปลอดค่าเช่า</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>10.</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>วันชำระค่าเช่า</b></td><td style="border : 1px solid black; padding-left: 10px;"></td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>11.</b></td>
+                        <td colspan="2" style="border : 1px solid black; padding-left: 10px;"><b>ค่าตอบแทน/ค่าเช่า</b></td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>-ค่าตอบแทนการให้เช่า</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>-ค่าเช่ารายวัน</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>-ค่าเช่ารายเดือน</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>-ค่าช่ารายปี</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>12.</b></td>
+                        <td colspan="2" style="border : 1px solid black; padding-left: 10px;"><b>เงินประกันการปฏิบัติตามสัญญา</b></td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>-เงินประกันการปฏิบัติตามสัญญา</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                    </tr>
+                    <tr style="border : 1px solid black;">
+                        <td style="border : 1px solid black; padding-left: 10px;">13.</td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>เงื่อนไขการเช่า</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <br/>
+            <br/>
+            <div style="page-break-inside: avoid !important;">
+            <div class="row justify-content-center">
+                <div class="col-6" style="text-align:center;">ลงชื่อ.....................................................ผู้ให้เช่า<br/>(${object.agreement_id.company_contact_id and object.agreement_id.company_contact_id.name or '.....................................................'})
+                </div>
+                <div class="col-6" style="text-align:center;">ลงชื่อ.....................................................ผู้เช่า<br/>(${object.agreement_id.partner_id and  object.agreement_id.partner_id.name or '.....................................................'})
+                </div>
+            </div>
+            </div>
+        </field>
+    </record>
+</odoo>

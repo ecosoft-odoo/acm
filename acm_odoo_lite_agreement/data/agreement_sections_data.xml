@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- <odoo noupdate="1"> -->
+<odoo>
+
+    <!-- สัญญาเช่าที่ดินเพื่อทำประโยชน์ -->
+    <record id="agreement_odoo_lite_section_1" model="agreement.section">
+        <field name="name">ย่อหน้าที่ 1</field>
+        <field name="sequence">10</field>
+        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite"/>
+        <field name="content" type="html">
+            <p style="text-align: center; text-indent: 0px;">
+                <font style="font-size: 28px;">
+                    <b>สัญญาเช่าที่ดินเพื่อทำประโยชน์</b>
+                </font>
+            </p>
+            <p style="text-align: right; text-indent: 0px;">
+                เลขที่ ${object.agreement_id.code or '   '}
+            </p>
+            <p style="text-indent: 48px;">สัญญานี้ทำขึ้น ณ ${object.agreement_id.company_id.name or '   '}
+            เมื่อวันที่ ${object.agreement_id.date_contract and '%s %s %s' % (object.agreement_id.date_contract.strftime('%d').lstrip('0'), object.agreement_id.trans_months(object.agreement_id.date_contract.strftime('%m')), (object.agreement_id.date_contract + relativedelta(years=543)).strftime('%Y')) or '   '}
+            ระหว่าง
+            </p>
+            <p style="text-indent: 48px;">
+                ${object.agreement_id.company_id.name or '   '} ซึ่งจดทะเบียนเป็นนิติบุคคลเลขที่ ${object.agreement_id.company_id.vat or '   '} มีสำนักงานตั้งอยู่เลขที่ ${object.agreement_id.company_id.street or '   '} ${object.agreement_id.company_id.street2 or '   '} ${object.agreement_id.company_id.zip or '   '} ซึ่งต่อไปนี้ในสัญญานี้เรียกว่า "ผู้ให้เช่า" ฝ่ายหนึ่ง กับ
+            </p>
+            <p style="text-indent: 48px;">
+                <span>${object.agreement_id.partner_id.name or '   '} </span>
+                <span>${object.agreement_id.partner_id.company_type == 'company' and 'ซึ่งจดทะเบียนเป็นนิติบุคคลเลขที่' or 'เลขประจำตัวประชาชน'} ${object.agreement_id.partner_id.vat or '   '} </span>
+                <span>${object.agreement_id.partner_id.company_type == 'company' and 'มีสำนักงานใหญ่อยู่' or 'บ้านเลขที่'} ${object.agreement_id.partner_id.street or '   '} ${object.agreement_id.partner_id.street2 or '   '} ${object.agreement_id.partner_id.zip or '  '} </span>
+                <span>ซึ่งต่อไปนี้ในสัญญาเช่านี้จะเรียกว่า "ผู้เช่า" อีกฝ่ายหนึ่ง</span>
+                <br/>
+            </p>
+        </field>
+    </record>
+
+    <record id="agreement_odoo_lite_section_2" model="agreement.section">
+        <field name="name">ย่อหน้าที่ 2</field>
+        <field name="sequence">20</field>
+        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite"/>
+        <field name="content" type="html">
+            <p style="text-indent: 48px;">
+                คู่สัญญาทั้งสองฝ่ายได้ตกลงทำสัญญากัน มีข้อความดังต่อไปนี้
+            </p>
+        </field>
+    </record>
+
+    <record id="agreement_odoo_lite_section_3" model="agreement.section">
+        <field name="name">ย่อหน้าที่ 3</field>
+        <field name="sequence">30</field>
+        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite"/>
+        <field name="content" type="html">
+            <p>สัญญานี้ทำขึ้นไว้สองฉบับข้อความตรงกัน คู่สัญญาได้ตรวจและเห็นว่าถูกต้องแล้ว จึงได้ลงลายมือชื่อไว้เป็นสำคัญต่อหน้าพยาน และคู่สัญญาแต่ละฝ่ายต่างยึดถือกันไว้ฝ่ายละฉบับ</p>
+            <br/>
+            <br/>
+            <div style="page-break-inside: avoid !important;">
+                <div class="row justify-content-center">
+                    <div class="col-6" style="text-align:center;">ลงชื่อ.....................................................ผู้ให้เช่า<br/>(${object.agreement_id.company_contact_id and object.agreement_id.company_contact_id.name or '.....................................................'})
+                    </div>
+                    <div class="col-6" style="text-align:center;">ลงชื่อ.....................................................ผู้เช่า<br/>(${object.agreement_id.partner_id and  object.agreement_id.partner_id.name or '.....................................................'})
+                    </div>
+                </div>
+                <br/>
+                <br/>
+                <div class="row justify-content-center">
+                    <div class="col-6" style="text-align:center;">ลงชื่อ.....................................................พยาน<br/>(${object.agreement_id.company_witness and object.agreement_id.company_witness or  '.....................................................'})
+                    </div>
+                    <div class="col-6" style="text-align:center;">ลงชื่อ.....................................................พยาน<br/>(${object.agreement_id.partner_witness and object.agreement_id.partner_witness or  '.....................................................'})
+                    </div>
+                </div>
+            </div>
+        </field>
+    </record>
+
+    <!-- สัญญาเช่าที่ดินและสิ่งปลูกสร้าง -->
+    <record id="agreement_odoo_lite_section_building_1" model="agreement.section">
+        <field name="name">ย่อหน้าที่ 1</field>
+        <field name="sequence">10</field>
+        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite_1"/>
+        <field name="content" type="html">
+            <p style="text-align: center; text-indent: 0px;">
+                <font style="font-size: 28px;">
+                    <b>สัญญาเช่าที่ดินและสิ่งปลูกสร้าง</b>
+                </font>
+            </p>
+            <p style="text-align: right; text-indent: 0px;">
+                เลขที่ ${object.agreement_id.code or '   '}
+            </p>
+            <p style="text-indent: 48px;">สัญญานี้ทำขึ้น ณ ${object.agreement_id.company_id.name or '   '}
+            เมื่อวันที่ ${object.agreement_id.date_contract and '%s %s %s' % (object.agreement_id.date_contract.strftime('%d').lstrip('0'), object.agreement_id.trans_months(object.agreement_id.date_contract.strftime('%m')), (object.agreement_id.date_contract + relativedelta(years=543)).strftime('%Y')) or '   '}
+            ระหว่าง
+            </p>
+            <p style="text-indent: 48px;">
+                ${object.agreement_id.company_id.name or '   '} ซึ่งจดทะเบียนเป็นนิติบุคคลเลขที่ ${object.agreement_id.company_id.vat or '   '} มีสำนักงานตั้งอยู่เลขที่ ${object.agreement_id.company_id.street or '   '} ${object.agreement_id.company_id.street2 or '   '} ${object.agreement_id.company_id.zip or '   '} ซึ่งต่อไปนี้ในสัญญานี้เรียกว่า "ผู้ให้เช่า" ฝ่ายหนึ่ง กับ
+            </p>
+            <p style="text-indent: 48px;">
+                <span>${object.agreement_id.partner_id.name or '   '} </span>
+                <span>${object.agreement_id.partner_id.company_type == 'company' and 'ซึ่งจดทะเบียนเป็นนิติบุคคลเลขที่' or 'เลขประจำตัวประชาชน'} ${object.agreement_id.partner_id.vat or '   '} </span>
+                <span>${object.agreement_id.partner_id.company_type == 'company' and 'มีสำนักงานใหญ่อยู่' or 'บ้านเลขที่'} ${object.agreement_id.partner_id.street or '   '} ${object.agreement_id.partner_id.street2 or '   '} ${object.agreement_id.partner_id.zip or '  '} </span>
+                <span>ซึ่งต่อไปนี้ในสัญญาเช่านี้จะเรียกว่า "ผู้เช่า" อีกฝ่ายหนึ่ง</span>
+                <br/>
+            </p>
+        </field>
+    </record>
+
+    <record id="agreement_odoo_lite_section_building_2" model="agreement.section">
+        <field name="name">ย่อหน้าที่ 2</field>
+        <field name="sequence">20</field>
+        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite_1"/>
+        <field name="content" type="html">
+            <p style="text-indent: 48px;">
+                คู่สัญญาทั้งสองฝ่ายได้ตกลงทำสัญญากัน มีข้อความดังต่อไปนี้
+            </p>
+        </field>
+    </record>
+
+    <record id="agreement_odoo_lite_section_building_3" model="agreement.section">
+        <field name="name">ย่อหน้าที่ 3</field>
+        <field name="sequence">30</field>
+        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite_1"/>
+        <field name="content" type="html">
+            <p>สัญญานี้ทำขึ้นไว้สองฉบับข้อความตรงกัน คู่สัญญาได้ตรวจและเห็นว่าถูกต้องแล้ว จึงได้ลงลายมือชื่อไว้เป็นสำคัญต่อหน้าพยาน และคู่สัญญาแต่ละฝ่ายต่างยึดถือกันไว้ฝ่ายละฉบับ</p>
+            <br/>
+            <br/>
+            <div style="page-break-inside: avoid !important;">
+                <div class="row justify-content-center">
+                    <div class="col-6" style="text-align:center;">ลงชื่อ.....................................................ผู้ให้เช่า<br/>(${object.agreement_id.company_contact_id and object.agreement_id.company_contact_id.name or '.....................................................'})
+                    </div>
+                    <div class="col-6" style="text-align:center;">ลงชื่อ.....................................................ผู้เช่า<br/>(${object.agreement_id.partner_id and  object.agreement_id.partner_id.name or '.....................................................'})
+                    </div>
+                </div>
+                <br/>
+                <br/>
+                <div class="row justify-content-center">
+                    <div class="col-6" style="text-align:center;">ลงชื่อ.....................................................พยาน<br/>(${object.agreement_id.company_witness and object.agreement_id.company_witness or  '.....................................................'})
+                    </div>
+                    <div class="col-6" style="text-align:center;">ลงชื่อ.....................................................พยาน<br/>(${object.agreement_id.partner_witness and object.agreement_id.partner_witness or  '.....................................................'})
+                    </div>
+                </div>
+            </div>
+        </field>
+    </record>
+</odoo>
