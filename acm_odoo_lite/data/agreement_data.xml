@@ -3,29 +3,27 @@
 <odoo>
 
     <!-- สัญญาเช่าที่ดินเพื่อทำประโยชน์  -->
-    <record id="agreement_template_lease_odoo_lite" model="agreement">
+    <record id="agreement_template_1" model="agreement">
         <field name="name">สัญญาเช่าที่ดินเพื่อทำประโยชน์</field>
         <field name="code">Template</field>
         <field name="is_template">True</field>
         <field name="agreement_type_id" ref="agreement_legal.agreement_type_contract"/>
         <field name="agreement_subtype_id" ref="acm.agreement_subtype_lease"/>
         <field name="contract_type">sale</field>
-        <field name="description">สัญญาเช่า</field>
+        <field name="description">สัญญาเช่าที่ดินเพื่อทำประโยชน์</field>
         <field name="company_id" ref="base.main_company"/>
-        <field name="income_type_id">1</field>
     </record>
 
     <!-- สัญญาเช่าที่ดินและสิ่งปลูกสร้าง -->
-    <record id="agreement_template_lease_odoo_lite_1" model="agreement">
-        <field name="name">สัญญาเช่าที่ดินพร้อมสิ่งก่อสร้าง</field>
+    <record id="agreement_template_2" model="agreement">
+        <field name="name">สัญญาเช่าที่ดินและสิ่งปลูกสร้าง</field>
         <field name="code">Template</field>
         <field name="is_template">True</field>
         <field name="agreement_type_id" ref="agreement_legal.agreement_type_contract"/>
         <field name="agreement_subtype_id" ref="acm.agreement_subtype_lease"/>
         <field name="contract_type">sale</field>
-        <field name="description">สัญญาเช่า</field>
+        <field name="description">สัญญาเช่าที่ดินและสิ่งปลูกสร้าง</field>
         <field name="company_id" ref="base.main_company"/>
-        <field name="income_type_id">1</field>
     </record>
 
 </odoo>
