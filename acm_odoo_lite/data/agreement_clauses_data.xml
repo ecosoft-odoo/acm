@@ -3,22 +3,22 @@
 <odoo>
 
     <!-- สัญญาเช่าที่ดินเพื่อทำประโยชน์ -->
-    <record id="agreement_odoo_lite_clause_1" model="agreement.clause">
+    <record id="agreement_clause_1" model="agreement.clause">
         <field name="name">ข้อ 1</field>
         <field name="sequence">10</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_1"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_2"/>
         <field name="content" type="html">
             <p>ข้อตกลงการเช่าและทรัพย์สินที่เช่า</p>
             <p style="text-indent: 114px;">ผู้ให้เช่าตกลงให้เช่าและผู้เช่าตกลงเช่าทรัพย์สินของผู้ให้เช่า โดยมีรายละเอียดการเช่าปรากฏตามเอกสารแนบท้ายสัญญารายละเอียดและเงื่อนไขการเช่าที่ดินเพื่อทำประโยชน์ และแผนผังแสดงตำแหน่งทรัพย์สินที่เช่า</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_2" model="agreement.clause">
+    <record id="agreement_clause_2" model="agreement.clause">
         <field name="name">ข้อ 2</field>
         <field name="sequence">20</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_1"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_2"/>
         <field name="content" type="html">
             <p>เงินประกันการปฏิบัติตามสัญญา</p>
             <p style="text-indent: 114px;">ในขณะทำสัญญาฉบับนี้ ผู้เช่าตกลงส่งมอบเงินประกันการปฏิบัติตามสัญญาให้แก่ผู้ให้เช่าเพื่อเป็นเงินประกันการปฏิบัติตามสัญญานี้ ปรากฏตามเอกสารแนบท้ายสัญญารายละเอียดและเงื่อนไขการเช่าที่ดินเพื่อทำประโยชน์</p>
@@ -27,227 +27,227 @@
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_3" model="agreement.clause">
+    <record id="agreement_clause_3" model="agreement.clause">
         <field name="name">ข้อ 3</field>
         <field name="sequence">30</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_1"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_2"/>
         <field name="content" type="html">
             <p>ผู้ให้เช่าไม่ต้องรับผิดชอบเพื่อการรอนสิทธิหรือเพื่อความชำรุดบกพร่องในทรัพย์สินที่เช่า อันเกิดขึ้นในระหว่างเวลาเช่าและไม่ว่ากรณีใด ๆ และผู้ให้เช่าไม่มีหน้าที่บำรุงรักษาในระหว่างการเช่า ทั้งนี้ ผู้เช่ามีหน้าที่และรับผิดเสียค่าใช้จ่ายในการบำรุงรักษาทรัพย์สินที่เช่า</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_4" model="agreement.clause">
+    <record id="agreement_clause_4" model="agreement.clause">
         <field name="name">ข้อ 4</field>
         <field name="sequence">40</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_1"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_2"/>
         <field name="content" type="html">
             <p>ผู้เช่าจะไม่ทอดทิ้งทรัพย์สินที่เช่า หรือทำให้ทรัพย์สินที่เช่าอยู่ในลักษณะปราศจากการครอบครอง หรือปราศจากการทำประโยชน์ โดยไม่ได้รับอนุญาตเป็นหนังสือจากผู้ให้เช่า</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_5" model="agreement.clause">
+    <record id="agreement_clause_5" model="agreement.clause">
         <field name="name">ข้อ 5</field>
         <field name="sequence">50</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_1"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_2"/>
         <field name="content" type="html">
             <p>ผู้เช่าตกลงจะใช้ทรัพย์สินที่เช่าตามสัญญาตามที่เอกสารแนบท้ายสัญญารายละเอียดและเงื่อนไขการเช่าที่ดินเพื่อทำประโยชน์กำหนด และจะไม่ใช้ทรัพย์สินที่เช่าเพื่อกิจการใด อันมีวัตถุประสงค์เป็นการต้องห้ามฝ่าฝืนกฎหมาย หรือขัดต่อความสงบเรียบร้อย หรือศีลธรรมอันดีของประชาชนโดยเด็ดชาด</p>
             <p style="text-indent: 114px;">หากผู้เช่ามีความประสงค์จะเปลี่ยนแปลงการใช้ประโยชน์ในทรัพย์สินที่เช่า ผู้เช่าจะต้องได้รับอนุญาต จากผู้ให้เช่าเป็นหนังสือ และปฏิบัติตามเงื่อนไขที่ผู้ให้เช่ากำหนด</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_6" model="agreement.clause">
+    <record id="agreement_clause_6" model="agreement.clause">
         <field name="name">ข้อ 6</field>
         <field name="sequence">60</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_1"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_2"/>
         <field name="content" type="html">
             <p>การดัดแปลงและการต่อเติม การปลูกสร้างหรือแก้ไขเพิ่มเติม หรือรื้อถอนทรัพย์สินที่เช่า ผู้เช่าจะกระทำมิได้ เว้นแต่จะได้รับการยกเว้นจากผู้ให้เช่าเป็นหนังสือ และปฏิบัติตามเงื่อนไขที่ผู้ให้เช่ากำหนด</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_7" model="agreement.clause">
+    <record id="agreement_clause_7" model="agreement.clause">
         <field name="name">ข้อ 7</field>
         <field name="sequence">70</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_1"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_2"/>
         <field name="content" type="html">
             <p>ผู้เช่าตกลงคืนทรัพย์สินที่เช่าตามข้อ 1 ตามสภาพที่ได้รับมอบในวันที่เริ่มสัญญาเช่า และรื้อถอนสิ่งปลูกสร้าง หรือการดำเนินการตามข้อ 5. และข้อ 6. ออกไปจากที่ดินของผู้ให้เช่าด้วยค่าใช้จ่ายของผู้เช่าเอง และจะไม่เรียกร้องค่าทดแทนใด ๆ จากผู้ให้เช่า เว้นแต่จะได้รับการยกเว้นจากผู้ให้เช่าเป็นหนังสือ และปฏิบัติตามเงื่อนไขที่ผู้ให้เช่ากำหนด </p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_8" model="agreement.clause">
+    <record id="agreement_clause_8" model="agreement.clause">
         <field name="name">ข้อ 8</field>
         <field name="sequence">80</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_1"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_2"/>
         <field name="content" type="html">
             <p>ผู้เช่าจะให้เช่าช่วงหรือโอนสิทธิของตนอันมีในทรัพย์สินที่เช่า ไม่ว่าทั้งหมดหรือบางส่วน หรือให้ผู้อื่นเข้าใช้ประโยชน์ในพื้นที่ดังกล่าวไม่ได้ เว้นแต่จะได้รับอนุญาตเป็นหนังสือจากผู้ให้เช่า</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_9" model="agreement.clause">
+    <record id="agreement_clause_9" model="agreement.clause">
         <field name="name">ข้อ 9</field>
         <field name="sequence">90</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_1"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_2"/>
         <field name="content" type="html">
             <p>ผู้เช่ายินยอมให้ผู้ให้เช่า เจ้าหน้าที่ หรือตัวแทนผู้ให้เช่าเข้าไปในทรัพย์สินที่เช่าได้ทุกเวลา โดยผู้เช่าและบริวารต้องอำนวยความสะดวกให้ผู้ให้เช่า เจ้าหน้าที่ หรือตัวแทนผู้ให้เช่า</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_10" model="agreement.clause">
+    <record id="agreement_clause_10" model="agreement.clause">
         <field name="name">ข้อ 10</field>
         <field name="sequence">100</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_1"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_2"/>
         <field name="content" type="html">
             <p>ผู้เช่า และบริวารของผู้เช่า จะต้องไม่ก่อการทะเลาะวิวาท หรือก่อความเดือนร้อนรำคาญ ให้กับผู้เช่ารายอื่น หรือบุคคลภายนอก การเพิกเฉยหรือฝ่าฝืนให้ถือว่าเป็นการปฏิบัติผิดสัญญาเช่าอย่างร้ายแรง</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_11" model="agreement.clause">
+    <record id="agreement_clause_11" model="agreement.clause">
         <field name="name">ข้อ 11</field>
         <field name="sequence">110</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_1"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_2"/>
         <field name="content" type="html">
-            <p>ผู้เช่าต้องชำระค่าเช่า ค่าตอบแทน ตามข้อ 1. และรับผิดชอบชำระค่าบริการสาธารณูปโภค (หากมี) เช่น ค่าไฟฟ้า ค่าน้ำประปา ค่าโทรศัพท์ เป็นต้น ภายในทรัพย์สินที่เช่า  ตามวันและวิธีการชำระที่ผู้ให้เช่ากำหนด</p>
+            <p>ผู้เช่าต้องชำระค่าเช่า ค่าตอบแทน ตามข้อ 1. และรับผิดชอบชำระค่าบริการสาธารณูปโภค (หากมี) เช่น ค่าไฟฟ้า ค่าน้ำประปา ค่าโทรศัพท์ เป็นต้น ภายในทรัพย์สินที่เช่า ตามวันและวิธีการชำระที่ผู้ให้เช่ากำหนด</p>
             <p style="text-indent: 114px;">หากผู้เช่าค้างชำระค่าบริการสาธารณูปโภค ตั้งแต่ 2 งวดขึ้นไป ผู้เช่ายินยอมให้ผู้ให้เช่าระงับการให้บริการสาธารณูปโภคได้ทันที โดยไม่จำเป็นต้องแจ้งให้ผู้เช่าทราบล่วงหน้า และผู้เช่าตกลงให้ถือว่าการระงับการให้บริการสาธารณูปโภคดังกล่าวไม่เป็นการกระทำละเมิดต่อผู้เช่า</p>
             <p style="text-indent: 114px;">กรณีผู้เช่าได้ชำระค่าบริการสาธารณูปโภค (หากมี) เช่น ค่าไฟฟ้า ค่าน้ำประปา ค่าโทรศัพท์ เป็นต้นต่อหน่วยงานที่ให้บริการแล้ว ผู้เช่าต้องแสดงหลักฐานการชำระค่าบริการสาธารณูปโภคว่าไม่มีหนี้ค้างชำระต่อผู้ให้เช่าเมื่อสิ้นสุดการเช่า</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_12" model="agreement.clause">
+    <record id="agreement_clause_12" model="agreement.clause">
         <field name="name">ข้อ 12</field>
         <field name="sequence">120</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_1"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_2"/>
         <field name="content" type="html">
             <p>ผู้เช่าตกลงว่าจะไม่กระทำการใด ๆ หรือยอมให้บุคคลอื่นกระทำการใด อันมีลักษณะเป็นการละเมิดการใช้ไฟฟ้า หรือน้ำประปา</p>
             <p style="text-indent: 114px;">การละเมิดการใช้ไฟฟ้า หรือน้ำประปา หมายถึง การทำลายหรือตัดแปลงแก้ไขมาตรวัดไฟฟ้า หรือมาตรวัดน้ำประปา หรืออุปกรณ์ประกอบใด ๆ ตลอดจนเครื่องหมายหรือตราต่าง ๆ ทำให้มาตรวัดอ่านค่าคลาดเคลื่อน หรือกระทำการอื่นใดที่มีลักษณะคล้ายคลึงกันหรือทำนองเดียวกัน หรือต่อไฟฟ้า หรือน้ำประปาตรงโดยไม่ผ่านมาตรวัด</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_13" model="agreement.clause">
+    <record id="agreement_clause_13" model="agreement.clause">
         <field name="name">ข้อ 13</field>
         <field name="sequence">130</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_1"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_2"/>
         <field name="content" type="html">
             <p>ผู้เช่าจำต้องสงวนทรัพย์สินที่เช่านั้นเสมอกับวิญญูชนจะพึงสงวนทรัพย์สินของตน และต้องบำรุงรักษาทั้งทำการซ่อมแซมด้วย นอกจากนี้ผู้เช่ายังต้องรับผิดในความเสียหายหรือบุบสลายใด ๆ อันเกิดขึ้นแก่ทรัพย์สินที่เช่าเพราะความผิดของผู้เช่าหรือบริวารของผู้เช่าอีกด้วย</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_14" model="agreement.clause">
+    <record id="agreement_clause_14" model="agreement.clause">
         <field name="name">ข้อ 14</field>
         <field name="sequence">140</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_1"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_2"/>
         <field name="content" type="html">
             <p>หากทรัพย์สินที่เช่าชำรุดทรุดโทรมจำเป็นต้องรับการซ่อมแซมทรัพย์สินที่เช่าตามคำแนะนำของผู้ให้เช่า ผู้ให้เช่าจะแจ้งเป็นหนังสือแก่ผู้เช่า และผู้เช่าต้องจัดการซ่อมแซมทรัพย์สินที่เช่าตามคำแนะนำของผู้ให้เช่า ภายในระยะเวลาที่กำหนด แต่ไม่เกิน 30 วัน นับแต่ได้รับบอกกล่าว โดยผู้เช่าเป็นผู้ออกค่าใช้จ่ายทั้งหมด</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_15" model="agreement.clause">
+    <record id="agreement_clause_15" model="agreement.clause">
         <field name="name">ข้อ 15</field>
         <field name="sequence">150</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_1"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_2"/>
         <field name="content" type="html">
-            <p>ผู้เช่าจะรักษาสถานที่เช่าให้อยู่ในสภาพมั่นคง ปลอดภัย สะอาดเรียบร้อย ไม่มีวัสดุอันอาจก่อให้เกิดอัคคีภัย ระเบิด หรือภยันตรายใด ๆไม่มีวัตถุที่ส่งกลิ่นเหม็น หรือกลิ่นอันไม่พึงปรารถนา ไม่ก่อให้เกิดเสียงเป็นที่รบกวนชาวบ้าน ไม่ก่อความเดือดร้อนรำคาญ ทะเลาะวิวาทกับผู้อื่นหรือกระทำประการอื่นใดในทำนองเดียวกัน หากมีข้อบกพร่องดังกล่าวเกิดขึ้น ผู้เช่าจะต้องแก้ไขหรือกำจัดหรือระงับให้สิ้นไป ภายในเวลาที่กำหนด แต่ไม่เกิน 3 วัน นับแต่ได้รับบอกกล่าวจากผู้ให้เช่า</p>
+            <p>ผู้เช่าจะรักษาสถานที่เช่าให้อยู่ในสภาพมั่นคง ปลอดภัย สะอาดเรียบร้อย ไม่มีวัสดุอันอาจก่อให้เกิดอัคคีภัย ระเบิด หรือภยันตรายใดๆ ไม่มีวัตถุที่ส่งกลิ่นเหม็น หรือกลิ่นอันไม่พึงปรารถนา ไม่ก่อให้เกิดเสียงเป็นที่รบกวนชาวบ้าน ไม่ก่อความเดือดร้อนรำคาญ ทะเลาะวิวาทกับผู้อื่นหรือกระทำประการอื่นใดในทำนองเดียวกัน หากมีข้อบกพร่องดังกล่าวเกิดขึ้น ผู้เช่าจะต้องแก้ไขหรือกำจัดหรือระงับให้สิ้นไป ภายในเวลาที่กำหนด แต่ไม่เกิน 3 วัน นับแต่ได้รับบอกกล่าวจากผู้ให้เช่า</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_16" model="agreement.clause">
+    <record id="agreement_clause_16" model="agreement.clause">
         <field name="name">ข้อ 16</field>
         <field name="sequence">160</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_1"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_2"/>
         <field name="content" type="html">
             <p>บรรดาทรัพย์สิน สินค้า หรืออุปกรณ์ใด ๆ ของผู้เช่าที่เก็บรักษาไว้ในสถานที่เช่า หากเกิดการสูญหาย เสียหาย บุบสลาย โจรกรรม อัคคีภัย หรือภัยอันเกิดจากภัยธรรมชาติ เช่น อุทกภัย วาตภัย แผ่นดินไหว ผู้ให้เช่าไม่รับผิดใด ๆ ทั้งสิ้น </p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_17" model="agreement.clause">
+    <record id="agreement_clause_17" model="agreement.clause">
         <field name="name">ข้อ 17</field>
         <field name="sequence">170</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_1"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_2"/>
         <field name="content" type="html">
             <p>ผู้เช่าตกลงว่าจะไม่นำสัญญาเช่านี้ไปเป็นหลักประกันการกู้ยืมหรือหนี้ใด ๆ หรือก่อภาระผูกพันใด ๆ กับบุคคลภายนอกโดยเด็ดขาด</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_18" model="agreement.clause">
+    <record id="agreement_clause_18" model="agreement.clause">
         <field name="name">ข้อ 18</field>
         <field name="sequence">180</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_1"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_2"/>
         <field name="content" type="html">
             <p>ค่าภาษีและค่าธรรมเนียม</p>
-            <p style="text-indent: 114px;">ผู้เช่าตกลงชำระภาษีที่ดินและสิ่งปลูกสร้าง ภาษีป้าย หรือภาษีอื่นใด ค่าอากร ค่าเบี้ยประกันภัยค่าธรรมเนียมหรือเงินอื่นใดที่รัฐเรียกเก็บเกี่ยวกับทรัพย์สินที่เช่า (หากมี) ตลอดระยะเวลาที่ผู้เช่าครอบครองทรัพย์สินที่เช่า จนถึงวันที่ส่งมอบทรัพย์สินที่เช่าคืนแก่ผู้ให้เช่าเสร็จเรียบร้อย</p>
+            <p style="text-indent: 114px;">ผู้เช่าตกลงชำระภาษีที่ดินและสิ่งปลูกสร้าง ภาษีป้าย หรือภาษีอื่นใด ค่าอากร ค่าเบี้ยประกันภัย ค่าธรรมเนียมหรือเงินอื่นใดที่รัฐเรียกเก็บเกี่ยวกับทรัพย์สินที่เช่า (หากมี) ตลอดระยะเวลาที่ผู้เช่าครอบครองทรัพย์สินที่เช่า จนถึงวันที่ส่งมอบทรัพย์สินที่เช่าคืนแก่ผู้ให้เช่าเสร็จเรียบร้อย</p>
             <p style="text-indent: 114px;">หากผู้ให้เช่าชำระไปก่อน ให้ผู้ให้เช่ามีสิทธิเรียกเงินที่ได้ชำระไปนั้นคืนจากผู้เช่าได้ทั้งหมด พร้อมด้วยดอกเบี้ยในอัตราร้อยละ 15 (สิบห้า) ต่อปี นับแต่วันที่ผู้ให้เช่าได้ชำระเงินนั้น</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_19" model="agreement.clause">
+    <record id="agreement_clause_19" model="agreement.clause">
         <field name="name">ข้อ 19</field>
         <field name="sequence">190</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_1"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_2"/>
         <field name="content" type="html">
             <p>ผู้เช่าต้องปฏิบัติตาม กฎหมาย กฎ ระเบียบ ประกาศ คำสั่ง ระเบียบของราชการ และกฎหมายเกี่ยวกับการคุ้มครองข้อมูลส่วนบุคคล รวมทั้งจะต้องไม่ให้ลูกจ้างหรือบริวารของผู้เช่าหรือบุคคลอื่นใดฝ่าฝืนกฎ ระเบียบ ประกาศ คำสั่ง หรือข้อกำหนดดังกล่าวโดยเคร่งครัด การเพิกเฉยหรือฝ่าฝืนให้ถือว่าเป็นการปฏิบัติผิดสัญญาเช่าอย่างร้ายแรง</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_20" model="agreement.clause">
+    <record id="agreement_clause_20" model="agreement.clause">
         <field name="name">ข้อ 20</field>
         <field name="sequence">200</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_1"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_2"/>
         <field name="content" type="html">
             <p>ผู้เช่าตกลงหรือยินยอมให้ผู้ให้เช่าและบุคคลอื่นที่ผู้ให้เช่ามอบหมายใช้ข้อมูลส่วนบุคคลของผู้เช่า เพื่อวัตถุประสงค์ตามสัญญานี้หรือที่เกี่ยวข้องต่อเนื่องกับการปฏิบัติตามสัญญานี้ได้</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_21" model="agreement.clause">
+    <record id="agreement_clause_21" model="agreement.clause">
         <field name="name">ข้อ 21</field>
         <field name="sequence">210</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_1"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_2"/>
         <field name="content" type="html">
             <p>ผู้เช่ารับทราบแล้วว่าสิทธิการเช่าของผู้เช่ามีเพียงเท่าที่ตกลงตามสัญญาเช่านี้และเมื่อครบกำหนดอายุสัญญาเช่าแล้ว ผู้เช่าจะต้องขนย้ายทรัพย์สินและบริวารออกพร้อมทั้งส่งมอบทรัพย์สินที่เช่าคืนแก่ผู้ให้เช่าในสภาพเรียบร้อยทันทีโดยค่าใช้จ่ายของผู้เช่าเอง และผู้เช่าไม่ติดใจว่าเมื่อครบกำหนดอายุสัญญาการเช่า ผู้ให้เช่าจะต่อสัญญาเช่าให้อีกต่อไปหรือไม่</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_22" model="agreement.clause">
+    <record id="agreement_clause_22" model="agreement.clause">
         <field name="name">ข้อ 22</field>
         <field name="sequence">220</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_1"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_2"/>
         <field name="content" type="html">
             <p>กรณีผู้เช่ามีความประสงค์จะขอต่อสัญญาเช่าล่วงหน้าก่อนครบกำหนดสัญญาเช่า ผู้เช่าต้องมีหนังสือแจ้งผู้ให้เช่าทราบล่วงหน้าก่อนครบกำหนดสัญญาเช่าไม่น้อยกว่า 3 เดือน เพื่อผู้ให้เช่าและผู้เช่าตกลงค่าเช่าและรายละเอียดเงื่อนไขในสัญญาเช่า หากตกลงกันไม่ได้ก่อนครบกำหนดสัญญาเช่า ให้ถือว่าสัญญาเช่าสิ้นสุดเมื่อครบกำหนดการเช่า และผู้ให้เช่ามีสิทธิให้บุคคลอื่นเช่าได้</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_23" model="agreement.clause">
+    <record id="agreement_clause_23" model="agreement.clause">
         <field name="name">ข้อ 23</field>
         <field name="sequence">230</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_1"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_2"/>
         <field name="content" type="html">
             <p>กรณีผู้เช่ามีความประสงค์จะขอคืนทรัพย์สินที่เช่าก่อนครบกำหนดสัญญาเช่า ผู้เช่าต้องมีหนังสือแจ้งผู้ให้เช่าทราบล่วงหน้าก่อนครบกำหนดสัญญาเช่าไม่น้อยกว่า 2 เดือน และเมื่อครบกำหนดตามระยะเวลาที่ผู้เช่ามีหนังสือแจ้งผู้ให้เช่าแล้วให้ถือว่าสัญญาเช่าสิ้นสุดลงทันที</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_24" model="agreement.clause">
+    <record id="agreement_clause_24" model="agreement.clause">
         <field name="name">ข้อ 24</field>
         <field name="sequence">240</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_1"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_2"/>
         <field name="content" type="html">
             <p>การปฏิบัติผิดสัญญาและค่าปรับ</p>
             <p style="text-indent: 114px;">24.1 ในกรณีที่ผู้เช่าผิดนัดชำระเงินค่าเช่า ค่าบริการสาธารณูปโภค หรือเงินอื่นใดในสัญญา หรือปฏิบัติผิดสัญญาข้อหนึ่งข้อใด หรือแม้แต่ส่วนหนึ่งส่วนใด หากผู้ให้เช่ามีหนังสือแจ้งเตือนผู้เช่าแล้วแต่ผู้เช่าไม่ดำเนินการภายในระยะเวลาที่ผู้ให้เช่ากำหนด ผู้ให้เช่ามีสิทธิบอกเลิกสัญญาได้ทันที แต่ทั้งนี้ หากผู้ให้เช่ายังไม่ใช้สิทธิบอกเลิกสัญญา ให้ผู้ให้เช่ามีสิทธิดำเนินการดังต่อไปนี้</p>
@@ -259,11 +259,11 @@
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_25" model="agreement.clause">
+    <record id="agreement_clause_25" model="agreement.clause">
         <field name="name">ข้อ 25</field>
         <field name="sequence">250</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_1"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_2"/>
         <field name="content" type="html">
             <p>การสิ้นสุดของสัญญา</p>
             <p style="text-indent: 114px;">สัญญาฉบับนี้จะสิ้นสุดลงทันที เมื่อเกิดเหตุการณ์อย่างใดอย่างหนึ่ง ดังต่อไปนี้</p>
@@ -278,11 +278,11 @@
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_26" model="agreement.clause">
+    <record id="agreement_clause_26" model="agreement.clause">
         <field name="name">ข้อ 26</field>
         <field name="sequence">260</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_1"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_2"/>
         <field name="content" type="html">
             <p>ผลภายหลังสัญญาสิ้นสุด</p>
             <p style="text-indent: 114px;">เมื่อสัญญาระงับลงไม่ว่าด้วยเหตุใดก็ตาม ผู้ให้เช่าและผู้เช่าตกลงกัน ดังนี้</p>
@@ -305,36 +305,33 @@
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_27" model="agreement.clause">
+    <record id="agreement_clause_27" model="agreement.clause">
         <field name="name">ข้อ 27</field>
         <field name="sequence">270</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_1"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_2"/>
         <field name="content" type="html">
-            <p>หากมีปัญหาเกิดขึ้นเกี่ยวกับการวินิจฉัยหรือตีความเงื่อนไขในสัญญาเช่านี้ ผู้เช่าตกลงให้
-                ผู้ให้เช่าเป็นผู้วินิจฉัยชี้ขาด และผู้เช่าตกลงยอมรับและปฏิบัติตามคำวินิจฉัยดังกล่าวอย่างเคร่งครัด</p>
-            <br/>
-            <br/>
+            <p>หากมีปัญหาเกิดขึ้นเกี่ยวกับการวินิจฉัยหรือตีความเงื่อนไขในสัญญาเช่านี้ ผู้เช่าตกลงให้ผู้ให้เช่าเป็นผู้วินิจฉัยชี้ขาด และผู้เช่าตกลงยอมรับและปฏิบัติตามคำวินิจฉัยดังกล่าวอย่างเคร่งครัด</p>
         </field>
     </record>
 
     <!-- สัญญาเช่าที่ดินและสิ่งปลูกสร้าง -->
-    <record id="agreement_odoo_lite_clause_building_1" model="agreement.clause">
+    <record id="agreement_clause_building_1" model="agreement.clause">
         <field name="name">ข้อ 1</field>
         <field name="sequence">10</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite_1"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_building_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_2"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_building_2"/>
         <field name="content" type="html">
             <p>ข้อตกลงการเช่าและทรัพย์สินที่เช่า</p>
             <p style="text-indent: 114px;">ผู้ให้เช่าตกลงให้เช่าและผู้เช่าตกลงเช่าทรัพย์สินของผู้ให้เช่า โดยมีรายละเอียดการเช่าปรากฏตามเอกสารแนบท้ายสัญญารายละเอียดและเงื่อนไขการเช่าที่ดินและสิ่งปลูกสร้าง และแผนผังแสดงตำแหน่งทรัพย์สินที่เช่า</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_building_2" model="agreement.clause">
+    <record id="agreement_clause_building_2" model="agreement.clause">
         <field name="name">ข้อ 2</field>
         <field name="sequence">20</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite_1"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_building_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_2"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_building_2"/>
         <field name="content" type="html">
             <p>เงินประกันการปฏิบัติตามสัญญา</p>
             <p style="text-indent: 114px;">ในขณะทำสัญญาฉบับนี้ ผู้เช่าตกลงส่งมอบเงินประกันการปฏิบัติตามสัญญาให้แก่ผู้ให้เช่า เพื่อเป็นเงินประกันการปฏิบัติตามสัญญานี้ ปรากฏตามเอกสารแนบท้ายสัญญารายละเอียดและเงื่อนไขการเช่าที่ดินและสิ่งปลูกสร้าง</p>
@@ -343,277 +340,277 @@
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_building_3" model="agreement.clause">
+    <record id="agreement_clause_building_3" model="agreement.clause">
         <field name="name">ข้อ 3</field>
         <field name="sequence">30</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite_1"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_building_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_2"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_building_2"/>
         <field name="content" type="html">
             <p>ผู้ให้เช่าไม่ต้องรับผิดชอบเพื่อการรอนสิทธิหรือเพื่อความชำรุดบกพร่องในทรัพย์สินที่เช่า อันเกิดขึ้นในระหว่างเวลาเช่าและไม่ว่ากรณีใด ๆ และผู้ให้เช่าไม่มีหน้าที่บำรุงรักษาในระหว่างการเช่า ทั้งนี้ ผู้เช่ามีหน้าที่และรับผิดเสียค่าใช้จ่ายในการบำรุงรักษาทรัพย์สินที่เช่า</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_building_4" model="agreement.clause">
+    <record id="agreement_clause_building_4" model="agreement.clause">
         <field name="name">ข้อ 4</field>
         <field name="sequence">40</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite_1"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_building_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_2"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_building_2"/>
         <field name="content" type="html">
             <p>ผู้เช่าจะไม่ทอดทิ้งทรัพย์สินที่เช่า หรือหยุดการประกอบการ หรือทำให้ทรัพย์สินที่เช่าอยู่ในลักษณะปราศจากการครอบครอง หรือปราศจากการทำประโยชน์ ติดต่อกันตั้งแต่ 3 (สาม) วันขึ้นไป โดยไม่ได้รับอนุญาตเป็นหนังสือจากผู้ให้เช่า</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_building_5" model="agreement.clause">
+    <record id="agreement_clause_building_5" model="agreement.clause">
         <field name="name">ข้อ 5</field>
         <field name="sequence">50</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite_1"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_building_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_2"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_building_2"/>
         <field name="content" type="html">
             <p>ผู้เช่าตกลงจะใช้ทรัพย์สินที่เช่าตามสัญญาตามที่เอกสารแนบท้ายสัญญารายละเอียดและเงื่อนไขการเช่าที่ดินและสิ่งปลูกสร้างกำหนด และจะไม่ใช้ทรัพย์สินที่เช่าเพื่อกิจการใด อันมีวัตถุประสงค์เป็นการต้องห้ามฝ่าฝืนกฎหมาย หรือขัดต่อความสงบเรียบร้อย หรือศีลธรรมอันดีของประชาชนโดยเด็ดชาด</p>
             <p style="text-indent: 114px;">หากผู้เช่ามีความประสงค์จะเปลี่ยนแปลงการใช้ประโยชน์ในทรัพย์สินที่เช่า ผู้เช่าจะต้องได้รับอนุญาต จากผู้ให้เช่าเป็นหนังสือ และปฏิบัติตามเงื่อนไขที่ผู้ให้เช่ากำหนด</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_building_6" model="agreement.clause">
+    <record id="agreement_clause_building_6" model="agreement.clause">
         <field name="name">ข้อ 6</field>
         <field name="sequence">60</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite_1"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_building_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_2"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_building_2"/>
         <field name="content" type="html">
             <p>ผู้เช่าตกลงตั้งวางสินค้า สิ่งของ ภายในทรัพย์สินที่เช่าเท่านั้น โดยจะต้องไม่วาง แขวน หรือกระทำโดยวิธีอื่นใด ให้สินค้า สิ่งของล่วงล้ำออกนอกบริเวณทรัพย์สินที่เช่าเป็นอันขาด และจะไม่ทำให้สินค้า สิ่งของ ป้ายต่าง ๆ บดบังร้านค้าใกล้เคียงหรือพื้นที่ส่วนกลาง</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_building_7" model="agreement.clause">
+    <record id="agreement_clause_building_7" model="agreement.clause">
         <field name="name">ข้อ 7</field>
         <field name="sequence">70</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite_1"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_building_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_2"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_building_2"/>
         <field name="content" type="html">
             <p>การติดตั้งแผ่นป้าย หรือป้ายโฆษณารูปแบบต่าง ๆ ทุกประเภท ให้ติดตั้งภายในพื้นที่ของทรัพย์สินที่เช่า หรือบริเวณพื้นที่ที่ผู้เช่ามีสิทธิการเช่าตามสัญญานี้ ผู้เช่าจะต้องได้รับอนุญาต จากผู้ให้เช่าเป็นหนังสือ และปฏิบัติตามเงื่อนไขที่ผู้ให้เช่ากำหนด และชำระค่าธรรมเนียมให้แก่ผู้ให้เช่า (หากมี) ก่อนการดำเนินการ</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_building_8" model="agreement.clause">
+    <record id="agreement_clause_building_8" model="agreement.clause">
         <field name="name">ข้อ 8</field>
         <field name="sequence">80</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite_1"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_building_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_2"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_building_2"/>
         <field name="content" type="html">
             <p>การดัดแปลงและการต่อเติม การปลูกสร้างหรือแก้ไขเพิ่มเติม หรือรื้อถอนทรัพย์สินที่เช่าตามผู้เช่าจะกระทำมิได้ เว้นแต่จะได้รับการอนุญาตจากผู้ให้เช่าเป็นหนังสือ และปฏิบัติตามเงื่อนไขที่ผู้ให้เช่ากำหนด</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_building_9" model="agreement.clause">
+    <record id="agreement_clause_building_9" model="agreement.clause">
         <field name="name">ข้อ 9</field>
         <field name="sequence">90</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite_1"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_building_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_2"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_building_2"/>
         <field name="content" type="html">
             <p>ผู้เช่าตกลงคืนทรัพย์สินที่เช่าตามข้อ 1 ตามสภาพที่ได้รับมอบในวันที่เริ่มสัญญาเช่า และรื้อถอนสิ่งปลูกสร้าง หรือการดำเนินการตามข้อ 5. ข้อ 6. ข้อ 7. และข้อ 8. ออกไปจากที่ดินของผู้ให้เช่าด้วยค่าใช้จ่ายของผู้เช่าเอง และจะไม่เรียกร้องค่าทดแทนใด ๆ จากผู้ให้เช่า เว้นแต่จะได้รับการยกเว้นจากผู้ให้เช่าเป็นหนังสือ และปฏิบัติตามเงื่อนไขที่ผู้ให้เช่ากำหนด</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_building_10" model="agreement.clause">
+    <record id="agreement_clause_building_10" model="agreement.clause">
         <field name="name">ข้อ 10</field>
         <field name="sequence">100</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite_1"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_building_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_2"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_building_2"/>
         <field name="content" type="html">
             <p>ผู้เช่าจะให้เช่าช่วงหรือโอนสิทธิของตนอันมีในทรัพย์สินที่เช่า ไม่ว่าทั้งหมดหรือบางส่วน หรือให้ผู้อื่นเข้าใช้ประโยชน์ในพื้นที่ดังกล่าวไม่ได้ เว้นแต่ได้รับอนุญาตเป็นหนังสือจากผู้ให้เช่า</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_building_11" model="agreement.clause">
+    <record id="agreement_clause_building_11" model="agreement.clause">
         <field name="name">ข้อ 11</field>
         <field name="sequence">110</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite_1"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_building_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_2"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_building_2"/>
         <field name="content" type="html">
             <p>ผู้เช่ายินยอมให้ผู้ให้เช่า เจ้าหน้าที่ หรือตัวแทนผู้ให้เช่าเข้าไปในทรัพย์สินที่เช่าได้ทุกเวลา โดยผู้เช่าและบริวารต้องอำนวยความสะดวกให้ผู้ให้เช่า เจ้าหน้าที่ หรือตัวแทนผู้ให้เช่า</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_building_12" model="agreement.clause">
+    <record id="agreement_clause_building_12" model="agreement.clause">
         <field name="name">ข้อ 12</field>
         <field name="sequence">120</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite_1"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_building_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_2"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_building_2"/>
         <field name="content" type="html">
             <p>ผู้เช่า และบริวารของผู้เช่า จะต้องไม่ก่อการทะเลาะวิวาท หรือก่อความเดือนร้อนรำคาญ ให้กับผู้เช่ารายอื่น หรือบุคคลภายนอก การเพิกเฉยหรือฝ่าฝืนให้ถือว่าเป็นการปฏิบัติผิดสัญญาเช่าอย่างร้ายแรง</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_building_13" model="agreement.clause">
+    <record id="agreement_clause_building_13" model="agreement.clause">
         <field name="name">ข้อ 13</field>
         <field name="sequence">130</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite_1"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_building_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_2"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_building_2"/>
         <field name="content" type="html">
-            <p>ผู้เช่าต้องชำระค่าเช่า ค่าตอบแทน ตามข้อ 1. และรับผิดชอบชำระค่าบริการสาธารณูปโภค (หากมี) เช่น ค่าไฟฟ้า ค่าน้ำประปา ค่าโทรศัพท์ เป็นต้น ภายในทรัพย์สินที่เช่า  ตามวันและวิธีการชำระที่ผู้ให้เช่ากำหนด</p>
+            <p>ผู้เช่าต้องชำระค่าเช่า ค่าตอบแทน ตามข้อ 1. และรับผิดชอบชำระค่าบริการสาธารณูปโภค (หากมี) เช่น ค่าไฟฟ้า ค่าน้ำประปา ค่าโทรศัพท์ เป็นต้น ภายในทรัพย์สินที่เช่า ตามวันและวิธีการชำระที่ผู้ให้เช่ากำหนด</p>
             <p style="text-indent: 114px;">หากผู้เช่าค้างชำระค่าบริการสาธารณูปโภค ตั้งแต่ 2 งวดขึ้นไป ผู้เช่ายินยอมให้ผู้ให้เช่าระงับการให้บริการสาธารณูปโภคได้ทันที โดยไม่จำเป็นต้องแจ้งให้ผู้เช่าทราบล่วงหน้า และผู้เช่าตกลงให้ถือว่าการระงับการให้บริการสาธารณูปโภคดังกล่าวไม่เป็นการกระทำละเมิดต่อผู้เช่า</p>
             <p style="text-indent: 114px;">กรณีผู้เช่าได้ชำระค่าบริการสาธารณูปโภค (หากมี) เช่น ค่าไฟฟ้า ค่าน้ำประปา ค่าโทรศัพท์ เป็นต้นต่อหน่วยงานที่ให้บริการแล้ว ผู้เช่าต้องแสดงหลักฐานการชำระค่าบริการสาธารณูปโภคว่าไม่มีหนี้ค้างชำระต่อผู้ให้เช่าเมื่อสิ้นสุดการเช่า</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_building_14" model="agreement.clause">
+    <record id="agreement_clause_building_14" model="agreement.clause">
         <field name="name">ข้อ 14</field>
         <field name="sequence">140</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite_1"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_building_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_2"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_building_2"/>
         <field name="content" type="html">
             <p>ผู้เช่าตกลงว่าจะไม่กระทำการใดๆ หรือยอมให้บุคคลอื่นกระทำการใด อันมีลักษณะเป็นการละเมิดการใช้ไฟฟ้า หรือน้ำประปา</p>
             <p style="text-indent: 114px;">การละเมิดการใช้ไฟฟ้า หรือน้ำประปา หมายถึง การทำลายหรือตัดแปลงแก้ไขมาตรวัดไฟฟ้า หรือมาตรวัดน้ำประปา หรืออุปกรณ์ประกอบใด ๆ ตลอดจนเครื่องหมายหรือตราต่าง ๆ ทำให้มาตรวัดอ่านค่าคลาดเคลื่อน หรือกระทำการอื่นใดที่มีลักษณะคล้ายคลึงกันหรือทำนองเดียวกัน หรือต่อไฟฟ้า หรือน้ำประปาตรงโดยไม่ผ่านมาตรวัด</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_building_15" model="agreement.clause">
+    <record id="agreement_clause_building_15" model="agreement.clause">
         <field name="name">ข้อ 15</field>
         <field name="sequence">150</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite_1"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_building_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_2"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_building_2"/>
         <field name="content" type="html">
             <p>การใช้เครื่องขยายเสียงเพื่อการโฆษณาสินค้า หรือเพื่อการใด ผู้เช่าจะต้องได้รับอนุญาตจากผู้ให้เช่าเป็นหนังสือ และปฏิบัติตามเงื่อนไขที่ผู้ให้เช่ากำหนด และชำระค่าธรรมเนียมให้แก่ผู้ให้เช่า (หากมี) ก่อนการดำเนินการ</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_building_16" model="agreement.clause">
+    <record id="agreement_clause_building_16" model="agreement.clause">
         <field name="name">ข้อ 16</field>
         <field name="sequence">160</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite_1"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_building_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_2"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_building_2"/>
         <field name="content" type="html">
             <p>ผู้เช่าตกลงตั้งวางสิ่งของภายในตัวอาคารทรัพย์สินที่เช่าต้องมีน้ำหนักไม่เกินตามเอกสารแนบท้ายสัญญารายละเอียดและเงื่อนไขการเช่าที่ดินและสิ่งปลูกสร้าง</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_building_17" model="agreement.clause">
+    <record id="agreement_clause_building_17" model="agreement.clause">
         <field name="name">ข้อ 17</field>
         <field name="sequence">170</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite_1"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_building_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_2"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_building_2"/>
         <field name="content" type="html">
             <p>ผู้เช่าจำต้องสงวนทรัพย์สินที่เช่านั้นเสมอกับวิญญูชนจะพึงสงวนทรัพย์สินของตน และต้องบำรุงรักษาทั้งทำการซ่อมแซมด้วย นอกจากนี้ผู้เช่ายังต้องรับผิดในความเสียหายหรือบุบสลายใดๆ อันเกิดขึ้นแก่ทรัพย์สินที่เช่าเพราะความผิดของผู้เช่าหรือบริวารของผู้เช่าอีกด้วย</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_building_18" model="agreement.clause">
+    <record id="agreement_clause_building_18" model="agreement.clause">
         <field name="name">ข้อ 18</field>
         <field name="sequence">180</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite_1"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_building_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_2"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_building_2"/>
         <field name="content" type="html">
-            <p>หากทรัพย์สินที่เช่าชำรุดทรุดโทรมจำเป็นต้องรับการซ่อมแซมทรัพย์สินที่เช่าตามคำแนะนำของผู้ให้เช่า ผู้ให้เช่าจะแจ้งเป็นหนังสือแก่ผู้เช่า และผู้เช่าต้องจัดการซ่อมแซมทรัพย์นที่เช่าตามคำแนะนำของผู้ให้เช่า ภายในระยะเวลาที่กำหนด แต่ไม่เกิน 30 วัน นับแต่ได้รับบอกกล่าว โดยผู้เช่าเป็นผู้ออกค่าใช้จ่ายทั้งหมด</p>
+            <p>หากทรัพย์สินที่เช่าชำรุดทรุดโทรมจำเป็นต้องรับการซ่อมแซมทรัพย์สินที่เช่าตามคำแนะนำของผู้ให้เช่า ผู้ให้เช่าจะแจ้งเป็นหนังสือแก่ผู้เช่า และผู้เช่าต้องจัดการซ่อมแซมทรัพย์สินที่เช่าตามคำแนะนำของผู้ให้เช่า ภายในระยะเวลาที่กำหนด แต่ไม่เกิน 30 วัน นับแต่ได้รับบอกกล่าว โดยผู้เช่าเป็นผู้ออกค่าใช้จ่ายทั้งหมด</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_building_19" model="agreement.clause">
+    <record id="agreement_clause_building_19" model="agreement.clause">
         <field name="name">ข้อ 19</field>
         <field name="sequence">190</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite_1"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_building_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_2"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_building_2"/>
         <field name="content" type="html">
             <p>ผู้เช่าจะรักษาสถานที่เช่าให้อยู่ในสภาพมั่นคง ปลอดภัย สะอาดเรียบร้อย ไม่มีวัสดุอันอาจก่อให้เกิดอัคคีภัย ระเบิด หรือภยันตรายใดๆไม่มีวัตถุที่ส่งกลิ่นเหม็น หรือกลิ่นอันไม่พึงปรารถนา ไม่ก่อให้เกิดเสียงเป็นที่รบกวนชาวบ้าน ไม่ก่อความเดือดร้อนรำคาญ ทะเลาะวิวาทกับผู้อื่นหรือกระทำประการอื่นใดในทำนองเดียวกัน หากมีข้อบกพร่องดังกล่าวเกิดขึ้น ผู้เช่าจะต้องแก้ใขหรือกำจัดหรือระงับให้สิ้นไป ภายในเวลาที่กำหนด แต่ไม่เกิน 3 วัน นับแต่ได้รับบอกกล่าวจากผู้ให้เช่า</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_building_20" model="agreement.clause">
+    <record id="agreement_clause_building_20" model="agreement.clause">
         <field name="name">ข้อ 20</field>
         <field name="sequence">200</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite_1"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_building_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_2"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_building_2"/>
         <field name="content" type="html">
             <p>ผู้เช่าสัญญาว่าจะนำอาคารที่เช่าไปประกันอัคคีภัยไว้กับบริษัทประกันภัยที่ผู้ให้เช่าเห็นชอบด้วย โดยผู้เช่าเป็นผู้จ่ายค่าเบี้ยประกัน และระบุชื่อผู้ให้เช่าเป็นผู้รับประโยชน์ตามกรมธรรม์ประกันภัยนั้น และมอบกรมธรรม์ประกันภัยให้ผู้ให้เช่ายึดถือไว้ การประกันอัคคีภัยนี้ให้ประกันเป็นระยะติดต่อกันไปตลอดอายุสัญญาเช่านี้</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_building_21" model="agreement.clause">
+    <record id="agreement_clause_building_21" model="agreement.clause">
         <field name="name">ข้อ 21</field>
         <field name="sequence">210</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite_1"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_building_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_2"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_building_2"/>
         <field name="content" type="html">
             <p>บรรดาทรัพย์สิน สินค้า หรืออุปกรณ์ใด ๆ ของผู้เช่าที่เก็บรักษาไว้ในสถานที่เช่า หากเกิดการสูญหาย เสียหาย บุบสลาย โจรกรรม อัคคีภัย หรือภัยอันเกิดจากภัยธรรมชาติ เช่น อุทกภัย วาตภัย แผ่นดินไหว ผู้ให้เช่าไม่รับผิดใด ๆ ทั้งสิ้น</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_building_22" model="agreement.clause">
+    <record id="agreement_clause_building_22" model="agreement.clause">
         <field name="name">ข้อ 22</field>
         <field name="sequence">220</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite_1"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_building_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_2"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_building_2"/>
         <field name="content" type="html">
             <p>ผู้เช่าตกลงว่าจะไม่นำสัญญาเช่านี้ไปเป็นหลักประกันการกู้ยืมหรือหนี้ใด ๆ หรือก่อภาระผูกพันใดๆ กับบุคคลภายนอกโดยเด็ดขาด</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_building_23" model="agreement.clause">
+    <record id="agreement_clause_building_23" model="agreement.clause">
         <field name="name">ข้อ 23</field>
         <field name="sequence">230</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite_1"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_building_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_2"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_building_2"/>
         <field name="content" type="html">
             <p>ค่าภาษีและค่าธรรมเนียม</p>
-            <p style="text-indent: 114px;">ผู้เช่าตกลงชำระภาษีที่ดินและสิ่งปลูกสร้าง ภาษีป้าย หรือภาษีอื่นใด ค่าอากร ค่าเบี้ยประกันภัยค่าธรรมเนียมหรือเงินอื่นใดที่รัฐเรียกเก็บเกี่ยวกับทรัพย์สินที่เช่า (หากมี) ตลอดระยะเวลาที่ผู้เช่าครอบครองทรัพย์สินที่เช่า จนถึงวันที่ส่งมอบทรัพย์สินที่เช่าคืนแก่ผู้ให้เช่าเสร็จเรียบร้อย</p>
+            <p style="text-indent: 114px;">ผู้เช่าตกลงชำระภาษีที่ดินและสิ่งปลูกสร้าง ภาษีป้าย หรือภาษีอื่นใด ค่าอากร ค่าเบี้ยประกันภัย ค่าธรรมเนียมหรือเงินอื่นใดที่รัฐเรียกเก็บเกี่ยวกับทรัพย์สินที่เช่า (หากมี) ตลอดระยะเวลาที่ผู้เช่าครอบครองทรัพย์สินที่เช่า จนถึงวันที่ส่งมอบทรัพย์สินที่เช่าคืนแก่ผู้ให้เช่าเสร็จเรียบร้อย</p>
             <p style="text-indent: 114px;">หากผู้ให้เช่าชำระไปก่อน ให้ผู้ให้เช่ามีสิทธิเรียกเงินที่ได้ชำระไปนั้นคืนจากผู้เช่าได้ทั้งหมด พร้อมด้วยดอกเบี้ยในอัตราร้อยละ 15 (สิบห้า) ต่อปี นับแต่วันที่ผู้ให้เช่าได้ชำระเงินนั้น</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_building_24" model="agreement.clause">
+    <record id="agreement_clause_building_24" model="agreement.clause">
         <field name="name">ข้อ 24</field>
         <field name="sequence">240</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite_1"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_building_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_2"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_building_2"/>
         <field name="content" type="html">
             <p>ผู้เช่าต้องปฏิบัติตาม กฎหมาย กฎ ระเบียบ ประกาศ คำสั่ง ระเบียบของราชการ และกฎหมายเกี่ยวกับการคุ้มครองข้อมูลส่วนบุคคล รวมทั้งจะต้องไม่ให้ลูกจ้างหรือบริวารของผู้เช่าหรือบุคคลอื่นใดฝ่าฝืนกฎ ระเบียบ ประกาศ คำสั่ง หรือข้อกำหนดดังกล่าวโดยเคร่งครัด การเพิกเฉยหรือฝ่าฝืนให้ถือว่าเป็นการปฏิบัติผิดสัญญาเช่าอย่างร้ายแรง</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_building_25" model="agreement.clause">
+    <record id="agreement_clause_building_25" model="agreement.clause">
         <field name="name">ข้อ 25</field>
         <field name="sequence">250</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite_1"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_building_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_2"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_building_2"/>
         <field name="content" type="html">
             <p>ผู้เช่าตกลงหรือยินยอมให้ผู้ให้เช่าและบุคคลอื่นที่ผู้ให้เช่ามอบหมายใช้ข้อมูลส่วนบุคคลของผู้เช่า เพื่อวัตถุประสงค์ตามสัญญานี้หรือที่เกี่ยวข้องต่อเนื่องกับการปฏิบัติตามสัญญานี้ได้</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_building_26" model="agreement.clause">
+    <record id="agreement_clause_building_26" model="agreement.clause">
         <field name="name">ข้อ 26</field>
         <field name="sequence">260</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite_1"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_building_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_2"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_building_2"/>
         <field name="content" type="html">
             <p>ผู้เช่ารับทราบแล้วว่าสิทธิการเช่าของผู้เช่ามีเพียงเท่าที่ตกลงตามสัญญาเช่านี้และเมื่อครบกำหนดอายุสัญญาเช่าแล้ว ผู้เช่าจะต้องขนย้ายทรัพย์สินและบริวารออกพร้อมทั้งส่งมอบทรัพย์สินที่เช่าคืนแก่ผู้ให้เช่าในสภาพเรียบร้อยทันทีโดยค่าใช้จ่ายของผู้เช่าเอง และผู้เช่าไม่ติดใจว่าเมื่อครบกำหนดอายุสัญญาการเช่า ผู้ให้เช่าจะต่อสัญญาเช่าให้อีกต่อไปหรือไม่</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_building_27" model="agreement.clause">
+    <record id="agreement_clause_building_27" model="agreement.clause">
         <field name="name">ข้อ 27</field>
         <field name="sequence">270</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite_1"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_building_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_2"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_building_2"/>
         <field name="content" type="html">
             <p>กรณีผู้เช่ามีความประสงค์จะขอต่อสัญญาเช่าล่วงหน้าก่อนครบกำหนดสัญญาเช่า ผู้เช่าต้องมีหนังสือแจ้งผู้ให้เช่าทราบล่วงหน้าก่อนครบกำหนดสัญญาเช่าไม่น้อยกว่า 3 เดือน เพื่อผู้ให้เช่าและผู้เช่าตกลงค่าเช่าและรายละเอียดเงื่อนไขในสัญญาเช่า หากตกลงกันไม่ได้ก่อนครบกำหนดสัญญาเช่า ให้ถือว่าสัญญาเช่าสิ้นสุดเมื่อครบกำหนดการเช่า และผู้ให้เช่ามีสิทธิให้บุคคลอื่นเช่าได้</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_building_28" model="agreement.clause">
+    <record id="agreement_clause_building_28" model="agreement.clause">
         <field name="name">ข้อ 28</field>
         <field name="sequence">280</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite_1"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_building_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_2"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_building_2"/>
         <field name="content" type="html">
             <p>กรณีผู้เช่ามีความประสงค์จะขอคืนทรัพย์สินที่เช่าก่อนครบกำหนดสัญญาเช่า ผู้เช่าต้องมีหนังสือแจ้งผู้ให้เช่าทราบล่วงหน้าก่อนครบกำหนดสัญญาเช่าไม่น้อยกว่า 2 เดือน และเมื่อครบกำหนดตามระยะเวลาที่ผู้เช่ามีหนังสือแจ้งผู้ให้เช่าแล้วให้ถือว่าสัญญาเช่าสิ้นสุดลงทันที</p>
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_building_29" model="agreement.clause">
+    <record id="agreement_clause_building_29" model="agreement.clause">
         <field name="name">ข้อ 29</field>
         <field name="sequence">290</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite_1"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_building_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_2"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_building_2"/>
         <field name="content" type="html">
             <p>การปฏิบัติผิดสัญญาและค่าปรับ</p>
             <p style="text-indent: 114px;">29.1 ในกรณีที่ผู้เช่าผิดนัดชำระเงินค่าเช่า ค่าบริการสาธารณูปโภค หรือเงินอื่นใดในสัญญา หรือปฏิบัติผิดสัญญาข้อหนึ่งข้อใด หรือแม้แต่ส่วนหนึ่งส่วนใด หากผู้ให้เช่ามีหนังสือแจ้งเตือนผู้เช่าแล้วแต่ผู้เช่าไม่ดำเนินการภายในระยะเวลาที่ผู้ให้เช่ากำหนด ผู้ให้เช่ามีสิทธิบอกเลิกสัญญาได้ทันที แต่ทั้งนี้ หากผู้ให้เช่ายังไม่ใช้สิทธิบอกเลิกสัญญา ให้ผู้ให้เช่ามีสิทธิดำเนินการดังต่อไปนี้</p>
@@ -625,11 +622,11 @@
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_building_30" model="agreement.clause">
+    <record id="agreement_clause_building_30" model="agreement.clause">
         <field name="name">ข้อ 30</field>
         <field name="sequence">300</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite_1"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_building_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_2"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_building_2"/>
         <field name="content" type="html">
             <p>การสิ้นสุดของสัญญา</p>
             <p style="text-indent: 114px;">สัญญาฉบับนี้จะสิ้นสุดลงทันที เมื่อเกิดเหตุการณ์อย่างใดอย่างหนึ่ง ดังต่อไปนี้</p>
@@ -642,11 +639,11 @@
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_building_31" model="agreement.clause">
+    <record id="agreement_clause_building_31" model="agreement.clause">
         <field name="name">ข้อ 31</field>
         <field name="sequence">310</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite_1"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_building_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_2"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_building_2"/>
         <field name="content" type="html">
             <p>ผลภายหลังสัญญาสิ้นสุด</p>
             <p style="text-indent: 114px;">เมื่อสัญญาระงับลงไม่ว่าด้วยเหตุใดก็ตาม ผู้ให้เช่าและผู้เช่าตกลงกัน ดังนี้</p>
@@ -663,11 +660,11 @@
         </field>
     </record>
 
-    <record id="agreement_odoo_lite_clause_building_32" model="agreement.clause">
+    <record id="agreement_clause_building_32" model="agreement.clause">
         <field name="name">ข้อ 32</field>
         <field name="sequence">320</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite_1"/>
-        <field name="section_id" ref="acm_odoo_lite_agreement.agreement_odoo_lite_section_building_2"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_2"/>
+        <field name="section_id" ref="acm_odoo_lite.agreement_section_building_2"/>
         <field name="content" type="html">
             <p>หากมีปัญหาเกิดขึ้นเกี่ยวกับการวินิจฉัยหรือตีความเงื่อนไขในสัญญาเช่านี้ ผู้เช่าตกลงให้ผู้ให้เช่าเป็นผู้วินิจฉัยชี้ขาด และผู้เช่าตกลงยอมรับและปฏิบัติตามคำวินิจฉัยดังกล่าวอย่างเคร่งครัด</p>
         </field>

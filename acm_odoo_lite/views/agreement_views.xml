@@ -1,0 +1,12 @@
+<odoo>
+    <record id="partner_agreement_form_view" model="ir.ui.view">
+        <field name="name">Agreement Form</field>
+        <field name="model">agreement</field>
+        <field name="inherit_id" ref="acm.partner_agreement_form_view"/>
+        <field name="arch" type="xml">
+            <field name="income_type_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+        </field>
+    </record>
+</odoo>

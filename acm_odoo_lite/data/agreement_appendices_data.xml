@@ -7,7 +7,7 @@
         <field name="name">เอกสารแนบท้ายสัญญาเงื่อนไขการเช่า สัญญาเช่าที่ดินเพื่อทำประโยชน์</field>
         <field name="title">เอกสารแนบท้ายสัญญาเงื่อนไขการเช่า สัญญาเช่าที่ดินเพื่อทำประโยชน์</field>
         <field name="sequence">10</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_1"/>
         <field name="content" type="html">
             <p style="text-align: center; ">
                 <b>เอกสารแนบท้ายสัญญารายละเอียดและเงื่อนไขการเช่า ${object.agreement_id.company_id.market_name or '-'} หมายเลข ${object.agreement_id.code or ''}</b>
@@ -144,7 +144,7 @@
         <field name="name">เอกสารแนบท้ายสัญญาเงื่อนไขการเช่า สัญญาเช่าที่ดินและสิ่งปลูกสร้าง</field>
         <field name="title">เอกสารแนบท้ายสัญญาเงื่อนไขการเช่า สัญญาเช่าที่ดินและสิ่งปลูกสร้าง</field>
         <field name="sequence">10</field>
-        <field name="agreement_id" ref="acm_odoo_lite_agreement.agreement_template_lease_odoo_lite_1"/>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_2"/>
         <field name="content" type="html">
             <p style="text-align: center; ">
                 <b>เอกสารแนบท้ายสัญญารายละเอียดและเงื่อนไขการเช่า ${object.agreement_id.company_id.market_name or '-'} หมายเลข ${object.agreement_id.code or ''}</b>
