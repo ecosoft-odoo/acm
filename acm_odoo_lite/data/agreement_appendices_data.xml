@@ -27,22 +27,22 @@
                     <tr style="border : 1px solid black;">
                         <td style="border : 1px solid black; padding-left: 10px;"><b>2.</b></td>
                         <td style="border : 1px solid black; padding-left: 10px;"><b>ชื่อผู้เช่า (บุคคลธรรมดา)</b></td>
-                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;">${object.agreement_id.partner_id.company_type == 'person' and object.agreement_id.partner_id.name or '-'}</td>
                     </tr>
                     <tr style="border : 1px solid black;">
                         <td style="border : 1px solid black; padding-left: 10px;"></td>
                         <td style="border : 1px solid black; padding-left: 10px;"><b>เลขประจำตัวประชาชน</b></td>
-                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;">${object.agreement_id.partner_id.company_type == 'person' and object.agreement_id.partner_id.vat or '-'}</td>
                     </tr>
                     <tr style="border : 1px solid black;">
                         <td style="border : 1px solid black; padding-left: 10px;"><b>3.</b></td>
                         <td style="border : 1px solid black; padding-left: 10px;"><b>ที่อยู่</b></td>
-                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;">${(object.agreement_id.partner_id.street or object.agreement_id.partner_id.street2 or object.agreement_id.partner_id.zip) and '%s %s %s' % (object.agreement_id.partner_id.street or '', object.agreement_id.partner_id.street2 or '', object.agreement_id.partner_id.zip or '') or '-'}</td>
                     </tr>
                     <tr style="border : 1px solid black;">
                         <td style="border : 1px solid black; padding-left: 10px;"><b>4.</b></td>
                         <td style="border : 1px solid black; padding-left: 10px;"><b>เบอร์ติดต่อ</b></td>
-                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;">${object.agreement_id.partner_id.phone or object.agreement_id.partner_id.mobile or '-'}</td>
                     </tr>
                     <tr style="border : 1px solid black;">
                         <td style="border : 1px solid black; padding-left: 10px;"><b>5.</b></td>
@@ -51,12 +51,12 @@
                     <tr style="border : 1px solid black;">
                         <td style="border : 1px solid black; padding-left: 10px;"></td>
                         <td style="border : 1px solid black; padding-left: 10px;"><b>-ชื่อกิจการ</b></td>
-                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;">${object.agreement_id.business_name or '-'}</td>
                     </tr>
                     <tr style="border : 1px solid black;">
                         <td style="border : 1px solid black; padding-left: 10px;"></td>
                         <td style="border : 1px solid black; padding-left: 10px;"><b>-ลักษณะการใช้ประโยชน์</b></td>
-                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;">${object.agreement_id.goods_type or '-'}</td>
                     </tr>
                     <tr style="border : 1px solid black;">
                         <td style="border : 1px solid black; padding-left: 10px;"><b>6.</b></td>
@@ -65,31 +65,35 @@
                     <tr style="border : 1px solid black;">
                         <td style="border : 1px solid black; padding-left: 10px;"></td>
                         <td style="border : 1px solid black; padding-left: 10px;"><p><b>-ที่ดินที่เช่า<br/>(หากมีมากกว่า 1 โฉนด ควรระบุทุกโฉนด)</b></p></td>
-                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;">1. โฉนดที่ดินเลขที่...... เลขที่ดิน...... เล่ม...... หน้า.... ตำบล............... อำเภอ............. จังหวัด......................<br/>
+                            2. โฉนดที่ดินเลขที่...... เลขที่ดิน...... เล่ม...... หน้า.... ตำบล............... อำเภอ............. จังหวัด......................<br/>
+                            3. โฉนดที่ดินเลขที่...... เลขที่ดิน...... เล่ม...... หน้า.... ตำบล............... อำเภอ............. จังหวัด......................<br/>
+                        </td>
                     </tr>
                     <tr style="border : 1px solid black;">
                         <td style="border : 1px solid black; padding-left: 10px;"></td>
                         <td style="border : 1px solid black; padding-left: 10px;"><p><b>-เนื้อที่ดินที่เช่า<br/>(ระบุรวม)</b></p></td>
-                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;">${object.agreement_id.rent_product_id.width and '{0:,.2f}'.format(object.agreement_id.rent_product_id.width) or '-'} เมตร x ${object.agreement_id.rent_product_id.length1 and '{0:,.2f}'.format(object.agreement_id.rent_product_id.length1) or '-'} เมตร (${object.agreement_id.rent_product_id.area and '{0:,.2f}'.format(object.agreement_id.rent_product_id.area) or '-'} ตารางเมตร) (พื้นที่โดยประมาณ)</td>
                     </tr>
                     <tr style="border : 1px solid black;">
                         <td style="border : 1px solid black; padding-left: 10px;"><b>7.</b></td>
                         <td style="border : 1px solid black; padding-left: 10px;"><b>ระยะเวลาการเช่า</b></td>
-                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;">${object.agreement_id.get_rental_period(object.agreement_id.start_date, object.agreement_id.end_date) or '-'} (วันที่ ${object.agreement_id.start_date and '%s %s %s' % (object.agreement_id.start_date.strftime('%d').lstrip('0'), object.agreement_id.trans_months(object.agreement_id.start_date.strftime('%m')), (object.agreement_id.start_date + relativedelta(years=543)).strftime('%Y')) or '-'} ถึงวันที่ ${object.agreement_id.end_date and '%s %s %s' % (object.agreement_id.end_date.strftime('%d').lstrip('0'), object.agreement_id.trans_months(object.agreement_id.end_date.strftime('%m')), (object.agreement_id.end_date + relativedelta(years=543)).strftime('%Y')) or '-'})</td>
                     </tr>
                     <tr style="border : 1px solid black;">
                         <td style="border : 1px solid black; padding-left: 10px;"><b>8.</b></td>
                         <td style="border : 1px solid black; padding-left: 10px;"><b>วันส่งมอบทรัพย์สินที่เช่า</b></td>
-                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;">วันที่ ${object.agreement_id.rental_area_delivery_date and '%s %s %s' % (object.agreement_id.rental_area_delivery_date.strftime('%d').lstrip('0'), object.agreement_id.trans_months(object.agreement_id.rental_area_delivery_date.strftime('%m')), (object.agreement_id.rental_area_delivery_date + relativedelta(years=543)).strftime('%Y')) or '-'}</td>
                     </tr>
                     <tr style="border : 1px solid black;">
                         <td style="border : 1px solid black; padding-left: 10px;"><b>9.</b></td>
                         <td style="border : 1px solid black; padding-left: 10px;"><b>ระยะเวลาปลอดค่าเช่า</b></td>
-                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;">วันที่ ${object.agreement_id.rental_free_start_date and '%s %s %s' % (object.agreement_id.rental_free_start_date.strftime('%d').lstrip('0'), object.agreement_id.trans_months(object.agreement_id.rental_free_start_date.strftime('%m')), (object.agreement_id.rental_free_start_date + relativedelta(years=543)).strftime('%Y')) or '-'} ถึงวันที่ ${object.agreement_id.rental_free_end_date and '%s %s %s' % (object.agreement_id.rental_free_end_date.strftime('%d').lstrip('0'), object.agreement_id.trans_months(object.agreement_id.rental_free_end_date.strftime('%m')), (object.agreement_id.rental_free_end_date + relativedelta(years=543)).strftime('%Y')) or '-'}</td>
                     </tr>
                     <tr style="border : 1px solid black;">
                         <td style="border : 1px solid black; padding-left: 10px;"><b>10.</b></td>
-                        <td style="border : 1px solid black; padding-left: 10px;"><b>วันชำระค่าเช่า</b></td><td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>วันชำระค่าเช่า</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;">วันที่ ${object.agreement_id.start_date and '%s %s %s' % (object.agreement_id.start_date.strftime('%d').lstrip('0'), object.agreement_id.trans_months(object.agreement_id.start_date.strftime('%m')), (object.agreement_id.start_date + relativedelta(years=543)).strftime('%Y')) or '-'}</td>
                     </tr>
                     <tr style="border : 1px solid black;">
                         <td style="border : 1px solid black; padding-left: 10px;"><b>11.</b></td>
@@ -98,22 +102,22 @@
                     <tr style="border : 1px solid black;">
                         <td style="border : 1px solid black; padding-left: 10px;"></td>
                         <td style="border : 1px solid black; padding-left: 10px;"><b>-ค่าตอบแทนการให้เช่า</b></td>
-                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;">${object.agreement_id.filter_lines(value_type='lump_sum_rent') and '{0:,.2f}'.format(sum(object.agreement_id.filter_lines(value_type='lump_sum_rent').mapped('lst_price'))) + ' บาท' or ' - บาท'}</td>
                     </tr>
                     <tr style="border : 1px solid black;">
                         <td style="border : 1px solid black; padding-left: 10px;"></td>
                         <td style="border : 1px solid black; padding-left: 10px;"><b>-ค่าเช่ารายวัน</b></td>
-                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;">${object.agreement_id.recurring_rule_type == 'daily' and '{0:,.2f}'.format(sum(object.agreement_id.filter_lines(value_type='rent').mapped('lst_price')[:1])) or '-'} บาท</td>
                     </tr>
                     <tr style="border : 1px solid black;">
                         <td style="border : 1px solid black; padding-left: 10px;"></td>
                         <td style="border : 1px solid black; padding-left: 10px;"><b>-ค่าเช่ารายเดือน</b></td>
-                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;">${object.agreement_id.recurring_rule_type == 'monthly' and '{0:,.2f}'.format(sum(object.agreement_id.filter_lines(value_type='rent').mapped('lst_price')[:1])) or '-'} บาท</td>
                     </tr>
                     <tr style="border : 1px solid black;">
                         <td style="border : 1px solid black; padding-left: 10px;"></td>
                         <td style="border : 1px solid black; padding-left: 10px;"><b>-ค่าช่ารายปี</b></td>
-                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;">${object.agreement_id.recurring_rule_type == 'year' and '{0:,.2f}'.format(sum(object.agreement_id.filter_lines(value_type='rent').mapped('lst_price')[:1])) or '-'} บาท </td>
                     </tr>
                     <tr style="border : 1px solid black;">
                         <td style="border : 1px solid black; padding-left: 10px;"><b>12.</b></td>
@@ -122,7 +126,7 @@
                     <tr style="border : 1px solid black;">
                         <td style="border : 1px solid black; padding-left: 10px;"></td>
                         <td style="border : 1px solid black; padding-left: 10px;"><b>-เงินประกันการปฏิบัติตามสัญญา</b></td>
-                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;">${object.agreement_id.filter_lines(value_type='security_deposit') and '{0:,.2f}'.format(sum(object.agreement_id.filter_lines(value_type='security_deposit').mapped('lst_price'))) or '-'} บาท</td>
                     </tr>
                 </tbody>
             </table>
@@ -164,22 +168,22 @@
                     <tr style="border : 1px solid black;">
                         <td style="border : 1px solid black; padding-left: 10px;"><b>2.</b></td>
                         <td style="border : 1px solid black; padding-left: 10px;"><b>ชื่อผู้เช่า (บุคคลธรรมดา)</b></td>
-                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;">${object.agreement_id.partner_id.company_type == 'person' and object.agreement_id.partner_id.name or '-'}</td>
                     </tr>
                     <tr style="border : 1px solid black;">
                         <td style="border : 1px solid black; padding-left: 10px;"></td>
                         <td style="border : 1px solid black; padding-left: 10px;"><b>เลขประจำตัวประชาชน</b></td>
-                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;">${object.agreement_id.partner_id.company_type == 'person' and object.agreement_id.partner_id.vat or '-'}</td>
                     </tr>
                     <tr style="border : 1px solid black;">
                         <td style="border : 1px solid black; padding-left: 10px;"><b>3.</b></td>
                         <td style="border : 1px solid black; padding-left: 10px;"><b>ที่อยู่</b></td>
-                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;">${(object.agreement_id.partner_id.street or object.agreement_id.partner_id.street2 or object.agreement_id.partner_id.zip) and '%s %s %s' % (object.agreement_id.partner_id.street or '', object.agreement_id.partner_id.street2 or '', object.agreement_id.partner_id.zip or '') or '-'}</td>
                     </tr>
                     <tr style="border : 1px solid black;">
                         <td style="border : 1px solid black; padding-left: 10px;"><b>4.</b></td>
                         <td style="border : 1px solid black; padding-left: 10px;"><b>เบอร์ติดต่อ</b></td>
-                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;">${object.agreement_id.partner_id.phone or object.agreement_id.partner_id.mobile or '-'}</td>
                     </tr>
                     <tr style="border : 1px solid black;">
                         <td style="border : 1px solid black; padding-left: 10px;"><b>5.</b></td>
@@ -188,12 +192,12 @@
                     <tr style="border : 1px solid black;">
                         <td style="border : 1px solid black; padding-left: 10px;"></td>
                         <td style="border : 1px solid black; padding-left: 10px;"><b>-ชื่อกิจการ</b></td>
-                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;">${object.agreement_id.business_name or '-'}</td>
                     </tr>
                     <tr style="border : 1px solid black;">
                         <td style="border : 1px solid black; padding-left: 10px;"></td>
                         <td style="border : 1px solid black; padding-left: 10px;"><b>-ลักษณะการใช้ประโยชน์</b></td>
-                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;">${object.agreement_id.goods_type or '-'}</td>
                     </tr>
                     <tr style="border : 1px solid black;">
                         <td style="border : 1px solid black; padding-left: 10px;"><b>6.</b></td>
@@ -202,31 +206,35 @@
                     <tr style="border : 1px solid black;">
                         <td style="border : 1px solid black; padding-left: 10px;"></td>
                         <td style="border : 1px solid black; padding-left: 10px;"><p><b>-ที่ดินที่เช่า<br/>(หากมีมากกว่า 1 โฉนด ควรระบุทุกโฉนด)</b></p></td>
-                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;">1. โฉนดที่ดินเลขที่...... เลขที่ดิน...... เล่ม...... หน้า.... ตำบล............... อำเภอ............. จังหวัด......................<br/>
+                            2. โฉนดที่ดินเลขที่...... เลขที่ดิน...... เล่ม...... หน้า.... ตำบล............... อำเภอ............. จังหวัด......................<br/>
+                            3. โฉนดที่ดินเลขที่...... เลขที่ดิน...... เล่ม...... หน้า.... ตำบล............... อำเภอ............. จังหวัด......................<br/>
+                        </td>
                     </tr>
                     <tr style="border : 1px solid black;">
                         <td style="border : 1px solid black; padding-left: 10px;"></td>
                         <td style="border : 1px solid black; padding-left: 10px;"><p><b>-เนื้อที่ดินที่เช่า<br/>(ระบุรวม)</b></p></td>
-                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;">${object.agreement_id.rent_product_id.width and '{0:,.2f}'.format(object.agreement_id.rent_product_id.width) or '-'} เมตร x ${object.agreement_id.rent_product_id.length1 and '{0:,.2f}'.format(object.agreement_id.rent_product_id.length1) or '-'} เมตร (${object.agreement_id.rent_product_id.area and '{0:,.2f}'.format(object.agreement_id.rent_product_id.area) or '-'} ตารางเมตร) (พื้นที่โดยประมาณ)</td>
                     </tr>
                     <tr style="border : 1px solid black;">
                         <td style="border : 1px solid black; padding-left: 10px;"><b>7.</b></td>
                         <td style="border : 1px solid black; padding-left: 10px;"><b>ระยะเวลาการเช่า</b></td>
-                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;">${object.agreement_id.get_rental_period(object.agreement_id.start_date, object.agreement_id.end_date) or '-'} (วันที่ ${object.agreement_id.start_date and '%s %s %s' % (object.agreement_id.start_date.strftime('%d').lstrip('0'), object.agreement_id.trans_months(object.agreement_id.start_date.strftime('%m')), (object.agreement_id.start_date + relativedelta(years=543)).strftime('%Y')) or '-'} ถึงวันที่ ${object.agreement_id.end_date and '%s %s %s' % (object.agreement_id.end_date.strftime('%d').lstrip('0'), object.agreement_id.trans_months(object.agreement_id.end_date.strftime('%m')), (object.agreement_id.end_date + relativedelta(years=543)).strftime('%Y')) or '-'})</td>
                     </tr>
                     <tr style="border : 1px solid black;">
                         <td style="border : 1px solid black; padding-left: 10px;"><b>8.</b></td>
                         <td style="border : 1px solid black; padding-left: 10px;"><b>วันส่งมอบทรัพย์สินที่เช่า</b></td>
-                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;">วันที่ ${object.agreement_id.rental_area_delivery_date and '%s %s %s' % (object.agreement_id.rental_area_delivery_date.strftime('%d').lstrip('0'), object.agreement_id.trans_months(object.agreement_id.rental_area_delivery_date.strftime('%m')), (object.agreement_id.rental_area_delivery_date + relativedelta(years=543)).strftime('%Y')) or '-'}</td>
                     </tr>
                     <tr style="border : 1px solid black;">
                         <td style="border : 1px solid black; padding-left: 10px;"><b>9.</b></td>
                         <td style="border : 1px solid black; padding-left: 10px;"><b>ระยะเวลาปลอดค่าเช่า</b></td>
-                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;">วันที่ ${object.agreement_id.rental_free_start_date and '%s %s %s' % (object.agreement_id.rental_free_start_date.strftime('%d').lstrip('0'), object.agreement_id.trans_months(object.agreement_id.rental_free_start_date.strftime('%m')), (object.agreement_id.rental_free_start_date + relativedelta(years=543)).strftime('%Y')) or '-'} ถึงวันที่ ${object.agreement_id.rental_free_end_date and '%s %s %s' % (object.agreement_id.rental_free_end_date.strftime('%d').lstrip('0'), object.agreement_id.trans_months(object.agreement_id.rental_free_end_date.strftime('%m')), (object.agreement_id.rental_free_end_date + relativedelta(years=543)).strftime('%Y')) or '-'}</td>
                     </tr>
                     <tr style="border : 1px solid black;">
                         <td style="border : 1px solid black; padding-left: 10px;"><b>10.</b></td>
-                        <td style="border : 1px solid black; padding-left: 10px;"><b>วันชำระค่าเช่า</b></td><td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>วันชำระค่าเช่า</b></td>
+                        <td style="border : 1px solid black; padding-left: 10px;">วันที่ ${object.agreement_id.start_date and '%s %s %s' % (object.agreement_id.start_date.strftime('%d').lstrip('0'), object.agreement_id.trans_months(object.agreement_id.start_date.strftime('%m')), (object.agreement_id.start_date + relativedelta(years=543)).strftime('%Y')) or '-'}</td>
                     </tr>
                     <tr style="border : 1px solid black;">
                         <td style="border : 1px solid black; padding-left: 10px;"><b>11.</b></td>
@@ -235,22 +243,22 @@
                     <tr style="border : 1px solid black;">
                         <td style="border : 1px solid black; padding-left: 10px;"></td>
                         <td style="border : 1px solid black; padding-left: 10px;"><b>-ค่าตอบแทนการให้เช่า</b></td>
-                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;">${object.agreement_id.filter_lines(value_type='lump_sum_rent') and '{0:,.2f}'.format(sum(object.agreement_id.filter_lines(value_type='lump_sum_rent').mapped('lst_price'))) + ' บาท' or ' - บาท'}</td>
                     </tr>
                     <tr style="border : 1px solid black;">
                         <td style="border : 1px solid black; padding-left: 10px;"></td>
                         <td style="border : 1px solid black; padding-left: 10px;"><b>-ค่าเช่ารายวัน</b></td>
-                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;">${object.agreement_id.recurring_rule_type == 'daily' and '{0:,.2f}'.format(sum(object.agreement_id.filter_lines(value_type='rent').mapped('lst_price')[:1])) or '-'} บาท</td>
                     </tr>
                     <tr style="border : 1px solid black;">
                         <td style="border : 1px solid black; padding-left: 10px;"></td>
                         <td style="border : 1px solid black; padding-left: 10px;"><b>-ค่าเช่ารายเดือน</b></td>
-                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;">${object.agreement_id.recurring_rule_type == 'monthly' and '{0:,.2f}'.format(sum(object.agreement_id.filter_lines(value_type='rent').mapped('lst_price')[:1])) or '-'} บาท</td>
                     </tr>
                     <tr style="border : 1px solid black;">
                         <td style="border : 1px solid black; padding-left: 10px;"></td>
                         <td style="border : 1px solid black; padding-left: 10px;"><b>-ค่าช่ารายปี</b></td>
-                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;">${object.agreement_id.recurring_rule_type == 'year' and '{0:,.2f}'.format(sum(object.agreement_id.filter_lines(value_type='rent').mapped('lst_price')[:1])) or '-'} บาท </td>
                     </tr>
                     <tr style="border : 1px solid black;">
                         <td style="border : 1px solid black; padding-left: 10px;"><b>12.</b></td>
@@ -259,12 +267,13 @@
                     <tr style="border : 1px solid black;">
                         <td style="border : 1px solid black; padding-left: 10px;"></td>
                         <td style="border : 1px solid black; padding-left: 10px;"><b>-เงินประกันการปฏิบัติตามสัญญา</b></td>
-                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;">${object.agreement_id.filter_lines(value_type='security_deposit') and '{0:,.2f}'.format(sum(object.agreement_id.filter_lines(value_type='security_deposit').mapped('lst_price'))) or '-'} บาท</td>
                     </tr>
                     <tr style="border : 1px solid black;">
-                        <td style="border : 1px solid black; padding-left: 10px;">13.</td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>13.</b></td>
                         <td style="border : 1px solid black; padding-left: 10px;"><b>เงื่อนไขการเช่า</b></td>
-                        <td style="border : 1px solid black; padding-left: 10px;"></td>
+                        <td style="border : 1px solid black; padding-left: 10px;"><b>1.</b>...............................................................................................................<br/>
+                            <b>2.</b>...............................................................................................................</td>
                     </tr>
                 </tbody>
             </table>
