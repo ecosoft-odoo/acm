@@ -1,0 +1,19 @@
+<odoo>
+    <record id="agreement_create_view_form" model="ir.ui.view">
+        <field name="name">agreement.create.view.form</field>
+        <field name="model">agreement.create</field>
+        <field name="inherit_id" ref="acm.agreement_create_view_form"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="before">
+                <field name="lessor_id" domain="[('lessor', '=', True)]" placeholder="ชื่อผู้ให้เช่า"/>
+                <field name="lessor_contact_id" attrs="{'invisible': [('lessor_id', '=', False)]}" domain="[('parent_id', '=', lessor_id)]"/>
+            </field>
+            <field name="goods_category_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="goods_type" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+        </field>
+    </record>
+</odoo>

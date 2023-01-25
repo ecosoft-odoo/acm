@@ -16,6 +16,13 @@ class AgreementInActive(models.TransientModel):
         selection=lambda self: self._get_selection_inactive_reason(),
         string='Inactive Reason',
         required=True,
+        help="""
+        Inactive reason type
+        Terminated => when agreement is terminated
+        Transfered => when agreement is transfered
+        Expired => when agreement is expired
+        Cancelled
+        """,
     )
 
     @api.model

@@ -27,7 +27,8 @@ class AccountAnalyticAccount(models.Model):
         selection=[
             ('daily', 'Day(s)'),
             ('monthly', 'Month(s)'),
-            ('yearly', 'Year(s)'), ],
+            ('yearly', 'Year(s)'),
+        ],
     )
     income_type_id = fields.Many2one(
         comodel_name='agreement.income.type',
@@ -58,6 +59,7 @@ class AccountAnalyticAccount(models.Model):
     @api.model
     def _prepare_invoice_line(self, line, invoice_id):
         next_date = line.analytic_account_id.recurring_next_date
+        # No create invoice lines
         if not (line.date_start or line.date_end):
             return {}
         if line.date_start and not line.date_end and \
@@ -70,7 +72,7 @@ class AccountAnalyticAccount(models.Model):
         if line.manual:
             return {}
         invoice_line_vals = super(AccountAnalyticAccount, self)._prepare_invoice_line(line, invoice_id)
-        # Overwrite account and taxs
+        # Overwrite account and taxes
         income_type = line.analytic_account_id.income_type_id
         if income_type and line.product_id.value_type == income_type.value_type:
             if income_type.account_id:
@@ -138,7 +140,6 @@ class AccountAnalyticGroup(models.Model):
         inverse_name='group_id',
         string='Market Zone Map',
     )
-
 
 
 class MarketZoneMap(models.Model):

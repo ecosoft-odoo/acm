@@ -6,6 +6,7 @@ from odoo import models, fields
 
 class AgreementIncomeType(models.Model):
     _name = 'agreement.income.type'
+    _description = "Agreement Income Type"
 
     name = fields.Char(
         string='Name',

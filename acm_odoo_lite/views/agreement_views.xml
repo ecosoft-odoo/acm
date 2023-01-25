@@ -7,6 +7,103 @@
             <field name="income_type_id" position="attributes">
                 <attribute name="invisible">1</attribute>
             </field>
+            <field name="goods_category_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="goods_type" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <group name="company" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </group>
+            <group name="contact_right" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </group>
+            <group name="company_witness" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </group>
+            <group name="company" position="after">
+                <group name="lessor" string="Lessor">
+                    <div class="o_address_format">
+                        <field name="lessor_id" placeholder="ชื่อผู้ให้เช่า" domain="[('lessor', '=', True)]" context="{'show_address': 1}" options="{'always_reload': True}" attrs="{'required': [('is_template', '=', False)]}"/>
+                    </div>
+                </group>
+            </group>
+            <group name="contact_right" position="after">
+                <group name="contact_right" string="Primary Contact">
+                    <field name="lessor_contact_id" domain="[('parent_id', '=', lessor_id)]" nolabel="1"/>
+                    <field name="lessor_contact_phone" widget="phone" readonly="1" nolabel="1"/>
+                    <field name="lessor_contact_email" widget="email" readonly="1" nolabel="1"/>
+                </group>
+            </group>
+            <group name="company_witness" position="after">
+                <group name="lessor_witness" string="Witness">
+                    <field name="lessor_witness" nolabel="1" placeholder="พยานผู้ให้เช่า"/>
+                </group>
+            </group>
+            <xpath expr="//field[@name='line_ids']/tree/field[@name='manual']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='line_ids']/tree/field[@name='date_start']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='line_ids']/tree/field[@name='date_end']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='special_terms']/.." position="before">
+                <group string="Final Contract Agreement (Addons)">
+                    <field name="final_contract_content" nolabel="1" placeholder="เนื้อหาของสัญญาข้อสุดท้าย"/>
+                </group>
+            </xpath>
+            <xpath expr="//field[@name='special_terms']/.." position="attributes">
+                <attribute name="string">Rental Condition Appendix</attribute>
+            </xpath>
+            <field name="special_terms" position="attributes">
+                <attribute name="placeholder">เงื่อนไขการเช่า</attribute>
+            </field>
+            <button name="create_new_contract" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </button>
+        </field>
+    </record>
+    <record id="partner_agreement_list_view" model="ir.ui.view">
+        <field name="name">Agreement List</field>
+        <field name="model">agreement</field>
+        <field name="inherit_id" ref="acm.partner_agreement_list_view"/>
+        <field name="arch" type="xml">
+            <field name="group_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="subzone" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="rent_product_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="company_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="partner_id" position="before">
+                <field name="code" invisible="context.get('default_is_template', False)"/>
+                <field name="all_product_ids" invisible="context.get('default_is_template', False)" widget="many2many_tags"/>
+                <field name="lessor_id"/>
+            </field>
+        </field>
+    </record>
+    <record id="partner_agreement_search_view" model="ir.ui.view">
+        <field name="name">Agreement Search</field>
+        <field name="model">agreement</field>
+        <field name="inherit_id" ref="agreement_legal.partner_agreement_search_view"/>
+        <field name="arch" type="xml">
+            <filter name="group_goods_category_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </filter>
+            <field name="group_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <filter name="group_group_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </filter>
         </field>
     </record>
 </odoo>

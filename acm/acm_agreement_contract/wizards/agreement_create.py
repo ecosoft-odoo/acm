@@ -20,7 +20,7 @@ class AgreementCreate(models.TransientModel):
         required=True,
     )
     partner_id = fields.Many2one(
-        comodel_name='res.partner',
+        comodel_name='res.partner', 
         string='Partner',
         required=True,
     )
@@ -62,6 +62,25 @@ class AgreementCreate(models.TransientModel):
         required=True,
         index=True,
     )
+    business_name = fields.Char(
+        string="Business Name",
+    )
+    goods_type = fields.Char(
+        string='Goods Type',
+    )
+    goods_category_id = fields.Many2one(
+        comodel_name='goods.category',
+        string='Goods Category',
+    )
+    rental_area_delivery_date = fields.Date(
+        string="Rental Area Delivery Date",
+    )
+    rental_free_start_date = fields.Date(
+        string="Rental Free Start Date",
+    )
+    rental_free_end_date = fields.Date(
+        string="Rental Free End Date",
+    )
 
     @api.onchange('template_id')
     def _onchange_template_id(self):
@@ -74,16 +93,26 @@ class AgreementCreate(models.TransientModel):
     @api.multi
     def action_create_agreement(self):
         self.ensure_one()
-        agreement = self.template_id.with_context({
-            'name': '%s %s' % (self.name, self.post_name),
-            'partner_id': self.partner_id.id,
-            'partner_contact_id': self.partner_contact_id.id,
-            'date_contract': self.date_contract,
-            'date_start': self.date_start,
-            'date_end': self.date_end,
-            'recurring_interval': self.recurring_interval,
-            'recurring_rule_type': self.recurring_rule_type,
-            'income_type_id': self.income_type_id.id,
-        })
+        context = self._context.copy()
+        context.update(
+            {
+                'name': '%s %s' % (self.name, self.post_name),
+                'partner_id': self.partner_id.id,
+                'partner_contact_id': self.partner_contact_id.id,
+                'date_contract': self.date_contract,
+                'date_start': self.date_start,
+                'date_end': self.date_end,
+                'recurring_interval': self.recurring_interval,
+                'recurring_rule_type': self.recurring_rule_type,
+                'income_type_id': self.income_type_id.id,
+                'business_name': self.business_name,
+                'goods_category_id': self.goods_category_id.id,
+                'goods_type': self.goods_type,
+                'rental_area_delivery_date': self.rental_area_delivery_date,
+                'rental_free_start_date': self.rental_free_start_date,
+                'rental_free_end_date': self.rental_free_end_date,
+            }
+        )
+        agreement = self.template_id.with_context(context)
         new_agreement = agreement.create_agreement()
         return new_agreement.view_agreement()

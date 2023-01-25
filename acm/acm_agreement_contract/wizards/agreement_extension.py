@@ -58,13 +58,16 @@ class AgreementExtension(models.TransientModel):
                         _('Invalid agreement period of %s.') % (
                             agreement.display_name, ))
             # Create Agreement
-            agreement = agreement.with_context({
-                'partner_id': agreement.partner_id.id,
-                'partner_contact_id': agreement.partner_contact_id.id,
-                'date_contract': self.date_contract,
-                'date_start': self.date_start,
-                'date_end': self.date_end,
-            })
+            context.update(
+                {
+                    'partner_id': agreement.partner_id.id,
+                    'partner_contact_id': agreement.partner_contact_id.id,
+                    'date_contract': self.date_contract,
+                    'date_start': self.date_start,
+                    'date_end': self.date_end,
+                }
+            )
+            agreement = agreement.with_context(context)
             new_agreement = agreement.create_agreement()
             if not self.force:
                 # Compute Start Date and End Date in Products/Services

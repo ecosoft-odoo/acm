@@ -8,17 +8,17 @@
                 <group>
                     <group string="Old Agreement">
                         <field name="termination_by"/>
-                        <field name="date_termination"/>
-                        <field name="reason_termination"/>
+                        <field name="date_termination" placeholder="วันที่ยุติสัญญาเดิม"/>
+                        <field name="reason_termination" placeholder="เหตุผลการยุติสัญญาเดิม"/>
                         <field name="refund_deposit_type"/>
                         <field name="is_attachment"/>
                     </group>
                     <group string="New Agreement">
-                        <field name="partner_id" domain="[('customer', '=', True)]" options="{'no_create': True, 'no_open': True}"/>
+                        <field name="partner_id" domain="[('customer', '=', True)]" options="{'no_create': True, 'no_open': True}" placeholder="ผู้เช่ารายใหม่"/>
                         <field name="partner_contact_id" attrs="{'invisible':[('partner_id', '=', False)]}" domain="[('parent_id', '=', partner_id)]" options="{'no_create': True, 'no_open': True}"/>
-                        <field name="date_contract"/>
-                        <field name="date_start"/>
-                        <field name="date_end"/>
+                        <field name="date_contract" placeholder="วันที่ทำสัญญาใหม่"/>
+                        <field name="date_start" placeholder="วันที่เริ่มต้นสัญญาใหม่"/>
+                        <field name="date_end" placeholder="วันที่สิ้นสุดสัญญาใหม่"/>
                     </group>
                 </group>
                 <group attrs="{'invisible': [('is_attachment', '=', False)]}">

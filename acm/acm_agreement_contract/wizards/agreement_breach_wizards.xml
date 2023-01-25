@@ -7,16 +7,16 @@
             <form string="Breach Agreement">
                 <group>
                     <group>
-                        <field name="date_breach" invisible="not context.get('breach')" required="context.get('breach')"/>
-                        <field name="breach_type_id" invisible="not context.get('breach')" required="context.get('breach')"/>
-                        <field name="date_cancel_breach" invisible="context.get('breach')" required="not context.get('breach')"/>
+                        <field name="date_breach" placeholder="วันที่ละเมิด" invisible="not context.get('breach')" required="context.get('breach')"/>
+                        <field name="breach_type_id" placeholder="ประเภทของการละเมิด" invisible="not context.get('breach')" required="context.get('breach')"/>
+                        <field name="date_cancel_breach" placeholder="วันที่ยกเลิกการละเมิด" invisible="context.get('breach')" required="not context.get('breach')"/>
                     </group>
                 </group>
                 <group string="Reason" invisible="not context.get('breach')">
-                    <field name="reason_breach" nolabel="1" required="context.get('breach')"/>
+                    <field name="reason_breach" placeholder="เหตุผลการละเมิด" nolabel="1" required="context.get('breach')"/>
                 </group>
                 <group string="Reason" invisible="context.get('breach')">
-                    <field name="reason_cancel_breach" nolabel="1" required="not context.get('breach')"/>
+                    <field name="reason_cancel_breach" placeholder="เหตุผลยกเลิกการละเมิด" nolabel="1" required="not context.get('breach')"/>
                 </group>
                 <footer>
                     <button name="action_breach_agreement" string="Confirm" type="object" default_focus="1" class="btn-primary"/>

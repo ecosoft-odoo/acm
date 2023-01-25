@@ -11,6 +11,7 @@
     'depends': [
         'agreement_legal',
         'contract',
+        'stock',
         'report_qweb_element_page_visibility',
         'date_range',
         'excel_import_export',

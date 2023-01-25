@@ -8,12 +8,12 @@
                 <group string="Agreement">
                     <group>
                         <field name="termination_by"/>
-                        <field name="date_termination"/>
+                        <field name="date_termination" placeholder="วันที่ยุติสัญญา"/>
                         <field name="refund_deposit_type"/>
                         <field name="is_attachment"/>
                     </group>
                     <group>
-                        <field name="reason_termination"/>
+                        <field name="reason_termination" placeholder="เหตุผลการยุติสัญญา"/>
                     </group>
                 </group>
                 <p attrs="{'invisible': [('refund_deposit_type', '!=', 'refund_deposit')]}" style="color: red;">Create vendor bill for refund security deposit.</p>

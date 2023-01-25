@@ -343,6 +343,7 @@ class Agreement(models.Model):
 
     @api.model
     def _default_company_contract_id(self):
+        """ Default company contact """
         company = self.env['res.company']._company_default_get()
         company_contact = self.env['res.partner'].search(
             [('parent_id', '=', company.partner_id.id)])
@@ -352,6 +353,7 @@ class Agreement(models.Model):
 
     @api.constrains('start_date', 'end_date')
     def _check_start_end_date(self):
+        """ Check start date <= end date """
         for rec in self:
             if rec.start_date > rec.end_date:
                 raise UserError(
@@ -360,6 +362,7 @@ class Agreement(models.Model):
 
     @api.constrains('date_contract', 'start_date')
     def _check_contract_start_date(self):
+        """ Check contract date <= start date """
         for rec in self:
             if rec.date_contract > rec.start_date:
                 raise UserError(
@@ -368,6 +371,7 @@ class Agreement(models.Model):
 
     @api.constrains('line_ids')
     def _check_line_ids(self):
+        """ One rental product is allowed """
         for rec in self:
             rent_products = \
                 rec.line_ids.filtered(
@@ -378,17 +382,24 @@ class Agreement(models.Model):
 
     @api.multi
     def _search_contract(self):
+        """ search active contract """
         Contract = self.env['account.analytic.account']
         contracts = Contract.search([('agreement_id', 'in', self.ids)])
         return contracts
 
     @api.multi
     def _compute_is_contract_create(self):
+        """
+            Check that contract created or not on the agreement
+            If contract created, this function will return TRUE
+            If contract is not created, this function will return FALSE
+        """
         for rec in self:
             rec.is_contract_create = rec._search_contract() and True or False
 
     @api.depends('line_ids')
     def _compute_product_id(self):
+        """ Get rental product """
         for rec in self:
             rent_products = rec.line_ids.filtered(
                 lambda l: l.product_id.value_type == 'rent') \
@@ -398,6 +409,7 @@ class Agreement(models.Model):
 
     @api.multi
     def _compute_contract_count(self):
+        """ Get contract number as created by the agreement """
         for rec in self:
             contracts = rec.with_context(active_test=False)._search_contract()
             rec.contract_count = len(contracts)
@@ -419,6 +431,7 @@ class Agreement(models.Model):
 
     @api.multi
     def _validate_active_agreement(self):
+        """ Validate agreement before active """
         for rec in self:
             # Agreement must be state to draft
             if rec.state != 'draft':
@@ -451,6 +464,7 @@ class Agreement(models.Model):
 
     @api.model
     def _validate_rent_product_dates(self, product_lines):
+        """ Validate date on agreement lines """
         sorted_lines = product_lines.filtered(
             lambda l: l.product_id and
             l.product_id.value_type == 'rent').sorted('date_start')
@@ -470,6 +484,7 @@ class Agreement(models.Model):
 
     @api.multi
     def _validate_contract_create(self):
+        """ Validate contract created """
         for rec in self:
             if rec.state != 'active':
                 raise UserError(_('Agreement is not active.'))
@@ -516,6 +531,7 @@ class Agreement(models.Model):
 
     @api.multi
     def active_statusbar(self):
+        """ Change state from draft -> active """
         for rec in self:
             if not rec.is_template:
                 # Validate active agreement
@@ -528,6 +544,7 @@ class Agreement(models.Model):
 
     @api.multi
     def inactive_statusbar(self):
+        """ Change state from active -> inactive """
         for rec in self:
             if rec.state == 'inactive':
                 raise UserError(_("Agreement's state must not be inactive."))
@@ -537,6 +554,7 @@ class Agreement(models.Model):
 
     @api.multi
     def get_agreement_vals(self):
+        """ Prepare agreement vals """
         self.ensure_one()
         context = self._context.copy()
         return {
@@ -558,6 +576,12 @@ class Agreement(models.Model):
             'recurring_rule_type':
                 context.get('recurring_rule_type') or self.recurring_rule_type,
             'income_type_id': context.get('income_type_id') or self.income_type_id.id,
+            'business_name': context.get('business_name') or self.business_name,
+            'goods_category_id': context.get('goods_category_id') or self.goods_category_id.id,
+            'goods_type': context.get('goods_type') or self.goods_type,
+            'rental_area_delivery_date': context.get('rental_area_delivery_date') or self.rental_area_delivery_date,
+            'rental_free_start_date': context.get('rental_free_start_date') or self.rental_free_start_date,
+            'rental_free_end_date': context.get('rental_free_end_date') or self.rental_free_end_date,
         }
 
     @api.multi
@@ -696,6 +720,7 @@ class Agreement(models.Model):
             vals['code'] = 'Template'
         return super(Agreement, self).create(vals)
 
+    # Used function in agreement form
     @api.model
     def trans_recurring(self, type):
         """
@@ -755,6 +780,8 @@ class Agreement(models.Model):
             rent_period += str(period.years) + ' ปี ' + \
                 str(period.months) + ' เดือน ' + str(period.days) + ' วัน'
         return rent_period
+
+    # --
 
     @api.multi
     def _compute_line_start_end_date(self, time):

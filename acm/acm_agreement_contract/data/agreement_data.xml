@@ -1,4 +1,5 @@
 <odoo noupdate="1">
+    <!-- Lease Agreement Template -->
     <record id="agreement_template_lease" model="agreement">
         <field name="name">สัญญาเช่า</field>
         <field name="code">Template</field>
