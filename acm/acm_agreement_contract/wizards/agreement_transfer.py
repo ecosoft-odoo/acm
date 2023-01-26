@@ -238,10 +238,11 @@ class AgreementTransfer(models.TransientModel):
         4. Terminate old agreement (Change state from active to inactive)
         """
         self.ensure_one()
+        context = self._context.copy()
         if self.date_termination >= self.date_start:
             raise UserError(_('Termination date is no more than start date.'))
         Agreement = self.env['agreement']
-        agreements = Agreement.browse(self._context.get('active_ids', []))
+        agreements = Agreement.browse(context.get('active_ids', []))
         agreements.ensure_one()
         security_deposit = agreements.line_ids.filtered(
             lambda l: l.product_id.value_type == 'security_deposit'
@@ -254,13 +255,14 @@ class AgreementTransfer(models.TransientModel):
         new_agreements = Agreement
         for agreement in agreements:
             agreement._validate_contract_create()
-            agreement = agreement.with_context({
+            context.update({
                 'partner_id': self.partner_id.id,
                 'partner_contact_id': self.partner_contact_id.id,
                 'date_contract': self.date_contract,
                 'date_start': self.date_start,
                 'date_end': self.date_end,
             })
+            agreement = agreement.with_context(context)
             new_agreement = agreement.create_agreement()
             new_agreements |= new_agreement
             # Create vendor bill for refund security deposit

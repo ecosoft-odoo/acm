@@ -1,0 +1,16 @@
+<odoo>
+    <record id="view_partner_form" model="ir.ui.view">
+        <field name="name">res.partner.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <group name="purchase" position="after">
+                <group string="Agreement" name="agreement" priority="1">
+                    <field name="lessor"/>
+                    <field name="sequence_code" attrs="{'invisible': [('lessor', '=', False)], 'required': [('lessor', '=', True)]}" placeholder="Sequence code of agreement"/>
+                    <field name="sequence_id" attrs="{'invisible': ['|', ('lessor', '=', False), ('sequence_id', '=', False)]}"/>
+                </group>
+            </group>
+        </field>
+    </record>
+</odoo>

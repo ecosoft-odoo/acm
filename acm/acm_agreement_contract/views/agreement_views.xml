@@ -38,16 +38,22 @@
             <field name="is_template" position="attributes">
                 <attribute name="readonly">1</attribute>
             </field>
+            <field name="start_date" position="attributes">
+                <attribute name="placeholder">วันที่เริ่มต้นสัญญา</attribute>
+            </field>
+            <field name="end_date" position="attributes">
+                <attribute name="placeholder">วันที่สิ้นสุดสัญญา</attribute>
+            </field>
             <field name="end_date" position="after">
-                <field name="date_contract" attrs="{'invisible': [('is_template', '=', True)], 'required': [('is_template', '=', False)]}"/>
+                <field name="date_contract" placeholder="วันที่ทำสัญญา" attrs="{'invisible': [('is_template', '=', True)], 'required': [('is_template', '=', False)]}"/>
                 <label for="recurring_interval" attrs="{'invisible': [('is_template', '=', True)], 'required': [('is_template', '=', False)]}"/>
                 <div attrs="{'invisible': [('is_template', '=', True)], 'required': [('is_template', '=', False)]}">
                     <field name="recurring_interval" class="oe_inline"/>
                     <field name="recurring_rule_type" class="oe_inline"/>
                 </div>
-                <field name="rental_area_delivery_date" attrs="{'invisible': [('is_template', '=', True)]}"/>
-                <field name="rental_free_start_date" attrs="{'invisible': [('is_template', '=', True)]}"/>
-                <field name="rental_free_end_date" attrs="{'invisible': [('is_template', '=', True)]}"/>
+                <field name="rental_area_delivery_date" attrs="{'invisible': [('is_template', '=', True)]}" placeholder="วันส่งมอบพื้นที่เช่า"/>
+                <field name="rental_free_start_date" attrs="{'invisible': [('is_template', '=', True)]}" placeholder="วันที่เริ่มต้นปลอดค่าเช่า"/>
+                <field name="rental_free_end_date" attrs="{'invisible': [('is_template', '=', True)]}" placeholder="วันที่สิ้นสุดปลอดค่าเช่า"/>
             </field>
             <field name="termination_date" position="attributes">
                 <attribute name="readonly">True</attribute>
@@ -63,6 +69,10 @@
             </field>
             <field name="partner_id" position="attributes">
                 <attribute name="attrs">{'required': [('is_template', '=', False)]}</attribute>
+                <attribute name="placeholder">ชื่อผู้เช่า</attribute>
+            </field>
+            <field name="company_id" position="attributes">
+                <attribute name="placeholder">ชื่อผู้ให้เช่า</attribute>
             </field>
             <field name="uom_id" position="after">
                 <field name="lst_price"/>
@@ -130,10 +140,10 @@
             </group>
             <group name="contact_right" position="after">
                 <group name="partner_witness" string="Witness">
-                    <field name="partner_witness" nolabel="1"/>
+                    <field name="partner_witness" nolabel="1" placeholder="พยานผู้เช่า"/>
                 </group>
                 <group name="company_witness" string="Witness">
-                    <field name="company_witness" nolabel="1" attrs="{'readonly': [('state', '=', 'active'), ('is_template', '=', False)]}"/>
+                    <field name="company_witness" nolabel="1" attrs="{'readonly': [('state', '=', 'active'), ('is_template', '=', False)]}" placeholder="พยานผู้ให้เช่า"/>
                 </group>
             </group>
             <field name="company_contact_id" position="attributes">
@@ -149,9 +159,9 @@
             <xpath expr="//sheet/group[1]" position="after">
                 <group string="Business Type" attrs="{'invisible': [('is_template', '=', True)]}">
                     <group>
-                        <field name="business_name"/>
-                        <field name="goods_category_id"/>
-                        <field name="goods_type"/>
+                        <field name="business_name" placeholder="ชื่อกิจการ"/>
+                        <field name="goods_category_id" placeholder="หมวดสินค้า"/>
+                        <field name="goods_type" placeholder="จำหน่ายสินค้าประเภท"/>
                     </group>
                     <group/>
                 </group>

@@ -35,6 +35,12 @@ class ResPartner(models.Model):
 
     @api.depends('agreement_ids', 'agreement_ids.state')
     def _compute_partner_type(self):
+        """
+        Compute partner type
+        - None: Agreement is not created for the contact
+        - Active Lessee: Agreement is created for the contact and state = active
+        - Inactive Lessee: Agreement is created for the contact and state = inactive
+        """
         for rec in self:
             agreements = rec.agreement_ids
             if not agreements:
@@ -46,11 +52,13 @@ class ResPartner(models.Model):
 
     @api.multi
     def _compute_age(self):
+        """ Compute age of individual contact """
         for rec in self:
             rec.age = relativedelta(fields.Date.context_today(self), rec.date_birth).years
 
     @api.multi
     def _compute_agreement_number(self):
+        """ Compute ACTIVE agreement no for the contact """
         for rec in self:
             rec.agreement_number = len(rec.agreement_ids.filtered(
                 lambda l: l.state == 'active'))
@@ -58,6 +66,7 @@ class ResPartner(models.Model):
     @api.model
     def read_group(self, domain, fields, groupby, offset=0, limit=None,
                    orderby=False, lazy=True):
+        """ Sum ACTIVE agreement no in each group lines """
         res = super(ResPartner, self).read_group(
             domain, fields, groupby, offset=offset, limit=limit,
             orderby=orderby, lazy=lazy)

@@ -1,0 +1,12 @@
+<odoo>
+    <record id="rental_analysis_report_tree_view" model="ir.ui.view">
+        <field name="name">rental.analysis.report.tree.view</field>
+        <field name="model">rental.analysis.report</field>
+        <field name="inherit_id" ref="acm.rental_analysis_report_tree_view"/>
+        <field name="arch" type="xml">
+            <field name="goods_category_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+        </field>
+    </record>
+</odoo>

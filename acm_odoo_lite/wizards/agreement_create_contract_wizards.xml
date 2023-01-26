@@ -1,0 +1,5 @@
+<odoo>
+    <record id="acm.agreement_create_contract_action" model="ir.actions.act_window">
+        <field name="binding_model_id" ref=""/>
+    </record>
+</odoo>

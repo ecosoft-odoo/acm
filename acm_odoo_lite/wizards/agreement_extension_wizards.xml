@@ -1,0 +1,12 @@
+<odoo>
+    <record id="agreement_extension_view_form" model="ir.ui.view">
+        <field name="name">agreement.extension.view.form</field>
+        <field name="model">agreement.extension</field>
+        <field name="inherit_id" ref="acm.agreement_extension_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group/group[2]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

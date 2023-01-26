@@ -7,9 +7,9 @@
             <form string="Renew Agreement">
                 <group>
                     <group>
-                        <field name="date_contract"/>
-                        <field name="date_start"/>
-                        <field name="date_end"/>
+                        <field name="date_contract" placeholder="วันที่ทำสัญญา"/>
+                        <field name="date_start" placeholder="วันที่เริ่มต้นสัญญา"/>
+                        <field name="date_end" placeholder="วันที่สิ้นสุดสัญญา"/>
                     </group>
                     <group>
                         <field name="force"/>

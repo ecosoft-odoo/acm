@@ -1,0 +1,5 @@
+<odoo>
+    <record id="acm.agreement_income_type_menu" model="ir.ui.menu">
+        <field name="active">False</field>
+    </record>
+</odoo>

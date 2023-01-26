@@ -22,6 +22,7 @@ class ResCompany(models.Model):
 
     @api.constrains('show_invoice_date')
     def _check_show_invoice_date(self):
+        """ If agreement is created, DO NOT uncheck show invoice date """
         for rec in self:
             line = self.env['agreement.invoice.line'].search([])
             if line and not rec.show_invoice_date:

@@ -1,0 +1,52 @@
+<odoo>
+    <record id="product_variant_easy_edit_view" model="ir.ui.view">
+        <field name="name">product.product.view.form.easy</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="acm.product_variant_easy_edit_view"/>
+        <field name="arch" type="xml">
+            <group name="agreement_info" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </group>
+        </field>
+    </record>
+
+    <record id="product_template_form_view" model="ir.ui.view">
+        <field name="name">product.template.common.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="acm.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <field name="group_id" position="attributes">
+                <attribute name="attrs"></attribute>
+            </field>
+            <field name="lock_number" position="attributes">
+                <attribute name="attrs"></attribute>
+            </field>
+            <page name="agreement_info" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </page>
+            <page name="agreement_info" position="after">
+                <page name="agreement_info" string="Agreement Info" groups="agreement_legal.group_agreement_readonly">
+                    <group>
+                        <group name="leased_land" string="Leased Land">
+                            <field name="title_dead_no" placeholder="โฉนดที่ดินเลขที่"/>
+                            <field name="parcel_no" placeholder="เลขที่ดิน"/>
+                            <field name="vol" placeholder="เล่ม"/>
+                            <field name="page" placeholder="หน้า"/>
+                            <field name="sub_distinct_name" placeholder="ตำบล"/>
+                            <field name="distinct" placeholder="อำเภอ"/>
+                            <field name="province" placeholder="จังหวัด"/>
+                        </group>
+                        <group name="leased_land_area" string="Leased Land Area">
+                            <field name="rai" placeholder="ไร่"/>
+                            <field name="ngan" placeholder="งาน"/>
+                            <field name="square_wa" placeholder="ตารางวา"/>
+                        </group>
+                        <group name="misc" string="Misc">
+                            <field name="value_type" required="1"/>
+                        </group>
+                    </group>
+                </page>
+            </page>
+        </field>
+    </record>
+</odoo>

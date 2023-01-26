@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo noupdate="1">
 
+    <!-- Inactive agreement by schedule job -->
     <record id="ir_cron_inactive_agreement_scheduler" model="ir.cron">
         <field name="name">Inactive Agreement Scheduler</field>
         <field name="user_id" ref="base.user_root"/>
