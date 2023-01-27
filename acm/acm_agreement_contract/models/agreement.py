@@ -146,7 +146,7 @@ class Agreement(models.Model):
         string="Company Witness",
     )
     partner_witness = fields.Char(
-        string="Partner Witness",
+        string="Lessee Witness",
         states={'active': [('readonly', True)]},
     )
     # Set field readonly = True for state is active.
