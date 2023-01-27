@@ -142,7 +142,7 @@ class Agreement(models.Model):
 
     @api.onchange("lessor_id")
     def _onchange_lessor_id(self):
-        if not self.is_template:
+        if not self.is_template and self.lessor_id and self.code != "New":
             raise UserError(_("Lessor is not allowed to change on the agreement"))
 
     @api.multi
