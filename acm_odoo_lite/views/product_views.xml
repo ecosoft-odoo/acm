@@ -27,6 +27,12 @@
             <page name="agreement_info" position="after">
                 <page name="agreement_info" string="Agreement Info" groups="agreement_legal.group_agreement_readonly">
                     <group>
+                        <group>
+                            <field name="value_type" required="1"/>
+                        </group>
+                        <group/>
+                    </group>
+                    <group attrs="{'invisible': [('value_type', '!=', 'rent')]}">
                         <group name="leased_land" string="Leased Land">
                             <field name="title_dead_no" placeholder="โฉนดที่ดินเลขที่"/>
                             <field name="parcel_no" placeholder="เลขที่ดิน"/>
@@ -40,9 +46,8 @@
                             <field name="rai" placeholder="ไร่"/>
                             <field name="ngan" placeholder="งาน"/>
                             <field name="square_wa" placeholder="ตารางวา"/>
-                        </group>
-                        <group name="misc" string="Misc">
-                            <field name="value_type" required="1"/>
+                            <field name="has_building"/>
+                            <field name="square_meter" attrs="{'invisible': [('has_building', '=', False)]}" placeholder="ตารางเมตร"/>
                         </group>
                     </group>
                 </page>

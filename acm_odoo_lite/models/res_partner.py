@@ -14,19 +14,25 @@ class ResPartner(models.Model):
     )
     sequence_code = fields.Char(
         string="Sequence Code",
+        copy=False,
     )
     sequence_id = fields.Many2one(
         comodel_name="ir.sequence",
         index=True,
         readonly=True,
         ondelete="restrict",
+        copy=False,
     )
 
     @api.constrains("sequence_code")
     def _check_sequence_code(self):
         for rec in self:
-            if rec.sequence_code and len(rec.sequence_code) != 3:
-                raise UserError(_("The sequence code must be equal to 3 characters."))
+            if rec.sequence_code:
+                if len(rec.sequence_code) != 3:
+                    raise UserError(_("The sequence code must be equal to 3 characters."))
+                partners = self.search([("sequence_code", "=", rec.sequence_code)])
+                if len(partners) > 1:
+                    raise UserError(_("The sequence code must be unique."))
 
     @api.multi
     def _create_update_sequence(self):

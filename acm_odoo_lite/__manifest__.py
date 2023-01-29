@@ -12,7 +12,6 @@
         "data/agreement_data.xml",
         "data/agreement_sections_data.xml",
         "data/agreement_clauses_data.xml",
-        "data/agreement_appendices_data.xml",
         "report/rental_analysis_report.xml",
         "report/historical_rental_analysis_report.xml",
         "views/account_analytic_account_views.xml",
