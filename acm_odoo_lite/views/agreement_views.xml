@@ -50,13 +50,8 @@
             <xpath expr="//field[@name='line_ids']/tree/field[@name='date_end']" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>
-            <xpath expr="//field[@name='special_terms']/.." position="before">
-                <group string="Final Contract Agreement (Addons)">
-                    <field name="final_contract_content" nolabel="1" placeholder="เนื้อหาของสัญญาข้อสุดท้าย"/>
-                </group>
-            </xpath>
             <xpath expr="//field[@name='special_terms']/.." position="attributes">
-                <attribute name="string">Rental Condition Appendix</attribute>
+                <attribute name="string">Rental Condition Appendix (Addons)</attribute>
             </xpath>
             <field name="special_terms" position="attributes">
                 <attribute name="placeholder">เงื่อนไขการเช่า</attribute>
@@ -64,6 +59,9 @@
             <button name="create_new_contract" position="attributes">
                 <attribute name="invisible">1</attribute>
             </button>
+            <field name="name" position="attributes">
+                <attribute name="attrs">{'readonly': ['|', ('is_template', '=', False), ('state', '=', 'active')]}</attribute>
+            </field>
         </field>
     </record>
     <record id="partner_agreement_list_view" model="ir.ui.view">

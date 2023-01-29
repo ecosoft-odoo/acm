@@ -25,6 +25,9 @@ class AgreementCreate(models.TransientModel):
         comodel_name="res.partner",
         string="Lessor Contact",
     )
+    post_name = fields.Char(
+        required=False,
+    )
 
     @api.multi
     def action_create_agreement(self):

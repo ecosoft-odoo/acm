@@ -42,3 +42,11 @@ class ProductTemplate(models.Model):
         string="Square Wa",
         default=0,
     )
+    has_building = fields.Boolean(
+        string="Has Building",
+        default=False,
+    )
+    square_meter = fields.Integer(
+        string="Square Meter",
+        default=0,
+    )

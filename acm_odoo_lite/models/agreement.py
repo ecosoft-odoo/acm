@@ -55,9 +55,6 @@ class Agreement(models.Model):
         compute="_compute_all_product_ids",
         string="Products",
     )
-    final_contract_content = fields.Text(
-        string="Final Contract Conent",
-    )
     special_terms = fields.Text(
         states={"active": [("readonly", False)]},
     )
@@ -98,24 +95,6 @@ class Agreement(models.Model):
         })
         return res
 
-    @api.multi
-    def _create_last_clauses(self, vals):
-        for rec in self:
-            if "final_contract_content" in vals:
-                # Unlink last clauses
-                rec.clauses_ids.filtered(lambda l: l.name == "Final Contract").unlink()
-                # Create last clauses
-                fcc = vals["final_contract_content"] and vals["final_contract_content"].strip() or vals["final_contract_content"]
-                if fcc:
-                    self.env["agreement.clause"].create({
-                        "name": "Final Contract",
-                        "sequence": 999,
-                        "agreement_id": rec.id,
-                        "section_id": rec.sections_ids.filtered(lambda l: l.name == "ย่อหน้าที่ 2")[:1].id,
-                        "content": "<p>${object.agreement_id.final_contract_content}</p>",
-                    })
-        return True
-
     @api.model
     def create(self, vals):
         code = vals.get("code")
@@ -125,20 +104,15 @@ class Agreement(models.Model):
             sequence = False
             if partner.lessor and partner.sequence_id:
                 sequence = partner.sequence_id.next_by_id()
-                vals["code"] = sequence
+                vals.update({
+                    "code": sequence,
+                    "name": sequence,
+                    "description": sequence,
+                })
             if not sequence:
                 raise UserError(_("Sequence code is not defined in lessor."))
         agreement = super(Agreement, self).create(vals)
-        # Create last clauses
-        agreement._create_last_clauses(vals)
         return agreement
-
-    @api.multi
-    def write(self, vals):
-        res = super(Agreement, self).write(vals)
-        # Create last clauses
-        self._create_last_clauses(vals)
-        return res
 
     @api.onchange("lessor_id")
     def _onchange_lessor_id(self):
@@ -189,3 +163,11 @@ class Agreement(models.Model):
         total_ngan = int((area - (400 * total_rai)) / 100)
         total_square_wa = area - (400 * total_rai) - (100 * total_ngan)
         return "{} ไร {} งาน {} ตารางวา".format(total_rai, total_ngan, total_square_wa)
+
+    def get_rental_building_area(self):
+        self.ensure_one()
+        products = self.line_ids.mapped("product_id")
+        building = products.filtered(
+            lambda l: l.value_type == "rent" and l.has_building)
+        square_meter = sum(building.mapped("square_meter"))
+        return "{} ตารางเมตร".format(square_meter)
