@@ -28,6 +28,18 @@ class AgreementCreate(models.TransientModel):
     post_name = fields.Char(
         required=False,
     )
+    is_payment_installment = fields.Boolean(
+        string="Is Payment Installment",
+        default=False,
+    )
+    payment_due_date = fields.Date(
+        string="Payment Due Date",
+    )
+    payment_installment_ids = fields.One2many(
+        comodel_name="agreement.create.payment.installment",
+        inverse_name="wizard_id",
+        string="Installment Line",
+    )
 
     @api.multi
     def action_create_agreement(self):
@@ -36,6 +48,28 @@ class AgreementCreate(models.TransientModel):
         self = self.with_context({
             "lessor_id": self.lessor_id.id,
             "lessor_contact_id": self.lessor_contact_id.id,
+            "is_payment_installment": self.is_payment_installment,
+            "payment_due_date": self.payment_due_date,
+            "payment_installment_ids": self.payment_installment_ids,
         })
         res = super(AgreementCreate, self).action_create_agreement()
         return res
+
+
+class AgreementCreatePaymentInstallment(models.TransientModel):
+    _name = "agreement.create.payment.installment"
+    _description = "Agreement Create Payment Installment"
+
+    installment = fields.Integer(
+        string="Installment",
+        required=True,
+        default=0,
+    )
+    payment_due_date = fields.Date(
+        string="Payment Due Date",
+        required=True,
+    )
+    wizard_id = fields.Many2one(
+        comodel_name="agreement.create",
+        index=True,
+    )

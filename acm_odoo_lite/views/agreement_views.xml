@@ -8,10 +8,10 @@
                 <attribute name="invisible">1</attribute>
             </field>
             <field name="goods_category_id" position="attributes">
-                <attribute name="invisible">1</attribute>
+                <attribute name="placeholder">ลักษณะการใช้ประโยชน์</attribute>
             </field>
             <field name="goods_type" position="attributes">
-                <attribute name="invisible">1</attribute>
+                <attribute name="placeholder">รายละเอียดการใช้ประโยชน์</attribute>
             </field>
             <group name="company" position="attributes">
                 <attribute name="invisible">1</attribute>
@@ -62,6 +62,18 @@
             <field name="name" position="attributes">
                 <attribute name="attrs">{'readonly': ['|', ('is_template', '=', False), ('state', '=', 'active')]}</attribute>
             </field>
+            <group name="termdates_left" position="after">
+                <group string="Installment" attrs="{'invisible': [('is_template', '=', True)]}">
+                    <field name="is_payment_installment"/>
+                    <field name="payment_due_date" attrs="{'invisible': [('is_payment_installment', '=', True)], 'required': [('is_payment_installment', '=', False)]}" placeholder="วันครบกำหนดชำระค่าเช่า"/>
+                    <field name="payment_installment_ids" attrs="{'invisible': [('is_payment_installment', '=', False)]}">
+                        <tree editable="bottom">
+                            <field name="installment"/>
+                            <field name="payment_due_date" placeholder="วันครบกำหนดชำระค่าเช่า"/>
+                        </tree>
+                    </field>
+                </group>
+            </group>
         </field>
     </record>
     <record id="partner_agreement_list_view" model="ir.ui.view">
@@ -93,9 +105,6 @@
         <field name="model">agreement</field>
         <field name="inherit_id" ref="agreement_legal.partner_agreement_search_view"/>
         <field name="arch" type="xml">
-            <filter name="group_goods_category_id" position="attributes">
-                <attribute name="invisible">1</attribute>
-            </filter>
             <field name="group_id" position="attributes">
                 <attribute name="invisible">1</attribute>
             </field>

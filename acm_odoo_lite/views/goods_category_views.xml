@@ -1,5 +1,0 @@
-<odoo>
-    <record id="acm.goods_category_menu" model="ir.ui.menu">
-        <field name="active">False</field>
-    </record>
-</odoo>

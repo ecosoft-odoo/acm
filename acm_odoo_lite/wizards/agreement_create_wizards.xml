@@ -9,16 +9,26 @@
                 <field name="lessor_contact_id" attrs="{'invisible': [('lessor_id', '=', False)]}" domain="[('parent_id', '=', lessor_id)]"/>
             </field>
             <field name="goods_category_id" position="attributes">
-                <attribute name="invisible">1</attribute>
+                <attribute name="placeholder">ลักษณะการใช้ประโยชน์</attribute>
             </field>
             <field name="goods_type" position="attributes">
-                <attribute name="invisible">1</attribute>
+                <attribute name="placeholder">รายละเอียดการใช้ประโยชน์</attribute>
             </field>
             <label for="name" position="attributes">
                 <attribute name="invisible">1</attribute>
             </label>
             <xpath expr="//field[@name='name']/.." position="attributes">
                 <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='recurring_interval']/.." position="after">
+                <field name="is_payment_installment"/>
+                <field name="payment_due_date" attrs="{'invisible': [('is_payment_installment', '=', True)], 'required': [('is_payment_installment', '=', False)]}" placeholder="วันครบกำหนดชำระค่าเช่า"/>
+                <field name="payment_installment_ids" attrs="{'invisible': [('is_payment_installment', '=', False)]}">
+                    <tree editable="bottom">
+                        <field name="installment"/>
+                        <field name="payment_due_date" placeholder="วันครบกำหนดชำระค่าเช่า"/>
+                    </tree>
+                </field>
             </xpath>
         </field>
     </record>
