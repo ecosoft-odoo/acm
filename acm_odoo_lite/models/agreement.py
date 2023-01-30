@@ -61,6 +61,18 @@ class Agreement(models.Model):
     is_contract_create = fields.Boolean(
         compute='_compute_is_contract_create',
     )
+    is_payment_installment = fields.Boolean(
+        string="Is Payment Installment",
+        default=False,
+    )
+    payment_due_date = fields.Date(
+        string="Payment Due Date",
+    )
+    payment_installment_ids = fields.One2many(
+        comodel_name="agreement.payment.installment",
+        inverse_name="agreement_id",
+        string="Installment Line",
+    )
 
     @api.multi
     def _compute_is_contract_create(self):
@@ -92,7 +104,13 @@ class Agreement(models.Model):
         res.update({
             "lessor_id": context.get("lessor_id") or self.lessor_id.id,
             "lessor_contact_id": context.get("lessor_contact_id") or self.lessor_contact_id.id,
+            "is_payment_installment": context.get("is_payment_installment") or self.is_payment_installment,
+            "payment_due_date": context.get("payment_due_date") or self.payment_due_date,
         })
+        payment_installment_ids = self.payment_installment_ids
+        if context.get("payment_installment_ids"):
+            payment_installment_ids = context["payment_installment_ids"]
+        res["payment_installment_ids"] = [(0, 0, {"installment": i.installment, "payment_due_date": i.payment_due_date}) for i in payment_installment_ids]
         return res
 
     @api.model
@@ -143,13 +161,6 @@ class Agreement(models.Model):
         return
 
     # Function used in appendix form
-    def get_rental_product_categ(self):
-        self.ensure_one()
-        products = self.line_ids.mapped("product_id")
-        rental_products = products.filtered(lambda l: l.value_type == "rent")
-        rental_product_categs = rental_products.mapped("categ_id")
-        return ", ".join(rental_product_categs.mapped("name"))
-
     def get_rental_product_area(self):
         self.ensure_one()
         products = self.line_ids.mapped("product_id")
@@ -171,3 +182,22 @@ class Agreement(models.Model):
             lambda l: l.value_type == "rent" and l.has_building)
         square_meter = sum(building.mapped("square_meter"))
         return "{} ตารางเมตร".format(square_meter)
+
+
+class AgreementPaymentInstallment(models.Model):
+    _name = "agreement.payment.installment"
+    _description = "Agreement Payment Installment"
+
+    installment = fields.Integer(
+        string="Installment",
+        required=True,
+        default=0,
+    )
+    payment_due_date = fields.Date(
+        string="Payment Due Date",
+        required=True,
+    )
+    agreement_id = fields.Many2one(
+        comodel_name="agreement",
+        index=True,
+    )
