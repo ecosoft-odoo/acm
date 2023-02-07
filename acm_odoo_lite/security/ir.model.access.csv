@@ -1,3 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_agreement_payment_installment_allusers,agreement payment installment all users,model_agreement_payment_installment,agreement_legal.group_agreement_user,1,1,1,1
-access_agreement_create_payment_installment_allusers,agreement create payment installment all users,model_agreement_create_payment_installment,agreement_legal.group_agreement_user,1,1,1,1

@@ -4,9 +4,12 @@
         <field name="model">agreement.create</field>
         <field name="inherit_id" ref="acm.agreement_create_view_form"/>
         <field name="arch" type="xml">
+            <field name="partner_contact_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
             <field name="partner_id" position="before">
                 <field name="lessor_id" domain="[('lessor', '=', True)]" placeholder="ชื่อผู้ให้เช่า"/>
-                <field name="lessor_contact_id" attrs="{'invisible': [('lessor_id', '=', False)]}" domain="[('parent_id', '=', lessor_id)]"/>
+                <!-- <field name="lessor_contact_id" attrs="{'invisible': [('lessor_id', '=', False)]}" domain="[('parent_id', '=', lessor_id)]"/> -->
             </field>
             <field name="goods_category_id" position="attributes">
                 <attribute name="placeholder">ลักษณะการใช้ประโยชน์</attribute>
@@ -17,19 +20,23 @@
             <label for="name" position="attributes">
                 <attribute name="invisible">1</attribute>
             </label>
+            <field name="date_end" position="after">
+                <field name="payment_type"/>
+                <field name="payment_date" placeholder="วันที่จ่าย" attrs="{'required': [('payment_type', '=', 'full_paid')], 'invisible': [('payment_type', '!=', 'full_paid')]}"/>
+                <field name="installment_number" placeholder="จำนวนงวดจ่าย" attrs="{'required': [('payment_type', '=', 'installment')], 'invisible': [('payment_type', '!=', 'installment')]}"/>
+                <field name="recurring_rule_type" string="Payment Every" attrs="{'required': [('payment_type', '=', 'installment')], 'invisible': [('payment_type', '!=', 'installment')]}"/>
+                <field name="payment_every_days" attrs="{'required': [('payment_type', '=', 'installment')], 'invisible': [('payment_type', '!=', 'installment')]}"/>
+                <field name="payment_every_months" attrs="{'required': [('payment_type', '=', 'installment'), ('recurring_rule_type', '=', 'yearly')], 'invisible': ['|', ('payment_type', '!=', 'installment'), ('recurring_rule_type', '!=', 'yearly')]}"/>
+            </field>
             <xpath expr="//field[@name='name']/.." position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>
-            <xpath expr="//field[@name='recurring_interval']/.." position="after">
-                <field name="is_payment_installment"/>
-                <field name="payment_due_date" attrs="{'invisible': [('is_payment_installment', '=', True)], 'required': [('is_payment_installment', '=', False)]}" placeholder="วันครบกำหนดชำระค่าเช่า"/>
-                <field name="payment_installment_ids" attrs="{'invisible': [('is_payment_installment', '=', False)]}">
-                    <tree editable="bottom">
-                        <field name="installment"/>
-                        <field name="payment_due_date" placeholder="วันครบกำหนดชำระค่าเช่า"/>
-                    </tree>
-                </field>
+            <xpath expr="//field[@name='recurring_interval']/.." position="attributes">
+                <attribute name="invisible">1</attribute>
             </xpath>
+            <label for="recurring_interval" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </label>
         </field>
     </record>
 </odoo>

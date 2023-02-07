@@ -61,17 +61,50 @@ class Agreement(models.Model):
     is_contract_create = fields.Boolean(
         compute='_compute_is_contract_create',
     )
-    is_payment_installment = fields.Boolean(
-        string="Is Payment Installment",
-        default=False,
+    recurring_interval = fields.Integer(
+        required=False,
     )
-    payment_due_date = fields.Date(
-        string="Payment Due Date",
+    recurring_rule_type = fields.Selection(
+        selection=[
+            ('monthly', 'Month(s)'),
+            ('yearly', 'Year(s)'),
+        ],
+        required=False,
+        states={'active': [('readonly', False)]},
     )
-    payment_installment_ids = fields.One2many(
-        comodel_name="agreement.payment.installment",
-        inverse_name="agreement_id",
-        string="Installment Line",
+    payment_type = fields.Selection(
+        selection=[
+            ("full_paid", "Full Paid"),
+            ("installment", "Installment"),
+        ],
+        string="Payment Type",
+    )
+    payment_date = fields.Date(
+        string="Payment Date",
+    )
+    installment_number = fields.Integer(
+        string="Installment Number",
+        default=1,
+    )
+    payment_every_days = fields.Integer(
+        string="Payment Every (Days)",
+    )
+    payment_every_months = fields.Selection(
+        selection=[
+            ("01", "มกราคม"),
+            ("02", "กุมภาพันธ์"),
+            ("03", "มีนาคม"),
+            ("04", "เมษายน"),
+            ("05", "พฤษภาคม"),
+            ("06", "มิถุนายน"),
+            ("07", "กฤกฎาคม"),
+            ("08", "สิงหาคม"),
+            ("09", "กันยายน"),
+            ("10", "ตุลาคม"),
+            ("11", "พฤศจิกายน"),
+            ("12", "ธันวาคม"),
+        ],
+        string="Payment Every (Months)",
     )
 
     @api.multi
@@ -85,6 +118,16 @@ class Agreement(models.Model):
         """ Get all products """
         for rec in self:
             rec.all_product_ids = rec.line_ids.mapped("product_id")
+
+    @api.onchange("payment_type")
+    def _onchange_payment_type(self):
+        self.update({
+            "payment_date": False,
+            "installment_number": 1,
+            "payment_every_days": False,
+            "payment_every_months": False,
+            "recurring_rule_type": False,
+        })
 
     @api.model
     def fields_view_get(self, view_id=None, view_type="form", toolbar=False, submenu=False):
@@ -104,13 +147,12 @@ class Agreement(models.Model):
         res.update({
             "lessor_id": context.get("lessor_id") or self.lessor_id.id,
             "lessor_contact_id": context.get("lessor_contact_id") or self.lessor_contact_id.id,
-            "is_payment_installment": context.get("is_payment_installment") or self.is_payment_installment,
-            "payment_due_date": context.get("payment_due_date") or self.payment_due_date,
+            "payment_type": context.get("payment_type") or self.payment_type,
+            "payment_date": context.get("payment_date") or self.payment_date,
+            "installment_number": context.get("installment_number") or self.installment_number,
+            "payment_every_days": context.get("payment_every_days") or self.payment_every_days,
+            "payment_every_months": context.get("payment_every_months") or self.payment_every_months,
         })
-        payment_installment_ids = self.payment_installment_ids
-        if context.get("payment_installment_ids"):
-            payment_installment_ids = context["payment_installment_ids"]
-        res["payment_installment_ids"] = [(0, 0, {"installment": i.installment, "payment_due_date": i.payment_due_date}) for i in payment_installment_ids]
         return res
 
     @api.model
@@ -161,43 +203,126 @@ class Agreement(models.Model):
         return
 
     # Function used in appendix form
-    def get_rental_product_area(self):
+    def get_rental_area(self):
         self.ensure_one()
-        products = self.line_ids.mapped("product_id")
-        rental_products = products.filtered(lambda l: l.value_type == "rent")
+        agreement_lines = self.line_ids.filtered(lambda l: l.product_id.value_type == "rent")
         # Calculate area in square wa
-        rai = sum(rental_products.mapped("rai"))
-        ngan = sum(rental_products.mapped("ngan"))
-        square_wa = sum(rental_products.mapped("square_wa"))
+        rai = sum(agreement_lines.mapped("rai"))
+        ngan = sum(agreement_lines.mapped("ngan"))
+        square_wa = sum(agreement_lines.mapped("square_wa"))
         area = (400 * rai) + (100 * ngan) + square_wa
         total_rai = int(area / 400)
         total_ngan = int((area - (400 * total_rai)) / 100)
         total_square_wa = area - (400 * total_rai) - (100 * total_ngan)
-        return "{} ไร {} งาน {} ตารางวา".format(total_rai, total_ngan, total_square_wa)
+        if total_square_wa == int(total_square_wa):
+            str_total_square_wa = str(int(total_square_wa))
+        else:
+            str_total_square_wa = "{0:,.2f}".format(total_square_wa)
+        return "{} ไร {} งาน {} ตารางวา".format(total_rai, total_ngan, str_total_square_wa)
 
     def get_rental_building_area(self):
         self.ensure_one()
-        products = self.line_ids.mapped("product_id")
-        building = products.filtered(
-            lambda l: l.value_type == "rent" and l.has_building)
-        square_meter = sum(building.mapped("square_meter"))
-        return "{} ตารางเมตร".format(square_meter)
+        agreement_lines = self.line_ids.filtered(lambda l: l.product_id.value_type == "rent")
+        square_meter = sum(agreement_lines.mapped("square_meter"))
+        if square_meter == int(square_meter):
+            str_square_meter = str(int(square_meter))
+        else:
+            str_square_meter = "{0:,.2f}".format(square_meter)
+        return "{} ตารางเมตร".format(str_square_meter)
 
 
-class AgreementPaymentInstallment(models.Model):
-    _name = "agreement.payment.installment"
-    _description = "Agreement Payment Installment"
+class AgreementLine(models.Model):
+    _inherit = "agreement.line"
 
-    installment = fields.Integer(
-        string="Installment",
-        required=True,
+    rai = fields.Integer(
+        string="Rai",
         default=0,
     )
-    payment_due_date = fields.Date(
-        string="Payment Due Date",
+    ngan = fields.Integer(
+        string="Ngan",
+        default=0,
+    )
+    square_wa = fields.Float(
+        string="Square Wa",
+        default=0,
+        digits=(16, 2),
+    )
+    square_meter = fields.Float(
+        string="Square Meter For Building",
+        default=0,
+        digits=(16, 2),
+    )
+    value_type = fields.Selection(
+        related="product_id.value_type",
+    )
+    remaining_land = fields.Char(
+        related="product_id.product_tmpl_id.remaining_land",
+    )
+    remaining_building = fields.Char(
+        related="product_id.product_tmpl_id.remaining_building",
+    )
+    product_id = fields.Many2one(
         required=True,
     )
-    agreement_id = fields.Many2one(
-        comodel_name="agreement",
-        index=True,
+    lst_price = fields.Float(
+        required=True,
     )
+
+    @api.multi
+    def _validate_product(self):
+        self.ensure_one()
+        # Check product do not duplicate
+        agreement_lines = self.env["agreement.line"].search([
+            ("agreement_id", "=", self.agreement_id.id),
+            ("product_id", "=", self.product_id.id),
+            ("agreement_id.state", "not in", ["active"]), # State active will not check product
+        ])
+        if len(agreement_lines) > 1:
+            raise UserError(_("Product do not duplicate on the agreement lines."))
+        # Check rental area
+        remaining_area = self.product_id.product_tmpl_id._get_remaining_area()
+        if remaining_area[0] < 0:
+            area = remaining_area[0] + (400 * self.rai) + (100 * self.ngan) + self.square_wa
+            rai = int(area / 400)
+            ngan = int((area - (400 * rai)) / 100)
+            square_wa = area - (400 * rai) - (100 * ngan)
+            if square_wa == int(square_wa):
+                str_square_wa = str(int(square_wa))
+            else:
+                str_square_wa = "{0:,.2f}".format(square_wa)
+            raise UserError(_("{} not enough area to rent (Remaining area: {} rai {} ngan {} square wa).").format(self.name, rai, ngan, str_square_wa))
+        if remaining_area[1] < 0:
+            square_meter = remaining_area[1] + self.square_meter
+            if square_meter == int(square_meter):
+                str_square_meter = str(int(square_meter))
+            else:
+                str_square_meter = "{0:,.2f}".format(square_meter)
+            raise UserError(_("{} not enough building area to rent (Remaining area: {} square meter).").format(self.name, str_square_meter))
+        return True
+
+    @api.model
+    def create(self, vals):
+        agreement_line = super(AgreementLine, self).create(vals)
+        # Validate Product
+        agreement_line._validate_product()
+        return agreement_line
+
+    @api.multi
+    def write(self, vals):
+        res = super(AgreementLine, self).write(vals)
+        for line in self:
+            # Validate Product
+            line._validate_product()
+        return res
+
+    @api.onchange("product_id")
+    def _onchange_product_id(self):
+        super()._onchange_product_id()
+        """ Reset area and price """
+        self.update({
+            "rai": 0,
+            "ngan": 0,
+            "square_wa": 0,
+            "square_meter": 0,
+            "lst_price": 0,
+        })

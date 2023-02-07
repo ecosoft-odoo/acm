@@ -140,17 +140,17 @@
                     </tr>
                     <tr>
                         <td style="border : 1px solid black; padding: 5px;"></td>
-                        <td style="border : 1px solid black; padding: 5px;">&#160;&#160;&#160;&#160;&#160;<b>- ที่ดินที่เช่า</b><br/>&#160;&#160;&#160;&#160;&#160;&#160;&#160;(หากมีมากกว่า 1 โฉนด ควรระบุทุกโฉนด)</td>
+                        <td style="border : 1px solid black; padding: 5px;">&#160;&#160;&#160;&#160;&#160;<b>- ที่ดินที่เช่า</b></td>
                         <td style="border : 1px solid black; padding: 5px;">
 % for line in object.agreement_id.filter_lines(value_type='rent'):
-    ${loop.index}. โฉนดที่ดินเลขที่ ${line.product_id.title_dead_no or '-'} เลขที่ดิน ${line.product_id.parcel_no or '-'} เล่ม ${line.product_id.vol or '-'} หน้า ${line.product_id.page or '-'} ตำบล ${line.product_id.sub_distinct_name or '-'} อำเภอ ${line.product_id.distinct or '-'} จังหวัด ${line.product_id.province or '-'}<br/>
+    ${loop.index}. โฉนดที่ดินเลขที่ ${line.product_id.title_deed_no or '-'} เลขที่ดิน ${line.product_id.parcel_no or '-'} เล่ม ${line.product_id.vol or '-'} หน้า ${line.product_id.page or '-'} ตำบล ${line.product_id.sub_distinct_name or '-'} อำเภอ ${line.product_id.distinct or '-'} จังหวัด ${line.product_id.province or '-'}<br/>
 % endfor
                         </td>
                     </tr>
                     <tr>
                         <td style="border : 1px solid black; padding: 5px;"></td>
-                        <td style="border : 1px solid black; padding: 5px;">&#160;&#160;&#160;&#160;&#160;<b>- เนื้อที่ที่ดินที่เช่า</b> (ระบุรวม)</td>
-                        <td style="border : 1px solid black; padding: 5px;">${object.agreement_id.get_rental_product_area() or '-'}</td>
+                        <td style="border : 1px solid black; padding: 5px;">&#160;&#160;&#160;&#160;&#160;<b>- เนื้อที่ที่ดินที่เช่า</b></td>
+                        <td style="border : 1px solid black; padding: 5px;">${object.agreement_id.get_rental_area() or '-'}</td>
                     </tr>
                     <tr>
                         <td style="border : 1px solid black; padding: 5px;"><b>7.</b></td>
@@ -171,13 +171,17 @@
                         <td style="border : 1px solid black; padding: 5px;"><b>10.</b></td>
                         <td style="border : 1px solid black; padding: 5px;"><b>วันชำระค่าเช่า</b></td>
                         <td style="border : 1px solid black; padding: 5px;">
-% if not object.agreement_id.is_payment_installment:
-    ชำระภายในวันที่ ${object.agreement_id.payment_due_date and '%s %s %s' % (object.agreement_id.payment_due_date.strftime('%d').lstrip('0'), object.agreement_id.trans_months(object.agreement_id.payment_due_date.strftime('%m')), (object.agreement_id.payment_due_date + relativedelta(years=543)).strftime('%Y')) or '-'}
+ชำระภายในวันที่ 
+% if object.agreement_id.payment_type == 'full_paid':
+    ${object.agreement_id.payment_date and '%s %s %s' % (object.agreement_id.payment_date.strftime('%d').lstrip('0'), object.agreement_id.trans_months(object.agreement_id.payment_date.strftime('%m')), (object.agreement_id.payment_date + relativedelta(years=543)).strftime('%Y')) or '-'}
 % endif
-% if object.agreement_id.is_payment_installment:
-    % for line in object.agreement_id.payment_installment_ids:
-        งวดที่ ${line.installment or '-'} ชำระภายในวันที่ ${line.payment_due_date and '%s %s %s' % (line.payment_due_date.strftime('%d').lstrip('0'), object.agreement_id.trans_months(line.payment_due_date.strftime('%m')), (line.payment_due_date + relativedelta(years=543)).strftime('%Y')) or '-'}<br/>
-    % endfor
+% if object.agreement_id.payment_type == 'installment':
+    % if object.agreement_id.recurring_rule_type == 'monthly':
+        ${object.agreement_id.payment_every_days or '-'} ของทุกงวด
+    % endif
+    % if object.agreement_id.recurring_rule_type == 'yearly':
+        ${object.agreement_id.payment_every_days or '-'} เดือน ${object.agreement_id.trans_months(object.agreement_id.payment_every_months) or '-'} ของทุกงวด
+    % endif
 % endif
                         </td>
                     </tr>
@@ -192,17 +196,22 @@
                     </tr>
                     <tr>
                         <td style="border : 1px solid black; padding: 5px;"></td>
-                        <td style="border : 1px solid black; padding: 5px;">&#160;&#160;&#160;&#160;&#160;<b>- ค่าเช่า${object.agreement_id.trans_recurring(object.agreement_id.recurring_rule_type)}</b><br/>&#160;&#160;&#160;&#160;&#160;&#160;&#160;จำนวนเงินรวม ${'{0:,.2f}'.format(sum(object.agreement_id.filter_lines(value_type='rent').mapped('lst_price')))} บาท</td>
+                        <td style="border : 1px solid black; padding: 5px;text-align: left;">
+&#160;&#160;&#160;&#160;&#160;<b>- ค่าเช่า${object.agreement_id.payment_type == 'installment' and object.agreement_id.trans_recurring(object.agreement_id.recurring_rule_type) or ''}</b><br/>
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;จำนวนเงินรวมต่องวด ${'{0:,.2f}'.format(sum(object.agreement_id.filter_lines(value_type='rent').mapped('lst_price')))} บาท
+                        </td>
                         <td style="border : 1px solid black; padding: 5px;">
     % for line in object.agreement_id.filter_lines(value_type='rent'):
-        % if line.agreement_id.recurring_rule_type == 'daily':
-            ${loop.index}. โฉนดที่ดินเลขที่ ${line.product_id.title_dead_no or '-'} ค่าเช่ารายวัน วันละ ${'{0:,.2f}'.format(line.lst_price)} บาท <br/>
+        % if line.agreement_id.payment_type == 'full_paid':
+            ${loop.index}. โฉนดที่ดินเลขที่ ${line.product_id.title_deed_no or '-'} ค่าเช่า ${'{0:,.2f}'.format(line.lst_price)} บาท<br/>
         % endif
-        % if line.agreement_id.recurring_rule_type == 'monthly':
-            ${loop.index}. โฉนดที่ดินเลขที่ ${line.product_id.title_dead_no or '-'} ค่าเช่ารายเดือน เดือนละ ${'{0:,.2f}'.format(line.lst_price)} บาท<br/>
-        % endif
-        % if line.agreement_id.recurring_rule_type == 'yearly':
-            ${loop.index}. โฉนดที่ดินเลขที่ ${line.product_id.title_dead_no or '-'} ค่าเช่ารายปี ปีละ ${'{0:,.2f}'.format(line.lst_price)} บาท<br/>
+        % if line.agreement_id.payment_type == 'installment':
+            % if line.agreement_id.recurring_rule_type == 'monthly':
+                ${loop.index}. โฉนดที่ดินเลขที่ ${line.product_id.title_deed_no or '-'} ค่าเช่ารายเดือน งวดละ ${'{0:,.2f}'.format(line.lst_price)} บาท<br/>
+            % endif
+            % if line.agreement_id.recurring_rule_type == 'yearly':
+                ${loop.index}. โฉนดที่ดินเลขที่ ${line.product_id.title_deed_no or '-'} ค่าเช่ารายปี งวดละ ${'{0:,.2f}'.format(line.lst_price)} บาท<br/>
+            % endif
         % endif
     % endfor
                         </td>
@@ -239,6 +248,50 @@ ${object.agreement_id.filter_lines(value_type='security_deposit') and '{0:,.2f}'
                     </tr>
                 </tfoot>
             </table>
+        </field>
+    </record>
+
+    <record id="agreement_section_5" model="agreement.section">
+        <field name="name">เอกสารแนบท้ายสัญญาเงื่อนไขการเช่า สัญญาเช่าที่ดินเพื่อทำประโยชน์ (แผนผังโฉนดที่ดิน)</field>
+        <field name="sequence">50</field>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_1"/>
+        <field name="content" type="html">
+            <div>
+                % for line in object.agreement_id.filter_lines(value_type='rent'):
+                    % if line.product_id.map:
+                        <table style="width: 100%;page-break-before: always;text-indent: 0px;">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:center;">
+                                        เอกสารแนบท้ายสัญญารายละเอียดและเงื่อนไขการเช่า<br/>${object.agreement_id.lessor_id.name or '&#160;&#160;&#160;'} หมายเลข ${object.agreement_id.code or '&#160;&#160;&#160;'}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <img style="width:100%;" src="data:image/jpeg;base64,${line.product_id.map.decode('ascii') or ''}" alt="Map"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td style="text-align:center;">
+                                        <br/>
+                                        <br/>
+                                        <div style="display: inline-block;margin-right: 40px;">
+                                            ลงชื่อ.....................................................ผู้ให้เช่า<br/>( ${object.agreement_id.lessor_id and object.agreement_id.lessor_id.name or '.....................................................'} )
+                                        </div>
+                                        <div style="display: inline-block;margin-left: 40px;">
+                                            ลงชื่อ.....................................................ผู้เช่า<br/>( ${object.agreement_id.partner_id and  object.agreement_id.partner_id.name or '.....................................................'} )
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    % endif
+                % endfor
+            </div>
         </field>
     </record>
 
@@ -380,21 +433,21 @@ ${object.agreement_id.filter_lines(value_type='security_deposit') and '{0:,.2f}'
                     </tr>
                     <tr>
                         <td style="border : 1px solid black; padding: 5px;"></td>
-                        <td style="border : 1px solid black; padding: 5px;">&#160;&#160;&#160;&#160;&#160;<b>- ที่ดินที่เช่า</b><br/>&#160;&#160;&#160;&#160;&#160;&#160;&#160;(หากมีมากกว่า 1 โฉนด ควรระบุทุกโฉนด)</td>
+                        <td style="border : 1px solid black; padding: 5px;">&#160;&#160;&#160;&#160;&#160;<b>- ที่ดินที่เช่า</b></td>
                         <td style="border : 1px solid black; padding: 5px;">
 % for line in object.agreement_id.filter_lines(value_type='rent'):
-    ${loop.index}. โฉนดที่ดินเลขที่ ${line.product_id.title_dead_no or '-'} พร้อมสิ่งปลูกสร้าง เลขที่ดิน ${line.product_id.parcel_no or '-'} เล่ม ${line.product_id.vol or '-'} หน้า ${line.product_id.page or '-'} ตำบล ${line.product_id.sub_distinct_name or '-'} อำเภอ ${line.product_id.distinct or '-'} จังหวัด ${line.product_id.province or '-'}<br/>
+    ${loop.index}. โฉนดที่ดินเลขที่ ${line.product_id.title_deed_no or '-'} พร้อมสิ่งปลูกสร้าง เลขที่ดิน ${line.product_id.parcel_no or '-'} เล่ม ${line.product_id.vol or '-'} หน้า ${line.product_id.page or '-'} ตำบล ${line.product_id.sub_distinct_name or '-'} อำเภอ ${line.product_id.distinct or '-'} จังหวัด ${line.product_id.province or '-'}<br/>
 % endfor
                         </td>
                     </tr>
                     <tr>
                         <td style="border : 1px solid black; padding: 5px;"></td>
-                        <td style="border : 1px solid black; padding: 5px;">&#160;&#160;&#160;&#160;&#160;<b>- เนื้อที่ที่ดินที่เช่า</b> (ระบุรวม)</td>
-                        <td style="border : 1px solid black; padding: 5px;">${object.agreement_id.get_rental_product_area() or '-'}</td>
+                        <td style="border : 1px solid black; padding: 5px;">&#160;&#160;&#160;&#160;&#160;<b>- เนื้อที่ที่ดินที่เช่า</b></td>
+                        <td style="border : 1px solid black; padding: 5px;">${object.agreement_id.get_rental_area() or '-'}</td>
                     </tr>
                     <tr>
                         <td style="border : 1px solid black; padding: 5px;"></td>
-                        <td style="border : 1px solid black; padding: 5px;">&#160;&#160;&#160;&#160;&#160;<b>- เนื้อที่สิ่งปลูกสร้าง</b> (ระบุรวม)</td>
+                        <td style="border : 1px solid black; padding: 5px;">&#160;&#160;&#160;&#160;&#160;<b>- เนื้อที่สิ่งปลูกสร้าง</b></td>
                         <td style="border : 1px solid black; padding: 5px;">${object.agreement_id.get_rental_building_area() or '-'}</td>
                     </tr>
                     <tr>
@@ -416,13 +469,17 @@ ${object.agreement_id.filter_lines(value_type='security_deposit') and '{0:,.2f}'
                         <td style="border : 1px solid black; padding: 5px;"><b>10.</b></td>
                         <td style="border : 1px solid black; padding: 5px;"><b>วันชำระค่าเช่า</b></td>
                         <td style="border : 1px solid black; padding: 5px;">
-% if not object.agreement_id.is_payment_installment:
-    ชำระภายในวันที่ ${object.agreement_id.payment_due_date and '%s %s %s' % (object.agreement_id.payment_due_date.strftime('%d').lstrip('0'), object.agreement_id.trans_months(object.agreement_id.payment_due_date.strftime('%m')), (object.agreement_id.payment_due_date + relativedelta(years=543)).strftime('%Y')) or '-'}
+ชำระภายในวันที่ 
+% if object.agreement_id.payment_type == 'full_paid':
+    ${object.agreement_id.payment_date and '%s %s %s' % (object.agreement_id.payment_date.strftime('%d').lstrip('0'), object.agreement_id.trans_months(object.agreement_id.payment_date.strftime('%m')), (object.agreement_id.payment_date + relativedelta(years=543)).strftime('%Y')) or '-'}
 % endif
-% if object.agreement_id.is_payment_installment:
-    % for line in object.agreement_id.payment_installment_ids:
-        งวดที่ ${line.installment or '-'} ชำระภายในวันที่ ${line.payment_due_date and '%s %s %s' % (line.payment_due_date.strftime('%d').lstrip('0'), object.agreement_id.trans_months(line.payment_due_date.strftime('%m')), (line.payment_due_date + relativedelta(years=543)).strftime('%Y')) or '-'}<br/>
-    % endfor
+% if object.agreement_id.payment_type == 'installment':
+    % if object.agreement_id.recurring_rule_type == 'monthly':
+        ${object.agreement_id.payment_every_days or '-'} ของทุกงวด
+    % endif
+    % if object.agreement_id.recurring_rule_type == 'yearly':
+        ${object.agreement_id.payment_every_days or '-'} เดือน ${object.agreement_id.trans_months(object.agreement_id.payment_every_months) or '-'} ของทุกงวด
+    % endif
 % endif
                         </td>
                     </tr>
@@ -437,17 +494,22 @@ ${object.agreement_id.filter_lines(value_type='security_deposit') and '{0:,.2f}'
                     </tr>
                     <tr>
                         <td style="border : 1px solid black; padding: 5px;"></td>
-                        <td style="border : 1px solid black; padding: 5px;">&#160;&#160;&#160;&#160;&#160;<b>- ค่าเช่า${object.agreement_id.trans_recurring(object.agreement_id.recurring_rule_type)}</b><br/>&#160;&#160;&#160;&#160;&#160;&#160;&#160;จำนวนเงินรวม ${'{0:,.2f}'.format(sum(object.agreement_id.filter_lines(value_type='rent').mapped('lst_price')))} บาท</td>
+                        <td style="border : 1px solid black; padding: 5px;text-align: left;">
+&#160;&#160;&#160;&#160;&#160;<b>- ค่าเช่า${object.agreement_id.payment_type == 'installment' and object.agreement_id.trans_recurring(object.agreement_id.recurring_rule_type) or ''}</b><br/>
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;จำนวนเงินรวมต่องวด ${'{0:,.2f}'.format(sum(object.agreement_id.filter_lines(value_type='rent').mapped('lst_price')))} บาท
+                        </td>
                         <td style="border : 1px solid black; padding: 5px;">
     % for line in object.agreement_id.filter_lines(value_type='rent'):
-        % if line.agreement_id.recurring_rule_type == 'daily':
-            ${loop.index}. โฉนดที่ดินเลขที่ ${line.product_id.title_dead_no or '-'} ค่าเช่ารายวัน วันละ ${'{0:,.2f}'.format(line.lst_price)} บาท <br/>
+        % if line.agreement_id.payment_type == 'full_paid':
+            ${loop.index}. โฉนดที่ดินเลขที่ ${line.product_id.title_deed_no or '-'} ค่าเช่า ${'{0:,.2f}'.format(line.lst_price)} บาท<br/>
         % endif
-        % if line.agreement_id.recurring_rule_type == 'monthly':
-            ${loop.index}. โฉนดที่ดินเลขที่ ${line.product_id.title_dead_no or '-'} ค่าเช่ารายเดือน เดือนละ ${'{0:,.2f}'.format(line.lst_price)} บาท<br/>
-        % endif
-        % if line.agreement_id.recurring_rule_type == 'yearly':
-            ${loop.index}. โฉนดที่ดินเลขที่ ${line.product_id.title_dead_no or '-'} ค่าเช่ารายปี ปีละ ${'{0:,.2f}'.format(line.lst_price)} บาท<br/>
+        % if line.agreement_id.payment_type == 'installment':
+            % if line.agreement_id.recurring_rule_type == 'monthly':
+                ${loop.index}. โฉนดที่ดินเลขที่ ${line.product_id.title_deed_no or '-'} ค่าเช่ารายเดือน งวดละ ${'{0:,.2f}'.format(line.lst_price)} บาท<br/>
+            % endif
+            % if line.agreement_id.recurring_rule_type == 'yearly':
+                ${loop.index}. โฉนดที่ดินเลขที่ ${line.product_id.title_deed_no or '-'} ค่าเช่ารายปี งวดละ ${'{0:,.2f}'.format(line.lst_price)} บาท<br/>
+            % endif
         % endif
     % endfor
                         </td>
@@ -484,6 +546,50 @@ ${object.agreement_id.filter_lines(value_type='security_deposit') and '{0:,.2f}'
                     </tr>
                 </tfoot>
             </table>
+        </field>
+    </record>
+
+    <record id="agreement_section_building_5" model="agreement.section">
+        <field name="name">เอกสารแนบท้ายสัญญาเงื่อนไขการเช่า สัญญาเช่าที่ดินและสิ่งปลูกสร้าง (แผนผังโฉนดที่ดิน)</field>
+        <field name="sequence">50</field>
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_template_2"/>
+        <field name="content" type="html">
+            <div>
+                % for line in object.agreement_id.filter_lines(value_type='rent'):
+                    % if line.product_id.map:
+                        <table style="width: 100%;page-break-before: always;text-indent: 0px;">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:center;">
+                                        เอกสารแนบท้ายสัญญารายละเอียดและเงื่อนไขการเช่า<br/>${object.agreement_id.lessor_id.name or '&#160;&#160;&#160;'} หมายเลข ${object.agreement_id.code or '&#160;&#160;&#160;'}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <img style="width:100%;" src="data:image/jpeg;base64,${line.product_id.map.decode('ascii') or ''}" alt="Map"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td style="text-align:center;">
+                                        <br/>
+                                        <br/>
+                                        <div style="display: inline-block;margin-right: 40px;">
+                                            ลงชื่อ.....................................................ผู้ให้เช่า<br/>( ${object.agreement_id.lessor_id and object.agreement_id.lessor_id.name or '.....................................................'} )
+                                        </div>
+                                        <div style="display: inline-block;margin-left: 40px;">
+                                            ลงชื่อ.....................................................ผู้เช่า<br/>( ${object.agreement_id.partner_id and  object.agreement_id.partner_id.name or '.....................................................'} )
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    % endif
+                % endfor
+            </div>
         </field>
     </record>
 </odoo>
