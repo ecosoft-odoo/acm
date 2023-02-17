@@ -10,3 +10,9 @@ class AccountAnalyticAccount(models.Model):
     income_type_id = fields.Many2one(
         required=False,
     )
+    recurring_rule_type = fields.Selection(
+        selection=[
+            ('monthly', 'Month(s)'),
+            ('yearly', 'Year(s)'),
+        ],
+    )

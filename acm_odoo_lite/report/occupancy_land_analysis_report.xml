@@ -1,0 +1,79 @@
+<odoo>
+
+    <!-- Report -->
+    <record id="occupancy_land_analysis_report_tree_view" model="ir.ui.view">
+        <field name="name">occupancy.land.analysis.report.tree.view</field>
+        <field name="model">occupancy.land.analysis.report</field>
+        <field name="arch" type="xml">
+            <tree string="Occupancy Land Analysis Report" create="0" edit="0" delete="0">
+                <field name="product_id"/>
+                <field name="lessor"/>
+                <field name="total_land_area_gla"/>
+                <field name="total_land_area_nla"/>
+                <field name="rented_land_area"/>
+                <field name="rented_land_percent"/>
+                <field name="remaining_land_area"/>
+                <field name="total_building_area"/>
+                <field name="rented_building_area"/>
+                <field name="rented_building_percent"/>
+                <field name="remaining_building_area"/>
+                <field name="number_of_lessee"/>
+                <field name="number_of_agreement"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="occupancy_land_analysis_report_search_view" model="ir.ui.view">
+        <field name="name">occupancy.land.analysis.report.search.view</field>
+        <field name="model">occupancy.land.analysis.report</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="product_id"/>
+                <field name="lessor"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="occupancy_land_analysis_report_action" model="ir.actions.act_window">
+        <field name="name">Occupancy - Land with Building</field>
+        <field name="res_model">occupancy.land.analysis.report</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+    <!-- Wizard -->
+    <record id="occupancy_land_analysis_report_wizard_view" model="ir.ui.view">
+        <field name="name">occupancy.land.analysis.report.wizard</field>
+        <field name="model">occupancy.land.analysis.report.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="at_date"/>
+                    </group>
+                    <group/>
+                </group>
+                <footer>
+                    <button name="view_report" type="object" string="View" class="oe_highlight"/>
+                    <button special="cancel" class="oe_link" string="Cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="occupancy_land_analysis_report_wizard_action" model="ir.actions.act_window">
+        <field name="name">Occupancy - Land with Building</field>
+        <field name="res_model">occupancy.land.analysis.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="occupancy_land_analysis_report_wizard_view"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem
+        name="Occupancy - Land with Building"
+        id="occupancy_land_analysis_report_menu"
+        sequence="30"
+        parent="agreement_legal.agreement_reporting"
+        action="occupancy_land_analysis_report_wizard_action"/>
+
+</odoo>

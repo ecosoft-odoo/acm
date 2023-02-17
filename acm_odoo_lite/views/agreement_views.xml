@@ -13,6 +13,9 @@
             <field name="goods_type" position="attributes">
                 <attribute name="placeholder">รายละเอียดการใช้ประโยชน์</attribute>
             </field>
+            <group name="partner_left" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </group>
             <group name="company" position="attributes">
                 <attribute name="invisible">1</attribute>
             </group>
@@ -29,13 +32,13 @@
                     </div>
                 </group>
             </group>
-            <group name="contact_right" position="after">
+            <!-- <group name="contact_right" position="after">
                 <group name="contact_right" string="Primary Contact">
                     <field name="lessor_contact_id" domain="[('parent_id', '=', lessor_id)]" nolabel="1"/>
                     <field name="lessor_contact_phone" widget="phone" readonly="1" nolabel="1"/>
                     <field name="lessor_contact_email" widget="email" readonly="1" nolabel="1"/>
                 </group>
-            </group>
+            </group> -->
             <group name="company_witness" position="after">
                 <group name="lessor_witness" string="Witness">
                     <field name="lessor_witness" nolabel="1" placeholder="พยานผู้ให้เช่า"/>
@@ -50,6 +53,24 @@
             <xpath expr="//field[@name='line_ids']/tree/field[@name='date_end']" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>
+            <xpath expr="//field[@name='line_ids']/tree/field[@name='qty']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='line_ids']/tree/field[@name='uom_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='line_ids']/tree/field[@name='name']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='line_ids']/tree/field[@name='name']" position="after">
+                <field name="value_type" invisible="1"/>
+                <field name="remaining_land"/>
+                <field name="rai" attrs="{'readonly': [('value_type', '!=', 'rent')]}"/>
+                <field name="ngan" attrs="{'readonly': [('value_type', '!=', 'rent')]}"/>
+                <field name="square_wa" attrs="{'readonly': [('value_type', '!=', 'rent')]}"/>
+                <field name="remaining_building"/>
+                <field name="square_meter" attrs="{'readonly': [('value_type', '!=', 'rent')]}"/>
+            </xpath>
             <xpath expr="//field[@name='special_terms']/.." position="attributes">
                 <attribute name="string">Rental Condition Appendix (Addons)</attribute>
             </xpath>
@@ -62,18 +83,20 @@
             <field name="name" position="attributes">
                 <attribute name="attrs">{'readonly': ['|', ('is_template', '=', False), ('state', '=', 'active')]}</attribute>
             </field>
-            <group name="termdates_left" position="after">
-                <group string="Installment" attrs="{'invisible': [('is_template', '=', True)]}">
-                    <field name="is_payment_installment"/>
-                    <field name="payment_due_date" attrs="{'invisible': [('is_payment_installment', '=', True)], 'required': [('is_payment_installment', '=', False)]}" placeholder="วันครบกำหนดชำระค่าเช่า"/>
-                    <field name="payment_installment_ids" attrs="{'invisible': [('is_payment_installment', '=', False)]}">
-                        <tree editable="bottom">
-                            <field name="installment"/>
-                            <field name="payment_due_date" placeholder="วันครบกำหนดชำระค่าเช่า"/>
-                        </tree>
-                    </field>
-                </group>
-            </group>
+            <xpath expr="//field[@name='recurring_interval']/.." position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <label for="recurring_interval" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </label>
+            <field name="end_date" position="after">
+                <field name="payment_type" attrs="{'required': [('is_template', '=', False)], 'invisible': [('is_template', '!=', False)]}"/>
+                <field name="payment_date" placeholder="วันที่จ่าย" attrs="{'required': [('payment_type', '=', 'full_paid')], 'invisible': [('payment_type', '!=', 'full_paid')]}"/>
+                <field name="installment_number" placeholder="จำนวนงวดจ่าย" attrs="{'required': [('payment_type', '=', 'installment')], 'invisible': [('payment_type', '!=', 'installment')]}"/>
+                <field name="recurring_rule_type" string="Payment Every" attrs="{'required': [('payment_type', '=', 'installment')], 'invisible': [('payment_type', '!=', 'installment')]}"/>
+                <field name="payment_every_days" attrs="{'required': [('payment_type', '=', 'installment')], 'invisible': [('payment_type', '!=', 'installment')]}"/>
+                <field name="payment_every_months" attrs="{'required': [('payment_type', '=', 'installment'), ('recurring_rule_type', '=', 'yearly')], 'invisible': ['|', ('payment_type', '!=', 'installment'), ('recurring_rule_type', '!=', 'yearly')]}"/>
+            </field>
         </field>
     </record>
     <record id="partner_agreement_list_view" model="ir.ui.view">
@@ -111,6 +134,12 @@
             <filter name="group_group_id" position="attributes">
                 <attribute name="invisible">1</attribute>
             </filter>
+            <filter name="group_partner_id" position="after">
+                <filter name="group_lessor_id" string="Lessor" icon="terp-partner" context="{'group_by':'lessor_id'}"/>
+            </filter>
+            <field name="partner_id" position="after">
+                <field name="lessor_id"/>
+            </field>
         </field>
     </record>
 </odoo>

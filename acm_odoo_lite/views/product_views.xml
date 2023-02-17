@@ -33,25 +33,100 @@
                         <group/>
                     </group>
                     <group attrs="{'invisible': [('value_type', '!=', 'rent')]}">
-                        <group name="leased_land" string="Leased Land">
-                            <field name="title_dead_no" placeholder="โฉนดที่ดินเลขที่"/>
-                            <field name="parcel_no" placeholder="เลขที่ดิน"/>
-                            <field name="vol" placeholder="เล่ม"/>
-                            <field name="page" placeholder="หน้า"/>
-                            <field name="sub_distinct_name" placeholder="ตำบล"/>
-                            <field name="distinct" placeholder="อำเภอ"/>
-                            <field name="province" placeholder="จังหวัด"/>
+                        <group name="title_deed_information" string="Title Deed Information" style="width: 100%;">
+                            <group>
+                                <field name="title_deed_no" placeholder="โฉนดที่ดินเลขที่"/>
+                                <field name="parcel_no" placeholder="เลขที่ดิน"/>
+                                <field name="vol" placeholder="เล่ม"/>
+                                <field name="page" placeholder="หน้า"/>
+                            </group>
+                            <group>
+                                <field name="sub_distinct_name" placeholder="ตำบล"/>
+                                <field name="distinct" placeholder="อำเภอ"/>
+                                <field name="province" placeholder="จังหวัด"/>
+                                <field name="map" widget="image" class="oe_avatar"/>
+                            </group>
                         </group>
-                        <group name="leased_land_area" string="Leased Land Area">
+                        <group name="title_deed_area_gla" string="Title Deed Area (GLA)">
+                            <h3 style="color: red;">Land</h3>
                             <field name="rai" placeholder="ไร่"/>
                             <field name="ngan" placeholder="งาน"/>
                             <field name="square_wa" placeholder="ตารางวา"/>
-                            <field name="has_building"/>
-                            <field name="square_meter" attrs="{'invisible': [('has_building', '=', False)]}" placeholder="ตารางเมตร"/>
+                            <h3 style="color: red;">Building</h3>
+                            <field name="square_meter" placeholder="ตารางเมตร"/>
+                        </group>
+                        <group name="title_deed_area_nla" string="Title Deed Area (NLA)">
+                            <h3 style="color: red;">Land</h3>
+                            <field name="rai2" placeholder="ไร่"/>
+                            <field name="ngan2" placeholder="งาน"/>
+                            <field name="square_wa2" placeholder="ตารางวา"/>
+                            <field name="remaining_land"/>
+                            <h3 style="color: red;">Building</h3>
+                            <field name="square_meter2" placeholder="ตารางเมตร"/>
+                            <field name="remaining_building"/>
                         </group>
                     </group>
                 </page>
             </page>
         </field>
+    </record>
+
+    <record id="product_template_tree_view" model="ir.ui.view">
+        <field name="name">product.template.product.tree</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_tree_view"/>
+        <field name="arch" type="xml">
+            <field name="sequence" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="default_code" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="list_price" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="standard_price" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="categ_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="type" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="uom_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="name" position="after">
+                <field name="rai" string="Rai (GLA)"/>
+                <field name="ngan" string="Ngan (GLA)"/>
+                <field name="square_wa" string="Square Wa (GLA)"/>
+                <field name="square_meter" string="Square Meter (GLA)"/>
+                <field name="rai2" string="Rai (NLA)"/>
+                <field name="ngan2" string="Ngan (NLA)"/>
+                <field name="square_wa2" string="Square Wa (NLA)"/>
+                <field name="remaining_land"/>
+                <field name="square_meter2" string="Square Meter (NLA)"/>
+                <field name="remaining_building"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_stock_product_template_tree" model="ir.ui.view">
+        <field name="name">product.template.stock.tree.inherit</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="stock.view_stock_product_template_tree"/>
+        <field name="arch" type="xml">
+            <field name="qty_available" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="virtual_available" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+        </field>
+    </record>
+
+    <record id="product.product_template_action" model="ir.actions.act_window">
+        <field name="view_mode">tree,form</field>
     </record>
 </odoo>

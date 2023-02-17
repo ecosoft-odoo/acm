@@ -1,0 +1,11 @@
+<odoo>
+    <record id="acm.historical_report_menu" model="ir.ui.menu">
+        <field name="active">False</field>
+    </record>
+    <record id="acm.occupancy_analysis_report_menu" model="ir.ui.menu">
+        <field name="active">False</field>
+    </record>
+    <record id="acm.rental_rate_analysis_report_menu" model="ir.ui.menu">
+        <field name="active">False</field>
+    </record>
+</odoo>
