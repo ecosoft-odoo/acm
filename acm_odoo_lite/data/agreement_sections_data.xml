@@ -143,7 +143,7 @@
                         <td style="border : 1px solid black; padding: 5px;">&#160;&#160;&#160;&#160;&#160;<b>- ที่ดินที่เช่า</b></td>
                         <td style="border : 1px solid black; padding: 5px;">
 % for line in object.agreement_id.filter_lines(value_type='rent'):
-    ${loop.index}. โฉนดที่ดินเลขที่ ${line.product_id.title_deed_no or '-'} เลขที่ดิน ${line.product_id.parcel_no or '-'} เล่ม ${line.product_id.vol or '-'} หน้า ${line.product_id.page or '-'} ตำบล ${line.product_id.sub_distinct_name or '-'} อำเภอ ${line.product_id.distinct or '-'} จังหวัด ${line.product_id.province or '-'}<br/>
+    ${loop.index}. โฉนดที่ดินเลขที่ ${line.product_id.title_deed_no or '-'} เลขที่ดิน ${line.product_id.parcel_no or '-'} เล่ม ${line.product_id.vol or '-'} หน้า ${line.product_id.page or '-'} ตำบล ${line.product_id.sub_district or '-'} อำเภอ ${line.product_id.district or '-'} จังหวัด ${line.product_id.province or '-'}<br/>
 % endfor
                         </td>
                     </tr>
@@ -436,7 +436,7 @@ ${object.agreement_id.filter_lines(value_type='security_deposit') and '{0:,.2f}'
                         <td style="border : 1px solid black; padding: 5px;">&#160;&#160;&#160;&#160;&#160;<b>- ที่ดินที่เช่า</b></td>
                         <td style="border : 1px solid black; padding: 5px;">
 % for line in object.agreement_id.filter_lines(value_type='rent'):
-    ${loop.index}. โฉนดที่ดินเลขที่ ${line.product_id.title_deed_no or '-'} พร้อมสิ่งปลูกสร้าง เลขที่ดิน ${line.product_id.parcel_no or '-'} เล่ม ${line.product_id.vol or '-'} หน้า ${line.product_id.page or '-'} ตำบล ${line.product_id.sub_distinct_name or '-'} อำเภอ ${line.product_id.distinct or '-'} จังหวัด ${line.product_id.province or '-'}<br/>
+    ${loop.index}. โฉนดที่ดินเลขที่ ${line.product_id.title_deed_no or '-'} พร้อมสิ่งปลูกสร้าง เลขที่ดิน ${line.product_id.parcel_no or '-'} เล่ม ${line.product_id.vol or '-'} หน้า ${line.product_id.page or '-'} ตำบล ${line.product_id.sub_district or '-'} อำเภอ ${line.product_id.district or '-'} จังหวัด ${line.product_id.province or '-'}<br/>
 % endfor
                         </td>
                     </tr>

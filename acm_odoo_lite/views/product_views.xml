@@ -41,8 +41,8 @@
                                 <field name="page" placeholder="หน้า"/>
                             </group>
                             <group>
-                                <field name="sub_distinct_name" placeholder="ตำบล"/>
-                                <field name="distinct" placeholder="อำเภอ"/>
+                                <field name="sub_district" placeholder="ตำบล"/>
+                                <field name="district" placeholder="อำเภอ"/>
                                 <field name="province" placeholder="จังหวัด"/>
                                 <field name="map" widget="image" class="oe_avatar"/>
                             </group>

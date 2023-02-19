@@ -6,7 +6,8 @@
         <field name="model">occupancy.land.analysis.report</field>
         <field name="arch" type="xml">
             <tree string="Occupancy Land Analysis Report" create="0" edit="0" delete="0">
-                <field name="product_id"/>
+                <field name="product_name"/>
+                <field name="district"/>
                 <field name="lessor"/>
                 <field name="total_land_area_gla"/>
                 <field name="total_land_area_nla"/>
@@ -28,8 +29,11 @@
         <field name="model">occupancy.land.analysis.report</field>
         <field name="arch" type="xml">
             <search>
-                <field name="product_id"/>
+                <field name="product_name"/>
                 <field name="lessor"/>
+                <field name="district"/>
+                <filter name="group_lessor" string="Lessor" context="{'group_by':'lessor'}"/>
+                <filter name="group_district" string="District" context="{'group_by':'district'}"/>
             </search>
         </field>
     </record>
