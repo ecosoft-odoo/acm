@@ -12,7 +12,7 @@ class AccountAnalyticAccount(models.Model):
     )
     recurring_rule_type = fields.Selection(
         selection=[
-            ('monthly', 'Month(s)'),
-            ('yearly', 'Year(s)'),
+            ("monthly", "Month(s)"),
+            ("yearly", "Year(s)"),
         ],
     )

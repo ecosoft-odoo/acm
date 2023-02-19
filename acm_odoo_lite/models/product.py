@@ -21,11 +21,11 @@ class ProductTemplate(models.Model):
     page = fields.Char(
         string="Page",
     )
-    sub_distinct_name = fields.Char(
-        string="Sub-District Name",
+    sub_district = fields.Char(
+        string="Sub-District",
     )
-    distinct = fields.Char(
-        string="Distinct",
+    district = fields.Char(
+        string="District",
     )
     province = fields.Char(
         string="Province",

@@ -15,14 +15,14 @@ class Agreement(models.Model):
     lessor_id = fields.Many2one(
         comodel_name="res.partner",
         string="Lessor",
-        states={'active': [('readonly', True)]},
+        states={"active": [("readonly", True)]},
         index=True,
         ondelete="restrict",
     )
     lessor_contact_id = fields.Many2one(
         comodel_name="res.partner",
         string="Lessor Contact",
-        states={'active': [('readonly', True)]},
+        states={"active": [("readonly", True)]},
         index=True,
         ondelete="restrict",
     )
@@ -36,7 +36,7 @@ class Agreement(models.Model):
     )
     lessor_witness = fields.Char(
         string="Lessor Witness",
-        states={'active': [('readonly', True)]},
+        states={"active": [("readonly", True)]},
     )
     company_id = fields.Many2one(
         string="Company",
@@ -59,18 +59,18 @@ class Agreement(models.Model):
         states={"active": [("readonly", False)]},
     )
     is_contract_create = fields.Boolean(
-        compute='_compute_is_contract_create',
+        compute="_compute_is_contract_create",
     )
     recurring_interval = fields.Integer(
         required=False,
     )
     recurring_rule_type = fields.Selection(
         selection=[
-            ('monthly', 'Month(s)'),
-            ('yearly', 'Year(s)'),
+            ("monthly", "Month(s)"),
+            ("yearly", "Year(s)"),
         ],
         required=False,
-        states={'active': [('readonly', False)]},
+        states={"active": [("readonly", False)]},
     )
     payment_type = fields.Selection(
         selection=[
@@ -188,17 +188,17 @@ class Agreement(models.Model):
                 raise UserError(_("Agreement's state must be draft."))
             # Agreement must have products/services
             if not rec.line_ids:
-                raise UserError(_('Please add Products/Services.'))
+                raise UserError(_("Please add Products/Services."))
             # Agreement must have rental product
             if not rec.line_ids.filtered(lambda l: l.product_id.value_type == "rent"):
-                raise UserError(_('Please add rental product.'))
+                raise UserError(_("Please add rental product."))
         return True
 
     @api.model
     def _validate_rent_product_dates(self, product_lines):
         return True
 
-    @api.constrains('line_ids')
+    @api.constrains("line_ids")
     def _check_line_ids(self):
         return
 
