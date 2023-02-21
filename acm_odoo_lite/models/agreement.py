@@ -218,7 +218,7 @@ class Agreement(models.Model):
             str_total_square_wa = str(int(total_square_wa))
         else:
             str_total_square_wa = "{0:,.2f}".format(total_square_wa)
-        return "{} ไร {} งาน {} ตารางวา".format(total_rai, total_ngan, str_total_square_wa)
+        return "{} ไร่ {} งาน {} ตารางวา".format(total_rai, total_ngan, str_total_square_wa)
 
     def get_rental_building_area(self):
         self.ensure_one()
