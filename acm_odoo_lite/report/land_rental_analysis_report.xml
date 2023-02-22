@@ -25,6 +25,25 @@
         </field>
     </record>
 
+    <record id="land_rental_analysis_report_search_view" model="ir.ui.view">
+        <field name="name">land.rental.analysis.report.search.view</field>
+        <field name="model">land.rental.analysis.report</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="agreement"/>
+                <field name="lessee"/>
+                <field name="product"/>
+                <field name="district"/>
+                <field name="land_use"/>
+                <filter name="group_agreement" string="Agreement" context="{'group_by':'agreement'}"/>
+                <filter name="group_lessee" string="Lessee" context="{'group_by':'lessee'}"/>
+                <filter name="group_product" string="Product" context="{'group_by':'product'}"/>
+                <filter name="group_district" string="District" context="{'group_by':'district'}"/>
+                <filter name="group_land_use" string="Land Use" context="{'group_by':'land_use'}"/>
+            </search>
+        </field>
+    </record>
+
     <record id="land_rental_analysis_report_action" model="ir.actions.act_window">
         <field name="name">Land Rental Analysis</field>
         <field name="res_model">land.rental.analysis.report</field>
@@ -61,7 +80,7 @@
     </record>
 
     <menuitem
-        name="Lend Rental Analysis"
+        name="Land Rental Analysis"
         id="land_rental_analysis_report_menu"
         sequence="40"
         parent="agreement_legal.agreement_reporting"
