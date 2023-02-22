@@ -136,18 +136,18 @@ class OccupancyLandAnalysisReport(models.TransientModel):
 
 
 class OccupancyLandAnalysisReportWizard(models.TransientModel):
-    _name = 'occupancy.land.analysis.report.wizard'
-    _description = 'Occupancy Land Analysis Report Wizard'
+    _name = "occupancy.land.analysis.report.wizard"
+    _description = "Occupancy Land Analysis Report Wizard"
 
     at_date = fields.Date(
-        string='At Date',
+        string="At Date",
         required=True,
         default=fields.Date.context_today,
     ) 
     report_ids = fields.One2many(
-        comodel_name='occupancy.land.analysis.report',
-        inverse_name='wizard_id',
-        string='Report',
+        comodel_name="occupancy.land.analysis.report",
+        inverse_name="wizard_id",
+        string="Report",
     )
 
     @api.multi
@@ -178,7 +178,7 @@ class OccupancyLandAnalysisReportWizard(models.TransientModel):
                 left join res_partner rp on a.partner_id = rp.id
                 left join res_partner ls on a.lessor_id = ls.id
                 left join product_product pp on al.product_id = pp.id
-                where a.is_template is False and (a.state = 'active' or (a.state = 'inactive' and a.inactive_reason <> 'cancel')) and 
+                where a.is_template = False and (a.state = 'active' or (a.state = 'inactive' and a.inactive_reason <> 'cancel')) and
                     '{}' >= a.start_date and '{}' <= (case when a.termination_date is not null then a.termination_date else a.end_date end)
                 group by pp.id
             ) sub on pp.id = sub.id
@@ -192,9 +192,9 @@ class OccupancyLandAnalysisReportWizard(models.TransientModel):
         # Create Report
         self._cr.execute(self._get_sql())
         res = self._cr.dictfetchall()
-        report = self.env['occupancy.land.analysis.report'].create(res)
+        report = self.env["occupancy.land.analysis.report"].create(res)
         # View Report
-        action = self.env.ref('acm_odoo_lite.occupancy_land_analysis_report_action')
+        action = self.env.ref("acm_odoo_lite.occupancy_land_analysis_report_action")
         vals = action.read()[0]
-        vals['domain'] = [('wizard_id', '=', self.id)]
+        vals["domain"] = [("wizard_id", "=", self.id)]
         return vals
