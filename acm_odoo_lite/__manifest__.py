@@ -22,5 +22,6 @@
         "wizards/agreement_create_contract_wizards.xml",
         "wizards/agreement_extension_wizards.xml",
         "report/occupancy_land_analysis_report.xml",
+        "report/land_rental_analysis_report.xml",
     ]
 }

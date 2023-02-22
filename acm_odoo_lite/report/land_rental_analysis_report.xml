@@ -1,0 +1,69 @@
+<odoo>
+
+    <!-- Report -->
+    <record id="land_rental_analysis_report_tree_view" model="ir.ui.view">
+        <field name="name">land.rental.analysis.report.tree.view</field>
+        <field name="model">land.rental.analysis.report</field>
+        <field name="arch" type="xml">
+            <tree string="Land Rental Analysis Report" create="0" edit="0" delete="0">
+                <field name="agreement"/>
+                <field name="lessee"/>
+                <field name="product"/>
+                <field name="district"/>
+                <field name="land_use"/>
+                <field name="land_nla"/>
+                <field name="land_rented"/>
+                <field name="percent_of_nla"/>
+                <field name="building_rented"/>
+                <field name="monthly_rent_collected_land"/>
+                <field name="land_monthly_rental_rate"/>
+                <field name="monthly_rent_collected_building"/>
+                <field name="building_monthly_rental_rate"/>
+                <field name="agreement_length"/>
+                <field name="estimated_contractual_rental_revenue"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="land_rental_analysis_report_action" model="ir.actions.act_window">
+        <field name="name">Land Rental Analysis</field>
+        <field name="res_model">land.rental.analysis.report</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+    <!-- Wizard -->
+    <record id="land_rental_analysis_report_wizard_view" model="ir.ui.view">
+        <field name="name">land.rental.analysis.report.wizard</field>
+        <field name="model">land.rental.analysis.report.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="at_date"/>
+                    </group>
+                    <group/>
+                </group>
+                <footer>
+                    <button name="view_report" type="object" string="View" class="oe_highlight"/>
+                    <button special="cancel" class="oe_link" string="Cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="land_rental_analysis_report_wizard_action" model="ir.actions.act_window">
+        <field name="name">Land Rental Analysis</field>
+        <field name="res_model">land.rental.analysis.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="land_rental_analysis_report_wizard_view"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem
+        name="Lend Rental Analysis"
+        id="land_rental_analysis_report_menu"
+        sequence="40"
+        parent="agreement_legal.agreement_reporting"
+        action="land_rental_analysis_report_wizard_action"/>
+</odoo>
