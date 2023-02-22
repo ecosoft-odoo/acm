@@ -34,7 +34,7 @@ class LandRentalAnalysisReport(models.TransientModel):
         digits=(16, 2),
     )
     land_rented = fields.Float(
-        string="Land Rented",
+        string="Land Rented (SQW)",
         digits=(16, 2),
     )
     percent_of_nla = fields.Float(
@@ -63,11 +63,38 @@ class LandRentalAnalysisReport(models.TransientModel):
     estimated_contractual_rental_revenue = fields.Float(
         string="Estimated Contractual Rental Revenue",
     )
+    product_id = fields.Many2one(
+        comodel_name="product.template",
+        string="Product ID",
+    )
     wizard_id = fields.Many2one(
         comodel_name="land.rental.analysis.report.wizard",
         string="Wizard",
         index=True,
     )
+
+    @api.model
+    def read_group(self, domain, fields, groupby, offset=0, limit=None,
+                   orderby=False, lazy=True):
+        res = super(LandRentalAnalysisReport, self).read_group(
+            domain, fields, groupby, offset=offset, limit=limit,
+            orderby=orderby, lazy=lazy)
+        for line in res:
+            if "__domain" in line:
+                # Land NLA (SQW)
+                report = self.search(line["__domain"])
+                product = report.mapped('product_id')
+                line["land_nla"] = sum([(p.rai2 * 400) + (p.ngan2 * 100) + p.square_wa2 for p in product])
+                # % of NLA
+                line["percent_of_nla"] = line["land_rented"] * 100 / (line["land_nla"] or 1)
+                # Land Monthly Rental Rate
+                line["land_monthly_rental_rate"] = line["monthly_rent_collected_land"] / (sum([r.land_rented for r in report if not r.building_rented]) or 1)
+                # Land and Building Monthly Rental Rate
+                line["building_monthly_rental_rate"] = line["monthly_rent_collected_building"] / (line["building_rented"] or 1)
+                # Agreement Length (Months)
+                agreement_length = sum([int(r.agreement_length) for r in report if r.agreement_length]) / (len(report) or 1)
+                line["agreement_length"] = "{:,.2f}".format(agreement_length)
+        return res
 
 
 class LandRentalAnalysisReportWizard(models.TransientModel):
@@ -97,7 +124,7 @@ class LandRentalAnalysisReportWizard(models.TransientModel):
                 case when sub.building_rented <> 0 then sub.estimated_contractual_rental_revenue / coalesce(nullif(sub.agreement_length, 0), 1) / coalesce(nullif(sub.building_rented, 0), 1) else 0 end as building_monthly_rental_rate
             from (
                 select 
-                    a.name as agreement, rp.name as lessee, pt.name as product, pt.sub_district, pt.district, pt.province,
+                    a.name as agreement, rp.name as lessee, pt.id as product_id, pt.name as product, pt.sub_district, pt.district, pt.province,
                     gc.name as land_use, (400 * pt.rai2) + (100 * pt.ngan2) + pt.square_wa2 as land_nla,
                     (400 * al.rai) + (100 * al.ngan) + al.square_wa as land_rented,
                     al.square_meter as building_rented, a.installment_number * al.lst_price as estimated_contractual_rental_revenue,
