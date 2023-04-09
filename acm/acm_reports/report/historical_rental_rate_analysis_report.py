@@ -97,8 +97,16 @@ class HistoricalRentalRateAnalysisReport(models.TransientModel):
                     line['rent_period_%s' % str(i+1)] = \
                         sum(report.mapped('rent_period_%s' % str(i+1)))
                 line['lump_sum_rent'] = sum(report.mapped('lump_sum_rent'))
-                line['average_rental_rate'] = \
-                    sum(report.mapped('average_rental_rate')) / len(report)
+                # Compute Avarage Rental Rate / Sqm / Month
+                total_rent_per_month = 0.0
+                for r in report:
+                    total_rent_per_month += (
+                        r.rent_period_1 + \
+                        r.rent_period_2 + \
+                        r.rent_period_3 + \
+                        r.rent_period_4 + \
+                        r.lump_sum_rent) / r.agreement_length
+                line['average_rental_rate'] = total_rent_per_month / line['area']
                 line.pop('agreement_length')
         return res
 
@@ -110,7 +118,8 @@ class HistoricalRentalRateAnalysisReport(models.TransientModel):
             -- Select column
             %s,
             DATE_PART('year', AGE(a.end_date + 1, a.start_date)) * 12 +
-            DATE_PART('month', AGE(a.end_date + 1, a.start_date)) AS
+            DATE_PART('month', AGE(a.end_date + 1, a.start_date)) +
+            ROUND(CAST(DATE_PART('day', AGE(a.end_date + 1, a.start_date)) / 30 AS NUMERIC), 2) AS
                 agreement_length
             -- From table
             FROM %s
