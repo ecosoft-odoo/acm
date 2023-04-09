@@ -11,8 +11,9 @@ class HistoricalRentalRateAnalysisReport(models.TransientModel):
     _inherit = 'historical.rental.analysis.report'
     _description = 'Historical Rental Rate Analysis Report'
 
-    agreement_length = fields.Integer(
+    agreement_length = fields.Float(
         string='Agreement Length (Months)',
+        digits=(16,2),
     )
     # Calculate Rent Period
     rent_period_1 = fields.Float(

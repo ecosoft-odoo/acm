@@ -12,8 +12,9 @@ class RentalRateAnalysisReport(models.Model):
     _description = 'Rental Rate Analysis Report'
     _auto = False
 
-    agreement_length = fields.Integer(
+    agreement_length = fields.Float(
         string='Agreement Length (Months)',
+        digits=(16,2),
     )
     # Calculate Rent Period
     rent_period_1 = fields.Float(
