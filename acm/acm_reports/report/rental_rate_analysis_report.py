@@ -102,8 +102,8 @@ class RentalRateAnalysisReport(models.Model):
                         r.rent_period_2 + \
                         r.rent_period_3 + \
                         r.rent_period_4 + \
-                        r.lump_sum_rent) / r.agreement_length
-                line['average_rental_rate'] = total_rent_per_month / line['area']
+                        r.lump_sum_rent) / (r.agreement_length or 1.0)
+                line['average_rental_rate'] = total_rent_per_month / (line['area'] or 1.0)
                 line.pop('agreement_length')
         return res
 
