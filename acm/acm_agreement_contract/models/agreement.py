@@ -7,7 +7,7 @@ from collections import namedtuple
 from dateutil.relativedelta import relativedelta
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
-from datetime import timedelta
+from datetime import timedelta, date
 import datetime
 
 
@@ -340,6 +340,15 @@ class Agreement(models.Model):
         required=True,
         index=True,
     )
+    # Active date and Inactive date fields
+    active_date = fields.Date(
+        string='Active Date',
+        readonly=True,
+    )
+    inactive_date = fields.Date(
+        string='Inactive Date',
+        readonly=True,
+    )
 
     @api.model
     def _default_company_contract_id(self):
@@ -540,7 +549,8 @@ class Agreement(models.Model):
                 rec._validate_rent_product_dates(rec.line_ids)
                 # Create agreement invoice line
                 rec._create_agreement_invoice_line()
-            rec.write({'state': 'active', })
+            rec.write({'state': 'active',
+                       'active_date': date.today()})
 
     @api.multi
     def inactive_statusbar(self):
@@ -550,7 +560,8 @@ class Agreement(models.Model):
                 raise UserError(_("Agreement's state must not be inactive."))
             contract = rec._search_contract()
             contract.write({'active': False, })
-            rec.write({'state': 'inactive', })
+            rec.write({'state': 'inactive',
+                       'inactive_date': date.today()})
 
     @api.multi
     def get_agreement_vals(self):

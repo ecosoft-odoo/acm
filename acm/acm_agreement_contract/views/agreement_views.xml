@@ -56,6 +56,8 @@
                 <field name="rental_area_delivery_date" attrs="{'invisible': [('is_template', '=', True)]}" placeholder="วันส่งมอบพื้นที่เช่า"/>
                 <field name="rental_free_start_date" attrs="{'invisible': [('is_template', '=', True)]}" placeholder="วันที่เริ่มต้นปลอดค่าเช่า"/>
                 <field name="rental_free_end_date" attrs="{'invisible': [('is_template', '=', True)]}" placeholder="วันที่สิ้นสุดปลอดค่าเช่า"/>
+                <field name="active_date" attrs="{'invisible': [('is_template', '=', True)]}" help="วันที่กด Active สัญญา"/>
+                <field name="inactive_date" attrs="{'invisible': [('is_template', '=', True)]}" help="วันที่กด Inactive สัญญา"/>
             </field>
             <field name="termination_date" position="attributes">
                 <attribute name="readonly">True</attribute>
