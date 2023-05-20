@@ -574,6 +574,7 @@ class Agreement(models.Model):
             'version': 1,
             'revision': 0,
             'state': 'draft',
+            'active_date': False,
             'parent_agreement_id': False,
             'stage_id': self.env.ref('agreement_legal.agreement_stage_new').id,
             'template_id': self.is_template and self.id or self.template_id.id,

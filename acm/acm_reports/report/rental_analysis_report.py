@@ -114,7 +114,7 @@ class RentalAnalysisReport(models.AbstractModel):
             FROM product_product pp
             LEFT JOIN product_template pt ON pp.product_tmpl_id = pt.id
             LEFT JOIN agreement a ON pp.id = a.rent_product_id AND
-            a.state = 'active'
+            a.state = 'active' AND NOW() BETWEEN a.start_date AND a.end_date
             WHERE pt.value_type = 'rent' AND pp.active IS TRUE
         """ % (self._get_sql_area_select(),
                self._get_sql_area_occupied_select())

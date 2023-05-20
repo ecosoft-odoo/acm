@@ -100,37 +100,6 @@ class HistoricalRentalAnalysisReport(models.AbstractModel):
         return res
 
     @api.model
-    def _get_agreement_ids(self):
-        """
-        Get active agreement at the selected date
-        return [agreement id]
-        """
-        # No have created invoice, this will be cancel agreement from the user error
-        cancelled_agreement = self.env["agreement"].search([("state", "=", "inactive"), ("inactive_reason", "=", "cancel")])
-        cancelled_contract = cancelled_agreement.with_context(active_test=False)._search_contract()
-        cancelled_agreement_no_contract = cancelled_agreement.filtered(lambda l: l.id not in cancelled_contract.mapped("agreement_id").ids)
-        self._cr.execute("select distinct contract_id from account_invoice where contract_id in %s", (tuple(cancelled_contract.ids), ))
-        res = self._cr.fetchall()
-        cancelled_contract_no_invoice = cancelled_contract.filtered(lambda l: l.id not in list(map(lambda l: l[0], res)))
-        cancelled_agreement_no_invoice = cancelled_contract_no_invoice.mapped("agreement_id") | cancelled_agreement_no_contract
-        # Get start date and end date of the agreement
-        # Terminated case, end date = termination date
-        self._cr.execute("""
-            SELECT id, start_date,
-            CASE WHEN termination_date IS NULL THEN end_date ELSE termination_date END AS end_date
-            FROM agreement
-            WHERE is_template = False and (state = 'active' or (state = 'inactive' and inactive_reason <> 'cancel') or (state = 'inactive' and inactive_reason = 'cancel' and id not in %s))
-        """, (tuple(cancelled_agreement_no_invoice.ids), ))
-        res = self._cr.fetchall()
-        # Get active agreement at the selected date
-        at_date = self._context.get("at_date", date.today())
-        res2 = list(filter(lambda l: l[1] <= at_date and l[2] >= at_date, res))
-        agreement_ids = list(map(lambda l: l[0], res2))
-        if len(agreement_ids) <= 1:
-            agreement_ids.extend([0, 0])
-        return agreement_ids
-
-    @api.model
     def _get_sql_area_select(self, else_value=0):
         select = """
             CASE WHEN pt.area IS NOT NULL AND pt.area <> 0
@@ -148,21 +117,28 @@ class HistoricalRentalAnalysisReport(models.AbstractModel):
 
     @api.model
     def _get_sql(self):
+        at_date = self._context.get("at_date").strftime("%Y-%m-%d")
+        at_date = "DATE('{}')".format(at_date)
         sql = """
             SELECT ROW_NUMBER() OVER(ORDER BY pp.id, a.id) AS id,
                    pt.group_id, pp.id AS product_id, a.partner_id,
-                   a.id AS agreement_id,
-                   a.goods_category_id,
-                   a.start_date,
-                   a.end_date, %s AS area, %s AS occupied_area, pt.value_type,
+                   a.id AS agreement_id, a.goods_category_id, a.start_date,
+                   a.end_date, %(area_select)s AS area, %(area_occupied_select)s AS occupied_area, pt.value_type,
                    pp.product_tmpl_id
             FROM product_product pp
             LEFT JOIN product_template pt ON pp.product_tmpl_id = pt.id
-            LEFT JOIN account_analytic_group ag ON pt.group_id = ag.id
-            LEFT JOIN agreement a ON pp.id = a.rent_product_id AND a.id IN %s
+            LEFT JOIN agreement a ON pp.id = a.rent_product_id AND
+            a.state != 'draft' AND a.active_date IS NOT NULL AND %(at_date)s BETWEEN a.start_date AND
+            (CASE
+                WHEN a.termination_date IS NOT NULL THEN a.termination_date
+                WHEN a.inactive_date IS NULL THEN a.end_date
+                ELSE a.inactive_date
+            END)
             WHERE pt.value_type = 'rent' AND pp.active IS TRUE
-            ORDER BY ag.name, pt.lock_number
-        """ % (self._get_sql_area_select(),
-               self._get_sql_area_occupied_select(),
-               str(tuple(self._get_agreement_ids())))
+        """
+        sql = sql % {
+            'area_select': self._get_sql_area_select(),
+            'area_occupied_select': self._get_sql_area_occupied_select(),
+            'at_date': at_date,
+        }
         return sql
