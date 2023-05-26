@@ -70,34 +70,34 @@ class HistoricalRentalAnalysisReport(models.AbstractModel):
         index=True,
     )
 
-    # @api.model
-    # def read_group(self, domain, fields, groupby, offset=0, limit=None,
-    #                orderby=False, lazy=True):
-    #     res = super(HistoricalRentalAnalysisReport, self).read_group(
-    #         domain, fields, groupby, offset=offset, limit=limit,
-    #         orderby=orderby, lazy=lazy)
-    #     for line in res:
-    #         if '__domain' in line:
-    #             report = self.search(line['__domain'])
-    #             # Area For Lease
-    #             self._cr.execute("""
-    #                 SELECT product_tmpl_id, area
-    #                 FROM "{}"
-    #                 WHERE id IN %s
-    #                 GROUP BY product_tmpl_id, area""".format(self._table), (
-    #                     tuple(report.ids), ))
-    #             line['area'] = sum(map(
-    #                 lambda l: l['area'], self._cr.dictfetchall()))
-    #             # Area Occupied
-    #             self._cr.execute("""
-    #                 SELECT product_tmpl_id, area
-    #                 FROM "{}"
-    #                 WHERE id IN %s AND agreement_id IS NOT NULL
-    #                 GROUP BY product_tmpl_id, area""".format(self._table), (
-    #                     tuple(report.ids), ))
-    #             line['occupied_area'] = sum(map(
-    #                 lambda l: l['area'], self._cr.dictfetchall()))
-    #     return res
+    @api.model
+    def read_group(self, domain, fields, groupby, offset=0, limit=None,
+                   orderby=False, lazy=True):
+        res = super(HistoricalRentalAnalysisReport, self).read_group(
+            domain, fields, groupby, offset=offset, limit=limit,
+            orderby=orderby, lazy=lazy)
+        for line in res:
+            if '__domain' in line:
+                report = self.search(line['__domain'])
+                # Area For Lease
+                self._cr.execute("""
+                    SELECT product_tmpl_id, area
+                    FROM "{}"
+                    WHERE id IN %s
+                    GROUP BY product_tmpl_id, area""".format(self._table), (
+                        tuple(report.ids), ))
+                line['area'] = sum(map(
+                    lambda l: l['area'], self._cr.dictfetchall()))
+                # Area Occupied
+                self._cr.execute("""
+                    SELECT product_tmpl_id, area
+                    FROM "{}"
+                    WHERE id IN %s AND agreement_id IS NOT NULL
+                    GROUP BY product_tmpl_id, area""".format(self._table), (
+                        tuple(report.ids), ))
+                line['occupied_area'] = sum(map(
+                    lambda l: l['area'], self._cr.dictfetchall()))
+        return res
 
     @api.model
     def _get_sql_area_select(self, else_value=0):
