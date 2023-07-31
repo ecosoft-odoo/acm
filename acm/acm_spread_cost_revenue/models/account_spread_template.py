@@ -1,27 +1,53 @@
-# Copyright 2018-2019 Onestein (<https://www.onestein.eu>)
-# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
+# Copyright 2023 Ecosoft Co., Ltd (https://ecosoft.co.th)
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html)
 
-from odoo import api, fields, models, _
+import calendar
+from odoo import fields, models, _
 from odoo.exceptions import UserError
 
 
 class AccountSpreadTemplate(models.Model):
     _inherit = 'account.spread.template'
 
+    def is_last_day_of_month(self, date):
+        """
+        Function for check that date is the last day of month or not
+        - If last day of month, return True
+        - If not last day of month, return False
+        """
+        day = date.day
+        last_day = calendar.monthrange(date.year, date.month)[1]
+        return day == last_day
+
     def _prepare_spread_from_template(self, spread_account_id=False):
-        res = super()._prepare_spread_from_template(
-            spread_account_id=spread_account_id)
-        if self._context.get('spread_over') == 'contract':
-            if not self._context.get('account_analytic_id'):
-                raise UserError(
-                    _('Product is set to spread over contract '
-                      'but no "contract/analytic" is set on invoice line'))
-            res_id = self._context['account_analytic_id']
-            contract = self.env['account.analytic.account'].browse(res_id)
-            # Get number of period from contract end - start
-            t1 = contract.date_start
-            t2 = contract.date_end
-            months = (t2.year - t1.year) * 12 + (t2.month - t1.month) + 1
-            res['period_number'] = months
-            res['force_spread_date'] = contract.date_start
-        return res
+        self.ensure_one()
+        spread_vals = super()._prepare_spread_from_template(spread_account_id=spread_account_id)
+        # Spread must created from the invoice
+        invoice_line_id = self._context.get('invoice_line_id')
+        if not invoice_line_id:
+            raise UserError(_('Spread must created from the invoice.'))
+        # Find spread date and number of spread lines
+        invoice_line = self.env['account.invoice.line'].browse(invoice_line_id)
+        invoice = invoice_line.invoice_id
+        contract = invoice_line.account_analytic_id
+        period_number = 12  # Default period number
+        spread_date = invoice.date_invoice or fields.Date.context_today(self)  # Default spread date will equal to invoice date
+        if not contract:  # ACM need contract
+            raise UserError(_('Analytic Account is not set in invoice, please set before validate it.'))
+        if contract:
+            if not contract.date_start or not contract.date_end:
+                raise UserError(_('Contract must have start date and end date.'))
+            # If spread date is before contract start date, spread date will equal to contract start date
+            if spread_date < contract.date_start:
+                spread_date = contract.date_start
+            if not (contract.date_start <= spread_date <= contract.date_end):
+                raise UserError(_('Spread date must to be in period of contract.'))
+            # Period number
+            period_number = (contract.date_end.year - spread_date.year) * 12 + (contract.date_end.month - spread_date.month) + 1
+            if period_number > 1 and not self.is_last_day_of_month(contract.date_end):
+                period_number = period_number - 1
+        spread_vals.update({
+            'period_number': period_number,
+            'force_spread_date': spread_date,
+        })
+        return spread_vals
