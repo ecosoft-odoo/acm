@@ -13,7 +13,7 @@ class Agreement(models.Model):
         if vals.get('termination_date'):
             contracts = self.with_context(active_test=False)._search_contract()
             invoices = self.env['account.invoice'].search([('contract_id', 'in', contracts.ids)])
-            spread_lines = invoices.mapped('invoice_line_ids.spreed_id.line_ids')
+            spread_lines = invoices.mapped('invoice_line_ids.spread_id.line_ids')
             # If terminate agreement, date on spreed lines after today date will be termination date
             spread_lines = spread_lines.filtered(lambda l: l.date > fields.Date.today() and l.move_id is False)
             spread_lines.write({'date': vals['termination_date']})
