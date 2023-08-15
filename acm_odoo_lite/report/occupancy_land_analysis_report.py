@@ -91,7 +91,7 @@ class OccupancyLandAnalysisReport(models.TransientModel):
         string="Remaining Building Area (SQM)",
         digits=(16, 2),
     )
-    number_of_lessee  = fields.Integer(
+    number_of_lessee = fields.Integer(
         string="Number of Lessee",
     )
     number_of_agreement = fields.Integer(
@@ -143,7 +143,7 @@ class OccupancyLandAnalysisReportWizard(models.TransientModel):
         string="At Date",
         required=True,
         default=fields.Date.context_today,
-    ) 
+    )
     report_ids = fields.One2many(
         comodel_name="occupancy.land.analysis.report",
         inverse_name="wizard_id",
@@ -154,14 +154,14 @@ class OccupancyLandAnalysisReportWizard(models.TransientModel):
     def _get_sql(self):
         self.ensure_one()
         sql = """
-            select 
+            select
                 pt.name as product_name, pt.title_deed_no, pt.parcel_no, pt.vol, pt.page, pt.sub_district,
                 pt.district, pt.province, pt.rai, pt.ngan, pt.square_wa, pt.rai2, pt.ngan2, pt.square_wa2, sub,lessor,
-                (400 * pt.rai) + (100 * pt.ngan) + pt.square_wa as total_land_area_gla, 
+                (400 * pt.rai) + (100 * pt.ngan) + pt.square_wa as total_land_area_gla,
                 (400 * pt.rai2) + (100 * pt.ngan2) + pt.square_wa2 as total_land_area_nla,
                 sub.rented_land_area, sub.rented_land_area * 100 / coalesce(nullif(((400 * pt.rai2) + (100 * pt.ngan2) + pt.square_wa2), 0), 1) as rented_land_percent,
                 (((400 * pt.rai2) + (100 * pt.ngan2) + pt.square_wa2) - sub.rented_land_area) as remaining_land_area,
-                pt.square_meter2 as total_building_area, sub.rented_building_area, 
+                pt.square_meter2 as total_building_area, sub.rented_building_area,
                 ((sub.rented_building_area * 100) / coalesce(nullif(pt.square_meter2, 0), 1)) as rented_building_percent,
                 (pt.square_meter2 - sub.rented_building_area) as remaining_building_area, sub.number_of_lessee, sub.number_of_agreement, sub.partner_list,
                 sub.agreement_list, {} as wizard_id
@@ -192,7 +192,7 @@ class OccupancyLandAnalysisReportWizard(models.TransientModel):
         # Create Report
         self._cr.execute(self._get_sql())
         res = self._cr.dictfetchall()
-        report = self.env["occupancy.land.analysis.report"].create(res)
+        self.env["occupancy.land.analysis.report"].create(res)
         # View Report
         action = self.env.ref("acm_odoo_lite.occupancy_land_analysis_report_action")
         vals = action.read()[0]

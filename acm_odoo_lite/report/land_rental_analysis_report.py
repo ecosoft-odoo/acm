@@ -105,7 +105,7 @@ class LandRentalAnalysisReportWizard(models.TransientModel):
         string="At Date",
         required=True,
         default=fields.Date.context_today,
-    ) 
+    )
     report_ids = fields.One2many(
         comodel_name="land.rental.analysis.report",
         inverse_name="wizard_id",
@@ -116,19 +116,19 @@ class LandRentalAnalysisReportWizard(models.TransientModel):
     def _get_sql(self):
         self.ensure_one()
         sql = """
-            select 
+            select
                 *, sub.land_rented * 100 / coalesce(nullif(sub.land_nla, 0), 1) as percent_of_nla,
                 case when sub.building_rented = 0 then sub.estimated_contractual_rental_revenue / coalesce(nullif(sub.agreement_length, 0), 1) else 0 end as monthly_rent_collected_land,
                 case when sub.building_rented = 0 then sub.estimated_contractual_rental_revenue / coalesce(nullif(sub.agreement_length, 0), 1) / coalesce(nullif(sub.land_rented, 0), 1) else 0 end as land_monthly_rental_rate,
                 case when sub.building_rented <> 0 then sub.estimated_contractual_rental_revenue / coalesce(nullif(sub.agreement_length, 0), 1) else 0 end as monthly_rent_collected_building,
                 case when sub.building_rented <> 0 then sub.estimated_contractual_rental_revenue / coalesce(nullif(sub.agreement_length, 0), 1) / coalesce(nullif(sub.building_rented, 0), 1) else 0 end as building_monthly_rental_rate
             from (
-                select 
+                select
                     a.name as agreement, rp.name as lessee, pt.id as product_id, pt.name as product, pt.sub_district, pt.district, pt.province,
                     gc.name as land_use, (400 * pt.rai2) + (100 * pt.ngan2) + pt.square_wa2 as land_nla,
                     (400 * al.rai) + (100 * al.ngan) + al.square_wa as land_rented,
                     al.square_meter as building_rented, a.installment_number * al.lst_price as estimated_contractual_rental_revenue,
-                    (extract(year from age(case when a.termination_date is not null then a.termination_date else a.end_date end + interval '1 day', a.start_date)) * 12 + 
+                    (extract(year from age(case when a.termination_date is not null then a.termination_date else a.end_date end + interval '1 day', a.start_date)) * 12 +
                     extract(month from age(case when a.termination_date is not null then a.termination_date else a.end_date end + interval '1 day', a.start_date))):: integer as agreement_length, {} as wizard_id
                 from agreement a
                 left join agreement_line al on a.id = al.agreement_id
@@ -136,7 +136,7 @@ class LandRentalAnalysisReportWizard(models.TransientModel):
                 left join product_template pt on pp.product_tmpl_id = pt.id
                 left join res_partner rp on a.partner_id = rp.id
                 left join goods_category gc on a.goods_category_id = gc.id
-                where a.is_template = False and (a.state = 'active' or (a.state = 'inactive' and a.inactive_reason <> 'cancel')) and 
+                where a.is_template = False and (a.state = 'active' or (a.state = 'inactive' and a.inactive_reason <> 'cancel')) and
                     '{}' >= a.start_date and '{}' <= (case when a.termination_date is not null then a.termination_date else a.end_date end) and
                     pt.value_type = 'rent' and pt.active = True
                 group by a.id, al.id, pt.id, rp.id, gc.id
@@ -150,7 +150,7 @@ class LandRentalAnalysisReportWizard(models.TransientModel):
         # Create Report
         self._cr.execute(self._get_sql())
         res = self._cr.dictfetchall()
-        report = self.env["land.rental.analysis.report"].create(res)
+        self.env["land.rental.analysis.report"].create(res)
         # View Report
         action = self.env.ref("acm_odoo_lite.land_rental_analysis_report_action")
         vals = action.read()[0]
