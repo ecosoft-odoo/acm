@@ -230,6 +230,12 @@ class Agreement(models.Model):
             str_square_meter = "{0:,.2f}".format(square_meter)
         return "{} ตารางเมตร".format(str_square_meter)
 
+    @api.multi
+    def active_statusbar(self):
+        super(Agreement, self).active_statusbar()
+        for line in self.mapped("line_ids"):
+            line._validate_product()
+
 
 class AgreementLine(models.Model):
     _inherit = "agreement.line"
@@ -269,16 +275,20 @@ class AgreementLine(models.Model):
     )
 
     @api.multi
-    def _validate_product(self):
+    def _validate_agreement_line(self):
         self.ensure_one()
         # Check product do not duplicate
         agreement_lines = self.env["agreement.line"].search([
             ("agreement_id", "=", self.agreement_id.id),
             ("product_id", "=", self.product_id.id),
-            ("agreement_id.state", "not in", ["active"]), # State active will not check product
         ])
         if len(agreement_lines) > 1:
             raise UserError(_("Product do not duplicate on the agreement lines."))
+        return True
+
+    @api.multi
+    def _validate_product(self):
+        self.ensure_one()
         # Check rental area
         remaining_area = self.product_id.product_tmpl_id._get_remaining_area()
         if remaining_area[0] < 0:
@@ -303,21 +313,21 @@ class AgreementLine(models.Model):
     @api.model
     def create(self, vals):
         agreement_line = super(AgreementLine, self).create(vals)
-        # Validate Product
-        agreement_line._validate_product()
+        # Validate Agreement Line
+        agreement_line._validate_agreement_line()
         return agreement_line
 
     @api.multi
     def write(self, vals):
         res = super(AgreementLine, self).write(vals)
         for line in self:
-            # Validate Product
-            line._validate_product()
+            # Validate Agreement Line
+            line._validate_agreement_line()
         return res
 
     @api.onchange("product_id")
     def _onchange_product_id(self):
-        super()._onchange_product_id()
+        super(AgreementLine, self)._onchange_product_id()
         """ Reset area and price """
         self.update({
             "rai": 0,

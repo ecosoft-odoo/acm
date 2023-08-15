@@ -96,7 +96,7 @@ class ProductTemplate(models.Model):
         if self.value_type == "rent":
             products = self.env["product.product"].search([("product_tmpl_id", "=", self.id)])
             agreement_lines = self.env["agreement.line"].search([
-                ("agreement_id.state", "in", ["draft", "active"]), ("product_id", "in", products.ids)])
+                ("agreement_id.state", "in", ["active"]), ("product_id", "in", products.ids)])
             rent_rai_area = sum(agreement_lines.mapped("rai"))
             rent_ngan_area = sum(agreement_lines.mapped("ngan"))
             rent_square_wa_area = sum(agreement_lines.mapped("square_wa"))
