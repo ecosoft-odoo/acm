@@ -281,6 +281,7 @@ class AgreementLine(models.Model):
         agreement_lines = self.env["agreement.line"].search([
             ("agreement_id", "=", self.agreement_id.id),
             ("product_id", "=", self.product_id.id),
+            ("agreement_id.state", "not in", ["active"]),  # State active will not check product
         ])
         if len(agreement_lines) > 1:
             raise UserError(_("Product do not duplicate on the agreement lines."))
