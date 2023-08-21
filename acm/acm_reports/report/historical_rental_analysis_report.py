@@ -135,9 +135,13 @@ class HistoricalRentalAnalysisReport(models.AbstractModel):
                 WHEN a.inactive_date IS NOT NULL AND a.inactive_date > a.end_date THEN a.end_date
                 ELSE a.inactive_date
             END)
-            WHERE pt.value_type = 'rent' AND pp.active IS TRUE AND (
-                -- product must created before report date (At Date)
-                a.id IS NOT NULL OR DATE(pt.create_date + INTERVAL '7 HOUR') <= %(at_date)s
+            WHERE pt.value_type = 'rent' AND (
+                a.id IS NOT NULL OR (
+                    DATE(pp.create_date + INTERVAL '7 HOUR') <= %(at_date)s AND
+                    (
+                        pp.active IS TRUE OR (pp.active IS FALSE AND %(at_date)s < DATE(pp.inactive_date + INTERVAL '7 HOUR'))
+                    )
+                )
             )
         """
         sql = sql % {

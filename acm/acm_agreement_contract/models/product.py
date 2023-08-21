@@ -71,6 +71,9 @@ class ProductTemplate(models.Model):
         comodel_name='lock.attribute',
     )
     manual = fields.Boolean()
+    inactive_date = fields.Date(
+        string='Inactive Date',
+    )
 
     _sql_constraints = [
         ('name_uniq', 'UNIQUE(name)', 'Name must be unique!'),
@@ -185,6 +188,21 @@ class ProductTemplate(models.Model):
                 template.write(related_vals)
         return templates
 
+    @api.multi
+    def write(self, vals):
+        """"Update inactive date when archive product"""
+        if 'active' in vals:
+            vals['inactive_date'] = False
+            if not vals['active']:
+                vals['inactive_date'] = fields.Date.context_today(self)
+        res = super(ProductTemplate, self).write(vals)
+        # Update inactive date in product variant
+        if 'inactive_date' in vals:
+            self.with_context(active_test=False).mapped('product_variant_ids').filtered(
+                lambda l: not l.active and l.inactive_date != vals['inactive_date']
+            ).write({'inactive_date': vals['inactive_date']})
+        return res
+
 
 class ProductProduct(models.Model):
     _inherit = 'product.product'
@@ -205,6 +223,9 @@ class ProductProduct(models.Model):
         comodel_name='acm.working.hours',
         string='Not Working Hours',
         domain="[('type', '=', 'out_time')]",
+    )
+    inactive_date = fields.Date(
+        string='Inactive Date',
     )
 
     @api.onchange('group_id', 'subzone', 'lock_number')
@@ -233,3 +254,12 @@ class ProductProduct(models.Model):
     def _onchange_width_length(self):
         """ Area = Width x Length """
         self.area = self.width * self.length1
+
+    @api.multi
+    def write(self, vals):
+        """"Update inactive date when archive product"""
+        if 'active' in vals:
+            vals['inactive_date'] = False
+            if not vals['active']:
+                vals['inactive_date'] = fields.Date.context_today(self)
+        return super(ProductProduct, self).write(vals)

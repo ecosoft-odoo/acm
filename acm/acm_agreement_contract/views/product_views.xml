@@ -24,6 +24,9 @@
                     </group>
                 </page>
             </page>
+            <group name="group_general" position="inside">
+                <field name="inactive_date" attrs="{'invisible': [('active', '=', True)], 'required': [('active', '=', False)]}"/>
+            </group>
         </field>
     </record>
     <record id="product_template_only_form_view" model="ir.ui.view">
@@ -71,6 +74,9 @@
                     </group>
                 </group>
             </xpath>
+            <field name="active" position="after">
+                <field name="inactive_date" attrs="{'invisible': [('active', '=', True)], 'required': [('active', '=', False)]}"/>
+            </field>
         </field>
     </record>
 
