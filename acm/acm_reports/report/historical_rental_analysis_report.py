@@ -139,7 +139,7 @@ class HistoricalRentalAnalysisReport(models.AbstractModel):
                 a.id IS NOT NULL OR (
                     DATE(pp.create_date + INTERVAL '7 HOUR') <= %(at_date)s AND
                     (
-                        pp.active IS TRUE OR (pp.active IS FALSE AND %(at_date)s < DATE(pp.inactive_date + INTERVAL '7 HOUR'))
+                        pp.active IS TRUE OR (pp.active IS FALSE AND %(at_date)s <= DATE(pp.inactive_date + INTERVAL '7 HOUR'))
                     )
                 )
             )
