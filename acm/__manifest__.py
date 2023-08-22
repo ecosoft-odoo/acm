@@ -28,6 +28,7 @@
         'acm_agreement_contract/data/breach_type_data.xml',
         'acm_agreement_contract/data/ir_cron.xml',
         'acm_agreement_contract/data/decimal_precision_data.xml',
+        'acm_agreement_contract/security/res_groups.xml',
         'acm_agreement_contract/security/ir.model.access.csv',
         'acm_agreement_contract/wizards/agreement_create_wizards.xml',
         'acm_agreement_contract/wizards/agreement_extension_wizards.xml',
