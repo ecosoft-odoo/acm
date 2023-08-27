@@ -15,3 +15,4 @@ from . import acm_working_hours
 from . import acm_breach_type
 from . import account_payment
 from . import agreement_income_type
+from . import product_attribute
