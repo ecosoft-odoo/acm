@@ -2,7 +2,6 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html)
 
 from odoo import models, fields, api
-from datetime import date
 from odoo.addons import decimal_precision as dp
 
 
@@ -84,8 +83,7 @@ class HistoricalRentalAnalysisReport(models.AbstractModel):
                     SELECT product_tmpl_id, area
                     FROM "{}"
                     WHERE id IN %s
-                    GROUP BY product_tmpl_id, area""".format(self._table), (
-                        tuple(report.ids), ))
+                    GROUP BY product_tmpl_id, area""".format(self._table), (tuple(report.ids), ))
                 line['area'] = sum(map(
                     lambda l: l['area'], self._cr.dictfetchall()))
                 # Area Occupied
@@ -93,8 +91,7 @@ class HistoricalRentalAnalysisReport(models.AbstractModel):
                     SELECT product_tmpl_id, area
                     FROM "{}"
                     WHERE id IN %s AND agreement_id IS NOT NULL
-                    GROUP BY product_tmpl_id, area""".format(self._table), (
-                        tuple(report.ids), ))
+                    GROUP BY product_tmpl_id, area""".format(self._table), (tuple(report.ids), ))
                 line['occupied_area'] = sum(map(
                     lambda l: l['area'], self._cr.dictfetchall()))
         return res
