@@ -37,7 +37,7 @@
                                 <td class="head_table center" t-esc="j"/>
                                 <t t-set="j" t-value="j+1"/>
                                 <td class="head_table center">
-                                    <span t-field="o.name"/>
+                                    <span t-field="o.display_name"/>
                                 </td>
                                 <td class="head_table">
                                     <span t-esc="line_dict.get(o.id, {}).get('partner_name')"/>
