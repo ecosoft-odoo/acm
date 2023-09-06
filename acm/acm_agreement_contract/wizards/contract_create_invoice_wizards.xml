@@ -12,6 +12,7 @@
                     <group>
                         <group>
                             <field name="num_inv_advance" attrs="{'invisible': [('multi', '=', True)]}"/>
+                            <field name="date_due"/>
                         </group>
                         <group>
                             <field name="multi" invisible="1"/>

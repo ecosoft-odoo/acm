@@ -13,6 +13,10 @@ class ContractCreateManualInvoice(models.TransientModel):
         string='Invoice Date',
         required=True,
     )
+    date_due = fields.Date(
+        string='Due Date',
+        required=True,
+    )
     product_ids = fields.Many2many(
         comodel_name='product.product',
         string='Invoice Items',
@@ -116,7 +120,7 @@ class ContractCreateManualInvoice(models.TransientModel):
         return invoice._convert_to_write(invoice._cache)
 
     @api.model
-    def _create_manual_invoice(self, contract, date_invoice, products):
+    def _create_manual_invoice(self, contract, date_invoice, date_due, products):
         # Can not create invoice after termination date
         termination_date = contract.agreement_id.termination_date
         if not contract.active:
@@ -124,8 +128,9 @@ class ContractCreateManualInvoice(models.TransientModel):
         if termination_date and date_invoice > termination_date:
             raise ValidationError(_("Can not create invoice of %s after termination date.") % contract.name)
         # Create invoice
-        invoice = self.env['account.invoice'].create(
-            self._prepare_manaul_invoice(contract, date_invoice))
+        invoice_vals = self._prepare_manaul_invoice(contract, date_invoice)
+        invoice_vals['date_due'] = date_due
+        invoice = self.env['account.invoice'].create(invoice_vals)
         lines = contract.recurring_invoice_line_ids.filtered(
             lambda l: l.manual and l.product_id in products)
         for line in lines:
@@ -176,7 +181,7 @@ class ContractCreateManualInvoice(models.TransientModel):
             self._check_create_manual_invoice(
                 contract, self.date_invoice, self.product_ids)
             # Create Manual Invoice
-            invoice = self._create_manual_invoice(contract, self.date_invoice,
+            invoice = self._create_manual_invoice(contract, self.date_invoice, self.date_due,
                                                   self.product_ids)
             invoices |= invoice
         return self.view_manual_invoice(contracts, invoices)

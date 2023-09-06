@@ -21,6 +21,10 @@ class ContractCreateInvoice(models.TransientModel):
         inverse_name='wizard_id',
         string='Next invoice dates'
     )
+    date_due = fields.Date(
+        string='Due Date',
+        required=True,
+    )
 
     @api.onchange('num_inv_advance')
     def _onchange_num_inv_advance(self):
@@ -55,6 +59,11 @@ class ContractCreateInvoice(models.TransientModel):
         invoices = self.env['account.invoice']
         for i in range(self.num_inv_advance):
             invoices |= contracts.recurring_create_invoice()
+        # Update invoice due date
+        if self.date_due and len(self.next_date_ids) > 1:
+            # If define due date, invoice date should have only one value
+            raise UserError(_('Multiple next invoice date not allowed create invoice'))
+        invoices.write({'date_due': self.date_due})
         return self.view_invoices(contracts, invoices)
 
     @api.multi

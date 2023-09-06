@@ -18,6 +18,7 @@
         'web_timeline',
         'account_spread_cost_revenue',
         'account_invoice_merge',
+        'account_document_reversal',
     ],
     'data': [
         # acm_agreement_contract

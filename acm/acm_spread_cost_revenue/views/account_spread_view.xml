@@ -1,10 +1,12 @@
 <odoo>
+    <!-- Tree View -->
     <record id="view_account_spread_tree" model="ir.ui.view">
         <field name="name">view.account.spread.tree</field>
         <field name="model">account.spread</field>
         <field name="inherit_id" ref="account_spread_cost_revenue.view_account_spread_tree"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='name']" position="after">
+            <!-- Add some fields -->
+            <field name="name" position="after">
                 <field name="group_id"/>
                 <field name="account_analytic_id"/>
                 <field name="partner_id"/>
@@ -12,19 +14,23 @@
                 <field name="date_end"/>
                 <field name="invoice_id"/>
                 <field name="state"/>
-            </xpath>
+            </field>
         </field>
     </record>
+
+    <!-- Search View -->
     <record id="view_account_spread_search" model="ir.ui.view">
+        <field name="name">account.spread search</field>
         <field name="model">account.spread</field>
         <field name="inherit_id" ref="account_spread_cost_revenue.view_account_spread_search"/>
         <field name="arch" type="xml">
-            <xpath expr="//filter[@name='inactive']" position="before">
+            <!-- Add some search field -->
+            <filter name="inactive" position="before">
                 <field name="group_id"/>
                 <field name="account_analytic_id"/>
                 <field name="partner_id"/>
                 <field name="invoice_id"/>
-            </xpath>
+            </filter>
         </field>
     </record>
 </odoo>
