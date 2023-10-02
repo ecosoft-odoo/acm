@@ -2,7 +2,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html)
 
 import calendar
-from odoo import fields, models, _
+from odoo import models, _
 from odoo.exceptions import UserError
 
 
@@ -11,7 +11,7 @@ class AccountSpreadTemplate(models.Model):
 
     def is_last_day_of_month(self, date):
         """
-        Function for check that date is the last day of month or not
+        Function for check date is the last day of month or not
         - If last day of month, return True
         - If not last day of month, return False
         """
@@ -26,28 +26,20 @@ class AccountSpreadTemplate(models.Model):
         invoice_line_id = self._context.get('invoice_line_id')
         if not invoice_line_id:
             raise UserError(_('Spread must created from the invoice.'))
-        # Find spread date and number of spread lines
+        # Check invoice has contract
         invoice_line = self.env['account.invoice.line'].browse(invoice_line_id)
-        invoice = invoice_line.invoice_id
         contract = invoice_line.account_analytic_id
-        period_number = 12  # Default period number
-        spread_date = invoice.date_invoice or fields.Date.context_today(self)  # Default spread date will equal to invoice date
-        if not contract:  # ACM need contract
-            raise UserError(_('Analytic Account is not set in invoice, please set before validate it.'))
-        if contract:
-            if not contract.date_start or not contract.date_end:
-                raise UserError(_('Contract must have start date and end date.'))
-            # If spread date is before contract start date, spread date will equal to contract start date
-            if spread_date < contract.date_start:
-                spread_date = contract.date_start
-            if not (contract.date_start <= spread_date <= contract.date_end):
-                raise UserError(_('Spread date must to be in period of contract.'))
-            # Period number
-            period_number = (contract.date_end.year - spread_date.year) * 12 + (contract.date_end.month - spread_date.month) + 1
-            if period_number > 1 and not self.is_last_day_of_month(contract.date_end):
-                period_number = period_number - 1
+        if not contract:
+            raise UserError(_('Contract is not set in the invoice, please set it before validate.'))
+        # Find spread date and number of spread lines
+        date_start, date_end = contract.date_start, contract.date_end
+        if not date_start or not date_end:
+            raise UserError(_('Contract must have start date and end date.'))
+        period_number = (date_end.year - date_start.year) * 12 + (date_end.month - date_start.month) + 1
+        if period_number > 1 and not self.is_last_day_of_month(date_end):
+            period_number = period_number - 1
         spread_vals.update({
             'period_number': period_number,
-            'force_spread_date': spread_date,
+            'force_spread_date': date_start,
         })
         return spread_vals

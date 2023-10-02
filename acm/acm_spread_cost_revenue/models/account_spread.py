@@ -30,13 +30,13 @@ class AccountSpread(models.Model):
         readonly=True,
     )
     date_start = fields.Date(
-        string='Contract Start Date',
+        string='Start Date',
         related='invoice_line_id.account_analytic_id.date_start',
         store=True,
         readonly=True,
     )
     date_end = fields.Date(
-        string='Contract End Date',
+        string='End Date',
         related='invoice_line_id.account_analytic_id.date_end',
         store=True,
         readonly=True,
@@ -83,7 +83,7 @@ class AccountSpread(models.Model):
             unposted_amount = total_amount
             spread_lines = self.env['account.spread.line'].search([('spread_id', "=", self.id)], order='date, id')
             for index, spread_line in enumerate(spread_lines):
-                # if found journal entry and state = 'post', continue it
+                # if found account move and state = 'post', continue it
                 if spread_line.move_id.state == 'posted':
                     unposted_amount -= spread_line.amount
                     continue

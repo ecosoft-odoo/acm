@@ -3,6 +3,5 @@
 from . import account_spread
 from . import account_spread_line
 from . import account_spread_template
-from . import account_invoice
-from . import account_invoice_line
 from . import agreement
+from . import account_invoice
