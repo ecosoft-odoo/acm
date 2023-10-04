@@ -23,8 +23,19 @@ class ContractCreateInvoice(models.TransientModel):
     )
     date_due = fields.Date(
         string='Due Date',
-        required=True,
     )
+    show_due_date = fields.Boolean(
+        string='Show Due Date',
+        default=lambda self: self._get_default_show_due_date(),
+    )
+
+    @api.model
+    def _get_default_show_due_date(self):
+        # Due date will not show for recurring rule type = daily
+        active_ids = self._context.get('active_ids', [])
+        contracts = self.env['account.analytic.account'].browse(active_ids)
+        recurring_rule_types = list(set(contracts.mapped('recurring_rule_type')))
+        return False if recurring_rule_types == ['daily'] else True
 
     @api.onchange('num_inv_advance')
     def _onchange_num_inv_advance(self):
@@ -38,7 +49,7 @@ class ContractCreateInvoice(models.TransientModel):
             contracts.ensure_one()
             contract = contracts[0]
             ref_date = contract.recurring_next_date or fields.Date.context_today(self)
-            for i in range(self.num_inv_advance-1):
+            for i in range(self.num_inv_advance - 1):
                 old_date = fields.Date.from_string(ref_date)
                 ref_date = old_date + Contract.get_relative_delta(
                     contract.recurring_rule_type, contract.recurring_interval)
@@ -55,15 +66,19 @@ class ContractCreateInvoice(models.TransientModel):
         if self.multi and len(self.next_date_ids) > 1:
             raise UserError(
                 _('Multiple next dates not allowed when working in batch'))
+        if self.date_due:
+            if len(self.next_date_ids) > 1:
+                # If define due date, invoice date should have only one value
+                raise UserError(_('Multiple next invoice date not allowed create invoice'))
+            if self.date_due < self.next_date_ids.date:
+                raise UserError(_('Due date must greater than or equal to invoice date.'))
         contracts = self.env['account.analytic.account'].browse(active_ids)
         invoices = self.env['account.invoice']
         for i in range(self.num_inv_advance):
             invoices |= contracts.recurring_create_invoice()
         # Update invoice due date
-        if self.date_due and len(self.next_date_ids) > 1:
-            # If define due date, invoice date should have only one value
-            raise UserError(_('Multiple next invoice date not allowed create invoice'))
-        invoices.write({'date_due': self.date_due})
+        if self.date_due:
+            invoices.write({'date_due': self.date_due})
         return self.view_invoices(contracts, invoices)
 
     @api.multi

@@ -5,10 +5,11 @@
         <field name="model">acm.batch.invoice.wizard</field>
         <field name="arch" type="xml">
             <form string="Batch Invoice">
-                <p>All invoice created by this operation will use following invoice date</p>
+                <p>All invoice created by this operation will use following invoice date and due date</p>
                 <group>
                     <group>
                         <field name="date_invoice"/>
+                        <field name="date_due"/>
                     </group>
                 </group>
                 <footer>
