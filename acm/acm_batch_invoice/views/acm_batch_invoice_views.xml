@@ -9,7 +9,7 @@
                     <field name="state" widget="statusbar" nolabel="1" statusbar_visible="draft,confirm,done"/>
                     <button name="button_confirm" string="Confirm" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
                     <button name="%(action_batch_invoice)d" string="Create Invoice" type="action" class="oe_highlight"
-                      attrs="{'invisible': [('state', '!=', 'confirm')]}" context="{'default_date_invoice': date_invoice}"/>
+                      attrs="{'invisible': [('state', '!=', 'confirm')]}" context="{'default_date_invoice': date_invoice, 'default_date_due': date_due}"/>
                     <button name="button_set_to_draft" string="Set to draft" type="object" attrs="{'invisible': [('state', '!=', 'confirm')]}"/>
                 </header>
                 <sheet string="Invoice">
@@ -35,6 +35,7 @@
                         </group>
                         <group>
                             <field name="date_invoice"/>
+                            <field name="date_due"/>
                         </group>
                     </group>
                     <button name="retriveve_product_line" string="Retrieve Meter Lines"
@@ -87,6 +88,7 @@
                 <field name="name"/>
                 <field name="date_range_id"/>
                 <field name="date_invoice"/>
+                <field name="date_due"/>
                 <field name="state"/>
             </tree>
       </field>
@@ -113,6 +115,7 @@
                     <filter name="group_partner_id" string="Zone" context="{'group_by':'group_id'}"/>
                     <filter name="group_partner_id" string="Date Range" context="{'group_by':'date_range_id'}"/>
                     <filter name="group_date" string="Invoice Date" context="{'group_by':'date_invoice'}"/>
+                    <filter name="group_date_due" string="Due Date" context="{'group_by':'date_due'}"/>
                     <filter name="group_state" string="State" context="{'group_by':'state'}"/>
                 </group>
             </search>

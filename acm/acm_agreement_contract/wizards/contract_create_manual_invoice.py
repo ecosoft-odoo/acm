@@ -142,7 +142,7 @@ class ContractCreateManualInvoice(models.TransientModel):
         return invoice
 
     @api.multi
-    def _check_create_manual_invoice(self, contract, date_invoice, products):
+    def _check_create_manual_invoice(self, contract, date_invoice, date_due, products):
         """
         This function for check
         1. Invoice don't created with same product and invoice date on the contract.
@@ -163,12 +163,17 @@ class ContractCreateManualInvoice(models.TransientModel):
         val_types = set(products.mapped('value_type'))
         if val_types.intersection(set(['lump_sum_rent', 'security_deposit'])):
             invoice_lines = InvoiceLine.search([
-                ('invoice_id.state', '!=', 'cancel'),
+                # ('invoice_id.state', '!=', 'cancel'),
                 ('account_analytic_id', '=', contract.id),
                 ('product_id', 'in', products.ids)])
+            invoice_lines = invoice_lines.filtered(
+                lambda l: l.invoice_id.state != 'cancel')
             if invoice_lines:
                 raise ValidationError(
                     _('Invoice of %s created already.' % (contract.name, )))
+        # Due date must greater than or equal to invoice date
+        if date_due < date_invoice:
+            raise ValidationError(_('Due date must greater than or equal to invoice date.'))
 
     @api.multi
     def action_create_manual_invoice(self):
@@ -179,7 +184,7 @@ class ContractCreateManualInvoice(models.TransientModel):
         for contract in contracts:
             # Check create manual invoice
             self._check_create_manual_invoice(
-                contract, self.date_invoice, self.product_ids)
+                contract, self.date_invoice, self.date_due, self.product_ids)
             # Create Manual Invoice
             invoice = self._create_manual_invoice(contract, self.date_invoice, self.date_due,
                                                   self.product_ids)

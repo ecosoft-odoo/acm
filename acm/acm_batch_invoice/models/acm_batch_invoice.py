@@ -40,6 +40,12 @@ class ACMBatchInvoice(models.Model):
         readonly=True,
         states={'draft': [('readonly', False)]},
     )
+    date_due = fields.Date(
+        string='Due Date',
+        required=True,
+        readonly=True,
+        states={'draft': [('readonly', False)]},
+    )
     date_range_id = fields.Many2one(
         comodel_name='date.range',
         string='Date Range',
@@ -133,6 +139,9 @@ class ACMBatchInvoice(models.Model):
                 rec.name = Sequene.with_context(ctx).next_by_code(seq_code)
             # Check no negative amount
             rec.batch_invoice_line_ids._check_no_negative_amount()
+            # Due date must greater than or equal to invoice date
+            if rec.date_due < rec.date_invoice:
+                raise ValidationError(_('Due date must greater than or equal to invoice date.'))
         self.write({'state': 'confirm'})
 
     @api.multi
@@ -197,6 +206,8 @@ class ACMBatchInvoice(models.Model):
             if not line.amount_subtotal:
                 continue
             invoice_dict = self._prepare_invoice_dict(line)
+            # Assign due date
+            invoice_dict['date_due'] = line.batch_invoice_id.date_due
             invoice = Invoice.create(invoice_dict)
             lines_dict = []
             for type in utility_types:

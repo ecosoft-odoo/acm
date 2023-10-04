@@ -12,6 +12,10 @@ class ACMBatchInvoiceWizard(models.TransientModel):
         string='Invoice Date',
         readonly=True,
     )
+    date_due = fields.Date(
+        string='Due Date',
+        readonly=True,
+    )
 
     @api.multi
     def button_confirm(self):
