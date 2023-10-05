@@ -36,9 +36,9 @@ class ContractCreateManualRentalInvoice(models.TransientModel):
         return [('id', 'in', self._get_product_ids())]
 
     @api.multi
-    def _check_create_manual_invoice(self, contract, date_invoice, products):
+    def _check_create_manual_invoice(self, contract, date_invoice, date_due, products):
         super(ContractCreateManualRentalInvoice, self). \
-            _check_create_manual_invoice(contract, date_invoice, products)
+            _check_create_manual_invoice(contract, date_invoice, date_due, products)
         lines = contract.recurring_invoice_line_ids.filtered(
             lambda l: l.manual and l.product_id.value_type == 'rent')
         if not lines:
