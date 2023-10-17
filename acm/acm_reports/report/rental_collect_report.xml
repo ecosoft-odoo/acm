@@ -23,7 +23,6 @@
                                 <th class="head_table center" style="width: 3%;">ลำดับ</th>
                                 <th class="head_table center">ล็อค</th>
                                 <th class="head_table center" style="width: 12%;">ชื่อ - สกุล</th>
-                                <th class="head_table center" style="width: 8%;">ประเภทสินค้า</th>
                                 <th class="head_table center" style="width: 7%;">ค่าเช่า</th>
                                 <th class="head_table center" style="width: 5%;">ยกมา</th>
                                 <t t-foreach="range(wizard._get_last_date(wizard.date_print.year, wizard.date_print.month)[1])" t-as="i">
@@ -42,11 +41,8 @@
                                 <td class="head_table">
                                     <span t-esc="line_dict.get(o.id, {}).get('partner_name')"/>
                                 </td>
-                                <td class="head_table center">
-                                    <span t-esc="line_dict.get(o.id, {}).get('goods_type')"/>
-                                </td>
                                 <td class="head_table right">
-                                    <span t-esc="line_dict.get(o.id, {}).get('lst_price')"/>
+                                    <span t-esc="line_dict.get(o.id, {}).get('total_price')"/>
                                 </td>
                                 <td class="head_table center"/>
                                 <t t-foreach="range(wizard._get_last_date(wizard.date_print.year, wizard.date_print.month)[1])" t-as="i">
@@ -54,7 +50,6 @@
                                 </t>
                             </tr>
                             <tr>
-                                <td class="head_table"/>
                                 <td class="head_table"/>
                                 <td class="head_table"/>
                                 <td class="head_table"/>

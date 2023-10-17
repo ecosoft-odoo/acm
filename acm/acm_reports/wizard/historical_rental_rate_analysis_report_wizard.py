@@ -36,6 +36,11 @@ class HistoricalRentalRateAnalysisReportWizard(models.TransientModel):
         # View Report
         action = self.env.ref('acm.historical_rental_rate_analysis_report_action')
         vals = action.read()[0]
+        if context.get('is_net_price'):
+            vals['name'] = 'Rental Rate Analysis - Net Price'
+        if context.get('is_standard_price'):
+            vals['name'] = 'Rental Rate Analysis - Standard Price'
+        vals['display_name'] = vals['name']
         vals['domain'] = [('wizard_id', '=', self.id)]
         vals['context'] = {'at_date': self.at_date.strftime('%d/%m/%Y')}
         return vals

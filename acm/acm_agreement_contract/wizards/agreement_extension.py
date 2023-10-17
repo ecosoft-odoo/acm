@@ -27,6 +27,11 @@ class AgreementExtension(models.TransientModel):
     force = fields.Boolean()
 
     @api.multi
+    def _unlink_new_agreement_lines(self, new_agreement):
+        new_agreement.rent_product_id = False
+        new_agreement.line_ids.unlink()
+
+    @api.multi
     def action_extension_agreement(self):
         context = self._context.copy()
         Agreement = self.env['agreement']
@@ -72,5 +77,7 @@ class AgreementExtension(models.TransientModel):
             if not self.force:
                 # Compute Start Date and End Date in Products/Services
                 new_agreement._compute_line_start_end_date(time)
+            # Set Rent Product is Null
+            self._unlink_new_agreement_lines(new_agreement)
             new_agreements |= new_agreement
         return new_agreements.view_agreement()

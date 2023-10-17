@@ -15,4 +15,56 @@
         <field name="active">False</field>
     </record>
 
+    <record id="ir_cron_update_product_end_date_end_year" model="ir.cron">
+        <field name="name">Update Product Date In End Year</field>
+        <field name="user_id" ref="base.user_root"/>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="nextcall" eval="datetime.now().strftime('%Y-%m-%d 11:00:00')"/>
+        <field name="model_id" ref="product.model_product_template"/>
+        <field name="state">code</field>
+        <field name="code">
+today = datetime.date.today()
+if today.month == 12 and today.day == 31:
+    product = env['product.template'].search([('value_type', '=', 'rent'), ('year', '=', str(today.year)), ('date_start', '!=', False), ('date_end', '=', False)])
+    for p in product:
+        agreements = env['agreement'].search([('active_date', '!=', False), ('rent_product_id', 'in', p.product_variant_ids.ids)])
+        termination_date_list = [a.termination_date if a.termination_date else a.end_date for a in agreements]
+        if not termination_date_list or max(termination_date_list) &lt;= today:
+            new_product = env['product.template'].search([
+                ('value_type', '=', 'rent'),
+                ('year', '=', str(today.year + 1)),
+                ('version', '=', '0001'),
+                ('group_id', '=', p.group_id.id),
+                ('subzone', '=', p.subzone),
+                ('lock_number', '=', p.lock_number),
+                ('date_start', '=', False),
+                ('date_end', '=', False)], limit=1)
+            p.write({
+                'date_end': today,
+            })
+            new_product.write({
+                'date_start': today + dateutil.relativedelta.relativedelta(days=1),
+            })
+        </field>
+    </record>
+
+    <record id="ir_cron_update_rental_product" model="ir.cron">
+        <field name="name">Update Rental Product</field>
+        <field name="user_id" ref="base.user_root"/>
+        <field name="interval_number">5</field>
+        <field name="interval_type">minutes</field>
+        <field name="numbercall">-1</field>
+        <field name="nextcall" eval="datetime.now().strftime('%Y-%m-%d %H:%M:%S')"/>
+        <field name="model_id" ref="agreement.model_agreement"/>
+        <field name="state">code</field>
+        <field name="code">
+agreements = env['agreement'].search([('rent_product_id', '=', False)])
+for agreement in agreements:
+  rent_product = agreement.line_ids.filtered(lambda l: l.product_id.value_type == 'rent').mapped('product_id')[:1]
+  if agreement.rent_product_id != rent_product:
+    agreement._cr.execute('update agreement set rent_product_id = %s where id = %s', (rent_product.id, agreement.id))
+        </field>
+    </record>
 </odoo>

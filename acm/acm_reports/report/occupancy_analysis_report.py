@@ -1,8 +1,6 @@
 # Copyright 2019 Ecosoft Co., Ltd (https://ecosoft.co.th)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html)
 
-from datetime import timedelta
-from dateutil.relativedelta import relativedelta
 from odoo import models, fields, api, tools
 
 
@@ -37,7 +35,7 @@ class OccupancyAnalysisReport(models.Model):
     @api.model
     def _get_expiry_time(self, expiry_month):
         month = int(expiry_month)
-        day = int(round((30 / 100 * (expiry_month - month)) * 100, 0))
+        day = int(round(30 * (expiry_month - month), 0))
         expiry_time = '{month}M{day}D'.format(month=month, day=day)
         return expiry_time
 
@@ -55,9 +53,16 @@ class OccupancyAnalysisReport(models.Model):
             domain, fields, groupby, offset=offset, limit=limit,
             orderby=orderby, lazy=lazy)
         # Find total area
-        Product = self.env['product.template']
-        product = Product.search([('value_type', '=', 'rent')])
-        total_area = sum(product.mapped('area'))
+        report = self.env['occupancy.analysis.report']
+        for line in res:
+            if '__domain' in line:
+                report |= self.search(line['__domain'])
+        self._cr.execute("""
+            SELECT MAX(area)
+            FROM {}
+            WHERE id IN %s
+            GROUP BY group_id, lock_number""".format(self._table), (tuple(report.ids), ))
+        total_area = sum(list(filter(lambda x: x, map(lambda k: k[0], self._cr.fetchall()))))
         # --
         for line in res:
             if '__domain' in line:
@@ -70,21 +75,23 @@ class OccupancyAnalysisReport(models.Model):
                     (line['occupied_area'] / (total_area or 1)) * 100
                 # Time to Expiry (Months)
                 expiry_day = sum([r._get_expiry_day() for r in report])
-                expiry_month = round(expiry_day / (len(report.filtered(lambda l: l.agreement_id)) or 1) / 30, 2)
+                expiry_month = round(expiry_day / (len(report.filtered(lambda k: k.agreement_id)) or 1) / 30, 2)
                 line['expiry_time'] = self._get_expiry_time(expiry_month)
         return res
 
     @api.model
-    def _get_sql_total_area_select(self):
-        select = """
-            SELECT SUM(area)
-            FROM product_template WHERE value_type = 'rent'
-        """
-        return select
-
-    @api.model
     def _get_sql(self):
         res = super(OccupancyAnalysisReport, self)._get_sql()
+        # Find total area
+        self._cr.execute("""
+            SELECT SUM(area)
+            FROM (
+                SELECT MAX(r.area) AS area
+                FROM ({}) AS r
+                GROUP BY r.group_id, r.lock_number
+            ) AS x""".format(res))
+        total_area = sum(list(filter(lambda x: x, map(lambda k: k[0], self._cr.fetchall()))))
+        # --
         sql_list = res.split('FROM')
         sql = """
             -- Select column
@@ -99,7 +106,7 @@ class OccupancyAnalysisReport(models.Model):
                self._get_sql_area_occupied_select(),
                self._get_sql_area_select(else_value=1),
                self._get_sql_area_occupied_select(),
-               self._get_sql_total_area_select(),
+               total_area or 1,
                sql_list[1])
         return sql
 

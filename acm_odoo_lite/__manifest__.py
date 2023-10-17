@@ -18,9 +18,12 @@
         "views/agreement_income_type_views.xml",
         "views/res_partner_views.xml",
         "views/product_views.xml",
+        "views/product_pricelist_views.xml",
+        "views/create_new_year_product_views.xml",
         "wizards/agreement_create_wizards.xml",
         "wizards/agreement_create_contract_wizards.xml",
         "wizards/agreement_extension_wizards.xml",
+        "wizards/create_new_version_product_wizards.xml",
         "report/occupancy_land_analysis_report.xml",
         "report/land_rental_analysis_report.xml",
     ]

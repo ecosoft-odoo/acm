@@ -1,0 +1,11 @@
+<odoo>
+    <record id="acm.product_pricelist_menu" model="ir.ui.menu">
+        <field name="action" ref=""/>
+    </record>
+    <record id="acm.product_pricelist_item_menu" model="ir.ui.menu">
+        <field name="action" ref=""/>
+    </record>
+    <record id="acm.product_pricelist_item_description_menu" model="ir.ui.menu">
+        <field name="action" ref=""/>
+    </record>
+</odoo>

@@ -228,6 +228,11 @@ class AgreementTransfer(models.TransientModel):
         return move
 
     @api.multi
+    def _unlink_new_agreement_lines(self, new_agreement):
+        new_agreement.rent_product_id = False
+        new_agreement.line_ids.unlink()
+
+    @api.multi
     def action_transfer_agreement(self):
         """
         Step to transfer agreement
@@ -264,6 +269,8 @@ class AgreementTransfer(models.TransientModel):
             })
             agreement = agreement.with_context(context)
             new_agreement = agreement.create_agreement()
+            # Set Rent Product is Null
+            self._unlink_new_agreement_lines(new_agreement)
             new_agreements |= new_agreement
             # Create vendor bill for refund security deposit
             invoice = self.env['account.invoice']

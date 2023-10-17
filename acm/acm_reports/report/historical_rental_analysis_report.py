@@ -8,21 +8,23 @@ from odoo.addons import decimal_precision as dp
 class HistoricalRentalAnalysisReport(models.AbstractModel):
     _name = 'historical.rental.analysis.report'
     _description = 'Historical Rental Analysis Report'
+    _order = 'group_id, lock_number'
 
     group_id = fields.Many2one(
         comodel_name='account.analytic.group',
         string='Zone',
         index=True,
     )
+    subzone = fields.Char(
+        string='Subzone',
+    )
+    lock_number = fields.Char(
+        string='Lock Number',
+    )
     product_id = fields.Many2one(
         comodel_name='product.product',
         string='Product',
         index=True,
-    )
-    attribute_value_ids = fields.Many2many(
-        comodel_name='product.attribute.value',
-        string='Attribute Values',
-        related='product_id.attribute_value_ids',
     )
     partner_id = fields.Many2one(
         comodel_name='res.partner',
@@ -64,10 +66,6 @@ class HistoricalRentalAnalysisReport(models.AbstractModel):
         string='Value Type',
         index=True,
     )
-    product_tmpl_id = fields.Many2one(
-        comodel_name="product.template",
-        index=True,
-    )
 
     @api.model
     def read_group(self, domain, fields, groupby, offset=0, limit=None,
@@ -78,22 +76,17 @@ class HistoricalRentalAnalysisReport(models.AbstractModel):
         for line in res:
             if '__domain' in line:
                 report = self.search(line['__domain'])
-                # Area For Lease
+                # Area For Lease, Area Occupied
                 self._cr.execute("""
-                    SELECT product_tmpl_id, area
-                    FROM "{}"
+                    SELECT MAX(area), MAX(occupied_area)
+                    FROM {}
                     WHERE id IN %s
-                    GROUP BY product_tmpl_id, area""".format(self._table), (tuple(report.ids), ))
-                line['area'] = sum(map(
-                    lambda l: l['area'], self._cr.dictfetchall()))
-                # Area Occupied
-                self._cr.execute("""
-                    SELECT product_tmpl_id, area
-                    FROM "{}"
-                    WHERE id IN %s AND agreement_id IS NOT NULL
-                    GROUP BY product_tmpl_id, area""".format(self._table), (tuple(report.ids), ))
-                line['occupied_area'] = sum(map(
-                    lambda l: l['area'], self._cr.dictfetchall()))
+                    GROUP BY group_id, lock_number""".format(self._table), (tuple(report.ids), ))
+                result = self._cr.fetchall()
+                line.update({
+                    'area': sum(list(filter(lambda x: x, map(lambda k: k[0], result)))),
+                    'occupied_area': sum(list(filter(lambda x: x, map(lambda k: k[1], result)))),
+                })
         return res
 
     @api.model
@@ -118,28 +111,19 @@ class HistoricalRentalAnalysisReport(models.AbstractModel):
         at_date = "DATE('{}')".format(at_date)
         sql = """
             SELECT ROW_NUMBER() OVER(ORDER BY pp.id, a.id) AS id,
-                   pt.group_id, pp.id AS product_id, a.partner_id,
+                   pt.group_id, pt.subzone, pt.lock_number, pp.id AS product_id, a.partner_id,
                    a.id AS agreement_id, a.goods_category_id, a.start_date,
-                   a.end_date, %(area_select)s AS area, %(area_occupied_select)s AS occupied_area, pt.value_type,
-                   pp.product_tmpl_id
+                   a.end_date, %(area_select)s AS area, %(area_occupied_select)s AS occupied_area, pt.value_type
             FROM product_product pp
             LEFT JOIN product_template pt ON pp.product_tmpl_id = pt.id
             LEFT JOIN agreement a ON pp.id = a.rent_product_id AND
             a.state != 'draft' AND a.active_date IS NOT NULL AND %(at_date)s BETWEEN a.start_date AND
             (CASE
                 WHEN a.termination_date IS NOT NULL THEN a.termination_date
-                WHEN a.inactive_date IS NULL THEN a.end_date
-                WHEN a.inactive_date IS NOT NULL AND a.inactive_date > a.end_date THEN a.end_date
-                ELSE a.inactive_date
+                ELSE a.end_date
             END)
-            WHERE pt.value_type = 'rent' AND (
-                a.id IS NOT NULL OR (
-                    DATE(pp.create_date + INTERVAL '7 HOUR') <= %(at_date)s AND
-                    (
-                        pp.active IS TRUE OR (pp.active IS FALSE AND %(at_date)s <= DATE(pp.inactive_date + INTERVAL '7 HOUR'))
-                    )
-                )
-            )
+            WHERE pt.value_type = 'rent' AND pt.date_start IS NOT NULL AND %(at_date)s >= pt.date_start AND
+            (pt.date_end IS NULL OR (pt.date_end IS NOT NULL AND %(at_date)s <= pt.date_end))
         """
         sql = sql % {
             'area_select': self._get_sql_area_select(),

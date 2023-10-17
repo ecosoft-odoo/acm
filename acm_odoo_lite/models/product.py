@@ -7,6 +7,7 @@ from odoo.exceptions import UserError
 
 class ProductTemplate(models.Model):
     _inherit = "product.template"
+    _order = 'name'
 
     # Title Deed Information
     title_deed_no = fields.Char(
@@ -132,3 +133,8 @@ class ProductTemplate(models.Model):
             else:
                 rec.remaining_land = ""
                 rec.remaining_building = ""
+
+
+class ProductProduct(models.Model):
+    _inherit = 'product.product'
+    _order = 'default_code, name, id'

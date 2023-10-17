@@ -8,19 +8,21 @@ from odoo.addons import decimal_precision as dp
 class RentalAnalysisReport(models.AbstractModel):
     _name = 'rental.analysis.report'
     _description = 'Rental Analysis Report'
+    _order = 'group_id, lock_number'
 
     group_id = fields.Many2one(
         comodel_name='account.analytic.group',
         string='Zone',
     )
+    subzone = fields.Char(
+        string='Subzone',
+    )
+    lock_number = fields.Char(
+        string='Lock Number',
+    )
     product_id = fields.Many2one(
         comodel_name='product.product',
         string='Product',
-    )
-    attribute_value_ids = fields.Many2many(
-        comodel_name='product.attribute.value',
-        string='Attribute Values',
-        related='product_id.attribute_value_ids',
     )
     partner_id = fields.Many2one(
         comodel_name='res.partner',
@@ -66,25 +68,17 @@ class RentalAnalysisReport(models.AbstractModel):
         for line in res:
             if '__domain' in line:
                 report = self.search(line['__domain'])
-                # Area For Lease
+                # Area For Lease, Area Occupied
                 self._cr.execute("""
-                    SELECT product_tmpl_id, area
-                    FROM "{}"
+                    SELECT MAX(area), MAX(occupied_area)
+                    FROM {}
                     WHERE id IN %s
-                    GROUP BY product_tmpl_id, area""".format(self._table), (
-                        tuple(report.ids), ))
-                line['area'] = sum(map(
-                    lambda l: l['area'], self._cr.dictfetchall()))
-                # Area Occupied
-                self._cr.execute("""
-                    SELECT product_tmpl_id, area
-                    FROM "{}"
-                    WHERE id IN %s AND agreement_id IS NOT NULL AND
-                    NOW() >= start_date AND NOW() <= end_date
-                    GROUP BY product_tmpl_id, area""".format(self._table), (
-                        tuple(report.ids), ))
-                line['occupied_area'] = sum(map(
-                    lambda l: l['area'], self._cr.dictfetchall()))
+                    GROUP BY group_id, lock_number""".format(self._table), (tuple(report.ids), ))
+                result = self._cr.fetchall()
+                line.update({
+                    'area': sum(list(filter(lambda x: x, map(lambda k: k[0], result)))),
+                    'occupied_area': sum(list(filter(lambda x: x, map(lambda k: k[1], result)))),
+                })
         return res
 
     @api.model
@@ -98,24 +92,32 @@ class RentalAnalysisReport(models.AbstractModel):
     @api.model
     def _get_sql_area_occupied_select(self, else_value=0):
         select = """
-            CASE WHEN a.id IS NOT NULL AND NOW() >= a.start_date AND
-            NOW() <= a.end_date AND pt.area IS NOT NULL THEN pt.area
-            ELSE %s END""" % (else_value, )
+            CASE WHEN a.id IS NOT NULL AND pt.area IS NOT NULL AND pt.area <> 0
+            THEN pt.area ELSE %s END
+        """ % (else_value, )
         return select
 
     @api.model
     def _get_sql(self):
         sql = """
             SELECT ROW_NUMBER() OVER(ORDER BY pp.id, a.id) AS id,
-                   pt.group_id, pp.id AS product_id, a.partner_id,
+                   pt.group_id, pt.subzone, pt.lock_number, pp.id AS product_id, a.partner_id,
                    a.id AS agreement_id, a.goods_category_id, a.start_date,
-                   a.end_date, %s AS area, %s AS occupied_area, pt.value_type,
-                   pp.product_tmpl_id
+                   a.end_date, %(area_select)s AS area, %(area_occupied_select)s AS occupied_area, pt.value_type
             FROM product_product pp
             LEFT JOIN product_template pt ON pp.product_tmpl_id = pt.id
             LEFT JOIN agreement a ON pp.id = a.rent_product_id AND
-            a.state = 'active' AND NOW() BETWEEN a.start_date AND a.end_date
-            WHERE pt.value_type = 'rent' AND pp.active IS TRUE
-        """ % (self._get_sql_area_select(),
-               self._get_sql_area_occupied_select())
+            a.state != 'draft' AND a.active_date IS NOT NULL AND %(at_date)s BETWEEN a.start_date AND
+            (CASE
+                WHEN a.termination_date IS NOT NULL THEN a.termination_date
+                ELSE a.end_date
+            END)
+            WHERE pt.value_type = 'rent' AND pt.date_start IS NOT NULL AND %(at_date)s >= pt.date_start AND
+            (pt.date_end IS NULL OR (pt.date_end IS NOT NULL AND %(at_date)s <= pt.date_end))
+        """
+        sql = sql % {
+            'area_select': self._get_sql_area_select(),
+            'area_occupied_select': self._get_sql_area_occupied_select(),
+            'at_date': "DATE(NOW() + INTERVAL '7 HOUR')"
+        }
         return sql
