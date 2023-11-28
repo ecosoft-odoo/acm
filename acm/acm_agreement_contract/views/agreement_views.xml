@@ -85,27 +85,27 @@
                 <attribute name="placeholder">ชื่อผู้ให้เช่า</attribute>
             </field>
             <xpath expr="//field[@name='line_ids']/tree" position="attributes">
-                <attribute name="create">1</attribute> <!-- Can create line in year 2023 -->
+                <attribute name="create">0</attribute> <!-- Can create line in year 2023 -->
             </xpath>
             <xpath expr="//field[@name='line_ids']/tree/field[@name='product_id']" position="attributes">
-                <attribute name="readonly">0</attribute> <!-- Can create line in year 2023 -->
+                <attribute name="readonly">1</attribute> <!-- Can create line in year 2023 -->
                 <attribute name="force_save">1</attribute>
             </xpath>
             <xpath expr="//field[@name='line_ids']/tree/field[@name='qty']" position="attributes">
-                <attribute name="readonly">0</attribute> <!-- Can create line in year 2023 -->
+                <attribute name="readonly">1</attribute> <!-- Can create line in year 2023 -->
                 <attribute name="force_save">1</attribute>
             </xpath>
             <xpath expr="//field[@name='line_ids']/tree/field[@name='uom_id']" position="attributes">
-                <attribute name="readonly">0</attribute> <!-- Can create line in year 2023 -->
+                <attribute name="readonly">1</attribute> <!-- Can create line in year 2023 -->
                 <attribute name="force_save">1</attribute>
             </xpath>
             <xpath expr="//field[@name='line_ids']/tree/field[@name='uom_id']" position="after">
-                <field name="lst_price" readonly="0" force_save="1"/> <!-- Can create line in year 2023 -->
+                <field name="lst_price" readonly="1" force_save="1"/> <!-- Can create line in year 2023 -->
                 <field name="discount"/>
                 <field name="total_price"/>
             </xpath>
             <xpath expr="//field[@name='line_ids']/tree/field[@name='name']" position="after">
-                <field name="manual" readonly="0" force_save="1"/> <!-- Can create line in year 2023 -->
+                <field name="manual" readonly="1" force_save="1"/> <!-- Can create line in year 2023 -->
                 <field name="date_start"/>
                 <field name="date_end"/>
             </xpath>
