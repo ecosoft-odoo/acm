@@ -1,0 +1,5 @@
+<odoo>
+    <record id="acm.create_new_year_product_menu" model="ir.ui.menu">
+        <field name="action" ref=""/>
+    </record>
+</odoo>

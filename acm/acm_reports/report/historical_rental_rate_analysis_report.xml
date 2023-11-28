@@ -12,12 +12,18 @@
                 <field name="agreement_length"/>
             </field>
             <field name="occupied_area" position="after">
-                <field name="rent_period_1"/>
-                <field name="rent_period_2"/>
-                <field name="rent_period_3"/>
-                <field name="rent_period_4"/>
-                <field name="lump_sum_rent"/>
-                <field name="average_rental_rate"/>
+                <field name="rent_period_net_1" invisible="not context.get('is_net_price')"/>
+                <field name="rent_period_net_2" invisible="not context.get('is_net_price')"/>
+                <field name="rent_period_net_3" invisible="not context.get('is_net_price')"/>
+                <!-- <field name="rent_period_net_4" invisible="not context.get('is_net_price')"/> -->
+                <field name="lump_sum_rent_net" invisible="not context.get('is_net_price')"/>
+                <field name="average_rental_rate_net" invisible="not context.get('is_net_price')"/>
+                <field name="rent_period_standard_1" invisible="not context.get('is_standard_price')"/>
+                <field name="rent_period_standard_2" invisible="not context.get('is_standard_price')"/>
+                <field name="rent_period_standard_3" invisible="not context.get('is_standard_price')"/>
+                <!-- <field name="rent_period_standard_4" invisible="not context.get('is_standard_price')"/> -->
+                <field name="lump_sum_rent_standard" invisible="not context.get('is_standard_price')"/>
+                <field name="average_rental_rate_standard" invisible="not context.get('is_standard_price')"/>
             </field>
         </field>
     </record>
@@ -29,18 +35,24 @@
         <field name="mode">primary</field>
         <field name="arch" type="xml">
             <form position="attributes">
-                <attribute name="string">Historical Rental Rate Analysis Report</attribute>
+                <attribute name="string">Rental Rate Analysis Report</attribute>
             </form>
             <field name="end_date" position="after">
                 <field name="agreement_length"/>
             </field>
             <field name="occupied_area" position="after">
-                <field name="rent_period_1"/>
-                <field name="rent_period_2"/>
-                <field name="rent_period_3"/>
-                <field name="rent_period_4"/>
-                <field name="lump_sum_rent"/>
-                <field name="average_rental_rate"/>
+                <field name="rent_period_net_1" invisible="not context.get('is_net_price')"/>
+                <field name="rent_period_net_2" invisible="not context.get('is_net_price')"/>
+                <field name="rent_period_net_3" invisible="not context.get('is_net_price')"/>
+                <!-- <field name="rent_period_net_4" invisible="not context.get('is_net_price')"/> -->
+                <field name="lump_sum_rent_net" invisible="not context.get('is_net_price')"/>
+                <field name="average_rental_rate_net" invisible="not context.get('is_net_price')"/>
+                <field name="rent_period_standard_1" invisible="not context.get('is_standard_price')"/>
+                <field name="rent_period_standard_2" invisible="not context.get('is_standard_price')"/>
+                <field name="rent_period_standard_3" invisible="not context.get('is_standard_price')"/>
+                <!-- <field name="rent_period_standard_4" invisible="not context.get('is_standard_price')"/> -->
+                <field name="lump_sum_rent_standard" invisible="not context.get('is_standard_price')"/>
+                <field name="average_rental_rate_standard" invisible="not context.get('is_standard_price')"/>
             </field>
         </field>
     </record>

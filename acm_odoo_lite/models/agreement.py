@@ -106,6 +106,25 @@ class Agreement(models.Model):
         ],
         string="Payment Every (Months)",
     )
+    rent_product_id = fields.Many2one(
+        comodel_name='product.product',
+        compute='_compute_product_id',
+        string='Rental Product',
+        store=True,
+        readonly=True,
+    )
+
+    @api.depends('line_ids')
+    def _compute_product_id(self):
+        super(Agreement, self)._compute_product_id()
+
+    @api.onchange('start_date')
+    def _onchange_start_date(self):
+        return
+
+    @api.onchange('rent_product_id')
+    def onchange_rent_product_id(self):
+        return
 
     @api.multi
     def _compute_is_contract_create(self):
@@ -236,6 +255,10 @@ class Agreement(models.Model):
         for line in self.mapped("line_ids"):
             line._validate_product()
 
+    @api.multi
+    def _update_product_date(self):
+        return
+
 
 class AgreementLine(models.Model):
     _inherit = "agreement.line"
@@ -337,3 +360,9 @@ class AgreementLine(models.Model):
             "square_meter": 0,
             "lst_price": 0,
         })
+
+    @api.multi
+    def _prepare_contract_line(self):
+        res = super(AgreementLine, self)._prepare_contract_line()
+        res['specific_price'] = self.lst_price,
+        return res

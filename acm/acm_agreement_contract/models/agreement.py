@@ -56,9 +56,12 @@ class Agreement(models.Model):
     )
     rent_product_id = fields.Many2one(
         comodel_name='product.product',
-        compute='_compute_product_id',
+        # compute='_compute_product_id',
         string='Rental Product',
+        ondelete='restrict',
         store=True,
+        readonly=False,
+        copy=False,
     )
     group_id = fields.Many2one(
         comodel_name='account.analytic.group',
@@ -340,6 +343,10 @@ class Agreement(models.Model):
         required=True,
         index=True,
     )
+    year_start_date = fields.Char(
+        compute='_compute_year_start_date',
+        string='Year of start date',
+    )
     # Active date and Inactive date fields
     active_date = fields.Date(
         string='Active Date',
@@ -349,6 +356,24 @@ class Agreement(models.Model):
         string='Inactive Date',
         readonly=True,
     )
+
+    @api.onchange('start_date')
+    def _onchange_start_date(self):
+        self.rent_product_id = False
+
+    @api.onchange('rent_product_id')
+    def onchange_rent_product_id(self):
+        # Clear agreement lines
+        self.line_ids = False
+        # Get agreement lines
+        agreement_lines = []
+        agreement = self
+        for pl in self.rent_product_id.product_pricelist_ids.filtered(lambda k: k.active):
+            for it in pl.item_ids:
+                if it.lst_price and (not it.condition or eval(it.condition)):
+                    if (it.product_id.value_type == 'rent' and it.product_id == self.rent_product_id) or (it.product_id.value_type != 'rent'):
+                        agreement_lines.append((0, 0, {'product_id': it.product_id.id, 'name': it.name.name, 'manual': it.manual, 'qty': 1, 'lst_price': it.lst_price, 'uom_id': it.product_id.uom_id}))
+        self.line_ids = agreement_lines or False
 
     @api.model
     def _default_company_contract_id(self):
@@ -455,7 +480,9 @@ class Agreement(models.Model):
             Range = namedtuple('Range', ['start', 'end'])
             agreements = self.env['agreement'].search(
                 [('state', '=', 'active'),
-                 ('rent_product_id', '=', rec.rent_product_id.id),
+                 ('rent_product_id.group_id', '=', rec.rent_product_id.group_id.id),
+                 ('rent_product_id.subzone', '=', rec.rent_product_id.subzone),
+                 ('rent_product_id.lock_number', '=', rec.rent_product_id.lock_number),
                  # no check for transfer agreement case
                  ('is_transfer', '=', False), ])
             for agreement in agreements:
@@ -553,11 +580,43 @@ class Agreement(models.Model):
                        'active_date': date.today()})
 
     @api.multi
+    def _update_product_date(self):
+        self.ensure_one()
+        end_date = self.termination_date if self.termination_date else self.end_date
+        if self.rent_product_id.product_tmpl_id.year and str(end_date.year) != self.rent_product_id.product_tmpl_id.year:
+            year = str(end_date.year)
+            if end_date.month == 12 and end_date.day == 31:
+                year = str(end_date.year + 1)
+            new_product = self.env['product.template'].search([
+                ('value_type', '=', 'rent'),
+                ('year', '=', year),
+                ('version', '=', '0001'),
+                ('group_id', '=', self.rent_product_id.product_tmpl_id.group_id.id),
+                ('subzone', '=', self.rent_product_id.product_tmpl_id.subzone),
+                ('lock_number', '=', self.rent_product_id.product_tmpl_id.lock_number),
+                ('date_start', '=', False),
+                ('date_end', '=', False),
+            ], limit=1)
+            if not new_product:
+                raise UserError(_('No have rent product in year {}.').format(year))
+            if not (self.rent_product_id.product_tmpl_id.date_start and not self.rent_product_id.product_tmpl_id.date_end):
+                raise UserError(_('The product must have product start date and not product end date.'))
+            self.rent_product_id.product_tmpl_id.write({
+                'date_end': end_date,
+            })
+            new_product.write({
+                'date_start': end_date + relativedelta(days=1),
+            })
+
+    @api.multi
     def inactive_statusbar(self):
         """ Change state from active -> inactive """
         for rec in self:
             if rec.state == 'inactive':
                 raise UserError(_("Agreement's state must not be inactive."))
+            # Update product date
+            if rec.state == 'active':
+                rec._update_product_date()
             contract = rec._search_contract()
             contract.write({'active': False, })
             rec.write({'state': 'inactive',
@@ -828,11 +887,17 @@ class Agreement(models.Model):
             elif agreement.is_terminate and agreement.termination_date < today:
                 agreement.inactive_statusbar()
                 agreement.inactive_reason = 'terminate'
-            elif not(agreement.is_transfer or agreement.is_terminate) and \
+            elif not (agreement.is_transfer or agreement.is_terminate) and \
                     agreement.end_date < today:
                 agreement.inactive_statusbar()
                 agreement.inactive_reason = 'expire'
         return True
+
+    @api.multi
+    @api.depends('start_date')
+    def _compute_year_start_date(self):
+        for rec in self:
+            rec.year_start_date = str(rec.start_date.year) if rec.start_date else ''
 
 
 class AgreementLine(models.Model):
@@ -855,6 +920,19 @@ class AgreementLine(models.Model):
         default=False,
         help="Allow using this line to create manual invoice",
     )
+    discount = fields.Float(
+        string='Discount',
+    )
+    total_price = fields.Float(
+        string='Total Price',
+        compute='_compute_total_price',
+    )
+
+    @api.multi
+    @api.depends('lst_price', 'discount')
+    def _compute_total_price(self):
+        for rec in self:
+            rec.total_price = rec.lst_price - rec.discount
 
     @api.multi
     def _prepare_contract_line(self):
@@ -863,7 +941,7 @@ class AgreementLine(models.Model):
             'name': self.name,
             'quantity': self.qty,
             'uom_id': self.uom_id.id,
-            'specific_price': self.lst_price,
+            'specific_price': self.total_price,
             'date_start': self.date_start,
             'date_end': self.date_end,
             'manual': self.manual,

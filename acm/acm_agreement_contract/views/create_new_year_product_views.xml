@@ -1,0 +1,86 @@
+<odoo>
+    <data>
+        <!-- Tree View -->
+        <record id="create_new_year_product_view_tree" model="ir.ui.view">
+            <field name="name">create.new.year.product.view.tree</field>
+            <field name="model">create.new.year.product</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Form View -->
+        <record id="create_new_year_product_view_form" model="ir.ui.view">
+            <field name="name">create.new.year.product.view.form</field>
+            <field name="model">create.new.year.product</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_create_all_product" string="Confirm" type="object" default_focus="1" class="btn-primary" attrs="{'invisible': ['|', ('state', '!=', 'draft'), ('is_confirmed_on_background', '=', True)]}" confirm="Are you sure to create all rent product for next year ?"/>
+                        <button name="action_create_all_product_async" string="Confirm On Background" type="object" default_focus="1" class="btn-primary" attrs="{'invisible': ['|', ('state', '!=', 'draft'), ('is_confirmed_on_background', '=', True)]}" confirm="Are you sure to create all rent product for next year ?"/>
+                        <button name="action_cancel" string="Cancel" type="object" attrs="{'invisible': ['|', ('state', '!=', 'draft'), ('is_confirmed_on_background', '=', True)]}"/>
+                        <field name="state" widget="statusbar" nolabel="1" statusbar_visible="draft,done"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_job"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-list"
+                                attrs="{'invisible': [('job_count', '=', 0)]}"
+                                groups="queue_job.group_queue_job_manager">
+                                <field name="job_count" widget="statinfo" string="Jobs"/>
+                            </button>
+                            <button name="action_view_product"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-list"
+                                attrs="{'invisible': [('product_count', '=', 0)]}">
+                                <field name="product_count" widget="statinfo" string="Products"/>
+                            </button>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="name" readonly="1" force_save="1"/>
+                            </group>
+                            <group>
+                                <field name="is_confirmed_on_background" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Search View -->
+        <record id="create_new_year_product_view_search" model="ir.ui.view">
+            <field name="name">create.new.year.product.view.search</field>
+            <field name="model">create.new.year.product</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="create_new_year_product_action" model="ir.actions.act_window">
+            <field name="name">Create All Rent Product (For Next Year)</field>
+            <field name="res_model">create.new.year.product</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+        </record>
+
+        <!-- Menu -->
+        <menuitem
+            name="Create All Rent Product (For Next Year)"
+            id="create_new_year_product_menu"
+            sequence="99"
+            parent="products_menu"
+            action="create_new_year_product_action"/>
+    </data>
+</odoo>

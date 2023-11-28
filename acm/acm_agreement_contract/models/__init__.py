@@ -3,6 +3,7 @@
 
 from . import res_partner
 from . import res_company
+from . import product_pricelist
 from . import product
 from . import goods_category
 from . import lock_attribute
@@ -16,3 +17,4 @@ from . import acm_breach_type
 from . import account_payment
 from . import agreement_income_type
 from . import product_attribute
+from . import create_new_year_product

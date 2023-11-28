@@ -1,0 +1,226 @@
+<odoo>
+    <!-- Pricelist Item Description -->
+    <!-- Tree View -->
+    <record id="product_pricelist_item_description_tree_view" model="ir.ui.view">
+        <field name="name">product.pricelist.item.description.tree.view</field>
+        <field name="model">acm.product.pricelist.item.description</field>
+        <field name="arch" type="xml">
+            <tree string="Product Pricelist Item Description">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="condition"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="product_pricelist_item_description_form_view" model="ir.ui.view">
+        <field name="name">product.pricelist.item.description.form.view</field>
+        <field name="model">acm.product.pricelist.item.description</field>
+        <field name="arch" type="xml">
+            <form string="Product Pricelist Item Description">
+                <group>
+                    <group>
+                        <field name="name"/>
+                        <field name="condition" placeholder="Ex: agreement.recurring_rule_type == 'monthly'"/>
+                    </group>
+                    <group/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="product_pricelist_item_description_action" model="ir.actions.act_window">
+        <field name="name">Pricelist Item Description Configuration</field>
+        <field name="res_model">acm.product.pricelist.item.description</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem
+        name="Pricelist Item Description Configuration"
+        id="product_pricelist_item_description_menu"
+        sequence="999"
+        parent="products_menu"
+        action="product_pricelist_item_description_action"/>
+
+    <!-- Pricelist Item -->
+    <!-- Tree View -->
+    <record id="product_pricelist_item_tree_view" model="ir.ui.view">
+        <field name="name">product.pricelist.item.tree.view</field>
+        <field name="model">acm.product.pricelist.item</field>
+        <field name="arch" type="xml">
+            <tree string="Product Pricelist Item">
+                <field name="pricelist_id"/>
+                <field name="product_id"/>
+                <field name="name"/>
+                <field name="manual"/>
+                <field name="price_per_square_meter"/>
+                <field name="square_meter_per_price"/>
+                <field name="lst_price"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="product_pricelist_item_form_view" model="ir.ui.view">
+        <field name="name">product.pricelist.item.form.view</field>
+        <field name="model">acm.product.pricelist.item</field>
+        <field name="arch" type="xml">
+            <form string="Product Pricelist Item">
+                <group>
+                    <group>
+                        <field name="pricelist_id"/>
+                        <field name="product_id"/>
+                        <field name="name"/>
+                        <field name="manual"/>
+                    </group>
+                    <group>
+                        <field name="price_per_square_meter"/>
+                        <field name="square_meter_per_price"/>
+                        <field name="lst_price"/>
+                    </group>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="product_pricelist_item_search_view" model="ir.ui.view">
+        <field name="name">product.pricelist.item.search.view</field>
+        <field name="model">acm.product.pricelist.item</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="pricelist_id"/>
+                <separator/>
+                <filter string="Is Lastest Version" name="is_lastest_version" domain="[('is_lastest_version','=',True)]"/>
+                <group expand="1" string="Group By">
+                    <filter string="Pricelist" name="pricelist" context="{'group_by':'pricelist_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="product_pricelist_item_action" model="ir.actions.act_window">
+        <field name="name">Pricelist Item</field>
+        <field name="res_model">acm.product.pricelist.item</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_is_lastest_version': 1}</field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem
+        name="Pricelist Item"
+        id="product_pricelist_item_menu"
+        sequence="3"
+        parent="products_menu"
+        action="product_pricelist_item_action"/>
+
+    <!-- Pricelist -->
+    <!-- Tree View -->
+    <record id="product_pricelist_tree_view" model="ir.ui.view">
+        <field name="name">product.pricelist.tree.view</field>
+        <field name="model">acm.product.pricelist</field>
+        <field name="arch" type="xml">
+            <tree string="Product Pricelist">
+                <field name="product_template_id"/>
+                <field name="year"/>
+                <field name="version"/>
+                <field name="group_id"/>
+                <field name="subzone"/>
+                <field name="lock_number"/>
+                <field name="is_lastest_version"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="product_pricelist_form_view" model="ir.ui.view">
+        <field name="name">product.pricelist.form.view</field>
+        <field name="model">acm.product.pricelist</field>
+        <field name="arch" type="xml">
+            <form string="Product Pricelist">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                            <field name="active" widget="boolean_button" options="{'terminology': 'archive'}"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label class="oe_edit_only" for="product_template_id" string="Pricelist Name"/>
+                        <h1><field name="product_template_id" domain="[('value_type', '=', 'rent')]" placeholder="Pricelist Name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="year"/>
+                            <field name="version"/>
+                            <field name="group_id"/>
+                            <field name="subzone"/>
+                            <field name="lock_number"/>
+                        </group>
+                        <group>
+                            <field name="is_lastest_version"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Item Lines" name="item_lines">
+                            <field name="item_ids">
+                                <tree editable="bottom">
+                                    <field name="product_id" domain="['|', ('product_tmpl_id', '=', parent.product_template_id), ('value_type', 'in', ['lump_sum_rent', 'security_deposit'])]"/>
+                                    <field name="name"/>
+                                    <field name="condition"/>
+                                    <field name="manual"/>
+                                    <field name="price_per_square_meter"/>
+                                    <field name="square_meter_per_price"/>
+                                    <field name="lst_price"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="product_pricelist_search_view" model="ir.ui.view">
+        <field name="name">product.pricelist.search.view</field>
+        <field name="model">acm.product.pricelist</field>
+        <field name="arch" type="xml">
+            <search string="Product Pricelist">
+                <field name="product_template_id"/>
+                <field name="year"/>
+                <field name="group_id"/>
+                <field name="subzone"/>
+                <separator/>
+                <filter string="Is Lastest Version" name="is_lastest_version" domain="[('is_lastest_version','=',True)]"/>
+                <group expand="1" string="Group By">
+                    <filter string="Year" name="year" context="{'group_by':'year'}"/>
+                    <filter string="Zone" name="zone" context="{'group_by':'group_id'}"/>
+                    <filter string="Subzone" name="subzone" context="{'group_by':'subzone'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="product_pricelist_action" model="ir.actions.act_window">
+        <field name="name">Pricelist</field>
+        <field name="res_model">acm.product.pricelist</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_is_lastest_version': 1}</field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem
+        name="Pricelist"
+        id="product_pricelist_menu"
+        sequence="2"
+        parent="products_menu"
+        action="product_pricelist_action"/>
+</odoo>

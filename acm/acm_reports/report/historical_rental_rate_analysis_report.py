@@ -13,28 +13,56 @@ class HistoricalRentalRateAnalysisReport(models.TransientModel):
 
     agreement_length = fields.Float(
         string='Agreement Length (Months)',
-        digits=(16,2),
+        digits=(16, 2),
     )
     # Calculate Rent Period
-    rent_period_1 = fields.Float(
+    rent_period_net_1 = fields.Float(
         compute='_compute_rent_period',
+        string='Rent Period 1',
     )
-    rent_period_2 = fields.Float(
+    rent_period_net_2 = fields.Float(
         compute='_compute_rent_period',
+        string='Rent Period 2',
     )
-    rent_period_3 = fields.Float(
+    rent_period_net_3 = fields.Float(
         compute='_compute_rent_period',
+        string='Rent Period 3',
     )
-    rent_period_4 = fields.Float(
+    rent_period_net_4 = fields.Float(
+        compute='_compute_rent_period',
+        string='Rent Period 3+',
+    )
+    rent_period_standard_1 = fields.Float(
+        compute='_compute_rent_period',
+        string='Rent Period 1',
+    )
+    rent_period_standard_2 = fields.Float(
+        compute='_compute_rent_period',
+        string='Rent Period 2',
+    )
+    rent_period_standard_3 = fields.Float(
+        compute='_compute_rent_period',
+        string='Rent Period 3',
+    )
+    rent_period_standard_4 = fields.Float(
         compute='_compute_rent_period',
         string='Rent Period 3+',
     )
     # Calculate Lum Sum Rent
-    lump_sum_rent = fields.Float(
+    lump_sum_rent_net = fields.Float(
         compute='_compute_lump_sum_rent',
+        string='Lump Sum Rent',
+    )
+    lump_sum_rent_standard = fields.Float(
+        compute='_compute_lump_sum_rent',
+        string='Lump Sum Rent',
     )
     # Calculate Average Rental Rate / Sqm / Month
-    average_rental_rate = fields.Float(
+    average_rental_rate_net = fields.Float(
+        compute='_compute_average_rental_rate',
+        string='Average Rental Rate / Sqm / Month',
+    )
+    average_rental_rate_standard = fields.Float(
         compute='_compute_average_rental_rate',
         string='Average Rental Rate / Sqm / Month',
     )
@@ -49,9 +77,9 @@ class HistoricalRentalRateAnalysisReport(models.TransientModel):
         for rec in self:
             # Filter agreement line for only rent product
             agreement_lines = rec.agreement_id.line_ids.filtered(
-                lambda l: l.product_id.value_type == 'rent').sorted(
+                lambda k: k.product_id.value_type == 'rent').sorted(
                     'date_start')
-            multiplier, sum = 1, 0
+            multiplier, sum_net, sum_standard = 1, 0, 0
             for i, line in enumerate(agreement_lines):
                 # Calculate days of period.
                 if line.agreement_id.recurring_rule_type == 'daily':
@@ -62,28 +90,40 @@ class HistoricalRentalRateAnalysisReport(models.TransientModel):
                     multiplier = period.years * 12 + period.months
                 # Calculate Rent Period
                 if i <= 2:
-                    rec['rent_period_%s' % str(i+1)] = line.lst_price * multiplier
+                    rec.update({
+                        'rent_period_net_%s' % str(i + 1): line.total_price * multiplier,
+                        'rent_period_standard_%s' % str(i + 1): line.lst_price * multiplier
+                    })
                 else:
-                    sum += line.lst_price * multiplier
-            rec['rent_period_4'] = sum
+                    sum_net += line.total_price * multiplier
+                    sum_standard += line.lst_price * multiplier
+            rec.update({
+                'rent_period_net_4': sum_net,
+                'rent_period_standard_4': sum_standard,
+            })
 
     @api.multi
     def _compute_lump_sum_rent(self):
         for rec in self:
             agreement_lines = rec.agreement_id.line_ids.filtered(
-                lambda l: l.product_id.value_type == 'lump_sum_rent').sorted(
+                lambda k: k.product_id.value_type == 'lump_sum_rent').sorted(
                     'date_start')
-            rec.lump_sum_rent = sum(agreement_lines.mapped('lst_price'))
+            rec.update({
+                'lump_sum_rent_net': sum(agreement_lines.mapped('total_price')),
+                'lump_sum_rent_standard': sum(agreement_lines.mapped('lst_price')),
+            })
 
     @api.multi
     def _compute_average_rental_rate(self):
         for rec in self:
-            total_rent = 0
+            total_rent_net, total_rent_standard = 0, 0
             for i in range(4):
-                total_rent += rec['rent_period_%s' % str(i+1)]
-            rec.average_rental_rate = \
-                (total_rent + rec['lump_sum_rent']) / (rec['area'] or 1) / \
-                (rec['agreement_length'] or 1)
+                total_rent_net += rec['rent_period_net_%s' % str(i + 1)]
+                total_rent_standard += rec['rent_period_standard_%s' % str(i + 1)]
+            rec.update({
+                'average_rental_rate_net': (total_rent_net + rec['lump_sum_rent_net']) / (rec['occupied_area'] or 1) / (rec['agreement_length'] or 1),
+                'average_rental_rate_standard': (total_rent_standard + rec['lump_sum_rent_standard']) / (rec['occupied_area'] or 1) / (rec['agreement_length'] or 1)
+            })
 
     @api.model
     def read_group(self, domain, fields, groupby, offset=0, limit=None,
@@ -95,19 +135,33 @@ class HistoricalRentalRateAnalysisReport(models.TransientModel):
             if '__domain' in line:
                 report = self.search(line['__domain'])
                 for i in range(4):
-                    line['rent_period_%s' % str(i+1)] = \
-                        sum(report.mapped('rent_period_%s' % str(i+1)))
-                line['lump_sum_rent'] = sum(report.mapped('lump_sum_rent'))
+                    line.update({
+                        'rent_period_net_%s' % str(i + 1): sum(report.mapped('rent_period_net_%s' % str(i + 1))),
+                        'rent_period_standard_%s' % str(i + 1): sum(report.mapped('rent_period_standard_%s' % str(i + 1))),
+                    })
+                line.update({
+                    'lump_sum_rent_net': sum(report.mapped('lump_sum_rent_net')),
+                    'lump_sum_rent_standard': sum(report.mapped('lump_sum_rent_standard')),
+                })
                 # Compute Avarage Rental Rate / Sqm / Month
-                total_rent_per_month = 0.0
+                total_rent_net_per_month, total_rent_standard_per_month = 0.0, 0.0
                 for r in report:
-                    total_rent_per_month += (
-                        r.rent_period_1 + \
-                        r.rent_period_2 + \
-                        r.rent_period_3 + \
-                        r.rent_period_4 + \
-                        r.lump_sum_rent) / (r.agreement_length or 1.0)
-                line['average_rental_rate'] = total_rent_per_month / (line['area'] or 1.0)
+                    total_rent_net_per_month += (
+                        r.rent_period_net_1 + \
+                        r.rent_period_net_2 + \
+                        r.rent_period_net_3 + \
+                        r.rent_period_net_4 + \
+                        r.lump_sum_rent_net) / (r.agreement_length or 1.0)
+                    total_rent_standard_per_month += (
+                        r.rent_period_standard_1 + \
+                        r.rent_period_standard_2 + \
+                        r.rent_period_standard_3 + \
+                        r.rent_period_standard_4 + \
+                        r.lump_sum_rent_standard) / (r.agreement_length or 1.0)
+                line.update({
+                    'average_rental_rate_net': total_rent_net_per_month / (line['occupied_area'] or 1.0),
+                    'average_rental_rate_standard': total_rent_standard_per_month / (line['occupied_area'] or 1.0),
+                })
                 line.pop('agreement_length')
         return res
 

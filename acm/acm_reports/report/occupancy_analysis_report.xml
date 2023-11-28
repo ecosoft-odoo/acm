@@ -18,6 +18,22 @@
         </field>
     </record>
 
+    <record id="occupancy_analysis_report_form_view" model="ir.ui.view">
+        <field name="name">occupancy.analysis.report.form.view</field>
+        <field name="model">occupancy.analysis.report</field>
+        <field name="inherit_id" ref="acm.rental_analysis_report_form_view"/>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <form position="attributes">
+                <attribute name="string">Occupancy Analysis Report</attribute>
+            </form>
+            <field name="occupied_area" position="after">
+                <field name="occupancy"/>
+                <field name="total_occupancy"/>
+            </field>
+        </field>
+    </record>
+
     <record id="occupancy_analysis_report_search_view" model="ir.ui.view">
         <field name="name">occupancy.analysis.report.search.view</field>
         <field name="model">occupancy.analysis.report</field>
@@ -46,8 +62,7 @@
         <field name="name">Occupancy Analysis</field>
         <field name="res_model">occupancy.analysis.report</field>
         <field name="view_type">form</field>
-        <field name="view_mode">tree,timeline</field>
-        <field name="context">{'search_default_filter_active_current': 1}</field>
+        <field name="view_mode">tree,form,timeline</field>
     </record>
 
     <menuitem

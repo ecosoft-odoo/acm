@@ -156,6 +156,6 @@
                 res_model="res.config.settings"
                 view_mode="form"
                 target="inline"
-                context="{'module': 'agreement'}"/>
+                context="{'module': 'agreement_legal'}"/>
 
 </odoo>

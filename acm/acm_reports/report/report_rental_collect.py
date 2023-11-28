@@ -13,24 +13,24 @@ class ReportRentalCollect(models.AbstractModel):
     def _get_report_values(self, docids, data=None):
         Wizard = self.env['rental.collect.report.wizard']
         wizard = Wizard.browse(self.env.context.get('active_ids'))
-        products = self.env['product.product'].search(
-            [('value_type', '=', 'rent'),
-             ('categ_id', '=', wizard.categ_id.id),
-             ('group_id', '=', wizard.group_id.id), ])
         agreement_lines = self.env['agreement.line'].search(
-            [('product_id', 'in', products.ids),
-             ('agreement_id.state', '=', 'active'),
-             ('date_start', '<=', wizard.date_print),
-             ('date_end', '>=', wizard.date_print), ])
+            [
+                ('agreement_id.state', '=', 'active'),
+                ('agreement_id.recurring_rule_type', '=', 'daily'),
+                ('product_id.value_type', '=', 'rent'),
+                ('product_id.group_id', '=', wizard.group_id.id),
+                ('date_start', '<=', wizard.date_print),
+                ('date_end', '>=', wizard.date_print),
+            ])
+        products = agreement_lines.mapped('product_id').sorted(
+            lambda k: (k.group_id, k.lock_number))
         line_dict = {}
         for rec in agreement_lines:
             line_dict[rec.product_id.id] = {
                 'partner_name': rec.agreement_id.partner_id.display_name,
-                # 'goods_type': rec.product_id.goods_type,
-                'goods_type': rec.agreement_id.goods_type,
-                'lst_price': '%.2f' % rec.lst_price,
+                'total_price': '%.2f' % rec.total_price,
             }
-        amount = sum([float(x['lst_price']) for x in list(line_dict.values())])
+        amount = sum([float(x['total_price']) for x in list(line_dict.values())])
         return {
             'current_date': datetime.today(),
             'amount': amount,

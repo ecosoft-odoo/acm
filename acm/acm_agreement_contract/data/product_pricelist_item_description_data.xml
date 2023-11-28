@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- สัญญาเช่า (V2) -->
+    <record id="pricelist_item_description_1" model="acm.product.pricelist.item.description">
+        <field name="sequence">1</field>
+        <field name="name">ค่าเช่ารายวัน ปีที่ 1 (มีค่าตอบแทนสิทธิการให้เช่า)</field>
+        <field name="condition">agreement.template_id.name == 'สัญญาเช่า (V2)' and agreement.recurring_rule_type == 'daily'</field>
+    </record>
+    <record id="pricelist_item_description_2" model="acm.product.pricelist.item.description">
+        <field name="sequence">2</field>
+        <field name="name">ค่าเช่ารายวัน ปีที่ 1 (ไม่มีค่าตอบแทนสิทธิการให้เช่า)</field>
+        <field name="condition">agreement.template_id.name == 'สัญญาเช่า (V2)' and agreement.recurring_rule_type == 'daily'</field>
+    </record>
+    <record id="pricelist_item_description_3" model="acm.product.pricelist.item.description">
+        <field name="sequence">3</field>
+        <field name="name">ค่าเช่ารายเดือน ปีที่ 1 (มีค่าตอบแทนสิทธิการให้เช่า)</field>
+        <field name="condition">agreement.template_id.name == 'สัญญาเช่า (V2)' and agreement.recurring_rule_type == 'monthly'</field>
+    </record>
+    <record id="pricelist_item_description_4" model="acm.product.pricelist.item.description">
+        <field name="sequence">4</field>
+        <field name="name">ค่าเช่ารายเดือน ปีที่ 1 (ไม่มีค่าตอบแทนสิทธิการให้เช่า)</field>
+        <field name="condition">agreement.template_id.name == 'สัญญาเช่า (V2)' and agreement.recurring_rule_type == 'monthly'</field>
+    </record>
+    <record id="pricelist_item_description_5" model="acm.product.pricelist.item.description">
+        <field name="sequence">5</field>
+        <field name="name">ค่าเช่ารายปี ปีที่ 1 (มีค่าตอบแทนสิทธิการให้เช่า)</field>
+        <field name="condition">agreement.template_id.name == 'สัญญาเช่า (V2)' and agreement.recurring_rule_type == 'yearly'</field>
+    </record>
+    <record id="pricelist_item_description_6" model="acm.product.pricelist.item.description">
+        <field name="sequence">6</field>
+        <field name="name">ค่าเช่ารายปี ปีที่ 1 (ไม่มีค่าตอบแทนสิทธิการให้เช่า)</field>
+        <field name="condition">agreement.template_id.name == 'สัญญาเช่า (V2)' and agreement.recurring_rule_type == 'yearly'</field>
+    </record>
+    <record id="pricelist_item_description_7" model="acm.product.pricelist.item.description">
+        <field name="sequence">7</field>
+        <field name="name">ค่าเช่ารายวัน ปีที่ 2 (มีค่าตอบแทนสิทธิการให้เช่า)</field>
+        <field name="condition">agreement.template_id.name == 'สัญญาเช่า (V2)' and agreement.recurring_rule_type == 'daily'</field>
+    </record>
+    <record id="pricelist_item_description_8" model="acm.product.pricelist.item.description">
+        <field name="sequence">8</field>
+        <field name="name">ค่าเช่ารายวัน ปีที่ 2 (ไม่มีค่าตอบแทนสิทธิการให้เช่า)</field>
+        <field name="condition">agreement.template_id.name == 'สัญญาเช่า (V2)' and agreement.recurring_rule_type == 'daily'</field>
+    </record>
+    <record id="pricelist_item_description_9" model="acm.product.pricelist.item.description">
+        <field name="sequence">9</field>
+        <field name="name">ค่าเช่ารายเดือน ปีที่ 2 (มีค่าตอบแทนสิทธิการให้เช่า)</field>
+        <field name="condition">agreement.template_id.name == 'สัญญาเช่า (V2)' and agreement.recurring_rule_type == 'monthly'</field>
+    </record>
+    <record id="pricelist_item_description_10" model="acm.product.pricelist.item.description">
+        <field name="sequence">10</field>
+        <field name="name">ค่าเช่ารายเดือน ปีที่ 2 (ไม่มีค่าตอบแทนสิทธิการให้เช่า)</field>
+        <field name="condition">agreement.template_id.name == 'สัญญาเช่า (V2)' and agreement.recurring_rule_type == 'monthly'</field>
+    </record>
+    <record id="pricelist_item_description_11" model="acm.product.pricelist.item.description">
+        <field name="sequence">11</field>
+        <field name="name">ค่าเช่ารายปี ปีที่ 2 (มีค่าตอบแทนสิทธิการให้เช่า)</field>
+        <field name="condition">agreement.template_id.name == 'สัญญาเช่า (V2)' and agreement.recurring_rule_type == 'yearly'</field>
+    </record>
+    <record id="pricelist_item_description_12" model="acm.product.pricelist.item.description">
+        <field name="sequence">12</field>
+        <field name="name">ค่าเช่ารายปี ปีที่ 2 (ไม่มีค่าตอบแทนสิทธิการให้เช่า)</field>
+        <field name="condition">agreement.template_id.name == 'สัญญาเช่า (V2)' and agreement.recurring_rule_type == 'yearly'</field>
+    </record>
+    <record id="pricelist_item_description_13" model="acm.product.pricelist.item.description">
+        <field name="sequence">13</field>
+        <field name="name">ค่าเช่ารายวัน ปีที่ 3 (มีค่าตอบแทนสิทธิการให้เช่า)</field>
+        <field name="condition">agreement.template_id.name == 'สัญญาเช่า (V2)' and agreement.recurring_rule_type == 'daily'</field>
+    </record>
+    <record id="pricelist_item_description_14" model="acm.product.pricelist.item.description">
+        <field name="sequence">14</field>
+        <field name="name">ค่าเช่ารายวัน ปีที่ 3 (ไม่มีค่าตอบแทนสิทธิการให้เช่า)</field>
+        <field name="condition">agreement.template_id.name == 'สัญญาเช่า (V2)' and agreement.recurring_rule_type == 'daily'</field>
+    </record>
+    <record id="pricelist_item_description_15" model="acm.product.pricelist.item.description">
+        <field name="sequence">15</field>
+        <field name="name">ค่าเช่ารายเดือน ปีที่ 3 (มีค่าตอบแทนสิทธิการให้เช่า)</field>
+        <field name="condition">agreement.template_id.name == 'สัญญาเช่า (V2)' and agreement.recurring_rule_type == 'monthly'</field>
+    </record>
+    <record id="pricelist_item_description_16" model="acm.product.pricelist.item.description">
+        <field name="sequence">16</field>
+        <field name="name">ค่าเช่ารายเดือน ปีที่ 3 (ไม่มีค่าตอบแทนสิทธิการให้เช่า)</field>
+        <field name="condition">agreement.template_id.name == 'สัญญาเช่า (V2)' and agreement.recurring_rule_type == 'monthly'</field>
+    </record>
+    <record id="pricelist_item_description_17" model="acm.product.pricelist.item.description">
+        <field name="sequence">17</field>
+        <field name="name">ค่าเช่ารายปี ปีที่ 3 (มีค่าตอบแทนสิทธิการให้เช่า)</field>
+        <field name="condition">agreement.template_id.name == 'สัญญาเช่า (V2)' and agreement.recurring_rule_type == 'yearly'</field>
+    </record>
+    <record id="pricelist_item_description_18" model="acm.product.pricelist.item.description">
+        <field name="sequence">18</field>
+        <field name="name">ค่าเช่ารายปี ปีที่ 3 (ไม่มีค่าตอบแทนสิทธิการให้เช่า)</field>
+        <field name="condition">agreement.template_id.name == 'สัญญาเช่า (V2)' and agreement.recurring_rule_type == 'yearly'</field>
+    </record>
+
+    <!-- สัญญาเช่าระยะสั้น -->
+    <record id="pricelist_item_description_19" model="acm.product.pricelist.item.description">
+        <field name="sequence">19</field>
+        <field name="name">ค่าเช่ารายวัน (มีค่าตอบแทนสิทธิการให้เช่า)</field>
+        <field name="condition">agreement.template_id.name == 'สัญญาเช่าระยะสั้น' and agreement.recurring_rule_type == 'daily'</field>
+    </record>
+    <record id="pricelist_item_description_20" model="acm.product.pricelist.item.description">
+        <field name="sequence">20</field>
+        <field name="name">ค่าเช่ารายวัน (ไม่มีค่าตอบแทนสิทธิการให้เช่า)</field>
+        <field name="condition">agreement.template_id.name == 'สัญญาเช่าระยะสั้น' and agreement.recurring_rule_type == 'daily'</field>
+    </record>
+    <record id="pricelist_item_description_21" model="acm.product.pricelist.item.description">
+        <field name="sequence">21</field>
+        <field name="name">ค่าเช่ารายเดือน (มีค่าตอบแทนสิทธิการให้เช่า)</field>
+        <field name="condition">agreement.template_id.name == 'สัญญาเช่าระยะสั้น' and agreement.recurring_rule_type == 'monthly'</field>
+    </record>
+    <record id="pricelist_item_description_22" model="acm.product.pricelist.item.description">
+        <field name="sequence">22</field>
+        <field name="name">ค่าเช่ารายเดือน (ไม่มีค่าตอบแทนสิทธิการให้เช่า)</field>
+        <field name="condition">agreement.template_id.name == 'สัญญาเช่าระยะสั้น' and agreement.recurring_rule_type == 'monthly'</field>
+    </record>
+    <record id="pricelist_item_description_23" model="acm.product.pricelist.item.description">
+        <field name="sequence">23</field>
+        <field name="name">ค่าเช่ารายปี (มีค่าตอบแทนสิทธิการให้เช่า)</field>
+        <field name="condition">agreement.template_id.name == 'สัญญาเช่าระยะสั้น' and agreement.recurring_rule_type == 'yearly'</field>
+    </record>
+    <record id="pricelist_item_description_24" model="acm.product.pricelist.item.description">
+        <field name="sequence">24</field>
+        <field name="name">ค่าเช่ารายปี (ไม่มีค่าตอบแทนสิทธิการให้เช่า)</field>
+        <field name="condition">agreement.template_id.name == 'สัญญาเช่าระยะสั้น' and agreement.recurring_rule_type == 'yearly'</field>
+    </record>
+
+    <!-- สัญญาให้บริการ (V2) -->
+    <record id="pricelist_item_description_25" model="acm.product.pricelist.item.description">
+        <field name="sequence">25</field>
+        <field name="name">ค่าบริการรายวัน (มีค่าตอบแทนสิทธิการให้เช่า)</field>
+        <field name="condition">agreement.template_id.name == 'สัญญาให้บริการ (V2)' and agreement.recurring_rule_type == 'daily'</field>
+    </record>
+    <record id="pricelist_item_description_26" model="acm.product.pricelist.item.description">
+        <field name="sequence">26</field>
+        <field name="name">ค่าบริการรายวัน (ไม่มีค่าตอบแทนสิทธิการให้เช่า)</field>
+        <field name="condition">agreement.template_id.name == 'สัญญาให้บริการ (V2)' and agreement.recurring_rule_type == 'daily'</field>
+    </record>
+    <record id="pricelist_item_description_27" model="acm.product.pricelist.item.description">
+        <field name="sequence">27</field>
+        <field name="name">ค่าบริการรายเดือน (มีค่าตอบแทนสิทธิการให้เช่า)</field>
+        <field name="condition">agreement.template_id.name == 'สัญญาให้บริการ (V2)' and agreement.recurring_rule_type == 'monthly'</field>
+    </record>
+    <record id="pricelist_item_description_28" model="acm.product.pricelist.item.description">
+        <field name="sequence">28</field>
+        <field name="name">ค่าบริการรายเดือน (ไม่มีค่าตอบแทนสิทธิการให้เช่า)</field>
+        <field name="condition">agreement.template_id.name == 'สัญญาให้บริการ (V2)' and agreement.recurring_rule_type == 'monthly'</field>
+    </record>
+    <record id="pricelist_item_description_29" model="acm.product.pricelist.item.description">
+        <field name="sequence">29</field>
+        <field name="name">ค่าบริการรายปี (มีค่าตอบแทนสิทธิการให้เช่า)</field>
+        <field name="condition">agreement.template_id.name == 'สัญญาให้บริการ (V2)' and agreement.recurring_rule_type == 'yearly'</field>
+    </record>
+    <record id="pricelist_item_description_30" model="acm.product.pricelist.item.description">
+        <field name="sequence">30</field>
+        <field name="name">ค่าบริการรายปี (ไม่มีค่าตอบแทนสิทธิการให้เช่า)</field>
+        <field name="condition">agreement.template_id.name == 'สัญญาให้บริการ (V2)' and agreement.recurring_rule_type == 'yearly'</field>
+    </record>
+
+    <!-- ค่าตอบแทน -->
+    <record id="pricelist_item_description_31" model="acm.product.pricelist.item.description">
+        <field name="sequence">31</field>
+        <field name="name">ค่าตอบแทนการให้เช่า</field>
+        <field name="condition">agreement.template_id.name in ['สัญญาเช่า (V2)', 'สัญญาเช่าระยะสั้น']</field>
+    </record>
+    <record id="pricelist_item_description_32" model="acm.product.pricelist.item.description">
+        <field name="sequence">32</field>
+        <field name="name">ค่าตอบแทนการให้บริการ</field>
+        <field name="condition">agreement.template_id.name in ['สัญญาให้บริการ (V2)']</field>
+    </record>
+
+    <!-- เงินประกันการปฏิบัติตามสัญญา -->
+    <record id="pricelist_item_description_33" model="acm.product.pricelist.item.description">
+        <field name="sequence">33</field>
+        <field name="name">เงินประกันการให้เช่า</field>
+        <field name="condition">agreement.template_id.name in ['สัญญาเช่า (V2)', 'สัญญาเช่าระยะสั้น']</field>
+    </record>
+    <record id="pricelist_item_description_34" model="acm.product.pricelist.item.description">
+        <field name="sequence">34</field>
+        <field name="name">เงินประกันการให้บริการ</field>
+        <field name="condition">agreement.template_id.name in ['สัญญาให้บริการ (V2)']</field>
+    </record>
+</odoo>

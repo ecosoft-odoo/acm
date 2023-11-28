@@ -12,3 +12,4 @@ from . import agreement_create_contract
 from . import contract_create_invoice
 from . import contract_create_manual_invoice
 from . import contract_create_manual_rental_invoice
+from . import create_new_version_product

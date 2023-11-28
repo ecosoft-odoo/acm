@@ -59,6 +59,12 @@
                 <field name="active_date" attrs="{'invisible': [('is_template', '=', True)]}" help="วันที่กด Active สัญญา"/>
                 <field name="inactive_date" attrs="{'invisible': [('is_template', '=', True)]}" help="วันที่กด Inactive สัญญา"/>
             </field>
+            <group name="term_information" position="inside">
+                <group string="Rental Information">
+                    <field name="year_start_date" invisible="1"/>
+                    <field name="rent_product_id" domain="[('year', '=', year_start_date), ('is_lastest_version', '=', True)]" attrs="{'invisible': [('is_template', '=', True)], 'readonly': [('state', '=', 'active'), ('is_template', '=', False)]}"/>
+                </group>
+            </group>
             <field name="termination_date" position="attributes">
                 <attribute name="readonly">True</attribute>
                 <attribute name="attrs">{'invisible': [('termination_date', '=', False)]}</attribute>
@@ -78,11 +84,28 @@
             <field name="company_id" position="attributes">
                 <attribute name="placeholder">ชื่อผู้ให้เช่า</attribute>
             </field>
-            <field name="uom_id" position="after">
-                <field name="lst_price"/>
-            </field>
+            <xpath expr="//field[@name='line_ids']/tree" position="attributes">
+                <attribute name="create">1</attribute> <!-- Can create line in year 2023 -->
+            </xpath>
+            <xpath expr="//field[@name='line_ids']/tree/field[@name='product_id']" position="attributes">
+                <attribute name="readonly">0</attribute> <!-- Can create line in year 2023 -->
+                <attribute name="force_save">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='line_ids']/tree/field[@name='qty']" position="attributes">
+                <attribute name="readonly">0</attribute> <!-- Can create line in year 2023 -->
+                <attribute name="force_save">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='line_ids']/tree/field[@name='uom_id']" position="attributes">
+                <attribute name="readonly">0</attribute> <!-- Can create line in year 2023 -->
+                <attribute name="force_save">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='line_ids']/tree/field[@name='uom_id']" position="after">
+                <field name="lst_price" readonly="0" force_save="1"/> <!-- Can create line in year 2023 -->
+                <field name="discount"/>
+                <field name="total_price"/>
+            </xpath>
             <xpath expr="//field[@name='line_ids']/tree/field[@name='name']" position="after">
-                <field name="manual"/>
+                <field name="manual" readonly="0" force_save="1"/> <!-- Can create line in year 2023 -->
                 <field name="date_start"/>
                 <field name="date_end"/>
             </xpath>

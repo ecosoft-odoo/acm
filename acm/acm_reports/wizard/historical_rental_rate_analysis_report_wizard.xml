@@ -19,19 +19,38 @@
         </field>
     </record>
 
-    <record id="historical_rental_rate_analysis_report_wizard_action" model="ir.actions.act_window">
-        <field name="name">Rental Rate Analysis</field>
+    <!-- Rental Rate Analysis - Net Price -->
+    <record id="historical_rental_rate_analysis_net_price_report_wizard_action" model="ir.actions.act_window">
+        <field name="name">Rental Rate Analysis - Net Price</field>
         <field name="res_model">historical.rental.rate.analysis.report.wizard</field>
         <field name="view_mode">form</field>
         <field name="view_id" ref="historical_rental_rate_analysis_report_wizard_view"/>
         <field name="target">new</field>
+        <field name="context">{'is_net_price': 1}</field>
     </record>
 
     <menuitem
-        name="Rental Rate Analysis"
-        id="historical_rental_rate_analysis_report_menu"
+        name="Rental Rate Analysis - Net Price"
+        id="historical_rental_rate_analysis_net_price_report_menu"
         sequence="20"
         parent="acm.historical_report_menu"
-        action="historical_rental_rate_analysis_report_wizard_action"/>
+        action="historical_rental_rate_analysis_net_price_report_wizard_action"/>
+
+    <!-- Rental Rate Analysis - Standard Price -->
+    <record id="historical_rental_rate_analysis_standard_price_report_wizard_action" model="ir.actions.act_window">
+        <field name="name">Rental Rate Analysis - Standard Price</field>
+        <field name="res_model">historical.rental.rate.analysis.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="historical_rental_rate_analysis_report_wizard_view"/>
+        <field name="target">new</field>
+        <field name="context">{'is_standard_price': 1}</field>
+    </record>
+
+    <menuitem
+        name="Rental Rate Analysis - Standard Price"
+        id="historical_rental_rate_analysis_standard_price_report_menu"
+        sequence="21"
+        parent="acm.historical_report_menu"
+        action="historical_rental_rate_analysis_standard_price_report_wizard_action"/>
 
 </odoo>
