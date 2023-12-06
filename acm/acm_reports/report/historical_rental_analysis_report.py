@@ -114,6 +114,7 @@ class HistoricalRentalAnalysisReport(models.AbstractModel):
                    pt.group_id, pt.subzone, pt.lock_number, pp.id AS product_id, a.partner_id,
                    a.id AS agreement_id, a.goods_category_id, a.start_date,
                    a.end_date, %(area_select)s AS area, %(area_occupied_select)s AS occupied_area, pt.value_type
+            -- split
             FROM product_product pp
             LEFT JOIN product_template pt ON pp.product_tmpl_id = pt.id
             LEFT JOIN (
@@ -125,7 +126,7 @@ class HistoricalRentalAnalysisReport(models.AbstractModel):
                     ELSE end_date
                 END)
                 GROUP BY rent_product_id
-            ) AS a_sub ON pp.id = a_sub.rent_product_id
+            ) a_sub ON pp.id = a_sub.rent_product_id
             LEFT JOIN agreement a ON a_sub.id = a.id
             WHERE pt.value_type = 'rent' AND pt.date_start IS NOT NULL AND %(at_date)s >= pt.date_start AND
             (pt.date_end IS NULL OR (pt.date_end IS NOT NULL AND %(at_date)s <= pt.date_end))

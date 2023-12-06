@@ -168,7 +168,7 @@ class HistoricalRentalRateAnalysisReport(models.TransientModel):
     @api.model
     def _get_sql(self):
         res = super(HistoricalRentalRateAnalysisReport, self)._get_sql()
-        sql_list = res.split('FROM')
+        sql_list = res.split('-- split')
         sql = """
             -- Select column
             %s,
@@ -177,7 +177,7 @@ class HistoricalRentalRateAnalysisReport(models.TransientModel):
             ROUND(CAST(DATE_PART('day', AGE(a.end_date + 1, a.start_date)) / 30 AS NUMERIC), 2) AS
                 agreement_length
             -- From table
-            FROM %s
+            %s
         """ % (sql_list[0],
                sql_list[1])
         return sql
