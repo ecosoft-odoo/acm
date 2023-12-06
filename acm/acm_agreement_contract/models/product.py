@@ -9,7 +9,7 @@ from odoo.exceptions import UserError
 
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
-    _order = 'sequence, is_lastest_version desc, group_id, lock_number, name'
+    _order = 'sequence, is_lastest_version desc, group_id, lock_number, subzone'
 
     width = fields.Float(
         string='Width',
@@ -320,7 +320,7 @@ class ProductTemplate(models.Model):
 
 class ProductProduct(models.Model):
     _inherit = 'product.product'
-    _order = 'sequence, is_lastest_version desc, group_id, lock_number, name'
+    _order = 'sequence, is_lastest_version desc, group_id, lock_number, subzone'
 
     # goods_type = fields.Char(
     #     string='Goods Type',

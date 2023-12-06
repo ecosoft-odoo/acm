@@ -19,6 +19,16 @@ class RentalCollectReport(models.TransientModel):
         string='Date',
         required=True,
     )
+    recurring_rule_type = fields.Selection(
+        selection=[
+            ('daily', 'Day(s)'),
+            ('monthly', 'Month(s)'),
+            ('yearly', 'Year(s)'),
+        ],
+        string='Recurrence',
+        default='daily',
+        required=True,
+    )
 
     @api.multi
     def print_report(self):

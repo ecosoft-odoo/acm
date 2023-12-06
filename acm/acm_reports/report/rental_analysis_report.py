@@ -8,7 +8,7 @@ from odoo.addons import decimal_precision as dp
 class RentalAnalysisReport(models.AbstractModel):
     _name = 'rental.analysis.report'
     _description = 'Rental Analysis Report'
-    _order = 'group_id, lock_number'
+    _order = 'group_id, lock_number, subzone'
 
     group_id = fields.Many2one(
         comodel_name='account.analytic.group',

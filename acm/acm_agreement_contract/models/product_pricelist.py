@@ -8,7 +8,7 @@ from odoo.exceptions import UserError
 class ACMProductPricelist(models.Model):
     _name = 'acm.product.pricelist'
     _description = 'Product Pricelist For ACM'
-    _order = 'is_lastest_version desc, group_id, lock_number, product_template_id'
+    _order = 'is_lastest_version desc, group_id, lock_number, subzone'
 
     product_template_id = fields.Many2one(
         comodel_name='product.template',
@@ -90,10 +90,7 @@ class ACMProductPricelist(models.Model):
         vals = []
         for product in product_template.product_variant_ids:
             for id in item_description_1:
-                prepare_vals = {'product_id': product.id, 'name': id.id, 'lst_price': 0.0}
-                if 'ปีที่' not in id.name:
-                    prepare_vals['manual'] = True
-                vals.append((0, 0, prepare_vals))
+                vals.append((0, 0, {'product_id': product.id, 'name': id.id, 'lst_price': 0.0}))
         for id in item_description_2:
             p = self.env['product.product'].search([('name', '=', id.name)], limit=1)
             if p:
@@ -174,7 +171,7 @@ class ACMProductPricelistItemDescription(models.Model):
 class ACMProductPricelistItem(models.Model):
     _name = 'acm.product.pricelist.item'
     _description = 'Product Pricelist Item For ACM'
-    _order = 'is_lastest_version desc, group_id, lock_number, pricelist_id, id'
+    _order = 'is_lastest_version desc, group_id, lock_number, subzone, pricelist_id, id'
 
     product_id = fields.Many2one(
         comodel_name='product.product',
@@ -230,6 +227,11 @@ class ACMProductPricelistItem(models.Model):
     lock_number = fields.Char(
         string='Number',
         related='pricelist_id.lock_number',
+        store=True,
+    )
+    subzone = fields.Char(
+        string='Subzone',
+        related='pricelist_id.subzone',
         store=True,
     )
     is_lastest_version = fields.Boolean(

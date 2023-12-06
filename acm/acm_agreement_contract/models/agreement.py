@@ -13,6 +13,7 @@ import datetime
 
 class Agreement(models.Model):
     _inherit = 'agreement'
+    _order = 'group_id, lock_number, subzone, start_date desc'
 
     # Normal Field
     template_id = fields.Many2one(
@@ -72,6 +73,10 @@ class Agreement(models.Model):
     subzone = fields.Char(
         related='rent_product_id.subzone',
         string='Subzone',
+    )
+    lock_number = fields.Char(
+        related='rent_product_id.lock_number',
+        string='Lock Number',
     )
     partner_id = fields.Many2one(
         string='Lessee',
