@@ -258,6 +258,7 @@
         <field name="arch" type="xml">
             <tree position="attributes">
                 <attribute name="delete">0</attribute>
+                <attribute name="default_order"></attribute>
             </tree>
             <field name="name" position="attributes">
                 <attribute name="invisible">not context.get('default_is_template', False)</attribute>
