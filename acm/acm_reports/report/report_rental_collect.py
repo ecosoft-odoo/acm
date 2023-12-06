@@ -16,7 +16,7 @@ class ReportRentalCollect(models.AbstractModel):
         agreement_lines = self.env['agreement.line'].search(
             [
                 ('agreement_id.state', '=', 'active'),
-                ('agreement_id.recurring_rule_type', '=', 'daily'),
+                ('agreement_id.recurring_rule_type', '=', wizard.recurring_rule_type),
                 ('product_id.value_type', '=', 'rent'),
                 ('product_id.group_id', '=', wizard.group_id.id),
                 ('date_start', '<=', wizard.date_print),

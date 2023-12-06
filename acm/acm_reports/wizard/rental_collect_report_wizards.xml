@@ -10,6 +10,9 @@
                         <field name="group_id"/>
                         <field name="date_print"/>
                     </group>
+                    <group>
+                        <field name="recurring_rule_type"/>
+                    </group>
                 </group>
                 <footer>
                     <button name="print_report" type="object" string="Print" class="oe_highlight"/>

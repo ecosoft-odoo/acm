@@ -105,7 +105,7 @@
                 <field name="total_price"/>
             </xpath>
             <xpath expr="//field[@name='line_ids']/tree/field[@name='name']" position="after">
-                <field name="manual" readonly="1" force_save="1"/> <!-- Can create line in year 2023 -->
+                <field name="manual" readonly="0" force_save="1"/>
                 <field name="date_start"/>
                 <field name="date_end"/>
             </xpath>
