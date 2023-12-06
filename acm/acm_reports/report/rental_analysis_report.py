@@ -115,7 +115,7 @@ class RentalAnalysisReport(models.AbstractModel):
                     ELSE end_date
                 END)
                 GROUP BY rent_product_id
-            ) a_sub ON pp.id = a_sub.rent_product_id
+            ) AS a_sub ON pp.id = a_sub.rent_product_id
             LEFT JOIN agreement a ON a_sub.id = a.id
             WHERE pt.value_type = 'rent' AND pt.date_start IS NOT NULL AND %(at_date)s >= pt.date_start AND
             (pt.date_end IS NULL OR (pt.date_end IS NOT NULL AND %(at_date)s <= pt.date_end))
