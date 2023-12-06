@@ -116,12 +116,17 @@ class HistoricalRentalAnalysisReport(models.AbstractModel):
                    a.end_date, %(area_select)s AS area, %(area_occupied_select)s AS occupied_area, pt.value_type
             FROM product_product pp
             LEFT JOIN product_template pt ON pp.product_tmpl_id = pt.id
-            LEFT JOIN agreement a ON pp.id = a.rent_product_id AND
-            a.state != 'draft' AND a.active_date IS NOT NULL AND %(at_date)s BETWEEN a.start_date AND
-            (CASE
-                WHEN a.termination_date IS NOT NULL THEN a.termination_date
-                ELSE a.end_date
-            END)
+            LEFT JOIN (
+                SELECT rent_product_id, MAX(id) AS id
+                FROM agreement
+                WHERE state != 'draft' AND active_date IS NOT NULL AND %(at_date)s BETWEEN start_date AND
+                (CASE
+                    WHEN termination_date IS NOT NULL THEN termination_date
+                    ELSE end_date
+                END)
+                GROUP BY rent_product_id
+            ) a_sub ON pp.id = a_sub.rent_product_id
+            LEFT JOIN agreement a ON a_sub.id = a.id
             WHERE pt.value_type = 'rent' AND pt.date_start IS NOT NULL AND %(at_date)s >= pt.date_start AND
             (pt.date_end IS NULL OR (pt.date_end IS NOT NULL AND %(at_date)s <= pt.date_end))
         """
