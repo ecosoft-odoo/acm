@@ -98,7 +98,7 @@ class HistoricalOccupancyAnalysisReport(models.TransientModel):
             ) AS x""".format(res))
         total_area = sum(list(filter(lambda x: x, map(lambda k: k[0], self._cr.fetchall()))))
         # --
-        sql_list = res.split('FROM')
+        sql_list = res.split('-- split')
         sql = """
             -- Select column
             %s,
@@ -107,7 +107,7 @@ class HistoricalOccupancyAnalysisReport(models.TransientModel):
             -- Total Occupancy
             ((%s) / (%s)) * 100 AS total_occupancy
             -- From table
-            FROM %s
+            %s
         """ % (sql_list[0],
                self._get_sql_area_occupied_select(),
                self._get_sql_area_select(else_value=1),
