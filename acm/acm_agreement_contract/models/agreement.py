@@ -622,7 +622,7 @@ class Agreement(models.Model):
             if rec.state == 'inactive':
                 raise UserError(_("Agreement's state must not be inactive."))
             contract = rec._search_contract()
-            invoices = self.env['account.invoice'].search([
+            invoices = self.sudo().env['account.invoice'].search([
                 ('contract_id', 'in', contract.ids),
                 ('state', '!=', 'cancel')])
             # Update product date
