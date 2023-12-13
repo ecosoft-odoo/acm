@@ -49,7 +49,7 @@ class CreateNewVersionProduct(models.TransientModel):
                 version = str(int(product.version) + 1).zfill(4)
                 # No allowed create a new version
                 agreements = self.env['agreement'].search([
-                    ('active_date', '!=', False),
+                    ('state', '=', 'active'),
                     ('rent_product_id', 'in', product.product_variant_ids.ids),
                 ])
                 termination_date_list = [a.termination_date if a.termination_date else a.end_date for a in agreements]
