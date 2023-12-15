@@ -29,7 +29,7 @@ today = datetime.date.today()
 if today.month == 12 and today.day == 31:
     product = env['product.template'].search([('value_type', '=', 'rent'), ('year', '=', str(today.year)), ('date_start', '!=', False), ('date_end', '=', False)])
     for p in product:
-        agreements = env['agreement'].search([('active_date', '!=', False), ('rent_product_id', 'in', p.product_variant_ids.ids)])
+        agreements = env['agreement'].search([('state', '=', 'active'), ('rent_product_id', 'in', p.product_variant_ids.ids)])
         termination_date_list = [a.termination_date if a.termination_date else a.end_date for a in agreements]
         if not termination_date_list or max(termination_date_list) &lt;= today:
             new_product = env['product.template'].search([
