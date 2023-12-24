@@ -26,6 +26,8 @@
                             <field name="width" attrs="{'invisible': [('manual', '=', True)]}"/>
                             <field name="length1" attrs="{'invisible': [('manual', '=', True)]}"/>
                             <field name="area" attrs="{'readonly': [('manual', '=', False)]}" force_save="1"/>
+                            <field name="working_hours_id" context="{'default_type': 'in_time'}"/>
+                            <field name="working_hours2_id" context="{'default_type': 'out_time'}"/>
                         </group>
                         <group>
                             <field name="value_type"/>
@@ -37,10 +39,6 @@
                             <field name="subzone"/>
                             <field name="lock_number" attrs="{'required': [('value_type', '=', 'rent')]}"/>
                             <field name="is_lastest_version"/>
-                        </group>
-                        <group>
-                            <field name="date_start"/>
-                            <field name="date_end"/>
                         </group>
                     </group>
                 </page>
@@ -63,31 +61,43 @@
         <field name="model">product.template</field>
         <field name="inherit_id" ref="product.product_template_only_form_view"/>
         <field name="arch" type="xml">
-            <field name="area" position="after">
-                <field name="working_hours_id" context="{'default_type': 'in_time'}"/>
-                <field name="working_hours2_id" context="{'default_type': 'out_time'}"/>
-            </field>
+            <!-- <field name="area" position="after">
+                <field name="working_hours_id" context="{'default_type': 'in_time'}" attrs="{'invisible': [('product_variant_count', '>', 1)]}"/>
+                <field name="working_hours2_id" context="{'default_type': 'out_time'}" attrs="{'invisible': [('product_variant_count', '>', 1)]}"/>
+            </field> -->
             <!-- <field name="value_type" position="after">
                 <field name="goods_category_id" attrs="{'invisible': [('product_variant_count', '>', 1)]}"/>
                 <field name="goods_type" attrs="{'invisible': [('product_variant_count', '>', 1)]}"/>
             </field> -->
+            <xpath expr="//field[@name='value_type']/.." position="after">
+                <group>
+                    <field name="date_start" attrs="{'invisible': [('product_variant_count', '>', 1)]}"/>
+                    <field name="date_end" attrs="{'invisible': [('product_variant_count', '>', 1)]}"/>
+                </group>
+            </xpath>
         </field>
     </record>
-    <!-- <record id="product_normal_form_view" model="ir.ui.view">
+    <record id="product_normal_form_view" model="ir.ui.view">
         <field name="name">product.product.form</field>
         <field name="model">product.product</field>
         <field name="inherit_id" ref="product.product_normal_form_view"/>
         <field name="arch" type="xml">
-            <field name="area" position="after">
+            <!-- <field name="area" position="after">
                 <field name="working_hours_id" context="{'default_type': 'in_time'}"/>
                 <field name="working_hours2_id" context="{'default_type': 'out_time'}"/>
             </field>
             <field name="value_type" position="after">
                 <field name="goods_category_id"/>
                 <field name="goods_type"/>
-            </field>
+            </field> -->
+            <xpath expr="//field[@name='value_type']/.." position="after">
+                <group>
+                    <field name="date_start"/>
+                    <field name="date_end"/>
+                </group>
+            </xpath>
         </field>
-    </record> -->
+    </record>
     <!-- <record id="product_variant_easy_edit_view" model="ir.ui.view">
         <field name="name">product.product.view.form.easy</field>
         <field name="model">product.product</field>

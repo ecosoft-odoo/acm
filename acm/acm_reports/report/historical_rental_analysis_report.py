@@ -128,8 +128,8 @@ class HistoricalRentalAnalysisReport(models.AbstractModel):
                 GROUP BY rent_product_id
             ) a_sub ON pp.id = a_sub.rent_product_id
             LEFT JOIN agreement a ON a_sub.id = a.id
-            WHERE pt.value_type = 'rent' AND pt.date_start IS NOT NULL AND %(at_date)s >= pt.date_start AND
-            (pt.date_end IS NULL OR (pt.date_end IS NOT NULL AND %(at_date)s <= pt.date_end))
+            WHERE pt.value_type = 'rent' AND pp.date_start IS NOT NULL AND %(at_date)s >= pp.date_start AND
+            (pp.date_end IS NULL OR (pp.date_end IS NOT NULL AND %(at_date)s <= pp.date_end))
         """
         sql = sql % {
             'area_select': self._get_sql_area_select(),
