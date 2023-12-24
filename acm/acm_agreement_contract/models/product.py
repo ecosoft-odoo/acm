@@ -104,10 +104,16 @@ class ProductTemplate(models.Model):
     )
     date_start = fields.Date(
         string='Product Start Date',
+        compute='_compute_date_start',
+        inverse='_set_date_start',
+        store=True,
         copy=False,
     )
     date_end = fields.Date(
         string='Product End Date',
+        compute='_compute_date_end',
+        inverse='_set_date_end',
+        store=True,
         copy=False,
     )
     is_lastest_version = fields.Boolean(
@@ -154,6 +160,34 @@ class ProductTemplate(models.Model):
     #     if len(self.product_variant_ids) == 1:
     #         self.product_variant_ids.goods_category_id = \
     #             self.goods_category_id.id
+
+    @api.depends('product_variant_ids', 'product_variant_ids.date_start')
+    def _compute_date_start(self):
+        unique_variants = self.filtered(
+            lambda template: len(template.product_variant_ids) == 1)
+        for template in unique_variants:
+            template.date_start = template.product_variant_ids.date_start
+        for template in (self - unique_variants):
+            template.date_start = False
+
+    @api.one
+    def _set_date_start(self):
+        if len(self.product_variant_ids) == 1:
+            self.product_variant_ids.date_start = self.date_start
+
+    @api.depends('product_variant_ids', 'product_variant_ids.date_end')
+    def _compute_date_end(self):
+        unique_variants = self.filtered(
+            lambda template: len(template.product_variant_ids) == 1)
+        for template in unique_variants:
+            template.date_end = template.product_variant_ids.date_end
+        for template in (self - unique_variants):
+            template.date_end = False
+
+    @api.one
+    def _set_date_end(self):
+        if len(self.product_variant_ids) == 1:
+            self.product_variant_ids.date_end = self.date_end
 
     @api.constrains('date_start', 'year')
     def _check_date_start_year(self):
@@ -251,22 +285,26 @@ class ProductTemplate(models.Model):
         """ Area = Width x Length """
         self.area = self.width * self.length1
 
-    # @api.model_create_multi
-    # def create(self, vals_list):
-    #     templates = super(ProductTemplate, self).create(vals_list)
-    #     for template, vals in pycompat.izip(templates, vals_list):
-    #         related_vals = {}
+    @api.model_create_multi
+    def create(self, vals_list):
+        templates = super(ProductTemplate, self).create(vals_list)
+        for template, vals in pycompat.izip(templates, vals_list):
+            related_vals = {}
     #         if vals.get('working_hours_id'):
     #             related_vals['working_hours_id'] = vals['working_hours_id']
     #         if vals.get('working_hours2_id'):
     #             related_vals['working_hours2_id'] = vals['working_hours2_id']
-    #         # if vals.get('goods_type'):
-    #         #     related_vals['goods_type'] = vals['goods_type']
-    #         # if vals.get('goods_category_id'):
-    #         #     related_vals['goods_category_id'] = vals['goods_category_id']
-    #         if related_vals:
-    #             template.write(related_vals)
-    #     return templates
+    #         if vals.get('goods_type'):
+    #             related_vals['goods_type'] = vals['goods_type']
+    #         if vals.get('goods_category_id'):
+    #             related_vals['goods_category_id'] = vals['goods_category_id']
+            if vals.get('date_start'):
+                related_vals['date_start'] = vals['date_start']
+            if vals.get('date_end'):
+                related_vals['date_end'] = vals['date_end']
+            if related_vals:
+                template.write(related_vals)
+        return templates
 
     @api.multi
     def action_view_product(self):
@@ -339,6 +377,14 @@ class ProductProduct(models.Model):
     #     string='Not Working Hours',
     #     domain="[('type', '=', 'out_time')]",
     # )
+    date_start = fields.Date(
+        string='Product Start Date',
+        copy=False,
+    )
+    date_end = fields.Date(
+        string='Product End Date',
+        copy=False,
+    )
 
     @api.onchange('year', 'version', 'group_id', 'subzone', 'lock_number')
     def _onchange_year_version_group_subzone_lock_number(self):
