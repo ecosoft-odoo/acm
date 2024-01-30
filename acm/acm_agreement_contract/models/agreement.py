@@ -410,6 +410,15 @@ class Agreement(models.Model):
                     _("Agreement '%s' contract date can't be later than start date")
                     % (rec.name, ))
 
+    @api.constrains('termination_date', 'end_date')
+    def _check_termination_end_date(self):
+        """ Check termination date <= end date """
+        for rec in self:
+            if rec.termination_date and rec.termination_date > rec.end_date:
+                raise UserError(
+                    _("Agreement '%s' termination date can't be later than end date")
+                    % (rec.name, ))
+
     @api.constrains('line_ids')
     def _check_line_ids(self):
         """ One rental product is allowed """
