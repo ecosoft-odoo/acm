@@ -599,29 +599,28 @@ class Agreement(models.Model):
     def _update_product_date(self):
         self.ensure_one()
         end_date = self.termination_date if self.termination_date else self.end_date
-        if self.rent_product_id.product_tmpl_id.year and str(end_date.year) != self.rent_product_id.product_tmpl_id.year:
+        if self.rent_product_id.year and str(end_date.year) != self.rent_product_id.year:
             year = str(end_date.year)
             if end_date.month == 12 and end_date.day == 31:
                 year = str(end_date.year + 1)
-            new_product = self.env['product.template'].search([
+            new_product = self.env['product.product'].search([
                 ('value_type', '=', 'rent'),
                 ('year', '=', year),
                 ('version', '=', '0001'),
-                ('group_id', '=', self.rent_product_id.product_tmpl_id.group_id.id),
-                ('subzone', '=', self.rent_product_id.product_tmpl_id.subzone),
-                ('lock_number', '=', self.rent_product_id.product_tmpl_id.lock_number),
-                ('date_start', '=', False),
-                ('date_end', '=', False),
+                ('group_id', '=', self.rent_product_id.group_id.id),
+                ('subzone', '=', self.rent_product_id.subzone),
+                ('lock_number', '=', self.rent_product_id.lock_number),
             ], limit=1)
             if not new_product:
                 raise UserError(_('No have rent product in year {}.').format(year))
-            if not (self.rent_product_id.product_tmpl_id.date_start and not self.rent_product_id.product_tmpl_id.date_end):
+            if not (self.rent_product_id.date_start and not self.rent_product_id.date_end):
                 raise UserError(_('The product must have product start date and not product end date.'))
-            self.rent_product_id.product_tmpl_id.write({
+            self.rent_product_id.write({
                 'date_end': end_date,
             })
             new_product.write({
                 'date_start': end_date + relativedelta(days=1),
+                'date_end': False,
             })
 
     @api.multi
