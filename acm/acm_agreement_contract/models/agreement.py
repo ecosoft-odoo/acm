@@ -613,8 +613,8 @@ class Agreement(models.Model):
             ], limit=1)
             if not new_product:
                 raise UserError(_('No have rent product in year {}.').format(year))
-            if not (self.rent_product_id.date_start and not self.rent_product_id.date_end):
-                raise UserError(_('The product must have product start date and not product end date.'))
+            if not self.rent_product_id.date_start:
+                raise UserError(_('The product must have product start date.'))
             self.rent_product_id.write({
                 'date_end': end_date,
             })
