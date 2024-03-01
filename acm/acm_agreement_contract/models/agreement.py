@@ -868,7 +868,7 @@ class Agreement(models.Model):
         rent_period = ''
         if date_start and date_end:
             period = relativedelta(
-                date_end, date_start - relativedelta(days=1))
+                date_end + relativedelta(days=1), date_start)
             rent_period += str(period.years) + ' ปี ' + \
                 str(period.months) + ' เดือน ' + str(period.days) + ' วัน'
         return rent_period
