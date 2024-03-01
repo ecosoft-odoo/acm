@@ -611,17 +611,19 @@ class Agreement(models.Model):
                 ('subzone', '=', self.rent_product_id.subzone),
                 ('lock_number', '=', self.rent_product_id.lock_number),
             ], limit=1)
-            if not new_product:
-                raise UserError(_('No have rent product in year {}.').format(year))
+            # if not new_product:
+            #     raise UserError(_('No have rent product in year {}.').format(year))
             if not self.rent_product_id.date_start:
                 raise UserError(_('The product must have product start date.'))
-            self.rent_product_id.write({
-                'date_end': end_date,
-            })
-            new_product.write({
-                'date_start': end_date + relativedelta(days=1),
-                'date_end': False,
-            })
+            if not self.rent_product_id.date_end:
+                self.rent_product_id.write({
+                    'date_end': end_date,
+                })
+            if not new_product.date_start:
+                new_product.write({
+                    'date_start': self.rent_product_id.date_end + relativedelta(days=1),
+                    'date_end': False,
+                })
 
     @api.multi
     def inactive_statusbar(self):
