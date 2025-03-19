@@ -158,6 +158,11 @@
                         <td style="border : 1px solid black; padding: 5px;">${object.agreement_id.get_rental_area() or '-'}</td>
                     </tr>
                     <tr>
+                        <td style="border : 1px solid black; padding: 5px;"></td>
+                        <td style="border : 1px solid black; padding: 5px;">&#160;&#160;&#160;&#160;&#160;<b>- เนื้อที่สิ่งปลูกสร้าง</b></td>
+                        <td style="border : 1px solid black; padding: 5px;">${object.agreement_id.get_rental_building_area() or '-'}</td>
+                    </tr>
+                    <tr>
                         <td style="border : 1px solid black; padding: 5px;"><b>7.</b></td>
                         <td style="border : 1px solid black; padding: 5px;"><b>ระยะเวลาการเช่า</b></td>
                         <td style="border : 1px solid black; padding: 5px;">${object.agreement_id.get_rental_period(object.agreement_id.start_date, object.agreement_id.end_date) or '-'} (วันที่ ${object.agreement_id.start_date and '%s %s %s' % (object.agreement_id.start_date.strftime('%d').lstrip('0'), object.agreement_id.trans_months(object.agreement_id.start_date.strftime('%m')), (object.agreement_id.start_date + relativedelta(years=543)).strftime('%Y')) or '-'} ถึงวันที่ ${object.agreement_id.end_date and '%s %s %s' % (object.agreement_id.end_date.strftime('%d').lstrip('0'), object.agreement_id.trans_months(object.agreement_id.end_date.strftime('%m')), (object.agreement_id.end_date + relativedelta(years=543)).strftime('%Y')) or '-'})</td>
@@ -342,6 +347,261 @@ ${object.agreement_id.filter_lines(value_type='security_deposit') and '{0:,.2f}'
                     % endif
                 % endfor
             </div>
+        </field>
+    </record>
+
+    <record id="agreement_appendix_land_v2_3" model="agreement.appendix">
+        <field name="agreement_id" ref="acm_odoo_lite.agreement_rental_land_v2"/>
+        <field name="name">กฎระเบียบ และข้อบังคับในการเช่าพื้นที่</field>
+        <field name="title">กฎระเบียบ และข้อบังคับในการเช่าพื้นที่</field>
+        <field name="sequence">60</field>
+        <field name="content">
+            <![CDATA[
+                <div style="page-break-before: always; text-align: justify; line-height:25px !important;">
+                    <p class="text-center"><b style="text-align: left; text-decoration-thickness: 1px;font-size:28px;">เอกสารแนบท้ายสัญญา ค.<br>กฎระเบียบ และข้อบังคับในการดำเนินกิจการค้าในพื้นที่เช่า</b></p>
+                    <div class="row" style="margin-bottom: 10px; page-break-inside: avoid;">
+                        <div class="col-1">
+                            <b>1.</b>
+                        </div>
+                        <div class="col-11">
+                            <b>เจ้าหน้าที่ของบริษัท ให้ถือว่าเป็นตัวแทนของผู้ให้เช่า โดยให้มีหน้าที่กระทำการใดๆ ให้เป็นไปตามวัตถุประสงค์ในการประกอบธุรกิจของผู้ให้เช่า</b>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 10px; page-break-inside: avoid;">
+                        <div class="col-1">
+                            <b>2.</b>
+                        </div>
+                        <div class="col-11">
+                            <b>ผู้เช่าต้องทำการประกอบการค้า ด้วยความซื่อสัตย์ สุจริต ยุติธรรม มีความรับผิดชอบ</b>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 10px; page-break-inside: avoid;">
+                        <div class="col-1">
+                            <b>3.</b>
+                        </div>
+                        <div class="col-11">
+                            <b>กรณีที่ผู้เช่าผิดนัดชำระค่าเช่า ค่าธรรมเนียม ค่าสาธารณูปโภค ค่าใช้จ่ายต่างๆ เกินกำหนดเวลาอันจะต้องเสียค่าปรับแล้ว ผู้เช่ายินยอมให้ผู้ให้เช่าคิดค่าติดตามทวงถามในอัตราครั้งละ 500 (ห้าร้อย) บาท ต่อสัญญา</b>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 10px; page-break-inside: avoid;">
+                        <div class="col-1">
+                            <b>4.</b>
+                        </div>
+                        <div class="col-11">
+                            <b>การนำยานพาหนะเข้าออก และหรือ การจอดรถของผู้เช่า บริวาร หรือคู่ค้าของผู้เช่าในพื้นที่เช่า อนุญาตให้จอดได้ในพื้นที่ที่ผู้ให้เช่ากำหนด หากการฝ่าฝืนของผู้เช่าไปรบกวนสิทธิของผู้เช่ารายอื่น ต้องชำระค่าปรับในอัตรา 500 (ห้าร้อย) บาท ต่อครั้ง</b>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 10px; page-break-inside: avoid;">
+                        <div class="col-1">
+                            <b>5.</b>
+                        </div>
+                        <div class="col-11">
+                            <b>กรณีมีเหตุการณ์ทะเลาะวิวาทกันในพื้นที่เช่า ผู้ที่เข้าร่วมการทะเลาะวิวาทหากเป็นลูกจ้าง บริวาร หรือลูกค้าของผู้เช่า ผู้เช่าต้องชำระค่าปรับในอัตรา 5,000 (ห้าพัน) บาท ต่อหนึ่งเหตุการณ์</b>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 10px; page-break-inside: avoid;">
+                        <div class="col-1">
+                            <b>6.</b>
+                        </div>
+                        <div class="col-11">
+                            <b>ผู้เช่าจะไม่นำ เก็บ หรือรักษาวัตถุที่เป็นพิษหรือเป็นอันตราย สารเคมี วัตถุไวไฟ อาวุธปืน วัตถุระเบิด วัตถุอันตราย หรือภาชนะบรรจุก๊าซที่ไม่ผ่านการรับรองความปลอดภัยจากหน่วยงานของทางราชการ หรือสินค้าประเภทที่กฎหมายบัญญัติว่าเป็นอันตรายไว้ในพื้นที่เช่า</b>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 10px; page-break-inside: avoid;">
+                        <div class="col-1">
+                            <b>7.</b>
+                        </div>
+                        <div class="col-11">
+                            <b>ผู้เช่าจะต้องดำเนินธุรกิจตามที่ได้กำหนดไว้ในสัญญาเท่านั้น หากฝ่าฝืนผู้ให้เช่ามีสิทธิยกเลิกสัญญาเช่าได้</b>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 10px; page-break-inside: avoid;">
+                        <div class="col-1">
+                            <b>8.</b>
+                        </div>
+                        <div class="col-11">
+                            <b>ผู้เช่าจะต้องไม่ปลอมปน ตกแต่งสินค้า หรือกระทำการใดๆ เพื่อหลอกลวงผู้ซื้อ หากมีการฟ้องร้องหรือดำเนินคดีเกี่ยวกับการหลอกลวงผู้ซื้อ ผู้ให้เช่าจะไม่รับผิดชอบใดๆ ทั้งสิ้น</b>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 10px; page-break-inside: avoid;">
+                        <div class="col-1">
+                            <b>9.</b>
+                        </div>
+                        <div class="col-11">
+                            <b>ผู้เช่าต้องรักษาความสะอาดบริเวณพื้นที่เช่า พื้นที่หน้าร้าน พื้นที่ทางเดิน พื้นที่ห้องน้ำและพื้นที่ส่วนกลางให้สะอาด และมีความเป็นระเบียบเรียบร้อยอยู่ตลอดเวลา (หากมี)</b>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 10px; page-break-inside: avoid;">
+                        <div class="col-1">
+                            <b>10.</b>
+                        </div>
+                        <div class="col-11">
+                            <b>ผู้เช่าจะต้องทิ้งขยะในถุงดำพร้อมมัดปากถุงให้เรียบร้อย และนำมาทิ้งในถังหรือสถานที่ที่ผู้ให้เช่าจัดไว้ให้เท่านั้น และจะต้องไม่นำขยะจากภายนอกมาทิ้งภายในบริเวณพื้นที่เช่า</b>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 10px; page-break-inside: avoid;">
+                        <div class="col-1">
+                            <b>11.</b>
+                        </div>
+                        <div class="col-11">
+                            <b>ผู้เช่าจะต้องไม่จ้างแรงงานต่างด้าวที่ไม่ได้รับอนุญาตตามกฎหมาย</b>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 10px; page-break-inside: avoid;">
+                        <div class="col-1">
+                            <b>12.</b>
+                        </div>
+                        <div class="col-11">
+                            <b>ผู้เช่าจะต้องจัดเก็บสินค้า สิ่งของในพื้นที่เช่าและต้องดูแลสินค้า สิ่งของนั้นเอง กรณีเกิดความชำรุดเสียหาย หรือสูญเสีย ผู้ให้เช่าจะไม่รับผิดชอบในความชำรุดเสียหายใดๆ ทั้งสิ้น</b>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 10px; page-break-inside: avoid;">
+                        <div class="col-1">
+                            <b>13.</b>
+                        </div>
+                        <div class="col-11">
+                            <b>ผู้เช่าจะต้องดูแลบำรุงรักษา และไม่ก่อให้เกิดความเสียหายใดๆ ต่อทรัพย์สินของผู้ให้เช่า ทรัพย์สินของ ผู้เช่ารายอื่น และทรัพย์สินของผู้เข้ามาใช้บริการหรือลูกค้าของผู้ให้เช่า</b>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 10px; page-break-inside: avoid;">
+                        <div class="col-1">
+                            <b>14.</b>
+                        </div>
+                        <div class="col-11">
+                            <b>ผู้เช่ารายใดประสงค์ใช้เครื่องขยายเสียง หรือใช้เสียงในกิจกรรมส่งเสริมการขาย หรืออื่นๆ จะต้องยื่นเรื่องเพื่อขออนุญาตล่วงหน้าต่อผู้ให้เช่า และชำระค่าธรรมเนียม (หากมี) เมื่อได้รับอนุญาตเป็นหนังสือแล้วจึงสามารถดำเนินการได้</b>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 10px; page-break-inside: avoid;">
+                        <div class="col-1">
+                            <b>15.</b>
+                        </div>
+                        <div class="col-11">
+                            <b>ผู้เช่าจะต้องไม่กระทำการใดๆ อันมีลักษณะหมิ่นประมาท ดูหมิ่น หรือแสดงความคิดเห็นด้วยข้อความ ภาพเคลื่อนไหว เสียง ทางสื่ออิเล็กทรอนิกส์ (Social Media) หรือการกระทำอื่นใด ซึ่งเป็นเท็จและอาจก่อให้เกิดความเสียหายด้านชื่อเสียง ทรัพย์สิน และความปลอดภัยของผู้ให้เช่าและพื้นที่เช่า</b>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 10px; page-break-inside: avoid;">
+                        <div class="col-1">
+                            <b>16.</b>
+                        </div>
+                        <div class="col-11">
+                            <b>ห้ามผู้เช่าสับเปลี่ยนตำแหน่งพื้นที่เช่าโดยไม่ได้รับอนุญาตจากผู้ให้เช่าก่อนโดยเด็ดขาด ในกรณีที่ผู้ให้เช่ามีเหตุจำเป็น ผู้เช่ายินยอมให้ผู้ให้เช่าทำการการสับเปลี่ยนตำแหน่งพื้นที่เช่าเป็นการชั่วคราวได้</b>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 10px; page-break-inside: avoid;">
+                        <div class="col-1">
+                            <b>17.</b>
+                        </div>
+                        <div class="col-11">
+                            <b>ห้ามเล่นการพนันหรือกระทำการใดๆ อันเป็นการผิดต่อกฎหมาย หรือศีลธรรมอันดีของประชาชนใน  พื้นที่เช่า</b>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 10px; page-break-inside: avoid;">
+                        <div class="col-1">
+                            <b>18.</b>
+                        </div>
+                        <div class="col-11">
+                            <b>ห้ามนำสิ่งเสพติดที่ผิดกฎหมายทุกประเภท เข้ามาในบริเวณพื้นที่เช่า</b>
+                        </div>
+                    </div>
+                    <div class="row" style="text-indent: 0px;margin-top: 30px;">
+                        <div class="col-6 text-center">ลงชื่อ.....................................................ผู้ให้เช่า<br>
+                        ( นางสาวปิยะดา เลาหวัฒน์ )
+                        </div>
+                        <div class="col-6 text-center">ลงชื่อ.....................................................ผู้เช่า<br>
+                        (${object.agreement_id.partner_id and &nbsp;&nbsp;&nbsp;object.agreement_id.partner_id.name&nbsp;&nbsp;&nbsp; or '.....................................................'})
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row" style="margin-bottom: 10px; page-break-inside: avoid;">
+                        <div class="col-1">
+                            <b>19.</b>
+                        </div>
+                        <div class="col-11">
+                            <b>ห้ามพกพาอาวุธหรือสิ่งผิดกฎหมายทุกชนิด เข้ามาในพื้นที่เช่าโดยเด็ดขาด หากพบว่ามีบุคคลใดพกพาอาวุธเข้ามาในพื้นที่เช่า ให้รีบแจ้งเจ้าหน้าที่รักษาความปลอดภัย หรือตัวแทนของผู้ให้เช่าโดยทันที</b>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 10px; page-break-inside: avoid;">
+                        <div class="col-1">
+                            <b>20.</b>
+                        </div>
+                        <div class="col-11">
+                            <b>ห้ามผู้เช่าจุดธูป เทียน ยากันยุง หรือกระทำการอื่นใดโดยไม่มีผู้ดูแลอันเป็นการรบกวนผู้อื่น และต้องดูแลรักษาอุปกรณ์เครื่องใช้ไฟฟ้าให้พร้อมใช้งานอยู่เสมอ รวมตลอดถึงการปิดอุปกรณ์ไฟฟ้าที่ไม่จำเป็นในพื้นที่เช่าก่อนปิดร้านทุกครั้งในแต่ละวัน และห้ามกระทำการใดๆ ที่ทำให้มีความเสี่ยงในการเกิดอัคคีภัยภายในบริเวณพื้นที่เช่าโดยเด็ดขาด หากการกระทำใดของผู้เช่าเกิดความเสี่ยงในการเกิดอัคคีภัย และขอสงวนสิทธิ์ผู้ให้เช่าในการแจ้งเตือน และหรือ ในการพิจารณาเพื่อบอกเลิกสัญญา</b>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 10px; page-break-inside: avoid;">
+                        <div class="col-1">
+                            <b>21.</b>
+                        </div>
+                        <div class="col-11">
+                            <b>ผู้เช่าที่ประกอบกิจการขายอาหารและเครื่องดื่มจะต้องแต่งกายตามกฎระเบียบของผู้สัมผัสอาหารซึ่งเป็นกฎระเบียบข้อบังคับของสำนักงานสาธารณสุข หรือส่วนราชการอื่นที่เกี่ยวข้องโดยเคร่งครัด</b>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 10px; page-break-inside: avoid;">
+                        <div class="col-1">
+                            <b>22.</b>
+                        </div>
+                        <div class="col-11">
+                            <b>กรณีที่ผู้เช่าต้องการติดต่อประสานงานในเรื่องต่างๆ ต้องติดต่อผ่านตัวแทนของผู้ให้เช่าเท่านั้น หากฝ่าฝืนไม่ปฏิบัติตาม ผู้ให้เช่าจะไม่รับผิดชอบความเสียหายใดๆ ที่เกิดขึ้น</b>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 10px; page-break-inside: avoid;">
+                        <div class="col-1">
+                            <b>23.</b>
+                        </div>
+                        <div class="col-11">
+                            <b>หากผู้เช่ามีข้อสงสัย หรือมีความประสงค์จะขอข้อมูลใดๆ เพิ่มเติม หรือมีเรื่องต้องการแจ้งให้ผู้ให้เช่ารับทราบ หรือมีเรื่องร้องเรียนในเรื่องต่างๆ กรุณาแจ้งที่ตัวแทนของผู้ให้เช่าเท่านั้น</b>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 10px; page-break-inside: avoid;">
+                        <div class="col-1">
+                            <b>24.</b>
+                        </div>
+                        <div class="col-11">
+                            <b>ผู้เช่าจะไม่ทำให้ผู้เช่ารายอื่น หรือบุคคลอื่นเดือดร้อน เกี่ยวกับเรื่องเสียงดัง หรือกระทำการใดๆ อันเป็นการรบกวนสิทธิของผู้เช่ารายอื่น โดยเด็ดขาด หากมีข้อบกพร่องดังกล่าวเกิดขึ้น ผู้เช่าจะต้องแก้ไขหรือกำจัดหรือระงับให้สิ้นไปภายในกำหนดระยะเวลาที่กำหนดแต่ไม่เกิน 3 วันนับแต่ได้รับบอกกล่าวจาก  ผู้ให้เช่า</b>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 10px; page-break-inside: avoid;">
+                        <div class="col-1">
+                            <b>25.</b>
+                        </div>
+                        <div class="col-11">
+                            <b>ผู้เช่าจะรักษาสถานที่เช่าให้อยู่ในสภาพมั่นคง ปลอดภัย สะอาดเรียบร้อย ไม่มีวัตถุที่ส่งกลิ่นเหม็น หรือกลิ่นอันไม่พึงปรารถนา หากมีข้อบกพร่องดังกล่าวเกิดขึ้น ผู้เช่าจะต้องแก้ไขหรือกำจัดหรือระงับให้สิ้นไปภายในกำหนดระยะเวลาที่กำหนดแต่ไม่เกิน 3 วันนับแต่ได้รับบอกกล่าวจากผู้ให้เช่า</b>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 10px; page-break-inside: avoid;">
+                        <div class="col-1">
+                            <b>26.</b>
+                        </div>
+                        <div class="col-11">
+                            <b>ผู้เช่าตกลงตั้งวางสินค้า สิ่งของ ภายในทรัพย์สินที่เช่าเท่านั้น โดยจะต้องไม่วาง แขวน หรือกระทำโดยวิธีอื่นใด ให้สินค้า สิ่งของล่วงล้ำออกนอกบริเวณทรัพย์สินที่เช่าเป็นอันขาด และจะไม่ทำให้สินค้า สิ่งของ ป้ายต่างๆ บดบังร้านค้าใกล้เคียงหรือพื้นที่ส่วนกลาง</b>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 10px; page-break-inside: avoid;">
+                        <div class="col-1">
+                            <b>27.</b>
+                        </div>
+                        <div class="col-11">
+                            <b>การติดตั้งแผ่นป้าย หรือป้ายโฆษณารูปแบบต่างๆ ทุกประเภท ให้ติดตั้งภายในพื้นที่ของทรัพย์สินที่เช่า หรือบริเวณพื้นที่ที่ผู้เช่ามีสิทธิการเช่าตามสัญญานี้ ผู้เช่าจะต้องได้รับอนุญาตจากผู้ให้เช่าเป็นหนังสือ และปฏิบัติตามเงื่อนไขที่ผู้ให้เช่ากำหนด และชำระค่าธรรมเนียมให้แก่ผู้ให้เช่า (หากมี) ก่อนการดำเนินการ</b>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 10px; page-break-inside: avoid;">
+                        <div class="col-1">
+                            <b>28.</b>
+                        </div>
+                        <div class="col-11">
+                            <b>ผู้เช่า และบริวารของผู้เช่า จะต้องไม่ก่อความเดือดร้อนรำคาญให้กับผู้เช่ารายอื่น หรือบุคคลภายนอก   การเพิกเฉยหรือฝ่าฝืนให้ถือว่าเป็นการปฏิบัติผิดสัญญาเช่าอย่างร้ายแรง</b>
+                        </div>
+                    </div>
+                    <div class="row" style="text-indent: 0px;margin-top: 30px;">
+                        <div class="col-6 text-center">ลงชื่อ.....................................................ผู้ให้เช่า<br>
+                        ( นางสาวปิยะดา เลาหวัฒน์ )
+                        </div>
+                        <div class="col-6 text-center">ลงชื่อ.....................................................ผู้เช่า<br>
+                        (${object.agreement_id.partner_id and &nbsp;&nbsp;&nbsp;object.agreement_id.partner_id.name&nbsp;&nbsp;&nbsp; or '.....................................................'})
+                        </div>
+                    </div>
+                </div>
+            ]]>
         </field>
     </record>
 
