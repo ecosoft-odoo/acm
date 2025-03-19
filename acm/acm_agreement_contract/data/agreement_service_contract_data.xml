@@ -606,6 +606,13 @@
                             <div class="col-6">ชำระภายในวันที่ 15 ของทุกเดือน</div>
                         </div>
                         <div class="row">
+                            <div class="col-6" style="padding-left: 70px;">&nbsp;&nbsp;&nbsp;&nbsp;- การชำระค่าบริการรายปี</div>
+                            <div class="col-6">
+                                ชำระภายในวันที่ 15 ของเดือน
+                                ${object.agreement_id.recurring_rule_type == 'yearly' and object.agreement_id.trans_months(object.agreement_id.paid_every_months) or '-'}
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-6" style="padding-left: 70px;">&nbsp;&nbsp;&nbsp;&nbsp;- การชำระค่าสาธารณูปโภค (น้ำ/ไฟฟ้า)</div>
                             <div class="col-6">ชำระภายในวันที่ 15 ของเดือนถัดไป</div>
                         </div>
