@@ -20,6 +20,9 @@
             <label for="name" position="attributes">
                 <attribute name="invisible">1</attribute>
             </label>
+            <xpath expr="//field[@name='paid_every_months']" position="attributes">
+                <attribute name="attrs">{'invisible': 1, 'required': 0}</attribute>
+            </xpath>
             <field name="date_end" position="after">
                 <field name="payment_type"/>
                 <field name="payment_date" placeholder="วันที่จ่าย" attrs="{'required': [('payment_type', '=', 'full_paid')], 'invisible': [('payment_type', '!=', 'full_paid')]}"/>

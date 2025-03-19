@@ -53,6 +53,13 @@
                     <field name="recurring_interval" class="oe_inline"/>
                     <field name="recurring_rule_type" class="oe_inline"/>
                 </div>
+                <field
+                    name="paid_every_months"
+                    attrs="{
+                        'invisible': ['|', ('is_template', '=', True),('recurring_rule_type', '!=', 'yearly')],
+                        'required': [('is_template', '=', False),('recurring_rule_type', '=', 'yearly')],
+                    }"
+                    placeholder="เดือนที่ต้องชำระ"/>
                 <field name="rental_area_delivery_date" attrs="{'invisible': [('is_template', '=', True)]}" placeholder="วันส่งมอบพื้นที่เช่า"/>
                 <field name="rental_free_start_date" attrs="{'invisible': [('is_template', '=', True)]}" placeholder="วันที่เริ่มต้นปลอดค่าเช่า"/>
                 <field name="rental_free_end_date" attrs="{'invisible': [('is_template', '=', True)]}" placeholder="วันที่สิ้นสุดปลอดค่าเช่า"/>

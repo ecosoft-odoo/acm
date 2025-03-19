@@ -81,6 +81,23 @@ class AgreementCreate(models.TransientModel):
     rental_free_end_date = fields.Date(
         string="Rental Free End Date",
     )
+    paid_every_months = fields.Selection(
+        selection=[
+            ("01", "มกราคม"),
+            ("02", "กุมภาพันธ์"),
+            ("03", "มีนาคม"),
+            ("04", "เมษายน"),
+            ("05", "พฤษภาคม"),
+            ("06", "มิถุนายน"),
+            ("07", "กรกฎาคม"),
+            ("08", "สิงหาคม"),
+            ("09", "กันยายน"),
+            ("10", "ตุลาคม"),
+            ("11", "พฤศจิกายน"),
+            ("12", "ธันวาคม"),
+        ],
+        string="Paid Every (Months)",
+    )
 
     @api.onchange('template_id')
     def _onchange_template_id(self):
@@ -111,6 +128,7 @@ class AgreementCreate(models.TransientModel):
                 'rental_area_delivery_date': self.rental_area_delivery_date,
                 'rental_free_start_date': self.rental_free_start_date,
                 'rental_free_end_date': self.rental_free_end_date,
+                'paid_every_months': self.paid_every_months,
             }
         )
         agreement = self.template_id.with_context(context)

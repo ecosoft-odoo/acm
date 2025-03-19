@@ -23,6 +23,14 @@
                             <field name="recurring_interval" class="oe_inline"/>
                             <field name="recurring_rule_type" class="oe_inline"/>
                         </div>
+                        <field
+                            name="paid_every_months"
+                            attrs="{
+                                'invisible': [('recurring_rule_type', '!=', 'yearly')],
+                                'required': [('recurring_rule_type', '=', 'yearly')],
+                            }"
+                            placeholder="เดือนที่ต้องชำระ"
+                        />
                     </group>
                     <group>
                         <field name="income_type_id" invisible="1"/>

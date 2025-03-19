@@ -378,6 +378,24 @@ class Agreement(models.Model):
         string='Inactive Date',
         readonly=True,
     )
+    paid_every_months = fields.Selection(
+        selection=[
+            ("01", "มกราคม"),
+            ("02", "กุมภาพันธ์"),
+            ("03", "มีนาคม"),
+            ("04", "เมษายน"),
+            ("05", "พฤษภาคม"),
+            ("06", "มิถุนายน"),
+            ("07", "กรกฎาคม"),
+            ("08", "สิงหาคม"),
+            ("09", "กันยายน"),
+            ("10", "ตุลาคม"),
+            ("11", "พฤศจิกายน"),
+            ("12", "ธันวาคม"),
+        ],
+        string="Paid Every (Months)",
+        states={'active': [('readonly', True)]},
+    )
 
     @api.onchange('start_date')
     def _onchange_start_date(self):
@@ -702,6 +720,7 @@ class Agreement(models.Model):
             'rental_area_delivery_date': context.get('rental_area_delivery_date') or self.rental_area_delivery_date,
             'rental_free_start_date': context.get('rental_free_start_date') or self.rental_free_start_date,
             'rental_free_end_date': context.get('rental_free_end_date') or self.rental_free_end_date,
+            'paid_every_months': context.get('paid_every_months') or self.paid_every_months,
         }
 
     @api.multi
@@ -874,6 +893,10 @@ class Agreement(models.Model):
             '11': ['พฤศจิกายน', 'พ.ย.'],
             '12': ['ธันวาคม', 'ธ.ค.'],
         }
+
+        if not month or month not in months:
+            return "-"
+
         return abbreviate and months[month][1] or months[month][0]
 
     @api.model

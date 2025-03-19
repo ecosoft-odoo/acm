@@ -107,6 +107,9 @@
             <label for="recurring_interval" position="attributes">
                 <attribute name="invisible">1</attribute>
             </label>
+            <xpath expr="//field[@name='paid_every_months']" position="attributes">
+                <attribute name="attrs">{'invisible': 1, 'required': 0}</attribute>
+            </xpath>
             <field name="end_date" position="after">
                 <field name="payment_type" attrs="{'required': [('is_template', '=', False)], 'invisible': [('is_template', '!=', False)]}"/>
                 <field name="payment_date" placeholder="วันที่จ่าย" attrs="{'required': [('payment_type', '=', 'full_paid')], 'invisible': [('payment_type', '!=', 'full_paid')]}"/>
