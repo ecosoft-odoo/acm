@@ -91,22 +91,19 @@ class RentalRateAnalysisReport(models.Model):
                         days_start_month = monthrange(line.date_start.year, line.date_start.month)[1]
                         days_end_month = monthrange(line.date_end.year, line.date_end.month)[1]
                         if line.date_start.day != 1:
-                            used_days = days_start_month - line.date_start.day + 1
                             # period_net
                             daily_rate_net = line.total_price / days_start_month
-                            partial_price_net += daily_rate_net * used_days
+                            partial_price_net = daily_rate_net * line.date_start.day
                             # period standard
                             daily_rate = line.lst_price / days_start_month
-                            used_days = days_start_month - line.date_start.day + 1
-                            partial_price += daily_rate * used_days
+                            partial_price += daily_rate * line.date_start.day
                         if line.date_end.day != days_end_month:
-                            used_days = days_end_month - line.date_start.day + 1
                             # period_net
                             daily_rate_net = line.total_price / days_end_month
-                            partial_price_net += daily_rate_net * used_days
+                            partial_price_net = daily_rate_net * line.date_end.day
                             # period standard
                             daily_rate = line.lst_price / days_end_month
-                            partial_price += daily_rate * used_days
+                            partial_price += daily_rate * line.date_end.day
                 # Calculate Rent Period
                 if i <= 2:
                     rent_period_net = (line.total_price * multiplier) + partial_price_net
