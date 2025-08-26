@@ -4,6 +4,7 @@
 from datetime import timedelta
 from odoo import models, fields, api, tools
 from dateutil.relativedelta import relativedelta
+from calendar import monthrange
 
 
 class RentalRateAnalysisReport(models.Model):
@@ -77,6 +78,8 @@ class RentalRateAnalysisReport(models.Model):
                     'date_start')
             multiplier, sum_net, sum_standard = 1, 0, 0
             for i, line in enumerate(agreement_lines):
+                partial_price_net = 0
+                partial_price = 0
                 # Calculate days of period.
                 if line.agreement_id.recurring_rule_type == 'daily':
                     multiplier = \
@@ -84,15 +87,34 @@ class RentalRateAnalysisReport(models.Model):
                 elif line.agreement_id.recurring_rule_type == 'monthly':
                     period = relativedelta(line.date_end + timedelta(1), line.date_start)
                     multiplier = period.years * 12 + period.months
+                    if period.days > 0:
+                        days_start_month = monthrange(line.date_start.year, line.date_start.month)[1]
+                        days_end_month = monthrange(line.date_end.year, line.date_end.month)[1]
+                        if line.date_start.day != 1:
+                            # period_net
+                            daily_rate_net = line.total_price / days_start_month
+                            partial_price_net = daily_rate_net * line.date_start.day
+                            # period standard
+                            daily_rate = line.lst_price / days_start_month
+                            partial_price += daily_rate * line.date_start.day
+                        if line.date_end.day != days_end_month:
+                            # period_net
+                            daily_rate_net = line.total_price / days_end_month
+                            partial_price_net = daily_rate_net * line.date_end.day
+                            # period standard
+                            daily_rate = line.lst_price / days_end_month
+                            partial_price += daily_rate * line.date_end.day
                 # Calculate Rent Period
                 if i <= 2:
+                    rent_period_net = (line.total_price * multiplier) + partial_price_net
+                    rent_period_standard = (line.lst_price * multiplier) + partial_price
                     rec.update({
-                        'rent_period_net_%s' % str(i + 1): line.total_price * multiplier,
-                        'rent_period_standard_%s' % str(i + 1): line.lst_price * multiplier
+                        'rent_period_net_%s' % str(i + 1): rent_period_net,
+                        'rent_period_standard_%s' % str(i + 1): rent_period_standard
                     })
                 else:
-                    sum_net += line.total_price * multiplier
-                    sum_standard += line.lst_price * multiplier
+                    sum_net += rent_period_net
+                    sum_standard += rent_period_standard
             rec.update({
                 'rent_period_net_4': sum_net,
                 'rent_period_standard_4': sum_standard,
