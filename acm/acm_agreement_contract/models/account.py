@@ -15,6 +15,7 @@ class AccountInvoice(models.Model):
             ('service', 'Service'),
             ('utility', 'Utility'),
             ('toilet', 'Toilet'),
+            ('sale', 'Sale'),
             ('others', 'Others'),
         ],
         string='Invoice Type',
