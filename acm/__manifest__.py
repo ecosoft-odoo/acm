@@ -62,6 +62,7 @@
         'acm_agreement_contract/views/product_attribute_views.xml',
         'acm_agreement_contract/views/product_pricelist_views.xml',
         'acm_agreement_contract/views/create_new_year_product_views.xml',
+        'acm_agreement_contract/views/account_analytic_tag_views.xml',
         'acm_agreement_contract/report/report_templates.xml',
         'acm_agreement_contract/report/report_agreement.xml',
         'acm_agreement_contract/report/report_appendix.xml',
