@@ -402,27 +402,34 @@ class Agreement(models.Model):
 
     @api.model
     def update_last_active_agreement(self):
-        """Update is_last_active_agreement for all agreements."""
         Agreement = self.env['agreement']
-        Agreement.search([
-            ('is_last_active_agreement', '=', True)
-        ]).write({
-            'is_last_active_agreement': False,
-        })
+        self.env.cr.execute("""
+            UPDATE agreement
+            SET is_last_active_agreement = FALSE
+            WHERE is_last_active_agreement = TRUE
+        """)
         agreements = Agreement.search([
             ('state', '=', 'active'),
             ('rent_product_id', '!=', False),
             ('start_date', '!=', False),
         ], order='rent_product_id, start_date desc, id desc')
-
-        latest_by_product = {}
+        latest_ids = []
+        seen_products = set()
         for agreement in agreements:
-            if agreement.rent_product_id.id not in latest_by_product:
-                latest_by_product[agreement.rent_product_id.id] = agreement.id
-        if latest_by_product:
-            Agreement.browse(latest_by_product.values()).write({
-                'is_last_active_agreement': True,
-            })
+            product_id = agreement.rent_product_id.id
+            if product_id not in seen_products:
+                seen_products.add(product_id)
+                latest_ids.append(agreement.id)
+        if latest_ids:
+            self.env.cr.execute("""
+                UPDATE agreement
+                SET is_last_active_agreement = TRUE
+                WHERE id = ANY(%s)
+            """, (latest_ids,))
+        Agreement.invalidate_cache(
+            ['is_last_active_agreement'],
+            latest_ids
+        )
         return True
 
     @api.onchange('start_date')
