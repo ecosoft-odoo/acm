@@ -396,6 +396,29 @@ class Agreement(models.Model):
         string="Paid Every (Months)",
         states={'active': [('readonly', True)]},
     )
+    is_last_active_agreement = fields.Boolean(
+        compute='_compute_is_last_active_agreement',
+        store=True,
+    )
+
+    @api.depends('rent_product_id', 'start_date', 'state')
+    def _compute_is_last_active_agreement(self):
+        for record in self:
+            if not record.rent_product_id or record.state != 'active':
+                record.is_last_active_agreement = False
+                continue
+
+            active_agreements = self.env['agreement'].search([
+                ('rent_product_id', '=', record.rent_product_id.id),
+                ('state', '=', 'active'),
+                ('start_date', '!=', False),
+            ])
+            if not active_agreements:
+                record.is_last_active_agreement = False
+                continue
+
+            latest_start_date = max(active_agreements.mapped('start_date'))
+            record.is_last_active_agreement = record.start_date == latest_start_date
 
     @api.onchange('start_date')
     def _onchange_start_date(self):
