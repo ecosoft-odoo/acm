@@ -3,7 +3,7 @@
 
 from lxml import etree
 from num2words import num2words
-from collections import namedtuple
+from collections import namedtuple, defaultdict
 from dateutil.relativedelta import relativedelta
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
@@ -397,28 +397,33 @@ class Agreement(models.Model):
         states={'active': [('readonly', True)]},
     )
     is_last_active_agreement = fields.Boolean(
-        compute='_compute_is_last_active_agreement',
-        store=True,
+        copy=False,
     )
 
-    @api.depends('rent_product_id', 'start_date', 'state')
-    def _compute_is_last_active_agreement(self):
-        for record in self:
-            if not record.rent_product_id or record.state != 'active':
-                record.is_last_active_agreement = False
-                continue
+    @api.model
+    def update_last_active_agreement(self):
+        """Update is_last_active_agreement for all agreements."""
+        Agreement = self.env['agreement']
+        Agreement.search([
+            ('is_last_active_agreement', '=', True)
+        ]).write({
+            'is_last_active_agreement': False,
+        })
+        agreements = Agreement.search([
+            ('state', '=', 'active'),
+            ('rent_product_id', '!=', False),
+            ('start_date', '!=', False),
+        ], order='rent_product_id, start_date desc, id desc')
 
-            active_agreements = self.env['agreement'].search([
-                ('rent_product_id', '=', record.rent_product_id.id),
-                ('state', '=', 'active'),
-                ('start_date', '!=', False),
-            ])
-            if not active_agreements:
-                record.is_last_active_agreement = False
-                continue
-
-            latest_start_date = max(active_agreements.mapped('start_date'))
-            record.is_last_active_agreement = record.start_date == latest_start_date
+        latest_by_product = {}
+        for agreement in agreements:
+            if agreement.rent_product_id.id not in latest_by_product:
+                latest_by_product[agreement.rent_product_id.id] = agreement.id
+        if latest_by_product:
+            Agreement.browse(latest_by_product.values()).write({
+                'is_last_active_agreement': True,
+            })
+        return True
 
     @api.onchange('start_date')
     def _onchange_start_date(self):
