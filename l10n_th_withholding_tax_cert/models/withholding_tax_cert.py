@@ -214,10 +214,11 @@ class WithholdingTaxCertLine(models.Model):
     def _check_wt_line(self):
         for rec in self:
             prec = self.env.user.company_id.currency_id.decimal_places
+            # Allow small difference from rounding (max 1.0)
             if rec.wt_percent and \
-                    float_compare(rec.amount,
-                                  rec.base * rec.wt_percent / 100,
-                                  prec) != 0:
+                    float_compare(abs(rec.amount -
+                                      rec.base * rec.wt_percent / 100),
+                                  1.0, prec) > 0:
                 raise ValidationError(_('WT Base/Percent/Tax mismatch!'))
 
     @api.onchange('wt_cert_income_type')
