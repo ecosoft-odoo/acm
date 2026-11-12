@@ -81,6 +81,11 @@ class HistoricalRentalRateAnalysisReport(models.TransientModel):
                 lambda k: k.product_id.value_type == 'rent').sorted(
                     'date_start')
             multiplier, sum_net, sum_standard = 1, 0, 0
+            # Default to 0 so periods without agreement line are always set
+            rec.update({
+                'rent_period_%s_%s' % (price_type, str(i + 1)): 0.0
+                for price_type in ('net', 'standard') for i in range(3)
+            })
             for i, line in enumerate(agreement_lines):
                 partial_price_net = 0
                 partial_price = 0
@@ -109,9 +114,9 @@ class HistoricalRentalRateAnalysisReport(models.TransientModel):
                             daily_rate = line.lst_price / days_end_month
                             partial_price += daily_rate * line.date_end.day
                 # Calculate Rent Period
+                rent_period_net = (line.total_price * multiplier) + partial_price_net
+                rent_period_standard = (line.lst_price * multiplier) + partial_price
                 if i <= 2:
-                    rent_period_net = (line.total_price * multiplier) + partial_price_net
-                    rent_period_standard = (line.lst_price * multiplier) + partial_price
                     rec.update({
                         'rent_period_net_%s' % str(i + 1): rent_period_net,
                         'rent_period_standard_%s' % str(i + 1): rent_period_standard
@@ -148,9 +153,10 @@ class HistoricalRentalRateAnalysisReport(models.TransientModel):
             })
 
     @api.model
-    def read_group(self, domain, fields, groupby, offset=0, limit=None,
-                   orderby=False, lazy=True):
-        res = super(HistoricalRentalRateAnalysisReport, self).read_group(
+    def _read_group_compute(self, domain, fields, groupby, offset=0,
+                            limit=None, orderby=False, lazy=True):
+        res = super(HistoricalRentalRateAnalysisReport, self).\
+            _read_group_compute(
             domain, fields, groupby, offset=offset, limit=limit,
             orderby=orderby, lazy=lazy)
         for line in res:
@@ -184,8 +190,20 @@ class HistoricalRentalRateAnalysisReport(models.TransientModel):
                     'average_rental_rate_net': total_rent_net_per_month / (line['occupied_area'] or 1.0),
                     'average_rental_rate_standard': total_rent_standard_per_month / (line['occupied_area'] or 1.0),
                 })
-                line.pop('agreement_length')
+                line.pop('agreement_length', None)
         return res
+
+    # Column header sorting (see report.column.sort.mixin)
+    _python_sort_record_fields = [
+        'rent_period_net_1', 'rent_period_net_2',
+        'rent_period_net_3', 'rent_period_net_4',
+        'rent_period_standard_1', 'rent_period_standard_2',
+        'rent_period_standard_3', 'rent_period_standard_4',
+        'lump_sum_rent_net', 'lump_sum_rent_standard',
+        'average_rental_rate_net', 'average_rental_rate_standard',
+    ]
+    _python_sort_group_fields = _python_sort_record_fields + [
+        'area', 'occupied_area']
 
     @api.model
     def _get_sql(self):

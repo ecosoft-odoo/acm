@@ -32,11 +32,13 @@
             <search>
                 <field name="agreement"/>
                 <field name="lessee"/>
+                <field name="lessor"/>
                 <field name="product"/>
                 <field name="district"/>
                 <field name="land_use"/>
                 <filter name="group_agreement" string="Agreement" context="{'group_by':'agreement'}"/>
                 <filter name="group_lessee" string="Lessee" context="{'group_by':'lessee'}"/>
+                <filter name="group_lessor" string="Lessor" context="{'group_by':'lessor'}"/>
                 <filter name="group_product" string="Product" context="{'group_by':'product'}"/>
                 <filter name="group_district" string="District" context="{'group_by':'district'}"/>
                 <filter name="group_land_use" string="Land Use" context="{'group_by':'land_use'}"/>

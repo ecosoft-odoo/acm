@@ -51,6 +51,7 @@
         <field name="arch" type="xml">
             <search  string="Rental Analysis Report">
                 <field name="group_id"/>
+                <field name="zone_group_id"/>
                 <field name="subzone"/>
                 <field name="product_id"/>
                 <field name="partner_id"/>
@@ -58,6 +59,7 @@
                 <filter name="filter_no_rented" string="No Rented" domain="[('agreement_id','=',False)]"/>
                 <separator/>
                 <filter name="group_value_type" string="Value Type" icon="terp-partner" context="{'group_by':'value_type'}"/>
+                <filter name="group_zone_group_id" string="Zone Group" icon="terp-partner" context="{'group_by':'zone_group_id'}"/>
                 <filter name="group_group_id" string="Zone" icon="terp-partner" context="{'group_by':'group_id'}"/>
                 <filter name="group_subzone" string="Subzone" icon="terp-partner" context="{'group_by':'subzone'}"/>
                 <filter name="group_product_id" string="Product" icon="terp-partner" context="{'group_by':'product_id'}"/>

@@ -7,12 +7,19 @@ from odoo.addons import decimal_precision as dp
 
 class RentalAnalysisReport(models.AbstractModel):
     _name = 'rental.analysis.report'
+    _inherit = 'report.column.sort.mixin'
     _description = 'Rental Analysis Report'
     _order = 'group_id, lock_number, subzone'
 
     group_id = fields.Many2one(
         comodel_name='account.analytic.group',
         string='Zone',
+    )
+    zone_group_id = fields.Many2one(
+        comodel_name='zone.group',
+        string='Zone Group',
+        help='Group of the zone, e.g. the floor (Floor 1, Floor 2) or a '
+             'group of zones (Zone A, Zone B)',
     )
     subzone = fields.Char(
         string='Subzone',
@@ -60,9 +67,9 @@ class RentalAnalysisReport(models.AbstractModel):
     )
 
     @api.model
-    def read_group(self, domain, fields, groupby, offset=0, limit=None,
-                   orderby=False, lazy=True):
-        res = super(RentalAnalysisReport, self).read_group(
+    def _read_group_compute(self, domain, fields, groupby, offset=0,
+                            limit=None, orderby=False, lazy=True):
+        res = super(RentalAnalysisReport, self)._read_group_compute(
             domain, fields, groupby, offset=offset, limit=limit,
             orderby=orderby, lazy=lazy)
         for line in res:
@@ -101,12 +108,13 @@ class RentalAnalysisReport(models.AbstractModel):
     def _get_sql(self):
         sql = """
             SELECT ROW_NUMBER() OVER(ORDER BY pp.id, a.id) AS id,
-                   pt.group_id, pt.subzone, pt.lock_number, pp.id AS product_id, a.partner_id,
+                   pt.group_id, zg.zone_group_id, pt.subzone, pt.lock_number, pp.id AS product_id, a.partner_id,
                    a.id AS agreement_id, a.goods_category_id, a.start_date,
                    a.end_date, %(area_select)s AS area, %(area_occupied_select)s AS occupied_area, pt.value_type
             -- split
             FROM product_product pp
             LEFT JOIN product_template pt ON pp.product_tmpl_id = pt.id
+            LEFT JOIN account_analytic_group zg ON pt.group_id = zg.id
             LEFT JOIN (
                 SELECT rent_product_id, MAX(id) AS id
                 FROM agreement

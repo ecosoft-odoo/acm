@@ -51,6 +51,7 @@
         'acm_agreement_contract/views/product_views.xml',
         'acm_agreement_contract/views/account_views.xml',
         'acm_agreement_contract/views/goods_category_views.xml',
+        'acm_agreement_contract/views/zone_group_views.xml',
         'acm_agreement_contract/views/lock_attribute_views.xml',
         'acm_agreement_contract/views/account_analytic_account_views.xml',
         'acm_agreement_contract/views/agreement_views.xml',

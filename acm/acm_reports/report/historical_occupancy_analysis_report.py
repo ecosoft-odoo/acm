@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html)
 
 import datetime
+import re
 from odoo import models, fields, api
 
 
@@ -52,10 +53,36 @@ class HistoricalOccupancyAnalysisReport(models.TransientModel):
             expiry_month = round(expiry_day / 30, 2)
             rec.expiry_time = rec._get_expiry_time(expiry_month)
 
+    # Column header sorting (see report.column.sort.mixin)
+    _python_sort_record_fields = ['expiry_time']
+    _python_sort_group_fields = [
+        'area', 'occupied_area', 'occupancy', 'total_occupancy',
+        'expiry_time']
+
     @api.model
-    def read_group(self, domain, fields, groupby, offset=0, limit=None,
-                   orderby=False, lazy=True):
-        res = super(HistoricalOccupancyAnalysisReport, self).read_group(
+    def _python_sort_record_value(self, rec, fname):
+        # Time to Expiry is a text like '12M3D', sort on the days instead
+        if fname == 'expiry_time':
+            return rec._get_expiry_day()
+        return super(HistoricalOccupancyAnalysisReport, self).\
+            _python_sort_record_value(rec, fname)
+
+    @api.model
+    def _python_sort_group_value(self, line, fname):
+        # Time to Expiry is a text like '12M3D', sort on its months value
+        if fname == 'expiry_time':
+            match = re.match(r'^(\d+)M(\d+)D$', line.get(fname) or '')
+            if not match:
+                return 0.0
+            return int(match.group(1)) + int(match.group(2)) / 30.0
+        return super(HistoricalOccupancyAnalysisReport, self).\
+            _python_sort_group_value(line, fname)
+
+    @api.model
+    def _read_group_compute(self, domain, fields, groupby, offset=0,
+                            limit=None, orderby=False, lazy=True):
+        res = super(HistoricalOccupancyAnalysisReport, self).\
+            _read_group_compute(
             domain, fields, groupby, offset=offset, limit=limit,
             orderby=orderby, lazy=lazy)
         # Find total area

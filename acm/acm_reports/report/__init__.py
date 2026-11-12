@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html)
 
 from . import report_rental_collect
+from . import report_column_sort_mixin
 from . import rental_analysis_report
 from . import occupancy_analysis_report
 from . import rental_rate_analysis_report

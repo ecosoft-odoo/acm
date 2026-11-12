@@ -4,6 +4,8 @@ access_agreement_breach_line_readonly,agreement breach line readonly,model_agree
 access_agreement_breach_line_allusers,agreement breach line all users,model_agreement_breach_line,agreement_legal.group_agreement_user,1,1,1,1
 access_goods_category_readonly,goods category readonly,model_goods_category,agreement_legal.group_agreement_readonly,1,0,0,0
 access_goods_category_manager,goods category manager,model_goods_category,agreement_legal.group_agreement_manager,1,1,1,1
+access_zone_group_readonly,zone group readonly,model_zone_group,agreement_legal.group_agreement_readonly,1,0,0,0
+access_zone_group_manager,zone group manager,model_zone_group,agreement_legal.group_agreement_manager,1,1,1,1
 access_lock_attribute_readonly,lock attribute readonly,model_lock_attribute,agreement_legal.group_agreement_readonly,1,0,0,0
 access_lock_attribute_manager,lock attribute manager,model_lock_attribute,agreement_legal.group_agreement_manager,1,1,1,1
 access_acm_working_hours_readonly,acm working hours readonly,model_acm_working_hours,agreement_legal.group_agreement_readonly,1,0,0,0
