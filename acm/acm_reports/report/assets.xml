@@ -9,6 +9,10 @@
                 type="text/javascript"
                 src="/acm/static/src/js/historical_rental_analysis_report.js"
             />
+            <script
+                type="text/javascript"
+                src="/acm/static/src/js/report_list_footer.js"
+            />
         </xpath>
     </template>
 </odoo>

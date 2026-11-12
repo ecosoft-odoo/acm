@@ -108,6 +108,13 @@ class ReportColumnSortMixin(models.AbstractModel):
     def _read_group_compute(self, domain, fields, groupby, offset=0,
                             limit=None, orderby=False, lazy=True):
         """ read_group with the computed columns filled in on each group """
-        return super(ReportColumnSortMixin, self).read_group(
+        res = super(ReportColumnSortMixin, self).read_group(
             domain, fields, groupby, offset=offset, limit=limit,
             orderby=orderby, lazy=lazy)
+        # Without groupby, the single total line has no __domain: add it so
+        # the inherited reports compute their values on it too (this gives
+        # the list footer totals, see report_list_footer.js)
+        if not groupby:
+            for line in res:
+                line.setdefault('__domain', domain or [])
+        return res
