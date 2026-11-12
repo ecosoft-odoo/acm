@@ -14,6 +14,9 @@ class LandRentalAnalysisReport(models.TransientModel):
     lessee = fields.Char(
         string="Lessee",
     )
+    lessor = fields.Char(
+        string="Lessor",
+    )
     product = fields.Char(
         string="Product",
     )
@@ -124,7 +127,7 @@ class LandRentalAnalysisReportWizard(models.TransientModel):
                 case when sub.building_rented <> 0 then sub.estimated_contractual_rental_revenue / coalesce(nullif(sub.agreement_length, 0), 1) / coalesce(nullif(sub.building_rented, 0), 1) else 0 end as building_monthly_rental_rate
             from (
                 select
-                    a.name as agreement, rp.name as lessee, pt.id as product_id, pt.name as product, pt.sub_district, pt.district, pt.province,
+                    a.name as agreement, rp.name as lessee, lp.name as lessor, pt.id as product_id, pt.name as product, pt.sub_district, pt.district, pt.province,
                     gc.name as land_use, (400 * pt.rai2) + (100 * pt.ngan2) + pt.square_wa2 as land_nla,
                     (400 * al.rai) + (100 * al.ngan) + al.square_wa as land_rented,
                     al.square_meter as building_rented, a.installment_number * al.lst_price as estimated_contractual_rental_revenue,
@@ -135,11 +138,12 @@ class LandRentalAnalysisReportWizard(models.TransientModel):
                 left join product_product pp on al.product_id = pp.id
                 left join product_template pt on pp.product_tmpl_id = pt.id
                 left join res_partner rp on a.partner_id = rp.id
+                left join res_partner lp on a.lessor_id = lp.id
                 left join goods_category gc on a.goods_category_id = gc.id
                 where a.is_template = False and (a.state = 'active' or (a.state = 'inactive' and a.inactive_reason <> 'cancel')) and
                     '{}' >= a.start_date and '{}' <= (case when a.termination_date is not null then a.termination_date else a.end_date end) and
                     pt.value_type = 'rent' and pt.active = True
-                group by a.id, al.id, pt.id, rp.id, gc.id
+                group by a.id, al.id, pt.id, rp.id, lp.id, gc.id
             ) sub
         """.format(self.id, self.at_date, self.at_date)
         return sql
