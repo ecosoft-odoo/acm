@@ -7,6 +7,7 @@ from odoo.addons import decimal_precision as dp
 
 class RentalAnalysisReport(models.AbstractModel):
     _name = 'rental.analysis.report'
+    _inherit = 'report.column.sort.mixin'
     _description = 'Rental Analysis Report'
     _order = 'group_id, lock_number, subzone'
 
@@ -60,9 +61,9 @@ class RentalAnalysisReport(models.AbstractModel):
     )
 
     @api.model
-    def read_group(self, domain, fields, groupby, offset=0, limit=None,
-                   orderby=False, lazy=True):
-        res = super(RentalAnalysisReport, self).read_group(
+    def _read_group_compute(self, domain, fields, groupby, offset=0,
+                            limit=None, orderby=False, lazy=True):
+        res = super(RentalAnalysisReport, self)._read_group_compute(
             domain, fields, groupby, offset=offset, limit=limit,
             orderby=orderby, lazy=lazy)
         for line in res:
