@@ -132,6 +132,14 @@ class AccountAnalyticGroup(models.Model):
     weight1 = fields.Char(
         string='Load weight',
     )
+    zone_group_id = fields.Many2one(
+        comodel_name='zone.group',
+        string='Zone Group',
+        index=True,
+        help='Group of the zone used to summarize the rental reports, '
+             'e.g. the floor (Floor 1, Floor 2) or a group of zones '
+             '(Zone A, Zone B)',
+    )
     weight2 = fields.Char(
         string='Other weight',
     )

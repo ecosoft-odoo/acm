@@ -6,6 +6,7 @@ from . import res_company
 from . import product_pricelist
 from . import product
 from . import goods_category
+from . import zone_group
 from . import lock_attribute
 from . import account_analytic_account
 from . import account_analytic_invoice_line
